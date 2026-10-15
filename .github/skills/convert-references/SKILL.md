@@ -8,6 +8,8 @@ description: "Convert reference PDFs (books/papers) in references/ to Markdown, 
 ## Prerequisites
 `.venv` active with `pip install -r requirements.txt`; `pandoc` and `tectonic` on `PATH` (required, not optional — the round-trip check fails hard without them).
 
+On machines without an NVIDIA GPU, Marker needs `llama-server` (from [llama.cpp](https://github.com/ggml-org/llama.cpp) releases) on `PATH` to serve the `surya-ocr-2` VLM that recognizes equations/layout — without it, conversion fails outright. Use a Vulkan build if an iGPU is available (`llama-server --list-devices` to check) for a ~2x speedup over CPU-only.
+
 ## Procedure
 1. Run [convert.py](./scripts/convert.py) (no args = batch-convert every unconverted PDF in `references/`; pass specific PDF paths, or `--force` to reconvert). Prints the list of converted names.
 2. Run [verify.py](./scripts/verify.py) on those names. It emits one JSON report per file: `latex_errors`, `image_issues`, `roundtrip` (`status` must be `ok`), and `sample_pages` (all pages if ≤20pp, else 10–20 evenly spread incl. first/last — each with a rendered PNG, a text-similarity score, and the best-matching markdown excerpt).
