@@ -71,6 +71,8 @@ Every citation key exists in the bibliography; every empirical claim is sourced;
 - Theory sections: strict ordering — only prior concepts, assumed background (with a short refresher), or inline definitions.
 - Practical/introductory sections: early mentions are acceptable with an intuitive gloss or a forward reference, ideally both.
 - Verify dates, attributions, mathematical and algorithmic properties, quantitative claims, and API/version statements against sources.
+- Invoke the `ground-truth-review` skill when auditing factual, mathematical, or empirical assertions against `references/`.
+- Both **Contradicted** and **Not found** findings from ground-truth review are classified as **`blocker`** severity in the review output.
 - Report factual errors with the corrected value and source; never fix them silently.
 
 ### 9. Markup
