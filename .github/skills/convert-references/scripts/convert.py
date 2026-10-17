@@ -2,6 +2,7 @@
 """Batch-convert reference PDFs to Markdown (math + figures preserved) via Marker."""
 import argparse
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -10,6 +11,12 @@ import tempfile
 from pathlib import Path
 
 MARKER_RUNNER = Path(__file__).resolve().parent / "_marker_runner.py"
+
+# Q8_0-quantized surya-ocr-2 VLM (one-time `llama-quantize`, see SKILL.md):
+# ~31% faster end-to-end on iGPU (memory-bandwidth bound) with identical
+# verify.py quality metrics vs the stock F16 weights.
+QUANT_MODEL = Path.home() / ".cache/datalab/surya/surya-2-q8_0.gguf"
+MMPROJ_GLOB = ".cache/huggingface/hub/models--datalab-to--surya-ocr-2-gguf/snapshots/*/surya-2-mmproj.gguf"
 
 IMG_LINK_RE = re.compile(r'(!\[[^\]]*\]\()([^)\s]+)')
 
@@ -31,6 +38,17 @@ def pending_pdfs(references_dir: Path, force: bool):
             yield pdf
 
 
+def marker_env() -> dict:
+    env = os.environ.copy()
+    if "SURYA_GGUF_LOCAL_MODEL_PATH" in env or not QUANT_MODEL.is_file():
+        return env
+    mmprojs = sorted(Path.home().glob(MMPROJ_GLOB))
+    if mmprojs:
+        env["SURYA_GGUF_LOCAL_MODEL_PATH"] = str(QUANT_MODEL)
+        env["SURYA_GGUF_LOCAL_MMPROJ_PATH"] = str(mmprojs[-1].resolve())
+    return env
+
+
 def run_marker(pdf: Path, out_dir: Path) -> Path:
     # Equations are OCR'd via the VLM in both modes regardless of force_ocr;
     # force_ocr would additionally force full-page OCR on all text, which is
@@ -43,6 +61,7 @@ def run_marker(pdf: Path, out_dir: Path) -> Path:
         [sys.executable, str(MARKER_RUNNER), str(pdf), "--output_dir", str(out_dir),
          "--output_format", "markdown", "--paginate_output", "--ocr_inline_math", "true"],
         check=True,
+        env=marker_env(),
     )
     matches = list(out_dir.rglob(f"{pdf.stem}.md"))
     if not matches:
