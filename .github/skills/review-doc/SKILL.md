@@ -85,6 +85,7 @@ Every image path exists; every generated diagram has its source file; captions a
 - Report factual errors with the corrected value and source; never fix them silently.
 - For LLM-as-a-judge or human rating studies, audit whether: (1) presentation order is counterbalanced across conditions (mitigating position bias), (2) evaluations are length-normalized or controlled for verbosity bias, (3) scoring criteria are evaluated independently to prevent halo effects, and (4) model family self-enhancement is mitigated via blinding or cross-model evaluators.
 - For search, generation, and multi-candidate tasks (convex payoffs), audit whether top-tail reach (k-max, top-decile yield, pass@k) is evaluated or masked by central averages. Audit whether severe downside risks (p95/p99 tail latency, out-of-distribution failure modes) are concealed by aggregate averages.
+- Audit researcher degrees of freedom: (1) verify comparison baselines received equal tuning/compute parity (hyperparameters, prompt engineering, token budgets), (2) check whether custom metrics replace standard community benchmarks without validation, and (3) confirm reported gains reflect full distributions across seeds rather than cherry-picked runs.
 
 ### 9. Markup
 Correct use of the book's callout/admonition environments. Collect all `TODO`/`FIXME` comments into the report.

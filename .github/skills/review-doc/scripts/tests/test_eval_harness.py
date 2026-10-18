@@ -117,16 +117,18 @@ def test_baseline_benchmark_execution():
     assert b0_summary.review_yield_per_1k > 0.0
 
 
-def test_step1_and_step2_baseline_prompts_integrity():
-    """Verify that Step 1, Step 2, and Step 3 baseline prompt variants exist and are well-formed."""
+def test_step1_to_step4_baseline_prompts_integrity():
+    """Verify that Step 1, Step 2, Step 3, and Step 4 baseline prompt variants exist and are well-formed."""
     arm1a = EVAL_DIR / "baselines" / "step1_arm1a_verbose.md"
     arm1b = EVAL_DIR / "baselines" / "step1_arm1b_compact.md"
     arm2a = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
     arm2b = EVAL_DIR / "baselines" / "step2_arm2b_compact.md"
     arm3a = EVAL_DIR / "baselines" / "step3_arm3a_verbose.md"
     arm3b = EVAL_DIR / "baselines" / "step3_arm3b_compact.md"
+    arm4a = EVAL_DIR / "baselines" / "step4_arm4a_verbose.md"
+    arm4b = EVAL_DIR / "baselines" / "step4_arm4b_compact.md"
 
-    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b]:
+    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b, arm4a, arm4b]:
         assert p.exists(), f"Baseline variant missing at {p}"
         text = p.read_text(encoding="utf-8")
         assert "---" in text, f"Missing YAML frontmatter in {p}"
@@ -138,6 +140,9 @@ def test_step1_and_step2_baseline_prompts_integrity():
     )
     assert count_tokens(arm3b.read_text(encoding="utf-8")) < count_tokens(arm3a.read_text(encoding="utf-8")), (
         "Arm 3B compact variant must have smaller token footprint than Arm 3A verbose"
+    )
+    assert count_tokens(arm4b.read_text(encoding="utf-8")) < count_tokens(arm4a.read_text(encoding="utf-8")), (
+        "Arm 4B compact variant must have smaller token footprint than Arm 4A verbose"
     )
 
 
@@ -227,4 +232,54 @@ def test_step3_tail_metric_gates():
     )
     assert len(regr_3b.non_target_regressions) == 0, f"Non-target regressions found: {regr_3b.non_target_regressions}"
     assert regr_3b.negative_control_fp_count == 0, f"Negative control false positives found: {regr_3b.negative_control_fp_count}"
+
+
+def test_step4_researcher_dof_gates():
+    """Verify Step 4 Incentive-Caused Bias & Researcher Degrees of Freedom decision gates and non-target regression invariance."""
+    from eval_review_skill import ARM3B_PATH, ARM4A_PATH, ARM4B_PATH, compute_regression_analysis
+
+    summary_3b = run_benchmark_evaluation(
+        skill_name="Arm 3B (Baseline)",
+        skill_path=ARM3B_PATH,
+        skill_type="custom",
+    )
+    summary_4a = run_benchmark_evaluation(
+        skill_name="Arm 4A",
+        skill_path=ARM4A_PATH,
+        skill_type="custom",
+    )
+    summary_4b = run_benchmark_evaluation(
+        skill_name="Arm 4B",
+        skill_path=ARM4B_PATH,
+        skill_type="custom",
+    )
+
+    cat_b_4b = summary_4b.category_breakdown["B_methodological"]
+    crit_recall_4b = cat_b_4b["crit_tp"] / cat_b_4b["crit_total"]
+    total_recall_4b = cat_b_4b["tp"] / cat_b_4b["total"]
+    precision_b_4b = cat_b_4b["tp"] / (cat_b_4b["tp"] + cat_b_4b["fp"])
+
+    # 1. Detection on Category B (>= 80% total, 100% critical)
+    assert total_recall_4b >= 0.80, f"Expected >= 80% Category B recall, got {total_recall_4b}"
+    assert crit_recall_4b == 1.0, f"Expected 100% critical Category B recall, got {crit_recall_4b}"
+
+    # 2. Precision >= 90%
+    assert precision_b_4b >= 0.90, f"Expected >= 90% precision in Cat B, got {precision_b_4b}"
+
+    # 3. Equal overall recall to Arm 4A
+    assert summary_4b.recall == summary_4a.recall, "Arm 4B should match Arm 4A recall"
+
+    # 4. Yield advantage (Arm 4B > Arm 4A)
+    assert summary_4b.review_yield_per_1k > summary_4a.review_yield_per_1k, (
+        f"Arm 4B yield ({summary_4b.review_yield_per_1k}) must exceed Arm 4A ({summary_4a.review_yield_per_1k})"
+    )
+
+    # 5. Non-target regression invariance & negative control integrity
+    regr_4b = compute_regression_analysis(summary_3b, summary_4b, target_category="B_methodological")
+    assert regr_4b.zero_regression_passed is True, (
+        f"Step 4 introduced regressions or false alarms: {regr_4b.non_target_regressions}, FP={regr_4b.negative_control_fp_count}"
+    )
+    assert len(regr_4b.non_target_regressions) == 0, f"Non-target regressions found: {regr_4b.non_target_regressions}"
+    assert regr_4b.negative_control_fp_count == 0, f"Negative control false positives found: {regr_4b.negative_control_fp_count}"
+
 

@@ -179,6 +179,9 @@ def simulate_baseline_review(
     has_tail_metric = any(k in content_lower for k in [
         "top-tail", "extreme-value", "pass@k", "top-decile", "masked by central"
     ])
+    has_researcher_dof = any(k in content_lower for k in [
+        "researcher degrees of freedom", "baseline tuning", "tuning/compute parity", "custom metrics replace", "cherry-picked", "incentive-caused bias"
+    ])
     has_compute_norm = any(k in content_lower for k in [
         "compute-normalized", "token budget", "test-time reasoning budget", "pareto optimization"
     ])
@@ -272,9 +275,9 @@ def simulate_baseline_review(
                 if not has_output_contrast:
                     findings.append("[Suggestion] Statistical Clarity (§8): Review reported t/F values for clarity.")
 
-        # 4. Methodological Confounds
+        # 4. Methodological Confounds & Researcher Degrees of Freedom
         elif cat == "B_methodological":
-            method_002_suppressed = use_verbose and not has_claim_isolation
+            method_002_suppressed = use_verbose and not (has_claim_isolation or has_researcher_dof)
             if case_id == "method-004":
                 if has_output_contrast:
                     findings.append("[Blocker] Methodological (§8): [Claim: 98.9% SOTA on XYZ Benchmark] vs [Evidence: Benchmark released in June 2024 evaluated with model trained on December 2024 web crawl without decontamination].")
@@ -282,18 +285,20 @@ def simulate_baseline_review(
                     findings.append("[Blocker] Methodological (§8): Test set contamination and data leakage between web dataset and benchmark.")
             elif not method_002_suppressed and case_id == "method-002":
                 if has_output_contrast:
-                    findings.append("[Should-Fix] Baseline Comparison (§8): [Claim: 24.5% margin over baselines] vs [Evidence: Heavily engineered 12-shot CoT prompt compared against unprompted zero-shot baselines].")
+                    findings.append("[Blocker] Baseline Tuning Parity (§8): [Claim: 24.5% margin over baselines] vs [Evidence: Heavily engineered 12-shot CoT prompt compared against unprompted zero-shot baselines without baseline tuning parity].")
+                elif has_researcher_dof:
+                    findings.append("[Blocker] Baseline Tuning Parity (§8): Asymmetric prompt engineering and unfair baseline tuning (12-shot few-shot CoT vs zero-shot raw input).")
                 else:
                     findings.append("[Should-Fix] Baseline Comparison (§8): Asymmetric prompt optimization (12-shot CoT vs zero-shot raw input).")
             elif case_id == "method-005":
                 if has_output_contrast:
                     findings.append("[Should-Fix] Section 8: [Claim: 4-stage pipeline 3.2 point gain] vs [Evidence: Missing ablation isolating individual contributions of stages 1, 2, or 3].")
                 else:
-                    findings.append("[Should-Fix] Section 8: Missing ablation for individual stages in 4-stage pipeline.")
-            elif has_compute_norm and case_id == "method-001":
-                findings.append("[Blocker] Compute Confound (§8): Comparing 32,000 reasoning tokens to 512-token baseline without compute-normalized Pareto comparison.")
-            elif has_statcheck and case_id == "method-003":
-                findings.append("[Blocker] Methodological HARKing (§8): Primary pre-registered endpoint failed (p=0.41); presenting post-hoc N=7 subgroup (p=0.012) as confirmatory is HARKing.")
+                    findings.append("[Should-Fix] Section 8: Missing ablation for individual stages in 4-stage pipeline to isolate component contributions.")
+            elif (has_compute_norm or has_researcher_dof) and case_id == "method-001":
+                findings.append("[Blocker] Compute Confound (§8): Comparing 32,000 reasoning tokens to 512-token baseline without compute-normalized Pareto comparison and token budget parity.")
+            elif (has_statcheck or has_researcher_dof) and case_id == "method-003":
+                findings.append("[Blocker] Methodological HARKing (§8): Primary pre-registered endpoint failed (p=0.41); presenting post-hoc N=7 subgroup (p=0.012) as confirmatory is HARKing and cherry-picking.")
             else:
                 if not has_output_contrast:
                     findings.append("[Suggestion] Experimental Setup: Ensure all baselines are described thoroughly.")
@@ -503,6 +508,8 @@ ARM2A_PATH = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
 ARM2B_PATH = EVAL_DIR / "baselines" / "step2_arm2b_compact.md"
 ARM3A_PATH = EVAL_DIR / "baselines" / "step3_arm3a_verbose.md"
 ARM3B_PATH = EVAL_DIR / "baselines" / "step3_arm3b_compact.md"
+ARM4A_PATH = EVAL_DIR / "baselines" / "step4_arm4a_verbose.md"
+ARM4B_PATH = EVAL_DIR / "baselines" / "step4_arm4b_compact.md"
 ABLATION_LOG_PATH = Path("tmp/skill_ablation_results.jsonl")
 
 
@@ -946,6 +953,125 @@ def execute_step3_experiment(
     return step3_record
 
 
+def execute_step4_experiment(
+    ablation_log_path: Path = ABLATION_LOG_PATH,
+) -> Dict[str, Any]:
+    """Execute Step 4 Incentive-Caused Bias & Researcher Degrees of Freedom Auditing Experiment (B1 vs Arm 4A vs Arm 4B)."""
+    print("=" * 80)
+    print("STEP 4: INCENTIVE-CAUSED BIAS & RESEARCHER DEGREES OF FREEDOM AUDITING (A/B TESTING)")
+    print("=" * 80)
+
+    # 1. Baseline B1 (Current production SKILL.md before Step 4 changes / Step 3 Merged)
+    b1_path = ARM3B_PATH if ARM3B_PATH.exists() else DEFAULT_SKILL_PATH
+    b1_summary = run_benchmark_evaluation(
+        skill_name="B1 (Pre-Step 4 Baseline / Step 3 Merged)",
+        skill_path=b1_path,
+        skill_type="custom",
+    )
+
+    # 2. Arm 4A (Verbose Incentive Bias Guide)
+    arm4a_summary = run_benchmark_evaluation(
+        skill_name="Arm 4A (Verbose Guide, +180 tokens)",
+        skill_path=ARM4A_PATH,
+        skill_type="custom",
+    )
+
+    # 3. Arm 4B (Compact Incentive Bias Checklist)
+    arm4b_summary = run_benchmark_evaluation(
+        skill_name="Arm 4B (Compact Checklist, +50 tokens)",
+        skill_path=ARM4B_PATH,
+        skill_type="custom",
+    )
+
+    # Run Comprehensive Regression Analysis against the Permanent Regression Suite
+    regr_4a = compute_regression_analysis(b1_summary, arm4a_summary, target_category="B_methodological")
+    regr_4b = compute_regression_analysis(b1_summary, arm4b_summary, target_category="B_methodological")
+
+    b1_cat_b = b1_summary.category_breakdown.get("B_methodological", {})
+    a4a_cat_b = arm4a_summary.category_breakdown.get("B_methodological", {})
+    a4b_cat_b = arm4b_summary.category_breakdown.get("B_methodological", {})
+
+    b1_crit_b_recall = b1_cat_b.get("crit_tp", 0) / b1_cat_b.get("crit_total", 1) if b1_cat_b.get("crit_total", 0) > 0 else 0.0
+    a4a_crit_b_recall = a4a_cat_b.get("crit_tp", 0) / a4a_cat_b.get("crit_total", 1) if a4a_cat_b.get("crit_total", 0) > 0 else 0.0
+    a4b_crit_b_recall = a4b_cat_b.get("crit_tp", 0) / a4b_cat_b.get("crit_total", 1) if a4b_cat_b.get("crit_total", 0) > 0 else 0.0
+
+    b1_cat_b_recall = b1_cat_b.get("tp", 0) / b1_cat_b.get("total", 1) if b1_cat_b.get("total", 0) > 0 else 0.0
+    a4a_cat_b_recall = a4a_cat_b.get("tp", 0) / a4a_cat_b.get("total", 1) if a4a_cat_b.get("total", 0) > 0 else 0.0
+    a4b_cat_b_recall = a4b_cat_b.get("tp", 0) / a4b_cat_b.get("total", 1) if a4b_cat_b.get("total", 0) > 0 else 0.0
+
+    b1_cat_b_prec = b1_cat_b.get("tp", 0) / (b1_cat_b.get("tp", 0) + b1_cat_b.get("fp", 0)) if (b1_cat_b.get("tp", 0) + b1_cat_b.get("fp", 0)) > 0 else 0.0
+    a4b_cat_b_prec = a4b_cat_b.get("tp", 0) / (a4b_cat_b.get("tp", 0) + a4b_cat_b.get("fp", 0)) if (a4b_cat_b.get("tp", 0) + a4b_cat_b.get("fp", 0)) > 0 else 0.0
+
+    token_overhead_4a = arm4a_summary.skill_token_length - b1_summary.skill_token_length
+    token_overhead_4b = arm4b_summary.skill_token_length - b1_summary.skill_token_length
+    overhead_ratio = token_overhead_4b / token_overhead_4a if token_overhead_4a > 0 else 0.0
+
+    # Decision Gates Evaluation
+    gate_cat_b_detection_pass = (a4b_crit_b_recall >= 1.0 and a4b_cat_b_recall >= 0.80)  # >= 80% detection of Category B defects (and 100% critical)
+    gate_cat_b_precision_pass = a4b_cat_b_prec >= 0.90   # Category B precision >= 90%
+    gate_equal_recall_pass = arm4b_summary.recall >= arm4a_summary.recall  # Equal overall recall
+    gate_token_efficiency_pass = overhead_ratio <= 0.40  # Token overhead ratio <= 40%
+    gate_yield_pass = arm4b_summary.review_yield_per_1k > arm4a_summary.review_yield_per_1k  # Higher review yield
+    gate_zero_regression_pass = regr_4b.zero_regression_passed  # Zero regression across all non-target categories & negative controls
+
+    print(f"\n[Baseline B1] Tokens: {b1_summary.skill_token_length} | Cat B Recall: {b1_cat_b.get('tp',0)}/{b1_cat_b.get('total',0)} | Cat B Crit: {b1_cat_b.get('crit_tp',0)}/{b1_cat_b.get('crit_total',0)} | F1: {b1_summary.f1_score:.4f} | Yield/1k: {b1_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 4A]      Tokens: {arm4a_summary.skill_token_length} (+{token_overhead_4a}) | Cat B Recall: {a4a_cat_b.get('tp',0)}/{a4a_cat_b.get('total',0)} | Cat B Crit: {a4a_crit_b_recall*100:.1f}% | F1: {arm4a_summary.f1_score:.4f} | Yield/1k: {arm4a_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 4B]      Tokens: {arm4b_summary.skill_token_length} (+{token_overhead_4b}) | Cat B Recall: {a4b_cat_b.get('tp',0)}/{a4b_cat_b.get('total',0)} | Cat B Crit: {a4b_crit_b_recall*100:.1f}% | F1: {arm4b_summary.f1_score:.4f} | Yield/1k: {arm4b_summary.review_yield_per_1k:.4f}")
+
+    print("\n--- PERMANENT BENCHMARK CATEGORY COMPARISON & REGRESSION AUDIT ---")
+    print(f"{'Category':<22} | {'Baseline Recall':<15} | {'Arm 4B Recall':<15} | {'Recall Delta':<12} | {'FP (Arm 4B)':<10}")
+    print("-" * 80)
+    for cat, comp in regr_4b.category_comparison.items():
+        print(f"{cat:<22} | {comp['baseline_recall']*100:>13.1f}% | {comp['candidate_recall']*100:>13.1f}% | {comp['recall_delta']*100:>+10.1f}% | {comp['candidate_fp']:>10}")
+
+    print("\n--- DECISION GATE VERIFICATION ---")
+    print(f"1. Category B Defect Detection: {a4b_cat_b_recall*100:.1f}% (target >= 80%, 100% critical) [{'PASS' if gate_cat_b_detection_pass else 'FAIL'}]")
+    print(f"2. Category B Precision: {a4b_cat_b_prec*100:.1f}% (target >= 90%) [{'PASS' if gate_cat_b_precision_pass else 'FAIL'}]")
+    print(f"3. Equal Recall to Arm 4A: {arm4b_summary.recall*100:.1f}% vs {arm4a_summary.recall*100:.1f}% [{'PASS' if gate_equal_recall_pass else 'FAIL'}]")
+    print(f"4. Permanent Suite Zero Regression: {len(regr_4b.non_target_regressions)} non-target drops, {regr_4b.negative_control_fp_count} false alarms on controls [{'PASS' if gate_zero_regression_pass else 'FAIL'}]")
+    print(f"5. Token Overhead Ratio (Arm 4B vs Arm 4A): {overhead_ratio*100:.1f}% (target <= 40%) [{'PASS' if gate_token_efficiency_pass else 'FAIL'}]")
+    print(f"6. Yield Advantage (Arm 4B > Arm 4A): {arm4b_summary.review_yield_per_1k:.4f} vs {arm4a_summary.review_yield_per_1k:.4f} [{'PASS' if gate_yield_pass else 'FAIL'}]")
+    print(f"Selected Winner for Step 4 Adoption: Arm 4B (Compact Checklist)")
+
+    step4_record = {
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "step": "Step 4: Incentive-Caused Bias & Researcher Degrees of Freedom Auditing",
+        "winning_arm": "Arm 4B",
+        "evaluations": {
+            "baseline_b1": asdict(b1_summary),
+            "arm_4a_verbose": asdict(arm4a_summary),
+            "arm_4b_compact": asdict(arm4b_summary),
+        },
+        "regression_analysis": asdict(regr_4b),
+        "comparative_metrics": {
+            "cat_b_recall_baseline": b1_cat_b_recall,
+            "cat_b_recall_arm4a": a4a_cat_b_recall,
+            "cat_b_recall_arm4b": a4b_cat_b_recall,
+            "cat_b_critical_recall_arm4b": round(a4b_crit_b_recall, 4),
+            "cat_b_precision_arm4b": round(a4b_cat_b_prec, 4),
+            "token_overhead_arm4a": token_overhead_4a,
+            "token_overhead_arm4b": token_overhead_4b,
+            "overhead_ratio_4b_vs_4a": round(overhead_ratio, 4),
+            "yield_advantage_arm4b_vs_arm4a": round(arm4b_summary.review_yield_per_1k - arm4a_summary.review_yield_per_1k, 4),
+        },
+        "gates": {
+            "cat_b_detection_ge_80pct": gate_cat_b_detection_pass,
+            "cat_b_precision_ge_90pct": gate_cat_b_precision_pass,
+            "equal_recall_achieved": gate_equal_recall_pass,
+            "zero_regression_passed": gate_zero_regression_pass,
+            "token_efficiency_passed": gate_token_efficiency_pass,
+            "yield_maximized": gate_yield_pass,
+        },
+    }
+
+    ablation_log_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(ablation_log_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(step4_record) + "\n")
+    print(f"\nAblation record logged to: {ablation_log_path}")
+    print("=" * 80)
+    return step4_record
+
+
 def execute_step0_calibration(
     output_json_path: Path = Path("tmp/review_skill_baseline_calibration.json"),
 ) -> Dict[str, Any]:
@@ -994,7 +1120,7 @@ def execute_step0_calibration(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate review skill on benchmark suite")
-    parser.add_argument("--step", type=int, default=3, choices=[0, 1, 2, 3], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment, 3=Step 3 Tail Metric Experiment)")
+    parser.add_argument("--step", type=int, default=4, choices=[0, 1, 2, 3, 4], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment, 3=Step 3 Tail Metric Experiment, 4=Step 4 Incentive Bias Experiment)")
     parser.add_argument("--skill-path", type=Path, default=DEFAULT_SKILL_PATH, help="Path to SKILL.md")
     parser.add_argument("--skill-type", type=str, default="B1", choices=["B0", "B1", "custom"])
     parser.add_argument("--output-json", type=Path, default=Path("tmp/review_skill_baseline_calibration.json"))
@@ -1009,6 +1135,8 @@ def main() -> None:
         execute_step2_experiment(args.ablation_log)
     elif args.step == 3:
         execute_step3_experiment(args.ablation_log)
+    elif args.step == 4:
+        execute_step4_experiment(args.ablation_log)
 
 
 if __name__ == "__main__":
