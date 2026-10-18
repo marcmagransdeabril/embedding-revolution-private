@@ -21,9 +21,10 @@ Written in the personal, candid, and intellectually curious spirit of *Through t
 
 ### **Prologue: The Geometry of Meaning**
 
-* From Cartesian Coordinates to Latent Worlds
-* Why Everything is Becoming a Vector
-* The Geek's Compass: Navigating Thousands of Dimensions
+* **The Personal Hook:** The day I realized a word was a coordinate in a 1,536-dimensional universe
+* **From Cartesian Coordinates to Latent Worlds:** The transition from discrete records to continuous geometry
+* **Why Everything is Becoming a Vector:** Text, pixels, audio, graphs, and logic as spatial coordinates
+* **The Geek's Compass:** Navigating thousands of dimensions
 
 ---
 
@@ -36,7 +37,8 @@ Written in the personal, candid, and intellectually curious spirit of *Through t
   * *Linear & Spectral Methods:* SVD, PCA, and classical dimensionality reduction
   * *Probabilistic & Generative Push-Forwards:* Variational Autoencoders (VAEs), Normalizing Flows, and Diffusion processes
   * *Contrastive & Metric Learning:* InfoNCE, Triplet Loss, and pulling semantics together
-* **Vector Arithmetic and Semantic Directionality:** King − Man + Woman = Queen and beyond
+* **Vector Arithmetic and Semantic Directionality:** $\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$ and beyond
+* **The Anisotropy Trap:** Dimensional collapse, the cone effect, and geometric regularization
 
 ---
 
@@ -46,8 +48,8 @@ Written in the personal, candid, and intellectually curious spirit of *Through t
 * **The Geometry of High Dimensions:** Where all volume lives in the crust and all corners are empty
 * **Concentration of Measure:** Why everything random is orthogonal
 * **The Johnson-Lindenstrauss Lemma:** The mathematical miracle that makes embedding search possible
-* Random wals in high dimensions
-* Optimization in high dimensions and wht multi-objective optimzation stops working
+* **Random Walks in High Dimensions:** Diffusion and mixing times on high-dimensional spheres
+* **Optimization in High Dimensions:** Why multi-objective optimization breaks down and how overparameterization rescues gradient descent
 * **Why Neural Networks Love High Dimensions:** Escaping local minima and saddle points
 * **The Manifold Hypothesis:** How real data saves us from high-dimensional emptiness
 
@@ -58,7 +60,8 @@ Written in the personal, candid, and intellectually curious spirit of *Through t
 * **The Personal Hook:** Finding the shortest path when space itself is curved
 * **The Erlangen Programme for Deep Learning:** Symmetries, Invariances, and Equivariances
 * **What is a Path in Tangent Space?** Geodesics, parallel transport, and semantic interpolation
-* **Lie Groups and Continuous Transformations:** Rotating, shifting, and morphing in latent coordinates
+* **Lie Groups and Continuous Transformations:** Rotating, shifting, and morphing in latent coordinates (SO(n), SE(n), and RoPE)
+* **Hyperbolic Latent Spaces:** Poincaré balls, Lorentz models, and embedding hierarchical trees with zero distortion
 * **Gauge Equivariance:** When coordinate frames depend on where you stand
 
 ---
@@ -81,7 +84,7 @@ Written in the personal, candid, and intellectually curious spirit of *Through t
 * **From Graphs to Higher-Order Networks:** Simplicial complexes, cell complexes, and Combinatorial Complexes (CCs)
 * **Topological Cochains and Boundary Operators:** Modeling flows, faces, and cavities
 * **Hodge Theory and Topological Message Passing:** Learning on manifolds with holes
-* **Persistent Homology in Latent Spaces:** Detecting the shape of learned representations
+* **Persistent Homology in Latent Spaces:** Detecting the topological shape of learned representations
 
 ---
 
@@ -131,14 +134,16 @@ Written in the personal, candid, and intellectually curious spirit of *Through t
 
 * **The Personal Hook:** Why my chatbot hallucinated my own resume
 * **Approximate Nearest Neighbor (ANN) Search:** HNSW, IVFFlat, and navigating billion-scale vector indexes
+* **Late Interaction & Multi-Vector Retrieval:** ColBERT, token-level manifold alignment, and PLAID acceleration
 * **Retrieval-Augmented Generation (RAG):** Bridging parametric model memory with external latent knowledge
 * **Hybrid Search:** Fusing BM25 lexical precision with dense vector semantic recall
 * **The Geometry of Hallucinations:** When retrieval lands in out-of-distribution manifold voids
 
 ---
 
-### **Chapter 11: Epilogue: An Algebra of Thought**
+### **Epilogue: An Algebra of Thought**
 
+* **The Personal Hook:** Looking back at the Cartesian coordinate system from 10,000 dimensions
 * **The Unified Picture:** High-dimensional manifolds as the universal medium of intelligence
 * **Open Frontiers:** Scaling laws, interpretability, and geometric bounds on reasoning
 * **Final Geek Musings:** Where does human intuition live in the latent space?
@@ -161,3 +166,4 @@ Or run commands directly via the virtual environment:
 .venv/bin/python <script.py>
 .venv/bin/pytest
 ```
+
