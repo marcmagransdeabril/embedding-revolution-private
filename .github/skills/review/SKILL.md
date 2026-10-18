@@ -30,6 +30,9 @@ Also establish, from `AGENTS.md`, the style guide, or an already-finished chapte
 
 Read the full unit under review (not just isolated diff hunks) before commenting, so feedback accounts for surrounding context. Apply only uncontroversial fixes; ask before anything touching voice, structure, or claims. For a paragraph/section-level review, skip checks that don't apply at that granularity (e.g. whole-chapter structure, index terms) and note which ones were skipped and why.
 
+### Metacognitive Calibration & Length Invariance
+Evaluate empirical and logical claims strictly independent of prose length, rhetorical fluency, or formatting polish. Scrutinize long, eloquent sections with heightened attention for unstated assumptions or buried flaws.
+
 ## Checks
 
 ### 1. Structure
