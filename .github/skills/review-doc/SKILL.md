@@ -1,5 +1,5 @@
 ---
-name: review
+name: review-doc
 description: "Review book content — from a single paragraph up to the whole book — for structure, style, grammar, cross-references, citations, factual accuracy, question/solution completeness, code consistency, and translation sync. Use when: reviewing, auditing, or proofreading text, or checking consistency between language versions."
 ---
 

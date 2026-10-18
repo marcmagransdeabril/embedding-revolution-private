@@ -20,7 +20,8 @@ def test_yaml_frontmatter_and_format_validation():
     
     frontmatter = yaml.safe_load(parts[1])
     assert isinstance(frontmatter, dict), "Frontmatter must be a YAML dictionary"
-    assert frontmatter.get("name") == "review", "Skill name must be 'review'"
+    assert frontmatter.get("name") == "review-doc", "Skill name must be 'review-doc'"
+    assert frontmatter["name"] == SKILL_DIR.name, "Skill name must match directory name"
     assert "description" in frontmatter and len(frontmatter["description"]) > 20, "Skill description must be descriptive"
 
 

@@ -30,5 +30,5 @@ This directory contains the standardized, reproducible Golden Review Benchmark S
 
 ## Running the Benchmark
 ```bash
-python3 .github/skills/review/eval/eval_review_skill.py --output-json tmp/review_skill_baseline_calibration.json
+python3 .github/skills/review-doc/eval/eval_review_skill.py --output-json tmp/review_skill_baseline_calibration.json
 ```

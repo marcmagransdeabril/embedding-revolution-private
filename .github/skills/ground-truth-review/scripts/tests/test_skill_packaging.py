@@ -11,7 +11,7 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[5]
 SKILLS_DIR = REPO_ROOT / ".github" / "skills"
 GT_SKILL_MD = SKILLS_DIR / "ground-truth-review" / "SKILL.md"
-REVIEW_SKILL_MD = SKILLS_DIR / "review" / "SKILL.md"
+REVIEW_SKILL_MD = SKILLS_DIR / "review-doc" / "SKILL.md"
 
 
 def parse_frontmatter(path: Path) -> tuple[dict[str, Any], str]:
