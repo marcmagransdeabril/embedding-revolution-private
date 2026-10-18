@@ -30,8 +30,8 @@ Also establish, from `AGENTS.md`, the style guide, or an already-finished chapte
 
 Read the full unit under review (not just isolated diff hunks) before commenting, so feedback accounts for surrounding context. Apply only uncontroversial fixes; ask before anything touching voice, structure, or claims. For a paragraph/section-level review, skip checks that don't apply at that granularity (e.g. whole-chapter structure, index terms) and note which ones were skipped and why.
 
-### Metacognitive Calibration & Length Invariance
-Evaluate empirical and logical claims strictly independent of prose length, rhetorical fluency, or formatting polish. Scrutinize long, eloquent sections with heightened attention for unstated assumptions or buried flaws.
+### Metacognitive Calibration & Claim Isolation
+Evaluate empirical and logical claims strictly independent of prose length, rhetorical fluency, or formatting polish. Mentally isolate each atomic claim (point estimate, baseline comparison, or inference) from narrative framing before judging soundness. Treat superlative framing or high rhetorical confidence as an alert to verify underlying data and controls.
 
 ## Checks
 
@@ -61,8 +61,14 @@ Sections present, ordered, and labelled per the book's skeleton. Flag deviations
 ### 5. Figures and diagrams
 Every image path exists; every generated diagram has its source file; captions are meaningful and in the chapter's language.
 
-### 6. Citations
-Every citation key exists in the bibliography; every empirical claim is sourced; keep inline citations minimal and prefer the further-reading section.
+### 6. Citations and referenced documents
+- Every citation key exists in the bibliography; every empirical claim is sourced; keep inline citations minimal and prefer the further-reading section.
+- **Referenced document validation**: Validate each document referenced or cited in the unit under review:
+  1. **Existence and indexing**: Confirm that the referenced document (PDF or transcript) exists in `references/` or is cataloged in the bibliography, and is indexed in `references/.ground-index/index.sqlite` (run `python .github/skills/ground-truth-review/scripts/build_index.py` if missing or updated).
+  2. **Bibliographic authenticity**: Verify the metadata (authors, title, year, venue, DOI/arXiv ID) against the actual publication to catch hallucinated, mangled, or misattributed citations (flag non-existent or hallucinated references as **`blocker`**).
+  3. **Claim-to-source grounding**: Verify that each cited passage, theorem, formula, or empirical metric is genuinely supported by the referenced document (invoke `ground-truth-review` / `ground_check.py`). Flag contradicted or ungrounded citations as **`blocker`**.
+  4. **Document integrity**: Ensure the source PDF in `references/` is valid, readable, and non-corrupted; if markdown conversion is used, verify document health with `convert-references` (`verify.py`).
+  5. **Primary source attribution**: Confirm seminal discoveries and primary formulations are cited directly rather than relying exclusively on secondary surveys.
 
 ### 7. Questions and solutions
 - Every question has exactly one matching solution, in the same order and the same file.
@@ -109,4 +115,4 @@ Run exactly what CI runs (check the CI workflow and `Makefile`): typically a ful
 
 ## Output
 
-Group findings by check. For each: file and line reference, severity (blocker / should-fix / suggestion), and a proposed correction. List applied fixes separately from items awaiting the author's decision. For a whole-book review, group by chapter first, then by check, and add a short cross-chapter summary (recurring issues, terminology drift, index/translation gaps spanning multiple chapters).
+Group findings by check. For each: file and line reference, severity (blocker / should-fix / suggestion), and a proposed correction. For substantive and methodological findings, explicitly contrast the author's claimed conclusion against the raw empirical evidence (e.g. `[Claim: ...] vs [Evidence: ...]`). List applied fixes separately from items awaiting the author's decision. For a whole-book review, group by chapter first, then by check, and add a short cross-chapter summary (recurring issues, terminology drift, index/translation gaps spanning multiple chapters).

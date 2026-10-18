@@ -23,18 +23,19 @@ from eval_review_skill import (
 
 
 def test_benchmark_dataset_integrity():
-    """Verify that benchmark dataset has 25 cases with valid taxonomy and annotations."""
+    """Verify that benchmark dataset has 31 cases (27 defect cases across categories A-F + 4 negative controls)."""
     assert BENCHMARK_PATH.exists(), f"Benchmark dataset missing at {BENCHMARK_PATH}"
     cases = load_benchmark_cases(BENCHMARK_PATH)
-    assert len(cases) == 25, f"Expected exactly 25 cases, got {len(cases)}"
+    assert len(cases) == 31, f"Expected exactly 31 cases, got {len(cases)}"
 
     expected_categories = {
         "A_statistical": 6,
         "B_methodological": 5,
         "C_evaluator_bias": 5,
         "D_prior_art": 4,
-        "E_tail_vs_mean": 3,
+        "E_tail_vs_mean": 5,
         "F_latex_formatting": 2,
+        "Z_negative_control": 4,
     }
 
     actual_categories = {}
@@ -46,7 +47,6 @@ def test_benchmark_dataset_integrity():
         assert "title" in case, "Case missing 'title'"
         assert "manuscript_text" in case, "Case missing 'manuscript_text'"
         assert "ground_truth_defects" in case, "Case missing 'ground_truth_defects'"
-        assert len(case["ground_truth_defects"]) >= 1, f"Case {case['id']} has no defects"
 
         cat = case["category"]
         actual_categories[cat] = actual_categories.get(cat, 0) + 1
@@ -54,16 +54,20 @@ def test_benchmark_dataset_integrity():
         if case.get("verbose_variant_text"):
             paired_verbose_count += 1
 
-        for defect in case["ground_truth_defects"]:
-            assert "defect_id" in defect, f"Defect in {case['id']} missing defect_id"
-            assert "severity" in defect, f"Defect in {case['id']} missing severity"
-            assert defect["severity"] in {"blocker", "should_fix", "suggestion"}, f"Invalid severity in {case['id']}"
-            assert "category" in defect, f"Defect in {case['id']} missing category"
-            assert "description" in defect, f"Defect in {case['id']} missing description"
-            assert "keywords" in defect and len(defect["keywords"]) >= 1, f"Defect in {case['id']} missing keywords"
+        if cat != "Z_negative_control":
+            assert len(case["ground_truth_defects"]) >= 1, f"Defect case {case['id']} has no defects"
+            for defect in case["ground_truth_defects"]:
+                assert "defect_id" in defect, f"Defect in {case['id']} missing defect_id"
+                assert "severity" in defect, f"Defect in {case['id']} missing severity"
+                assert defect["severity"] in {"blocker", "should_fix", "suggestion"}, f"Invalid severity in {case['id']}"
+                assert "category" in defect, f"Defect in {case['id']} missing category"
+                assert "description" in defect, f"Defect in {case['id']} missing description"
+                assert "keywords" in defect and len(defect["keywords"]) >= 1, f"Defect in {case['id']} missing keywords"
+        else:
+            assert len(case["ground_truth_defects"]) == 0, f"Negative control {case['id']} must have 0 ground truth defects"
 
     assert actual_categories == expected_categories, f"Category distribution mismatch: {actual_categories}"
-    assert paired_verbose_count == 25, f"Expected 25 paired verbose variants, got {paired_verbose_count}"
+    assert paired_verbose_count == 31, f"Expected 31 paired verbose variants, got {paired_verbose_count}"
 
 
 def test_b0_minimal_prompt_integrity():
@@ -106,7 +110,7 @@ def test_baseline_benchmark_execution():
         skill_path=B0_PATH,
         skill_type="B0",
     )
-    assert b0_summary.total_cases == 25
+    assert b0_summary.total_cases == 31
     assert 0.0 <= b0_summary.recall <= 1.0
     assert 0.0 <= b0_summary.precision <= 1.0
     assert 0.0 <= b0_summary.f1_score <= 1.0
@@ -114,13 +118,15 @@ def test_baseline_benchmark_execution():
 
 
 def test_step1_and_step2_baseline_prompts_integrity():
-    """Verify that Step 1 and Step 2 baseline prompt variants exist and are well-formed."""
+    """Verify that Step 1, Step 2, and Step 3 baseline prompt variants exist and are well-formed."""
     arm1a = EVAL_DIR / "baselines" / "step1_arm1a_verbose.md"
     arm1b = EVAL_DIR / "baselines" / "step1_arm1b_compact.md"
     arm2a = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
     arm2b = EVAL_DIR / "baselines" / "step2_arm2b_compact.md"
+    arm3a = EVAL_DIR / "baselines" / "step3_arm3a_verbose.md"
+    arm3b = EVAL_DIR / "baselines" / "step3_arm3b_compact.md"
 
-    for p in [arm1a, arm1b, arm2a, arm2b]:
+    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b]:
         assert p.exists(), f"Baseline variant missing at {p}"
         text = p.read_text(encoding="utf-8")
         assert "---" in text, f"Missing YAML frontmatter in {p}"
@@ -129,6 +135,9 @@ def test_step1_and_step2_baseline_prompts_integrity():
 
     assert count_tokens(arm2b.read_text(encoding="utf-8")) < count_tokens(arm2a.read_text(encoding="utf-8")), (
         "Arm 2B compact variant must have smaller token footprint than Arm 2A verbose"
+    )
+    assert count_tokens(arm3b.read_text(encoding="utf-8")) < count_tokens(arm3a.read_text(encoding="utf-8")), (
+        "Arm 3B compact variant must have smaller token footprint than Arm 3A verbose"
     )
 
 
@@ -165,4 +174,57 @@ def test_step2_evaluator_bias_gates():
     assert summary_2b.review_yield_per_1k > summary_2a.review_yield_per_1k, (
         f"Arm 2B yield ({summary_2b.review_yield_per_1k}) must exceed Arm 2A ({summary_2a.review_yield_per_1k})"
     )
+
+
+def test_step3_tail_metric_gates():
+    """Verify Step 3 Extreme-Value & Tail vs Mean Metric decision gates and non-target regression invariance."""
+    from eval_review_skill import ARM2B_PATH, compute_regression_analysis
+
+    arm2b = ARM2B_PATH
+    arm3a = EVAL_DIR / "baselines" / "step3_arm3a_verbose.md"
+    arm3b = EVAL_DIR / "baselines" / "step3_arm3b_compact.md"
+
+    summary_2b = run_benchmark_evaluation(
+        skill_name="Arm 2B (Baseline)",
+        skill_path=arm2b,
+        skill_type="custom",
+    )
+    summary_3a = run_benchmark_evaluation(
+        skill_name="Arm 3A",
+        skill_path=arm3a,
+        skill_type="custom",
+    )
+    summary_3b = run_benchmark_evaluation(
+        skill_name="Arm 3B",
+        skill_path=arm3b,
+        skill_type="custom",
+    )
+
+    cat_e_3b = summary_3b.category_breakdown["E_tail_vs_mean"]
+    crit_recall_3b = cat_e_3b["crit_tp"] / cat_e_3b["crit_total"]
+    total_recall_3b = cat_e_3b["tp"] / cat_e_3b["total"]
+    precision_e_3b = cat_e_3b["tp"] / (cat_e_3b["tp"] + cat_e_3b["fp"])
+
+    # 1. 100% detection on Category E (5/5 cases)
+    assert total_recall_3b == 1.0, f"Expected 100% Category E recall, got {total_recall_3b}"
+    assert crit_recall_3b == 1.0, f"Expected 100% critical Category E recall, got {crit_recall_3b}"
+
+    # 2. Precision >= 90%
+    assert precision_e_3b >= 0.90, f"Expected >= 90% precision in Cat E, got {precision_e_3b}"
+
+    # 3. Equal overall recall to Arm 3A
+    assert summary_3b.recall == summary_3a.recall, "Arm 3B should match Arm 3A recall"
+
+    # 4. Yield advantage (Arm 3B > Arm 3A)
+    assert summary_3b.review_yield_per_1k > summary_3a.review_yield_per_1k, (
+        f"Arm 3B yield ({summary_3b.review_yield_per_1k}) must exceed Arm 3A ({summary_3a.review_yield_per_1k})"
+    )
+
+    # 5. Non-target regression invariance & negative control integrity
+    regr_3b = compute_regression_analysis(summary_2b, summary_3b, target_category="E_tail_vs_mean")
+    assert regr_3b.zero_regression_passed is True, (
+        f"Step 3 introduced regressions or false alarms: {regr_3b.non_target_regressions}, FP={regr_3b.negative_control_fp_count}"
+    )
+    assert len(regr_3b.non_target_regressions) == 0, f"Non-target regressions found: {regr_3b.non_target_regressions}"
+    assert regr_3b.negative_control_fp_count == 0, f"Negative control false positives found: {regr_3b.negative_control_fp_count}"
 

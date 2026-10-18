@@ -84,6 +84,7 @@ Every image path exists; every generated diagram has its source file; captions a
 - Both **Contradicted** and **Not found** findings from ground-truth review are classified as **`blocker`** severity in the review output.
 - Report factual errors with the corrected value and source; never fix them silently.
 - For LLM-as-a-judge or human rating studies, audit whether: (1) presentation order is counterbalanced across conditions (mitigating position bias), (2) evaluations are length-normalized or controlled for verbosity bias, (3) scoring criteria are evaluated independently to prevent halo effects, and (4) model family self-enhancement is mitigated via blinding or cross-model evaluators.
+- For search, generation, and multi-candidate tasks (convex payoffs), audit whether top-tail reach (k-max, top-decile yield, pass@k) is evaluated or masked by central averages. Audit whether severe downside risks (p95/p99 tail latency, out-of-distribution failure modes) are concealed by aggregate averages.
 
 ### 9. Markup
 Correct use of the book's callout/admonition environments. Collect all `TODO`/`FIXME` comments into the report.
