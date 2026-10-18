@@ -111,3 +111,58 @@ def test_baseline_benchmark_execution():
     assert 0.0 <= b0_summary.precision <= 1.0
     assert 0.0 <= b0_summary.f1_score <= 1.0
     assert b0_summary.review_yield_per_1k > 0.0
+
+
+def test_step1_and_step2_baseline_prompts_integrity():
+    """Verify that Step 1 and Step 2 baseline prompt variants exist and are well-formed."""
+    arm1a = EVAL_DIR / "baselines" / "step1_arm1a_verbose.md"
+    arm1b = EVAL_DIR / "baselines" / "step1_arm1b_compact.md"
+    arm2a = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
+    arm2b = EVAL_DIR / "baselines" / "step2_arm2b_compact.md"
+
+    for p in [arm1a, arm1b, arm2a, arm2b]:
+        assert p.exists(), f"Baseline variant missing at {p}"
+        text = p.read_text(encoding="utf-8")
+        assert "---" in text, f"Missing YAML frontmatter in {p}"
+        tokens = count_tokens(text)
+        assert 1500 <= tokens <= 3000, f"Token count ({tokens}) outside reasonable bounds for {p}"
+
+    assert count_tokens(arm2b.read_text(encoding="utf-8")) < count_tokens(arm2a.read_text(encoding="utf-8")), (
+        "Arm 2B compact variant must have smaller token footprint than Arm 2A verbose"
+    )
+
+
+def test_step2_evaluator_bias_gates():
+    """Verify Step 2 Evaluator Bias decision gates (100% critical recall, >=90% precision, yield advantage)."""
+    arm2a = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
+    arm2b = EVAL_DIR / "baselines" / "step2_arm2b_compact.md"
+
+    summary_2a = run_benchmark_evaluation(
+        skill_name="Arm 2A",
+        skill_path=arm2a,
+        skill_type="custom",
+    )
+    summary_2b = run_benchmark_evaluation(
+        skill_name="Arm 2B",
+        skill_path=arm2b,
+        skill_type="custom",
+    )
+
+    cat_c_2b = summary_2b.category_breakdown["C_evaluator_bias"]
+    crit_recall_2b = cat_c_2b["crit_tp"] / cat_c_2b["crit_total"]
+    precision_c_2b = cat_c_2b["tp"] / (cat_c_2b["tp"] + cat_c_2b["fp"])
+
+    # 1. 100% detection on critical evaluator bias
+    assert crit_recall_2b == 1.0, f"Expected 100% critical evaluator bias recall, got {crit_recall_2b}"
+
+    # 2. Precision >= 90%
+    assert precision_c_2b >= 0.90, f"Expected >= 90% precision in Cat C, got {precision_c_2b}"
+
+    # 3. Equal overall recall to Arm 2A
+    assert summary_2b.recall == summary_2a.recall, "Arm 2B should match Arm 2A recall"
+
+    # 4. Yield advantage (Arm 2B > Arm 2A)
+    assert summary_2b.review_yield_per_1k > summary_2a.review_yield_per_1k, (
+        f"Arm 2B yield ({summary_2b.review_yield_per_1k}) must exceed Arm 2A ({summary_2a.review_yield_per_1k})"
+    )
+

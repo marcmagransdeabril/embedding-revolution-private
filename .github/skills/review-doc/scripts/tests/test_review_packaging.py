@@ -61,3 +61,19 @@ def test_cross_skill_linkage_and_severity_invariant():
     assert "blocker" in content.lower(), "SKILL.md must specify blocker severity"
     assert "should-fix" in content.lower() or "should fix" in content.lower(), "SKILL.md must specify should-fix severity"
     assert "suggestion" in content.lower(), "SKILL.md must specify suggestion severity"
+
+
+def test_referenced_documents_validation_step():
+    """Verify that SKILL.md contains a procedure for validating referenced documents."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    content_lower = content.lower()
+    
+    assert "referenced document" in content_lower or "referenced documents" in content_lower, (
+        "SKILL.md must contain a referenced document validation step"
+    )
+    assert "build_index.py" in content or "references/.ground-index" in content, (
+        "SKILL.md must reference the ground index or index build script for referenced documents"
+    )
+    assert "bibliographic" in content_lower or "metadata" in content_lower, (
+        "SKILL.md must specify bibliographic/metadata validation for references"
+    )

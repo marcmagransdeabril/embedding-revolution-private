@@ -1,6 +1,6 @@
 ---
 name: review-doc
-description: "Review book content — from a single paragraph up to the whole book — for structure, style, grammar, cross-references, citations, factual accuracy, question/solution completeness, code consistency, and translation sync. Use when: reviewing, auditing, or proofreading text, or checking consistency between language versions."
+description: "Review book content — from a single paragraph up to the whole book — for structure, style, grammar, cross-references, citations, referenced documents validation, factual accuracy, question/solution completeness, code consistency, and translation sync. Use when: reviewing, auditing, or proofreading text, or checking consistency between language versions."
 ---
 
 # Book Review
@@ -61,8 +61,14 @@ Sections present, ordered, and labelled per the book's skeleton. Flag deviations
 ### 5. Figures and diagrams
 Every image path exists; every generated diagram has its source file; captions are meaningful and in the chapter's language.
 
-### 6. Citations
-Every citation key exists in the bibliography; every empirical claim is sourced; keep inline citations minimal and prefer the further-reading section.
+### 6. Citations and referenced documents
+- Every citation key exists in the bibliography; every empirical claim is sourced; keep inline citations minimal and prefer the further-reading section.
+- **Referenced document validation**: Validate each document referenced or cited in the unit under review:
+  1. **Existence and indexing**: Confirm that the referenced document (PDF or transcript) exists in `references/` or is cataloged in the bibliography, and is indexed in `references/.ground-index/index.sqlite` (run `python .github/skills/ground-truth-review/scripts/build_index.py` if missing or updated).
+  2. **Bibliographic authenticity**: Verify the metadata (authors, title, year, venue, DOI/arXiv ID) against the actual publication to catch hallucinated, mangled, or misattributed citations (flag non-existent or hallucinated references as **`blocker`**).
+  3. **Claim-to-source grounding**: Verify that each cited passage, theorem, formula, or empirical metric is genuinely supported by the referenced document (invoke `ground-truth-review` / `ground_check.py`). Flag contradicted or ungrounded citations as **`blocker`**.
+  4. **Document integrity**: Ensure the source PDF in `references/` is valid, readable, and non-corrupted; if markdown conversion is used, verify document health with `convert-references` (`verify.py`).
+  5. **Primary source attribution**: Confirm seminal discoveries and primary formulations are cited directly rather than relying exclusively on secondary surveys.
 
 ### 7. Questions and solutions
 - Every question has exactly one matching solution, in the same order and the same file.
@@ -77,6 +83,7 @@ Every citation key exists in the bibliography; every empirical claim is sourced;
 - Invoke the `ground-truth-review` skill when auditing factual, mathematical, or empirical assertions against `references/`.
 - Both **Contradicted** and **Not found** findings from ground-truth review are classified as **`blocker`** severity in the review output.
 - Report factual errors with the corrected value and source; never fix them silently.
+- For LLM-as-a-judge or human rating studies, audit whether: (1) presentation order is counterbalanced across conditions (mitigating position bias), (2) evaluations are length-normalized or controlled for verbosity bias, (3) scoring criteria are evaluated independently to prevent halo effects, and (4) model family self-enhancement is mitigated via blinding or cross-model evaluators.
 
 ### 9. Markup
 Correct use of the book's callout/admonition environments. Collect all `TODO`/`FIXME` comments into the report.

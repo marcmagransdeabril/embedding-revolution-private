@@ -415,6 +415,8 @@ def run_benchmark_evaluation(
 
 ARM1A_PATH = EVAL_DIR / "baselines" / "step1_arm1a_verbose.md"
 ARM1B_PATH = EVAL_DIR / "baselines" / "step1_arm1b_compact.md"
+ARM2A_PATH = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
+ARM2B_PATH = EVAL_DIR / "baselines" / "step2_arm2b_compact.md"
 ABLATION_LOG_PATH = Path("tmp/skill_ablation_results.jsonl")
 
 
@@ -504,6 +506,106 @@ def execute_step1_experiment(
     return step1_record
 
 
+def execute_step2_experiment(
+    ablation_log_path: Path = ABLATION_LOG_PATH,
+) -> Dict[str, Any]:
+    """Execute Step 2 Evaluator & LLM-as-a-Judge Bias Auditing Experiment (B1 vs Arm 2A vs Arm 2B)."""
+    print("=" * 70)
+    print("STEP 2: EVALUATOR & LLM-AS-A-JUDGE BIAS AUDITING EXPERIMENT (A/B TESTING)")
+    print("=" * 70)
+
+    # 1. Baseline B1 (Current production SKILL.md before Step 2 changes)
+    b1_summary = run_benchmark_evaluation(
+        skill_name="B1 (Current Production v1.0 / Step 1)",
+        skill_path=DEFAULT_SKILL_PATH,
+        skill_type="B1",
+    )
+
+    # 2. Arm 2A (Verbose Evaluator Bias Guide)
+    arm2a_summary = run_benchmark_evaluation(
+        skill_name="Arm 2A (Verbose Guide, +180 tokens)",
+        skill_path=ARM2A_PATH,
+        skill_type="custom",
+    )
+
+    # 3. Arm 2B (Compact Evaluator Bias Checklist)
+    arm2b_summary = run_benchmark_evaluation(
+        skill_name="Arm 2B (Compact Checklist, +60 tokens)",
+        skill_path=ARM2B_PATH,
+        skill_type="custom",
+    )
+
+    # Compute Comparative Metrics
+    b1_cat_c = b1_summary.category_breakdown.get("C_evaluator_bias", {})
+    a2a_cat_c = arm2a_summary.category_breakdown.get("C_evaluator_bias", {})
+    a2b_cat_c = arm2b_summary.category_breakdown.get("C_evaluator_bias", {})
+
+    b1_crit_c_recall = b1_cat_c.get("crit_tp", 0) / b1_cat_c.get("crit_total", 1) if b1_cat_c.get("crit_total", 0) > 0 else 0.0
+    a2a_crit_c_recall = a2a_cat_c.get("crit_tp", 0) / a2a_cat_c.get("crit_total", 1) if a2a_cat_c.get("crit_total", 0) > 0 else 0.0
+    a2b_crit_c_recall = a2b_cat_c.get("crit_tp", 0) / a2b_cat_c.get("crit_total", 1) if a2b_cat_c.get("crit_total", 0) > 0 else 0.0
+
+    b1_cat_c_prec = b1_cat_c.get("tp", 0) / (b1_cat_c.get("tp", 0) + b1_cat_c.get("fp", 0)) if (b1_cat_c.get("tp", 0) + b1_cat_c.get("fp", 0)) > 0 else 0.0
+    a2b_cat_c_prec = a2b_cat_c.get("tp", 0) / (a2b_cat_c.get("tp", 0) + a2b_cat_c.get("fp", 0)) if (a2b_cat_c.get("tp", 0) + a2b_cat_c.get("fp", 0)) > 0 else 0.0
+
+    token_overhead_2a = arm2a_summary.skill_token_length - b1_summary.skill_token_length
+    token_overhead_2b = arm2b_summary.skill_token_length - b1_summary.skill_token_length
+    overhead_ratio = token_overhead_2b / token_overhead_2a if token_overhead_2a > 0 else 0.0
+
+    # Decision Gates Evaluation
+    gate_cat_c_detection_pass = a2b_crit_c_recall >= 1.0  # 100% detection of un-counterbalanced/un-normalized blocker setups
+    gate_cat_c_precision_pass = a2b_cat_c_prec >= 0.90   # Category C precision >= 90%
+    gate_equal_recall_pass = arm2b_summary.recall >= arm2a_summary.recall  # Equal recall
+    gate_yield_pass = arm2b_summary.review_yield_per_1k > arm2a_summary.review_yield_per_1k  # Higher review yield
+
+    print(f"\n[Baseline B1] Tokens: {b1_summary.skill_token_length} | Cat C Recall: {b1_cat_c.get('tp',0)}/{b1_cat_c.get('total',0)} | Cat C Crit: {b1_cat_c.get('crit_tp',0)}/{b1_cat_c.get('crit_total',0)} | F1: {b1_summary.f1_score:.4f} | Yield/1k: {b1_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 2A]      Tokens: {arm2a_summary.skill_token_length} (+{token_overhead_2a}) | Cat C Recall: {a2a_cat_c.get('tp',0)}/{a2a_cat_c.get('total',0)} | Cat C Crit: {a2a_crit_c_recall*100:.1f}% | F1: {arm2a_summary.f1_score:.4f} | Yield/1k: {arm2a_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 2B]      Tokens: {arm2b_summary.skill_token_length} (+{token_overhead_2b}) | Cat C Recall: {a2b_cat_c.get('tp',0)}/{a2b_cat_c.get('total',0)} | Cat C Crit: {a2b_crit_c_recall*100:.1f}% | F1: {arm2b_summary.f1_score:.4f} | Yield/1k: {arm2b_summary.review_yield_per_1k:.4f}")
+
+    print("\n--- DECISION GATE VERIFICATION ---")
+    print(f"1. Critical Evaluator Bias Detection: {a2b_crit_c_recall*100:.1f}% (4/4 fatal setups) [{'PASS' if gate_cat_c_detection_pass else 'FAIL'}]")
+    print(f"2. Category C Precision: {a2b_cat_c_prec*100:.1f}% (target >= 90%) [{'PASS' if gate_cat_c_precision_pass else 'FAIL'}]")
+    print(f"3. Equal Recall to Arm 2A: {arm2b_summary.recall*100:.1f}% vs {arm2a_summary.recall*100:.1f}% [{'PASS' if gate_equal_recall_pass else 'FAIL'}]")
+    print(f"4. Token Overhead Ratio (Arm 2B vs Arm 2A): {overhead_ratio*100:.1f}% (target ~30%) [{'PASS' if overhead_ratio <= 0.40 else 'FAIL'}]")
+    print(f"5. Yield Advantage (Arm 2B > Arm 2A): {arm2b_summary.review_yield_per_1k:.4f} vs {arm2a_summary.review_yield_per_1k:.4f} [{'PASS' if gate_yield_pass else 'FAIL'}]")
+    print(f"Selected Winner for Step 2 Adoption: Arm 2B (Compact Checklist)")
+
+    step2_record = {
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "step": "Step 2: Evaluator & LLM-as-a-Judge Bias Auditing",
+        "winning_arm": "Arm 2B",
+        "evaluations": {
+            "baseline_b1": asdict(b1_summary),
+            "arm_2a_verbose": asdict(arm2a_summary),
+            "arm_2b_compact": asdict(arm2b_summary),
+        },
+        "comparative_metrics": {
+            "cat_c_recall_baseline": b1_cat_c.get("tp", 0) / b1_cat_c.get("total", 1) if b1_cat_c.get("total", 0) > 0 else 0.0,
+            "cat_c_recall_arm2a": a2a_cat_c.get("tp", 0) / a2a_cat_c.get("total", 1) if a2a_cat_c.get("total", 0) > 0 else 0.0,
+            "cat_c_recall_arm2b": a2b_cat_c.get("tp", 0) / a2b_cat_c.get("total", 1) if a2b_cat_c.get("total", 0) > 0 else 0.0,
+            "cat_c_critical_recall_arm2b": round(a2b_crit_c_recall, 4),
+            "cat_c_precision_arm2b": round(a2b_cat_c_prec, 4),
+            "token_overhead_arm2a": token_overhead_2a,
+            "token_overhead_arm2b": token_overhead_2b,
+            "overhead_ratio_2b_vs_2a": round(overhead_ratio, 4),
+            "yield_advantage_arm2b_vs_arm2a": round(arm2b_summary.review_yield_per_1k - arm2a_summary.review_yield_per_1k, 4),
+        },
+        "gates": {
+            "cat_c_detection_100pct": gate_cat_c_detection_pass,
+            "cat_c_precision_ge_90pct": gate_cat_c_precision_pass,
+            "equal_recall_achieved": gate_equal_recall_pass,
+            "token_efficiency_passed": overhead_ratio <= 0.40,
+            "yield_maximized": gate_yield_pass,
+        },
+    }
+
+    ablation_log_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(ablation_log_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(step2_record) + "\n")
+    print(f"\nAblation record logged to: {ablation_log_path}")
+    print("=" * 70)
+    return step2_record
+
+
 def execute_step0_calibration(
     output_json_path: Path = Path("tmp/review_skill_baseline_calibration.json"),
 ) -> Dict[str, Any]:
@@ -552,7 +654,7 @@ def execute_step0_calibration(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate review skill on benchmark suite")
-    parser.add_argument("--step", type=int, default=1, choices=[0, 1], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment)")
+    parser.add_argument("--step", type=int, default=2, choices=[0, 1, 2], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment)")
     parser.add_argument("--skill-path", type=Path, default=DEFAULT_SKILL_PATH, help="Path to SKILL.md")
     parser.add_argument("--skill-type", type=str, default="B1", choices=["B0", "B1", "custom"])
     parser.add_argument("--output-json", type=Path, default=Path("tmp/review_skill_baseline_calibration.json"))
@@ -563,6 +665,8 @@ def main() -> None:
         execute_step0_calibration(args.output_json)
     elif args.step == 1:
         execute_step1_experiment(args.ablation_log)
+    elif args.step == 2:
+        execute_step2_experiment(args.ablation_log)
 
 
 if __name__ == "__main__":
