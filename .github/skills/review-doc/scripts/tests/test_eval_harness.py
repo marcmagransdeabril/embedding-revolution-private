@@ -63,7 +63,7 @@ def test_benchmark_dataset_integrity():
             assert "keywords" in defect and len(defect["keywords"]) >= 1, f"Defect in {case['id']} missing keywords"
 
     assert actual_categories == expected_categories, f"Category distribution mismatch: {actual_categories}"
-    assert paired_verbose_count == 10, f"Expected 10 paired verbose variants, got {paired_verbose_count}"
+    assert paired_verbose_count == 25, f"Expected 25 paired verbose variants, got {paired_verbose_count}"
 
 
 def test_b0_minimal_prompt_integrity():
