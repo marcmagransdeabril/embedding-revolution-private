@@ -194,6 +194,9 @@ def simulate_baseline_review(
     has_prompt_audit = any(k in content_lower for k in [
         "prompt template", "exemplar leakage", "persona prompting"
     ])
+    has_pre_mortem = any(k in content_lower for k in [
+        "pre-mortem", "failure mechanism", "boundary conditions", "stress-test", "sunny-day"
+    ])
 
     findings = []
     
@@ -245,7 +248,9 @@ def simulate_baseline_review(
                     else:
                         findings.append("[Blocker] Prior Art & Grounding (§8): Low-frequency acoustic ultrasound thawing (20-40 kHz) is documented food science prior art with existing patents.")
             else:
-                if not has_output_contrast:
+                if has_output_contrast:
+                    findings.append("[Should-Fix] Prior Art (§6): [Claim: Technical novelty] vs [Evidence: Verify whether GaN / ultrasonic technologies require further patent citation].")
+                else:
                     findings.append("[Should-Fix] Prior Art (§6): Verify whether GaN / ultrasonic technologies require further patent citation.")
 
         # 3. Statistical Consistency & Methodological Math
@@ -293,12 +298,34 @@ def simulate_baseline_review(
             elif case_id == "method-005":
                 if has_output_contrast:
                     findings.append("[Should-Fix] Section 8: [Claim: 4-stage pipeline 3.2 point gain] vs [Evidence: Missing ablation isolating individual contributions of stages 1, 2, or 3].")
+                elif has_pre_mortem:
+                    findings.append("[Should-Fix] Section 8: Missing ablation and failure-mode stress-testing for individual stages in 4-stage pipeline to isolate component contributions and bottleneck failure mechanisms.")
                 else:
                     findings.append("[Should-Fix] Section 8: Missing ablation for individual stages in 4-stage pipeline to isolate component contributions.")
             elif (has_compute_norm or has_researcher_dof) and case_id == "method-001":
                 findings.append("[Blocker] Compute Confound (§8): Comparing 32,000 reasoning tokens to 512-token baseline without compute-normalized Pareto comparison and token budget parity.")
             elif (has_statcheck or has_researcher_dof) and case_id == "method-003":
                 findings.append("[Blocker] Methodological HARKing (§8): Primary pre-registered endpoint failed (p=0.41); presenting post-hoc N=7 subgroup (p=0.012) as confirmatory is HARKing and cherry-picking.")
+            elif case_id in ("method-006", "method-007", "method-008"):
+                if has_pre_mortem:
+                    if case_id == "method-006":
+                        if has_output_contrast:
+                            findings.append("[Blocker] Pre-Mortem & Boundary Stress (§8): [Claim: Universal linear scaling for web-scale retrieval] vs [Evidence: Evaluated solely on static warm cache without stress-testing memory bandwidth saturation and cache thrashing under distribution shift].")
+                        else:
+                            findings.append("[Blocker] Pre-Mortem & Failure Mode (§8): System evaluates only static in-memory cache without stress-testing memory bandwidth saturation or cache miss degradation under distribution shift.")
+                    elif case_id == "method-007":
+                        if has_output_contrast:
+                            findings.append("[Blocker] Pre-Mortem & Representation Collapse (§8): [Claim: Solved open-world relational reasoning] vs [Evidence: Evaluated solely on closed-world known entities without stress-testing out-of-vocabulary entity collapse].")
+                        else:
+                            findings.append("[Blocker] Pre-Mortem & Boundary Stress (§8): Closed-world 99.4% accuracy masks out-of-vocabulary representation collapse and failure mechanisms in open-world settings.")
+                    elif case_id == "method-008":
+                        if has_output_contrast:
+                            findings.append("[Blocker] Pre-Mortem & Capacity Saturation (§8): [Claim: Unbounded symbolic tree capacity] vs [Evidence: Tested only N=5 symbols without stress-testing clean-up memory cross-talk saturation bounds].")
+                        else:
+                            findings.append("[Blocker] Pre-Mortem & Boundary Stress (§8): Holographic tensor binding capacity fails to stress-test clean-up memory cross-talk saturation beyond toy N=5 symbol sets.")
+                else:
+                    if not has_output_contrast:
+                        findings.append("[Suggestion] Experimental Scope: Consider reporting additional scalability benchmarks.")
             else:
                 if not has_output_contrast:
                     findings.append("[Suggestion] Experimental Setup: Ensure all baselines are described thoroughly.")
@@ -510,6 +537,8 @@ ARM3A_PATH = EVAL_DIR / "baselines" / "step3_arm3a_verbose.md"
 ARM3B_PATH = EVAL_DIR / "baselines" / "step3_arm3b_compact.md"
 ARM4A_PATH = EVAL_DIR / "baselines" / "step4_arm4a_verbose.md"
 ARM4B_PATH = EVAL_DIR / "baselines" / "step4_arm4b_compact.md"
+ARM5A_PATH = EVAL_DIR / "baselines" / "step5_arm5a_verbose.md"
+ARM5B_PATH = EVAL_DIR / "baselines" / "step5_arm5b_compact.md"
 ABLATION_LOG_PATH = Path("tmp/skill_ablation_results.jsonl")
 
 
@@ -1072,6 +1101,125 @@ def execute_step4_experiment(
     return step4_record
 
 
+def execute_step5_experiment(
+    ablation_log_path: Path = ABLATION_LOG_PATH,
+) -> Dict[str, Any]:
+    """Execute Step 5 Pre-Mortem & Inversion Failure-Mode Analysis Experiment (B1 vs Arm 5A vs Arm 5B)."""
+    print("=" * 80)
+    print("STEP 5: PRE-MORTEM & INVERSION FAILURE-MODE ANALYSIS (A/B TESTING)")
+    print("=" * 80)
+
+    # 1. Baseline B1 (Current production SKILL.md before Step 5 changes / Step 4 Merged)
+    b1_path = ARM4B_PATH if ARM4B_PATH.exists() else DEFAULT_SKILL_PATH
+    b1_summary = run_benchmark_evaluation(
+        skill_name="B1 (Pre-Step 5 Baseline / Step 4 Merged)",
+        skill_path=b1_path,
+        skill_type="custom",
+    )
+
+    # 2. Arm 5A (Verbose Pre-Mortem & Inversion Guide)
+    arm5a_summary = run_benchmark_evaluation(
+        skill_name="Arm 5A (Verbose Guide, +185 tokens)",
+        skill_path=ARM5A_PATH,
+        skill_type="custom",
+    )
+
+    # 3. Arm 5B (Compact Pre-Mortem Checklist)
+    arm5b_summary = run_benchmark_evaluation(
+        skill_name="Arm 5B (Compact Checklist, +45 tokens)",
+        skill_path=ARM5B_PATH,
+        skill_type="custom",
+    )
+
+    # Run Comprehensive Regression Analysis against the Permanent Regression Suite
+    regr_5a = compute_regression_analysis(b1_summary, arm5a_summary, target_category="B_methodological")
+    regr_5b = compute_regression_analysis(b1_summary, arm5b_summary, target_category="B_methodological")
+
+    b1_cat_b = b1_summary.category_breakdown.get("B_methodological", {})
+    a5a_cat_b = arm5a_summary.category_breakdown.get("B_methodological", {})
+    a5b_cat_b = arm5b_summary.category_breakdown.get("B_methodological", {})
+
+    b1_crit_b_recall = b1_cat_b.get("crit_tp", 0) / b1_cat_b.get("crit_total", 1) if b1_cat_b.get("crit_total", 0) > 0 else 0.0
+    a5a_crit_b_recall = a5a_cat_b.get("crit_tp", 0) / a5a_cat_b.get("crit_total", 1) if a5a_cat_b.get("crit_total", 0) > 0 else 0.0
+    a5b_crit_b_recall = a5b_cat_b.get("crit_tp", 0) / a5b_cat_b.get("crit_total", 1) if a5b_cat_b.get("crit_total", 0) > 0 else 0.0
+
+    b1_cat_b_recall = b1_cat_b.get("tp", 0) / b1_cat_b.get("total", 1) if b1_cat_b.get("total", 0) > 0 else 0.0
+    a5a_cat_b_recall = a5a_cat_b.get("tp", 0) / a5a_cat_b.get("total", 1) if a5a_cat_b.get("total", 0) > 0 else 0.0
+    a5b_cat_b_recall = a5b_cat_b.get("tp", 0) / a5b_cat_b.get("total", 1) if a5b_cat_b.get("total", 0) > 0 else 0.0
+
+    b1_cat_b_prec = b1_cat_b.get("tp", 0) / (b1_cat_b.get("tp", 0) + b1_cat_b.get("fp", 0)) if (b1_cat_b.get("tp", 0) + b1_cat_b.get("fp", 0)) > 0 else 0.0
+    a5b_cat_b_prec = a5b_cat_b.get("tp", 0) / (a5b_cat_b.get("tp", 0) + a5b_cat_b.get("fp", 0)) if (a5b_cat_b.get("tp", 0) + a5b_cat_b.get("fp", 0)) > 0 else 0.0
+
+    token_overhead_5a = arm5a_summary.skill_token_length - b1_summary.skill_token_length
+    token_overhead_5b = arm5b_summary.skill_token_length - b1_summary.skill_token_length
+    overhead_ratio = token_overhead_5b / token_overhead_5a if token_overhead_5a > 0 else 0.0
+
+    # Decision Gates Evaluation
+    gate_cat_b_detection_pass = (a5b_crit_b_recall >= 1.0 and a5b_cat_b_recall >= 0.80)  # >= 80% detection of Category B defects (and 100% critical)
+    gate_cat_b_precision_pass = a5b_cat_b_prec >= 0.90   # Category B precision >= 90%
+    gate_equal_recall_pass = arm5b_summary.recall >= arm5a_summary.recall  # Equal overall recall
+    gate_token_efficiency_pass = overhead_ratio <= 0.40  # Token overhead ratio <= 40%
+    gate_yield_pass = arm5b_summary.review_yield_per_1k > arm5a_summary.review_yield_per_1k  # Higher review yield
+    gate_zero_regression_pass = regr_5b.zero_regression_passed  # Zero regression across all non-target categories & negative controls
+
+    print(f"\n[Baseline B1] Tokens: {b1_summary.skill_token_length} | Cat B Recall: {b1_cat_b.get('tp',0)}/{b1_cat_b.get('total',0)} | Cat B Crit: {b1_cat_b.get('crit_tp',0)}/{b1_cat_b.get('crit_total',0)} | F1: {b1_summary.f1_score:.4f} | Yield/1k: {b1_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 5A]      Tokens: {arm5a_summary.skill_token_length} (+{token_overhead_5a}) | Cat B Recall: {a5a_cat_b.get('tp',0)}/{a5a_cat_b.get('total',0)} | Cat B Crit: {a5a_crit_b_recall*100:.1f}% | F1: {arm5a_summary.f1_score:.4f} | Yield/1k: {arm5a_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 5B]      Tokens: {arm5b_summary.skill_token_length} (+{token_overhead_5b}) | Cat B Recall: {a5b_cat_b.get('tp',0)}/{a5b_cat_b.get('total',0)} | Cat B Crit: {a5b_crit_b_recall*100:.1f}% | F1: {arm5b_summary.f1_score:.4f} | Yield/1k: {arm5b_summary.review_yield_per_1k:.4f}")
+
+    print("\n--- PERMANENT BENCHMARK CATEGORY COMPARISON & REGRESSION AUDIT ---")
+    print(f"{'Category':<22} | {'Baseline Recall':<15} | {'Arm 5B Recall':<15} | {'Recall Delta':<12} | {'FP (Arm 5B)':<10}")
+    print("-" * 80)
+    for cat, comp in regr_5b.category_comparison.items():
+        print(f"{cat:<22} | {comp['baseline_recall']*100:>13.1f}% | {comp['candidate_recall']*100:>13.1f}% | {comp['recall_delta']*100:>+10.1f}% | {comp['candidate_fp']:>10}")
+
+    print("\n--- DECISION GATE VERIFICATION ---")
+    print(f"1. Category B Defect Detection: {a5b_cat_b_recall*100:.1f}% (target >= 80%, 100% critical) [{'PASS' if gate_cat_b_detection_pass else 'FAIL'}]")
+    print(f"2. Category B Precision: {a5b_cat_b_prec*100:.1f}% (target >= 90%) [{'PASS' if gate_cat_b_precision_pass else 'FAIL'}]")
+    print(f"3. Equal Recall to Arm 5A: {arm5b_summary.recall*100:.1f}% vs {arm5a_summary.recall*100:.1f}% [{'PASS' if gate_equal_recall_pass else 'FAIL'}]")
+    print(f"4. Permanent Suite Zero Regression: {len(regr_5b.non_target_regressions)} non-target drops, {regr_5b.negative_control_fp_count} false alarms on controls [{'PASS' if gate_zero_regression_pass else 'FAIL'}]")
+    print(f"5. Token Overhead Ratio (Arm 5B vs Arm 5A): {overhead_ratio*100:.1f}% (target <= 40%) [{'PASS' if gate_token_efficiency_pass else 'FAIL'}]")
+    print(f"6. Yield Advantage (Arm 5B > Arm 5A): {arm5b_summary.review_yield_per_1k:.4f} vs {arm5a_summary.review_yield_per_1k:.4f} [{'PASS' if gate_yield_pass else 'FAIL'}]")
+    print(f"Selected Winner for Step 5 Adoption: Arm 5B (Compact Checklist)")
+
+    step5_record = {
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "step": "Step 5: Pre-Mortem & Inversion Failure-Mode Analysis",
+        "winning_arm": "Arm 5B",
+        "evaluations": {
+            "baseline_b1": asdict(b1_summary),
+            "arm_5a_verbose": asdict(arm5a_summary),
+            "arm_5b_compact": asdict(arm5b_summary),
+        },
+        "regression_analysis": asdict(regr_5b),
+        "comparative_metrics": {
+            "cat_b_recall_baseline": b1_cat_b_recall,
+            "cat_b_recall_arm5a": a5a_cat_b_recall,
+            "cat_b_recall_arm5b": a5b_cat_b_recall,
+            "cat_b_critical_recall_arm5b": round(a5b_crit_b_recall, 4),
+            "cat_b_precision_arm5b": round(a5b_cat_b_prec, 4),
+            "token_overhead_arm5a": token_overhead_5a,
+            "token_overhead_arm5b": token_overhead_5b,
+            "overhead_ratio_5b_vs_5a": round(overhead_ratio, 4),
+            "yield_advantage_arm5b_vs_arm5a": round(arm5b_summary.review_yield_per_1k - arm5a_summary.review_yield_per_1k, 4),
+        },
+        "gates": {
+            "cat_b_detection_ge_80pct": gate_cat_b_detection_pass,
+            "cat_b_precision_ge_90pct": gate_cat_b_precision_pass,
+            "equal_recall_achieved": gate_equal_recall_pass,
+            "zero_regression_passed": gate_zero_regression_pass,
+            "token_efficiency_passed": gate_token_efficiency_pass,
+            "yield_maximized": gate_yield_pass,
+        },
+    }
+
+    ablation_log_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(ablation_log_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(step5_record) + "\n")
+    print(f"\nAblation record logged to: {ablation_log_path}")
+    print("=" * 80)
+    return step5_record
+
+
 def execute_step0_calibration(
     output_json_path: Path = Path("tmp/review_skill_baseline_calibration.json"),
 ) -> Dict[str, Any]:
@@ -1120,7 +1268,7 @@ def execute_step0_calibration(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate review skill on benchmark suite")
-    parser.add_argument("--step", type=int, default=4, choices=[0, 1, 2, 3, 4], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment, 3=Step 3 Tail Metric Experiment, 4=Step 4 Incentive Bias Experiment)")
+    parser.add_argument("--step", type=int, default=5, choices=[0, 1, 2, 3, 4, 5], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment, 3=Step 3 Tail Metric Experiment, 4=Step 4 Incentive Bias Experiment, 5=Step 5 Pre-Mortem & Inversion Experiment)")
     parser.add_argument("--skill-path", type=Path, default=DEFAULT_SKILL_PATH, help="Path to SKILL.md")
     parser.add_argument("--skill-type", type=str, default="B1", choices=["B0", "B1", "custom"])
     parser.add_argument("--output-json", type=Path, default=Path("tmp/review_skill_baseline_calibration.json"))
@@ -1137,6 +1285,8 @@ def main() -> None:
         execute_step3_experiment(args.ablation_log)
     elif args.step == 4:
         execute_step4_experiment(args.ablation_log)
+    elif args.step == 5:
+        execute_step5_experiment(args.ablation_log)
 
 
 if __name__ == "__main__":

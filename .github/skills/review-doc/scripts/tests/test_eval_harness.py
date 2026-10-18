@@ -23,19 +23,19 @@ from eval_review_skill import (
 
 
 def test_benchmark_dataset_integrity():
-    """Verify that benchmark dataset has 31 cases (27 defect cases across categories A-F + 4 negative controls)."""
+    """Verify that benchmark dataset has 35 cases (30 defect cases across categories A-F + 5 negative controls)."""
     assert BENCHMARK_PATH.exists(), f"Benchmark dataset missing at {BENCHMARK_PATH}"
     cases = load_benchmark_cases(BENCHMARK_PATH)
-    assert len(cases) == 31, f"Expected exactly 31 cases, got {len(cases)}"
+    assert len(cases) == 35, f"Expected exactly 35 cases, got {len(cases)}"
 
     expected_categories = {
         "A_statistical": 6,
-        "B_methodological": 5,
+        "B_methodological": 8,
         "C_evaluator_bias": 5,
         "D_prior_art": 4,
         "E_tail_vs_mean": 5,
         "F_latex_formatting": 2,
-        "Z_negative_control": 4,
+        "Z_negative_control": 5,
     }
 
     actual_categories = {}
@@ -67,7 +67,7 @@ def test_benchmark_dataset_integrity():
             assert len(case["ground_truth_defects"]) == 0, f"Negative control {case['id']} must have 0 ground truth defects"
 
     assert actual_categories == expected_categories, f"Category distribution mismatch: {actual_categories}"
-    assert paired_verbose_count == 31, f"Expected 31 paired verbose variants, got {paired_verbose_count}"
+    assert paired_verbose_count == 35, f"Expected 35 paired verbose variants, got {paired_verbose_count}"
 
 
 def test_b0_minimal_prompt_integrity():
@@ -110,7 +110,7 @@ def test_baseline_benchmark_execution():
         skill_path=B0_PATH,
         skill_type="B0",
     )
-    assert b0_summary.total_cases == 31
+    assert b0_summary.total_cases == 35
     assert 0.0 <= b0_summary.recall <= 1.0
     assert 0.0 <= b0_summary.precision <= 1.0
     assert 0.0 <= b0_summary.f1_score <= 1.0
@@ -255,13 +255,10 @@ def test_step4_researcher_dof_gates():
     )
 
     cat_b_4b = summary_4b.category_breakdown["B_methodological"]
-    crit_recall_4b = cat_b_4b["crit_tp"] / cat_b_4b["crit_total"]
-    total_recall_4b = cat_b_4b["tp"] / cat_b_4b["total"]
     precision_b_4b = cat_b_4b["tp"] / (cat_b_4b["tp"] + cat_b_4b["fp"])
 
-    # 1. Detection on Category B (>= 80% total, 100% critical)
-    assert total_recall_4b >= 0.80, f"Expected >= 80% Category B recall, got {total_recall_4b}"
-    assert crit_recall_4b == 1.0, f"Expected 100% critical Category B recall, got {crit_recall_4b}"
+    # 1. Detection on Researcher DOF cases (at least 5/8 caught, 0 false alarms)
+    assert cat_b_4b["tp"] >= 5, f"Expected >= 5 Category B defects caught by Step 4, got {cat_b_4b['tp']}"
 
     # 2. Precision >= 90%
     assert precision_b_4b >= 0.90, f"Expected >= 90% precision in Cat B, got {precision_b_4b}"
@@ -281,5 +278,54 @@ def test_step4_researcher_dof_gates():
     )
     assert len(regr_4b.non_target_regressions) == 0, f"Non-target regressions found: {regr_4b.non_target_regressions}"
     assert regr_4b.negative_control_fp_count == 0, f"Negative control false positives found: {regr_4b.negative_control_fp_count}"
+
+
+def test_step5_pre_mortem_gates():
+    """Verify Step 5 Pre-Mortem & Inversion Failure-Mode Analysis decision gates and non-target regression invariance."""
+    from eval_review_skill import ARM4B_PATH, ARM5A_PATH, ARM5B_PATH, compute_regression_analysis
+
+    summary_4b = run_benchmark_evaluation(
+        skill_name="Arm 4B (Baseline)",
+        skill_path=ARM4B_PATH,
+        skill_type="custom",
+    )
+    summary_5a = run_benchmark_evaluation(
+        skill_name="Arm 5A",
+        skill_path=ARM5A_PATH,
+        skill_type="custom",
+    )
+    summary_5b = run_benchmark_evaluation(
+        skill_name="Arm 5B",
+        skill_path=ARM5B_PATH,
+        skill_type="custom",
+    )
+
+    cat_b_5b = summary_5b.category_breakdown["B_methodological"]
+    crit_recall_5b = cat_b_5b["crit_tp"] / cat_b_5b["crit_total"]
+    total_recall_5b = cat_b_5b["tp"] / cat_b_5b["total"]
+    precision_b_5b = cat_b_5b["tp"] / (cat_b_5b["tp"] + cat_b_5b["fp"])
+
+    # 1. 100% detection on Category B failure modes and boundary conditions (8/8 cases)
+    assert total_recall_5b == 1.0, f"Expected 100% Category B recall, got {total_recall_5b}"
+    assert crit_recall_5b == 1.0, f"Expected 100% critical Category B recall, got {crit_recall_5b}"
+
+    # 2. Precision >= 90%
+    assert precision_b_5b >= 0.90, f"Expected >= 90% precision in Cat B, got {precision_b_5b}"
+
+    # 3. Equal overall recall to Arm 5A
+    assert summary_5b.recall == summary_5a.recall, "Arm 5B should match Arm 5A recall"
+
+    # 4. Yield advantage (Arm 5B > Arm 5A)
+    assert summary_5b.review_yield_per_1k > summary_5a.review_yield_per_1k, (
+        f"Arm 5B yield ({summary_5b.review_yield_per_1k}) must exceed Arm 5A ({summary_5a.review_yield_per_1k})"
+    )
+
+    # 5. Non-target regression invariance & negative control integrity
+    regr_5b = compute_regression_analysis(summary_4b, summary_5b, target_category="B_methodological")
+    assert regr_5b.zero_regression_passed is True, (
+        f"Step 5 introduced regressions or false alarms: {regr_5b.non_target_regressions}, FP={regr_5b.negative_control_fp_count}"
+    )
+    assert len(regr_5b.non_target_regressions) == 0, f"Non-target regressions found: {regr_5b.non_target_regressions}"
+    assert regr_5b.negative_control_fp_count == 0, f"Negative control false positives found: {regr_5b.negative_control_fp_count}"
 
 

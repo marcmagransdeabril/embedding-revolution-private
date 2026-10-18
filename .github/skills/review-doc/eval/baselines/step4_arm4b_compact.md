@@ -114,3 +114,7 @@ If another language version exists:
 
 ### 14. Build and test
 Run exactly what CI runs (check the CI workflow and `Makefile`): typically a full render plus the test suite. The review is not complete until these pass cleanly.
+
+## Output
+
+Group findings by check. For each: file and line reference, severity (blocker / should-fix / suggestion), and a proposed correction. For substantive and methodological findings, explicitly contrast the author's claimed conclusion against the raw empirical evidence (e.g. `[Claim: ...] vs [Evidence: ...]`). List applied fixes separately from items awaiting the author's decision. For a whole-book review, group by chapter first, then by check, and add a short cross-chapter summary (recurring issues, terminology drift, index/translation gaps spanning multiple chapters).

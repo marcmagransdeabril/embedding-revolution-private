@@ -51,27 +51,28 @@ def test_yaml_frontmatter_and_format_validation():
 
 
 def test_procedure_and_execution_completeness():
-    """Verify that all required workflow steps (0 through 6) are fully documented."""
+    """Verify that all required workflow steps and environment requirements are fully documented."""
     assert GT_SKILL_MD.is_file()
     _, body = parse_frontmatter(GT_SKILL_MD)
 
-    # Step 0: Background Daemon Check
-    assert "Step 0" in body or "0." in body
-    assert "daemon.pid" in body
-    assert "systemd-run" in body
+    # When to Invoke (Triggers) and Environment
+    assert "When to Invoke" in body or "Triggers" in body
+    assert ".venv" in body
+    assert "python" in body.lower()
 
-    # Step 1: Index Check
+    # Step 1: Index Check / Build
     assert "Step 1" in body or "1." in body
     assert "index.sqlite" in body
     assert "build_index.py" in body
 
-    # Step 2: Claim Extraction & Query Formulation
+    # Step 2: Live Claim Extraction & Query Formulation
     assert "Step 2" in body or "2." in body
     assert "Query Formulation" in body or "query formulation" in body.lower()
 
     # Step 3: Candidate Retrieval
     assert "Step 3" in body or "3." in body
     assert "ground_check.py" in body
+    assert "search_index" in body
     assert "no_match" in body or "retry" in body.lower()
     assert "synonym" in body.lower() or "reword" in body.lower()
 
