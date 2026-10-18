@@ -242,15 +242,19 @@ def render_page_image(
     dpi: int = 150,
 ) -> Path:
     """Render a 1-based page of a PDF document to a PNG file."""
-    doc_stem = Path(doc).stem
-    pdf_path = references_dir / f"{doc_stem}.pdf"
+    # Handle doc identifiers that may contain dots or end with .pdf
+    doc_clean = doc.removesuffix(".pdf") if doc.endswith(".pdf") else doc
+    pdf_path = references_dir / f"{doc_clean}.pdf"
     if not pdf_path.is_file():
-        candidate = Path(doc)
-        if candidate.is_file():
-            pdf_path = candidate
-            doc_stem = candidate.stem
+        if (references_dir / doc).is_file():
+            pdf_path = references_dir / doc
+        elif Path(doc).is_file():
+            pdf_path = Path(doc)
+        elif (references_dir / f"{Path(doc).stem}.pdf").is_file():
+            pdf_path = references_dir / f"{Path(doc).stem}.pdf"
         else:
             raise FileNotFoundError(f"PDF document not found: {doc} in {references_dir}")
+    doc_stem = pdf_path.stem
 
     pdf_doc = pymupdf.open(pdf_path)
     try:

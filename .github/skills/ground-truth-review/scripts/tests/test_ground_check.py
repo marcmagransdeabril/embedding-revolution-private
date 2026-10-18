@@ -38,7 +38,7 @@ def make_synthetic_pdf(
     for text in pages_text:
         page = doc.new_page()
         if text:
-            page.insert_text((50, 50), text)
+            page.insert_textbox(page.rect, text)
     if toc is not None:
         doc.set_toc(toc)
     doc.save(str(path))
