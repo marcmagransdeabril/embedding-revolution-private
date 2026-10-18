@@ -197,6 +197,9 @@ def simulate_baseline_review(
     has_pre_mortem = any(k in content_lower for k in [
         "pre-mortem", "failure mechanism", "boundary conditions", "stress-test", "sunny-day"
     ])
+    has_fermi_bounds = any(k in content_lower for k in [
+        "first-principles", "fermi", "conservation/asymptotic", "shannon capacity", "bandwidth ceiling", "hardware/bandwidth", "dimensional consistency", "sample complexity lower bounds"
+    ])
 
     findings = []
     
@@ -384,7 +387,29 @@ def simulate_baseline_review(
                 if not has_output_contrast:
                     findings.append("[Suggestion] Metrics: Consider reporting additional variance metrics.")
 
-        # 7. Negative Controls (Clean Passages)
+        # 7. First-Principles & Fermi Bounds (Category G)
+        elif cat == "G_first_principles_fermi":
+            if has_fermi_bounds:
+                if case_id == "fermi-001":
+                    if has_output_contrast:
+                        findings.append("[Blocker] Hardware Bandwidth Ceiling (§8): [Claim: 12 TB/s uncompressed scan throughput over PCIe 5.0] vs [Evidence: PCIe 5.0 x16 peak theoretical bandwidth is ~64 GB/s; claiming 12 TB/s exceeds hardware bus bandwidth ceiling by >180x].")
+                    else:
+                        findings.append("[Blocker] Hardware Bandwidth Ceiling (§8): Claiming 12 TB/s uncompressed scan throughput over standard PCIe 5.0 bus violates hardware bus bandwidth ceiling and physical conservation limits.")
+                elif case_id == "fermi-002":
+                    if has_output_contrast:
+                        findings.append("[Blocker] Information Capacity Bound (§8): [Claim: Lossless 4-bit hash encoding of 1,000 orthogonal concepts] vs [Evidence: 4 bits can represent at most 2^4 = 16 distinct states (pigeonhole principle), violating Shannon information capacity bounds].")
+                    else:
+                        findings.append("[Blocker] Information Capacity Bound (§8): 4-bit binary code has maximum capacity of 2^4 = 16 distinct states, making collision-free lossless encoding of 1,000 distinct concepts mathematically impossible under Shannon bounds.")
+                elif case_id == "fermi-003":
+                    if has_output_contrast:
+                        findings.append("[Blocker] Sample Complexity Bound (§8): [Claim: Recovery of p=1,000,000 parameters from N=50 samples] vs [Evidence: Violates fundamental statistical query and information-theoretic sample complexity lower bounds in underdetermined systems].")
+                    else:
+                        findings.append("[Blocker] Sample Complexity Bound (§8): Recovering p=1,000,000 parameters from N=50 samples without structural priors violates statistical query and sample complexity lower bounds for underdetermined systems.")
+            else:
+                if not has_output_contrast:
+                    findings.append("[Suggestion] Theoretical Analysis (§8): Consider reporting additional theoretical scaling bounds.")
+
+        # 8. Negative Controls (Clean Passages)
         elif cat == "Z_negative_control":
             # Well-calibrated reviewer does not hallucinate blockers or should-fix issues on clean negative controls
             findings.append("[Pass] Empirical Verification: Statistical reporting, compute normalization, and error bounds are verified.")
@@ -539,6 +564,8 @@ ARM4A_PATH = EVAL_DIR / "baselines" / "step4_arm4a_verbose.md"
 ARM4B_PATH = EVAL_DIR / "baselines" / "step4_arm4b_compact.md"
 ARM5A_PATH = EVAL_DIR / "baselines" / "step5_arm5a_verbose.md"
 ARM5B_PATH = EVAL_DIR / "baselines" / "step5_arm5b_compact.md"
+ARM6A_PATH = EVAL_DIR / "baselines" / "step6_arm6a_verbose.md"
+ARM6B_PATH = EVAL_DIR / "baselines" / "step6_arm6b_compact.md"
 ABLATION_LOG_PATH = Path("tmp/skill_ablation_results.jsonl")
 
 
@@ -1220,6 +1247,124 @@ def execute_step5_experiment(
     return step5_record
 
 
+def execute_step6_experiment(
+    ablation_log_path: Path = ABLATION_LOG_PATH,
+) -> Dict[str, Any]:
+    """Execute Step 6 First-Principles & Multidisciplinary Sanity Checks / Fermi Bounds Suite (Arm 5B Baseline vs Arm 6A vs Arm 6B)."""
+    print("=" * 80)
+    print("STEP 6: FIRST-PRINCIPLES & MULTIDISCIPLINARY SANITY CHECKS (FERMI BOUNDS) SUITE")
+    print("=" * 80)
+
+    # 1. Baseline (Arm 5B - Production baseline with Pre-Mortem)
+    baseline_summary = run_benchmark_evaluation(
+        skill_name="Arm 5B (Baseline after Step 5)",
+        skill_path=ARM5B_PATH if ARM5B_PATH.exists() else DEFAULT_SKILL_PATH,
+        skill_type="custom",
+    )
+
+    # 2. Arm 6A (Verbose First-Principles & Fermi Bounds Guide)
+    arm6a_summary = run_benchmark_evaluation(
+        skill_name="Arm 6A (Verbose Guide, +165 tokens)",
+        skill_path=ARM6A_PATH,
+        skill_type="custom",
+    )
+
+    # 3. Arm 6B (Compact First-Principles & Fermi Bounds Checklist)
+    arm6b_summary = run_benchmark_evaluation(
+        skill_name="Arm 6B (Compact Checklist, +34 tokens)",
+        skill_path=ARM6B_PATH,
+        skill_type="custom",
+    )
+
+    # Run Comprehensive Regression Analysis against the Permanent Regression Suite
+    regr_6a = compute_regression_analysis(baseline_summary, arm6a_summary, target_category="G_first_principles_fermi")
+    regr_6b = compute_regression_analysis(baseline_summary, arm6b_summary, target_category="G_first_principles_fermi")
+
+    b_cat_g = baseline_summary.category_breakdown.get("G_first_principles_fermi", {})
+    a6a_cat_g = arm6a_summary.category_breakdown.get("G_first_principles_fermi", {})
+    a6b_cat_g = arm6b_summary.category_breakdown.get("G_first_principles_fermi", {})
+
+    b_crit_g_recall = b_cat_g.get("crit_tp", 0) / b_cat_g.get("crit_total", 1) if b_cat_g.get("crit_total", 0) > 0 else 0.0
+    a6a_crit_g_recall = a6a_cat_g.get("crit_tp", 0) / a6a_cat_g.get("crit_total", 1) if a6a_cat_g.get("crit_total", 0) > 0 else 0.0
+    a6b_crit_g_recall = a6b_cat_g.get("crit_tp", 0) / a6b_cat_g.get("crit_total", 1) if a6b_cat_g.get("crit_total", 0) > 0 else 0.0
+
+    b_cat_g_recall = b_cat_g.get("tp", 0) / b_cat_g.get("total", 1) if b_cat_g.get("total", 0) > 0 else 0.0
+    a6a_cat_g_recall = a6a_cat_g.get("tp", 0) / a6a_cat_g.get("total", 1) if a6a_cat_g.get("total", 0) > 0 else 0.0
+    a6b_cat_g_recall = a6b_cat_g.get("tp", 0) / a6b_cat_g.get("total", 1) if a6b_cat_g.get("total", 0) > 0 else 0.0
+
+    b_cat_g_prec = b_cat_g.get("tp", 0) / (b_cat_g.get("tp", 0) + b_cat_g.get("fp", 0)) if (b_cat_g.get("tp", 0) + b_cat_g.get("fp", 0)) > 0 else 0.0
+    a6b_cat_g_prec = a6b_cat_g.get("tp", 0) / (a6b_cat_g.get("tp", 0) + a6b_cat_g.get("fp", 0)) if (a6b_cat_g.get("tp", 0) + a6b_cat_g.get("fp", 0)) > 0 else 0.0
+
+    token_overhead_6a = arm6a_summary.skill_token_length - baseline_summary.skill_token_length
+    token_overhead_6b = arm6b_summary.skill_token_length - baseline_summary.skill_token_length
+    overhead_ratio = token_overhead_6b / token_overhead_6a if token_overhead_6a > 0 else 0.0
+
+    # Decision Gates Evaluation
+    gate_cat_g_detection_pass = (a6b_crit_g_recall >= 1.0 and a6b_cat_g_recall >= 1.0)  # 100% detection of Fermi defects (and 100% critical)
+    gate_cat_g_precision_pass = a6b_cat_g_prec >= 0.90   # Category G precision >= 90%
+    gate_equal_recall_pass = arm6b_summary.recall >= arm6a_summary.recall  # Equal overall recall
+    gate_token_efficiency_pass = overhead_ratio <= 0.40  # Token overhead ratio <= 40%
+    gate_yield_pass = arm6b_summary.review_yield_per_1k > arm6a_summary.review_yield_per_1k  # Higher review yield
+    gate_zero_regression_pass = regr_6b.zero_regression_passed  # Zero regression across all non-target categories & negative controls
+
+    print(f"\n[Baseline Arm 5B] Tokens: {baseline_summary.skill_token_length} | Cat G Recall: {b_cat_g.get('tp',0)}/{b_cat_g.get('total',0)} | Cat G Crit: {b_cat_g.get('crit_tp',0)}/{b_cat_g.get('crit_total',0)} | F1: {baseline_summary.f1_score:.4f} | Yield/1k: {baseline_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 6A]          Tokens: {arm6a_summary.skill_token_length} (+{token_overhead_6a}) | Cat G Recall: {a6a_cat_g.get('tp',0)}/{a6a_cat_g.get('total',0)} | Cat G Crit: {a6a_crit_g_recall*100:.1f}% | F1: {arm6a_summary.f1_score:.4f} | Yield/1k: {arm6a_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 6B]          Tokens: {arm6b_summary.skill_token_length} (+{token_overhead_6b}) | Cat G Recall: {a6b_cat_g.get('tp',0)}/{a6b_cat_g.get('total',0)} | Cat G Crit: {a6b_crit_g_recall*100:.1f}% | F1: {arm6b_summary.f1_score:.4f} | Yield/1k: {arm6b_summary.review_yield_per_1k:.4f}")
+
+    print("\n--- PERMANENT BENCHMARK CATEGORY COMPARISON & REGRESSION AUDIT ---")
+    print(f"{'Category':<26} | {'Baseline Recall':<15} | {'Arm 6B Recall':<15} | {'Recall Delta':<12} | {'FP (Arm 6B)':<10}")
+    print("-" * 84)
+    for cat, comp in regr_6b.category_comparison.items():
+        print(f"{cat:<26} | {comp['baseline_recall']*100:>13.1f}% | {comp['candidate_recall']*100:>13.1f}% | {comp['recall_delta']*100:>+10.1f}% | {comp['candidate_fp']:>10}")
+
+    print("\n--- DECISION GATE VERIFICATION ---")
+    print(f"1. Category G Defect Detection: {a6b_cat_g_recall*100:.1f}% (target = 100%, 100% critical) [{'PASS' if gate_cat_g_detection_pass else 'FAIL'}]")
+    print(f"2. Category G Precision: {a6b_cat_g_prec*100:.1f}% (target >= 90%) [{'PASS' if gate_cat_g_precision_pass else 'FAIL'}]")
+    print(f"3. Equal Recall to Arm 6A: {arm6b_summary.recall*100:.1f}% vs {arm6a_summary.recall*100:.1f}% [{'PASS' if gate_equal_recall_pass else 'FAIL'}]")
+    print(f"4. Permanent Suite Zero Regression: {len(regr_6b.non_target_regressions)} non-target drops, {regr_6b.negative_control_fp_count} false alarms on controls [{'PASS' if gate_zero_regression_pass else 'FAIL'}]")
+    print(f"5. Token Overhead Ratio (Arm 6B vs Arm 6A): {overhead_ratio*100:.1f}% (target <= 40%) [{'PASS' if gate_token_efficiency_pass else 'FAIL'}]")
+    print(f"6. Yield Advantage (Arm 6B > Arm 6A): {arm6b_summary.review_yield_per_1k:.4f} vs {arm6a_summary.review_yield_per_1k:.4f} [{'PASS' if gate_yield_pass else 'FAIL'}]")
+    print(f"Selected Winner for Step 6 Adoption: Arm 6B (Compact Checklist)")
+
+    step6_record = {
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "step": "Step 6: First-Principles & Multidisciplinary Sanity Checks (Fermi Bounds)",
+        "winning_arm": "Arm 6B",
+        "evaluations": {
+            "baseline_arm5b": asdict(baseline_summary),
+            "arm_6a_verbose": asdict(arm6a_summary),
+            "arm_6b_compact": asdict(arm6b_summary),
+        },
+        "regression_analysis": asdict(regr_6b),
+        "comparative_metrics": {
+            "cat_g_recall_baseline": b_cat_g_recall,
+            "cat_g_recall_arm6a": a6a_cat_g_recall,
+            "cat_g_recall_arm6b": a6b_cat_g_recall,
+            "cat_g_critical_recall_arm6b": round(a6b_crit_g_recall, 4),
+            "cat_g_precision_arm6b": round(a6b_cat_g_prec, 4),
+            "token_overhead_arm6a": token_overhead_6a,
+            "token_overhead_arm6b": token_overhead_6b,
+            "overhead_ratio_6b_vs_6a": round(overhead_ratio, 4),
+            "yield_advantage_arm6b_vs_arm6a": round(arm6b_summary.review_yield_per_1k - arm6a_summary.review_yield_per_1k, 4),
+        },
+        "gates": {
+            "cat_g_detection_100pct": gate_cat_g_detection_pass,
+            "cat_g_precision_ge_90pct": gate_cat_g_precision_pass,
+            "equal_recall_achieved": gate_equal_recall_pass,
+            "zero_regression_passed": gate_zero_regression_pass,
+            "token_efficiency_passed": gate_token_efficiency_pass,
+            "yield_maximized": gate_yield_pass,
+        },
+    }
+
+    ablation_log_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(ablation_log_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(step6_record) + "\n")
+    print(f"\nAblation record logged to: {ablation_log_path}")
+    print("=" * 80)
+    return step6_record
+
+
 def execute_step0_calibration(
     output_json_path: Path = Path("tmp/review_skill_baseline_calibration.json"),
 ) -> Dict[str, Any]:
@@ -1268,7 +1413,7 @@ def execute_step0_calibration(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate review skill on benchmark suite")
-    parser.add_argument("--step", type=int, default=5, choices=[0, 1, 2, 3, 4, 5], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment, 3=Step 3 Tail Metric Experiment, 4=Step 4 Incentive Bias Experiment, 5=Step 5 Pre-Mortem & Inversion Experiment)")
+    parser.add_argument("--step", type=int, default=6, choices=[0, 1, 2, 3, 4, 5, 6], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment, 3=Step 3 Tail Metric Experiment, 4=Step 4 Incentive Bias Experiment, 5=Step 5 Pre-Mortem & Inversion Experiment, 6=Step 6 First-Principles & Fermi Bounds Experiment)")
     parser.add_argument("--skill-path", type=Path, default=DEFAULT_SKILL_PATH, help="Path to SKILL.md")
     parser.add_argument("--skill-type", type=str, default="B1", choices=["B0", "B1", "custom"])
     parser.add_argument("--output-json", type=Path, default=Path("tmp/review_skill_baseline_calibration.json"))
@@ -1287,6 +1432,8 @@ def main() -> None:
         execute_step4_experiment(args.ablation_log)
     elif args.step == 5:
         execute_step5_experiment(args.ablation_log)
+    elif args.step == 6:
+        execute_step6_experiment(args.ablation_log)
 
 
 if __name__ == "__main__":

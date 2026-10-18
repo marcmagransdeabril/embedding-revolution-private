@@ -83,10 +83,11 @@ Every image path exists; every generated diagram has its source file; captions a
 - Invoke the `ground-truth-review` skill when auditing factual, mathematical, or empirical assertions against `references/`.
 - Both **Contradicted** and **Not found** findings from ground-truth review are classified as **`blocker`** severity in the review output.
 - Report factual errors with the corrected value and source; never fix them silently.
-- For LLM-as-a-judge or human rating studies, audit whether: (1) presentation order is counterbalanced across conditions (mitigating position bias), (2) evaluations are length-normalized or controlled for verbosity bias, (3) scoring criteria are evaluated independently to prevent halo effects, and (4) model family self-enhancement is mitigated via blinding or cross-model evaluators.
-- For search, generation, and multi-candidate tasks (convex payoffs), audit whether top-tail reach (k-max, top-decile yield, pass@k) is evaluated or masked by central averages. Audit whether severe downside risks (p95/p99 tail latency, out-of-distribution failure modes) are concealed by aggregate averages.
-- Audit researcher degrees of freedom: (1) verify comparison baselines received equal tuning/compute parity (hyperparameters, prompt engineering, token budgets), (2) check whether custom metrics replace standard community benchmarks without validation, and (3) confirm reported gains reflect full distributions across seeds rather than cherry-picked runs.
-- Pre-Mortem (Inversion): Identify top 2–3 failure modes (e.g., distribution shift, out-of-vocabulary, memory/bandwidth saturation, adversarial fragility) within claimed scope. Audit if boundary stress-tests are reported vs 'sunny-day' results. Credit declared limitations; avoid speculative out-of-scope critiques.
+- For human, expert, or automated rating/evaluation studies, audit whether: (1) presentation order is counterbalanced across conditions (mitigating position/sequence bias), (2) evaluations are length- or volume-normalized to control for superficial verbosity/size bias, (3) scoring criteria are evaluated independently to prevent halo effects, and (4) evaluator/observer allegiance bias is mitigated via blinding or cross-condition masking.
+- For search, screening, and multi-candidate generation tasks (convex payoffs), audit whether top-tail reach (k-max, top-decile yield, best-of-N outcomes) is evaluated or masked by central averages. Audit whether severe downside risks (p95/p99 tail latency, toxicity, catastrophic failure modes) are concealed by aggregate averages.
+- Audit researcher degrees of freedom: (1) verify comparison baselines and controls received equal optimization/resource parity rather than being tested in uncalibrated or handicapped configurations, (2) check whether custom post-hoc metrics replace pre-specified standard endpoints without validation, and (3) confirm reported gains reflect full distributions across independent replicates/seeds rather than cherry-picked runs.
+- Pre-Mortem (Inversion): Identify top 2–3 failure modes (e.g., regime/distribution shifts, boundary/edge-case inputs, saturation, degradation under stress) within claimed scope. Audit if boundary stress-tests are reported vs 'sunny-day' results. Credit declared limitations; avoid speculative out-of-scope critiques.
+- Audit claims against first-principles and conservation/asymptotic bounds (physical laws, Shannon capacity, dimensional consistency, sample complexity lower bounds, hardware/bandwidth ceilings). Flag claims that mathematically or physically contradict declared experimental conditions or physical limits.
 
 ### 9. Markup
 Correct use of the book's callout/admonition environments. Collect all `TODO`/`FIXME` comments into the report.
@@ -97,6 +98,7 @@ Correct use of the book's callout/admonition environments. Collect all `TODO`/`F
 - Flag as **forced** (propose spelling it out) when two or more hold: used fewer than ~4–5 times; all uses clustered in one section; the abbreviation saves nothing over the plain term; not standard vocabulary for the target audience.
 
 ### 11. Code consistency
+When executable code, pseudocode, algorithms, scripts, or computational models are present:
 - Every script referenced in the text exists, and the prose matches what it actually does.
 - Inline snippets may be excerpted or simplified but must not contradict the full script's logic or API.
 - **Inline snippets are usually not executed by CI.** A passing build does not mean a snippet runs. Trace each snippet's calls against the tested source, or run it. Watch for "readable" simplifications the real API does not support (e.g. an operator the library doesn't implement) — verify method-level compatibility, not just mathematical equivalence.

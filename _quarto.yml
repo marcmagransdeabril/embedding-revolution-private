@@ -1,0 +1,72 @@
+project:
+  type: book
+  output-dir: _book
+book:
+  title: The Embedding Revolution
+  subtitle: Navigating High-Dimensional Knowledge Manifolds Through the Geek's Lens
+  author: Marc Magrans de Abril
+  date: '2026'
+  description: A comprehensive guide to high-dimensional embedding spaces, geometry,
+    and neurosymbolic computing.
+  page-footer:
+    left: The Embedding Revolution
+    right: Marc Magrans de Abril
+  chapters:
+  - index.qmd
+  - part: 'Part I: The Flat Vector Paradigm and Its Limits'
+    chapters:
+    - chapters/embedding_spaces.qmd
+format:
+  html:
+    theme:
+      light:
+      - cosmo
+      - styles/book-theme.scss
+      dark:
+      - darkly
+      - styles/book-theme.scss
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: show
+    code-tools: true
+    html-math-method: mathjax
+    filters:
+    - filters/book-callouts.lua
+    - filters/book-typography.lua
+  pdf:
+    output-file: The-Embedding-Revolution.pdf
+    documentclass: scrbook
+    classoption:
+    - openany
+    - twoside=true
+    - fontsize=10pt
+    geometry:
+    - paperwidth=155mm
+    - paperheight=235mm
+    - top=24mm
+    - bottom=26mm
+    - inner=22mm
+    - outer=20mm
+    - headheight=14pt
+    - headsep=6mm
+    - footskip=12mm
+    pdf-engine: xelatex
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    number-depth: 3
+    colorlinks: true
+    linkcolor: NavyBlue
+    urlcolor: NavyBlue
+    citecolor: NavyBlue
+    include-in-header:
+    - styles/springer-preamble.tex
+    filters:
+    - filters/book-callouts.lua
+    - filters/book-typography.lua
+  epub:
+    output-file: The-Embedding-Revolution.epub
+    toc: true
+    toc-depth: 2
+    number-sections: true

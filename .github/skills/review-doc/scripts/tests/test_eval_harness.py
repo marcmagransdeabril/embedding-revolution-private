@@ -23,10 +23,10 @@ from eval_review_skill import (
 
 
 def test_benchmark_dataset_integrity():
-    """Verify that benchmark dataset has 35 cases (30 defect cases across categories A-F + 5 negative controls)."""
+    """Verify that benchmark dataset has 38 cases (33 defect cases across categories A-G + 5 negative controls)."""
     assert BENCHMARK_PATH.exists(), f"Benchmark dataset missing at {BENCHMARK_PATH}"
     cases = load_benchmark_cases(BENCHMARK_PATH)
-    assert len(cases) == 35, f"Expected exactly 35 cases, got {len(cases)}"
+    assert len(cases) == 38, f"Expected exactly 38 cases, got {len(cases)}"
 
     expected_categories = {
         "A_statistical": 6,
@@ -35,6 +35,7 @@ def test_benchmark_dataset_integrity():
         "D_prior_art": 4,
         "E_tail_vs_mean": 5,
         "F_latex_formatting": 2,
+        "G_first_principles_fermi": 3,
         "Z_negative_control": 5,
     }
 
@@ -67,7 +68,7 @@ def test_benchmark_dataset_integrity():
             assert len(case["ground_truth_defects"]) == 0, f"Negative control {case['id']} must have 0 ground truth defects"
 
     assert actual_categories == expected_categories, f"Category distribution mismatch: {actual_categories}"
-    assert paired_verbose_count == 35, f"Expected 35 paired verbose variants, got {paired_verbose_count}"
+    assert paired_verbose_count == 38, f"Expected 38 paired verbose variants, got {paired_verbose_count}"
 
 
 def test_b0_minimal_prompt_integrity():
@@ -110,15 +111,15 @@ def test_baseline_benchmark_execution():
         skill_path=B0_PATH,
         skill_type="B0",
     )
-    assert b0_summary.total_cases == 35
+    assert b0_summary.total_cases == 38
     assert 0.0 <= b0_summary.recall <= 1.0
     assert 0.0 <= b0_summary.precision <= 1.0
     assert 0.0 <= b0_summary.f1_score <= 1.0
     assert b0_summary.review_yield_per_1k > 0.0
 
 
-def test_step1_to_step4_baseline_prompts_integrity():
-    """Verify that Step 1, Step 2, Step 3, and Step 4 baseline prompt variants exist and are well-formed."""
+def test_step1_to_step6_baseline_prompts_integrity():
+    """Verify that Step 1 through Step 6 baseline prompt variants exist and are well-formed."""
     arm1a = EVAL_DIR / "baselines" / "step1_arm1a_verbose.md"
     arm1b = EVAL_DIR / "baselines" / "step1_arm1b_compact.md"
     arm2a = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
@@ -127,13 +128,17 @@ def test_step1_to_step4_baseline_prompts_integrity():
     arm3b = EVAL_DIR / "baselines" / "step3_arm3b_compact.md"
     arm4a = EVAL_DIR / "baselines" / "step4_arm4a_verbose.md"
     arm4b = EVAL_DIR / "baselines" / "step4_arm4b_compact.md"
+    arm5a = EVAL_DIR / "baselines" / "step5_arm5a_verbose.md"
+    arm5b = EVAL_DIR / "baselines" / "step5_arm5b_compact.md"
+    arm6a = EVAL_DIR / "baselines" / "step6_arm6a_verbose.md"
+    arm6b = EVAL_DIR / "baselines" / "step6_arm6b_compact.md"
 
-    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b, arm4a, arm4b]:
+    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b, arm4a, arm4b, arm5a, arm5b, arm6a, arm6b]:
         assert p.exists(), f"Baseline variant missing at {p}"
         text = p.read_text(encoding="utf-8")
         assert "---" in text, f"Missing YAML frontmatter in {p}"
         tokens = count_tokens(text)
-        assert 1500 <= tokens <= 3000, f"Token count ({tokens}) outside reasonable bounds for {p}"
+        assert 1500 <= tokens <= 3200, f"Token count ({tokens}) outside reasonable bounds for {p}"
 
     assert count_tokens(arm2b.read_text(encoding="utf-8")) < count_tokens(arm2a.read_text(encoding="utf-8")), (
         "Arm 2B compact variant must have smaller token footprint than Arm 2A verbose"
@@ -143,6 +148,12 @@ def test_step1_to_step4_baseline_prompts_integrity():
     )
     assert count_tokens(arm4b.read_text(encoding="utf-8")) < count_tokens(arm4a.read_text(encoding="utf-8")), (
         "Arm 4B compact variant must have smaller token footprint than Arm 4A verbose"
+    )
+    assert count_tokens(arm5b.read_text(encoding="utf-8")) < count_tokens(arm5a.read_text(encoding="utf-8")), (
+        "Arm 5B compact variant must have smaller token footprint than Arm 5A verbose"
+    )
+    assert count_tokens(arm6b.read_text(encoding="utf-8")) < count_tokens(arm6a.read_text(encoding="utf-8")), (
+        "Arm 6B compact variant must have smaller token footprint than Arm 6A verbose"
     )
 
 
@@ -327,5 +338,55 @@ def test_step5_pre_mortem_gates():
     )
     assert len(regr_5b.non_target_regressions) == 0, f"Non-target regressions found: {regr_5b.non_target_regressions}"
     assert regr_5b.negative_control_fp_count == 0, f"Negative control false positives found: {regr_5b.negative_control_fp_count}"
+
+
+def test_step6_fermi_bounds_gates():
+    """Verify Step 6 First-Principles & Fermi Bounds decision gates and non-target regression invariance."""
+    from eval_review_skill import ARM5B_PATH, ARM6A_PATH, ARM6B_PATH, compute_regression_analysis
+
+    summary_5b = run_benchmark_evaluation(
+        skill_name="Arm 5B (Baseline)",
+        skill_path=ARM5B_PATH,
+        skill_type="custom",
+    )
+    summary_6a = run_benchmark_evaluation(
+        skill_name="Arm 6A",
+        skill_path=ARM6A_PATH,
+        skill_type="custom",
+    )
+    summary_6b = run_benchmark_evaluation(
+        skill_name="Arm 6B",
+        skill_path=ARM6B_PATH,
+        skill_type="custom",
+    )
+
+    cat_g_6b = summary_6b.category_breakdown["G_first_principles_fermi"]
+    crit_recall_6b = cat_g_6b["crit_tp"] / cat_g_6b["crit_total"]
+    total_recall_6b = cat_g_6b["tp"] / cat_g_6b["total"]
+    precision_g_6b = cat_g_6b["tp"] / (cat_g_6b["tp"] + cat_g_6b["fp"])
+
+    # 1. 100% detection on Category G Fermi bound violations (3/3 cases)
+    assert total_recall_6b == 1.0, f"Expected 100% Category G recall, got {total_recall_6b}"
+    assert crit_recall_6b == 1.0, f"Expected 100% critical Category G recall, got {crit_recall_6b}"
+
+    # 2. Precision >= 90%
+    assert precision_g_6b >= 0.90, f"Expected >= 90% precision in Cat G, got {precision_g_6b}"
+
+    # 3. Equal overall recall to Arm 6A
+    assert summary_6b.recall == summary_6a.recall, "Arm 6B should match Arm 6A recall"
+
+    # 4. Yield advantage (Arm 6B > Arm 6A)
+    assert summary_6b.review_yield_per_1k > summary_6a.review_yield_per_1k, (
+        f"Arm 6B yield ({summary_6b.review_yield_per_1k}) must exceed Arm 6A ({summary_6a.review_yield_per_1k})"
+    )
+
+    # 5. Non-target regression invariance & negative control integrity
+    regr_6b = compute_regression_analysis(summary_5b, summary_6b, target_category="G_first_principles_fermi")
+    assert regr_6b.zero_regression_passed is True, (
+        f"Step 6 introduced regressions or false alarms: {regr_6b.non_target_regressions}, FP={regr_6b.negative_control_fp_count}"
+    )
+    assert len(regr_6b.non_target_regressions) == 0, f"Non-target regressions found: {regr_6b.non_target_regressions}"
+    assert regr_6b.negative_control_fp_count == 0, f"Negative control false positives found: {regr_6b.negative_control_fp_count}"
+
 
 

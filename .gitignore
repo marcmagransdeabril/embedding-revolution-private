@@ -5,3 +5,10 @@ __pycache__/
 references/
 tmp/
 .vscode/settings.json
+/.quarto/
+_book/
+_freeze/
+*.tex
+
+
+/.luarc.json

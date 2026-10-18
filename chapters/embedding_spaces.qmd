@@ -1,0 +1,107 @@
+---
+title: "The Anatomy of Embedding and Latent Spaces"
+subtitle: "From Shannon's Bits to High-Dimensional Geometric Knowledge"
+author: "Marc Magrans de Abril"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+---
+
+# Overview & Thematic Core {#sec-overview}
+
+::: {.callout-note appearance="simple"}
+## The Epistemological Leap
+In 1948, Claude Shannon formalized information as discrete uncertainty reduction (entropy in bits), deliberately decoupling transmission from semantic meaning. The **Embedding Revolution** represents the reciprocal triumph: reconstructing the geometry of meaning by discovering that knowledge can be formalized as continuous coordinates on high-dimensional manifolds.
+:::
+
+This chapter establishes the foundational paradigm of the book—moving from discrete orthogonal tables to continuous metric spaces, exploring how latent manifolds are constructed, examining their geometric properties, and identifying the structural cracks in flat vector arithmetic that motivate the subsequent chapters.
+
+---
+
+# Chapter 1 Sections & Structure {#sec-sections}
+
+## 1.1 The Epistemological Leap: From Shannon's Bits to Geometric Knowledge
+*Shannon quantified the transmission of uncertainty while ignoring meaning; the embedding revolution reconstructs semantics as continuous coordinates in space.*
+
+- **The Personal Hook:** The frustration of 1980s-style keyword databases (`WHERE content LIKE '%monarch%'`) treating concepts as opaque character bytes.
+- **Shannon's Masterstroke (1948):** Mathematical definition of information entropy ($H(X) = -\sum p(x) \log_2 p(x)$) and the deliberate exclusion of semantic meaning from channel transmission.
+- **The Paradigm Shift:** Shifting from discrete bits and combinatorial lookup tables to continuous semantic manifolds $\mathcal{M} \subset \mathbb{R}^D$.
+
+---
+
+## 1.2 The Discrete Collapse: Why Symbolic Tables Hit a Geometric Wall
+*One-hot tokens and relational tables create an orthogonal catastrophe where all concepts are mutually equidistant ($\sqrt{2}$), necessitating distributed continuous representations.*
+
+- **The Orthogonal Catastrophe:** Standard basis vectors $\mathbf{e}_i, \mathbf{e}_j \in \mathbb{R}^{|V|}$ where $\langle \mathbf{e}_i, \mathbf{e}_j \rangle = \delta_{ij} = 0$ and $\|\mathbf{e}_i - \mathbf{e}_j\|_2 = \sqrt{2}$, making all distinct concepts equidistant.
+- **Distributed Representations:** Geoffrey Hinton's 1986 insight—distributing meaning across continuous dimensions where dot products measure semantic overlap.
+- **Feature Engineering vs. Latent Manifolds:** Why handcrafted extrinsic features are brittle compared to self-supervised intrinsic manifolds.
+
+---
+
+## 1.3 How Latent Spaces Are Born: The Four Generative Blueprints
+*Four mathematical mechanisms convert raw unstructured data into continuous semantic manifolds:*
+
+### 1.3.1 Spectral & Distributional Factorization (SVD, PPMI, GloVe)
+*Deriving low-rank coordinate systems from co-occurrence statistics.*
+- Firth's distributional hypothesis (*"You shall know a word by the company it keeps"*).
+- Positive Pointwise Mutual Information (PPMI) and low-rank Eckart-Young approximation via SVD ($\mathbf{M} \approx \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$).
+- GloVe log-bilinear co-occurrence regression.
+
+### 1.3.2 Predictive Push-Forwards (Word2Vec, Transformers)
+*Optimizing local log-bilinear prediction and dynamic attention trajectories.*
+- Word2Vec Skip-Gram with Negative Sampling (SGNS) and Levy & Goldberg's proof of implicit shifted-PMI factorization.
+- Dynamic contextual latents in Transformers: token coordinates as trajectories through multi-head attention layers.
+
+### 1.3.3 Contrastive Metric Learning (InfoNCE, Triplet Loss)
+*Pulling semantic neighbors together and repelling negatives on hyperspheres.*
+- InfoNCE loss and temperature hyperparameter $\tau$ as a hard-negative mining dial.
+- Wang & Isola's decomposition into *alignment* (pulling positive pairs) and *uniformity* (spreading points across the hypersphere $\mathbb{S}^{D-1}$).
+
+### 1.3.4 Probabilistic Manifolds (VAEs, Diffusion Latents)
+*Enforcing continuous, gap-free semantic coverage via Gaussian priors and KL regularizers.*
+- The failure of deterministic autoencoders (disconnected Dirac clusters and reconstruction voids).
+- Variational Autoencoders (VAEs) and the KL divergence term as a geometric spring enforcing continuous manifold coverage.
+
+---
+
+## 1.4 The Metric Geometry of Latent Space: Spheres, Angles, and Distances
+*On unit hyperspheres, cosine similarity and Euclidean distance are monotonically linked, separating categorical direction ($\mathbf{z} / \|\mathbf{z}\|$) from salience/frequency ($\|\mathbf{z}\|$).*
+
+- **Cosine vs. Euclidean Metrics:** Geometric equivalence on the unit hypersphere $\mathbb{S}^{D-1}$ ($\|\mathbf{u} - \mathbf{v}\|_2^2 = 2 - 2 \cos \theta$).
+- **Direction vs. Magnitude:** Semantic angle encoding category/domain vs. vector norm encoding certainty, salience, and frequency.
+- **Intrinsic vs. Extrinsic Dimensionality:** The Manifold Hypothesis ($d_{\text{int}} \ll D_{\text{ambient}}$).
+
+---
+
+## 1.5 The Miracle of Vector Arithmetic: Linear Substructures of Thought
+*Log-odds probability ratios map multiplicative linguistic relationships to additive vector translations ($\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$) and LLM activation steering.*
+
+- **The Analogical Parallelogram:** Mikolov's discovery of linear relational offsets ($\mathbf{v}_{\text{king}} - \mathbf{v}_{\text{man}} + \mathbf{v}_{\text{woman}} \approx \mathbf{v}_{\text{queen}}$).
+- **Mathematical Origin:** Arora and Pennington's derivation showing how log-odds ratios in co-occurrences map multiplicative probabilities to linear displacements.
+- **Steering Vectors in Modern LLMs:** Activation addition in Transformer residual streams for model steering and safety.
+
+---
+
+## 1.6 Pathologies of Flat Space: Anisotropy, Cones, and Hubness
+*Unconstrained high-dimensional embeddings collapse into narrow eccentric cones with spurious nearest-neighbor hubs, requiring centering, whitening, and isotropic regularization.*
+
+- **The Anisotropy Trap:** Dimensional collapse where all embeddings cluster inside a narrow eccentric cone ($\cos \theta \ge 0.85$).
+- **The Hubness Phenomenon:** Spurious universal nearest neighbors in high-dimensional vector spaces.
+- **Geometric Remedies:** Mean-centering, PCA whitening, and uniformity regularization.
+
+---
+
+## 1.7 The Cracks in Flat Space: Exploration Hints and the Road Ahead
+*The breakdown of flat Euclidean vector arithmetic reveals the structural limitations that motivate the rest of the book:*
+
+- **$\rightarrow$ Chapter 2 (RAG & Vector DBs):** *Nearest-neighbor lookup cannot perform multi-hop reasoning or logical negation.*
+- **$\rightarrow$ Chapter 3 (The High-Dimensional Trap):** *Orthogonal collapse and empty volumes in 1,536 dimensions.*
+- **$\rightarrow$ Chapter 4 (Hyperbolic Spaces):** *Flat space cannot embed hierarchical taxonomies without exponential distortion.*
+- **$\rightarrow$ Chapter 5 (Knowledge Graphs):** *Symmetric dot products fail on asymmetric and typed relations, requiring complex rotations (RotatE).*
+- **$\rightarrow$ Chapter 6 (Topological Deep Learning):** *Pairwise distances miss multi-way interactions and topological holes.*
+- **$\rightarrow$ Chapter 7 (Complex & Quantum Latents):** *Non-commutative reasoning and phase interference in $\mathbb{C}^D$.*
+- **$\rightarrow$ Chapter 8 (Vector Symbolic Architectures):** *Exact variable binding ($\circledast$) and bundling without neural retraining.*
+- **$\rightarrow$ Chapter 9 (Neurosymbolic AI):** *Tensor Product Representations and emergent compositional syntax.*
+- **$\rightarrow$ Chapter 10 (Optimal Transport):** *Aligning disconnected multimodal manifolds with Wasserstein geometry.*

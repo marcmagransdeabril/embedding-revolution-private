@@ -1,0 +1,73 @@
+# Welcome & Overview {.unnumbered}
+
+> *"You shall know a word by the company it keeps."*  
+> — John Rupert Firth (1957)
+
+---
+
+## The Epistemological Leap
+
+For more than seven decades, computer science operated on a foundational dogma: **information is discrete, and computation is symbolic manipulation over structured records**. 
+
+In 1948, Claude Shannon laid the mathematical bedrock of digital telecommunications by formalizing information as statistical uncertainty reduction over discrete alphabets. In doing so, Shannon deliberately set aside the question of *meaning*:
+
+> *"These semantic aspects of communication are irrelevant to the engineering problem."* — Claude Shannon (1948)
+
+Today, modern artificial intelligence has arrived at the reciprocal breakthrough: **the Embedding Revolution**. 
+
+Beneath transformer attention mechanisms, diffusion models, and generative chatbots lies a profound mathematical shift: almost any complex domain of reality—human language, protein folding, robotic trajectories, logical deductions, and relational graphs—can be mapped onto continuous, high-dimensional geometric manifolds. Once embedded, semantics become vectors, affinities become inner products, analogies become parallel transports, and reasoning becomes a smooth trajectory through latent space.
+
+---
+
+## Book Architecture & Roadmap
+
+This book is organized into four interconnected parts, taking you from flat Euclidean vector spaces to curved Riemannian geometries, hyperdimensional algebras, and neurosymbolic architectures:
+
+### **Part I: The Flat Vector Paradigm and Its Limits**
+* **Chapter 1: The Anatomy of Embedding and Latent Spaces** — Spectral factorization, predictive push-forwards, contrastive InfoNCE dynamics, probabilistic VAEs, and linear semantic arithmetic ($\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$).
+* **Chapter 2: Vector Databases, RAG, and Flat Retrieval Limits** — Navigating billion-scale ANN graphs (HNSW, IVFFlat), hybrid search, ColBERT late interaction, and the geometric origins of hallucination voids.
+* **Chapter 3: The Curse (and Blessing) of Dimensionality** — Why volume concentrates in the crust, concentration of measure, the Johnson-Lindenstrauss lemma, and why neural networks thrive in thousands of dimensions.
+
+### **Part II: Curved Manifolds, Graphs, and Topologies**
+* **Chapter 4: Tangent Spaces, Geodesics, and Geometric Deep Learning** — Erlangen programme symmetries, Lie groups, SO(n)/SE(n) equivariances, RoPE, and Hyperbolic Poincaré embeddings for zero-distortion hierarchies.
+* **Chapter 5: Graph Embeddings and Relational Geometry** — Graph Neural Networks, Message Passing, and Knowledge Graph Embeddings (TransE, RotatE, ComplEx) in complex planes.
+* **Chapter 6: Topological Deep Learning** — Higher-order networks, simplicial complexes, combinatorial complexes, boundary operators, and persistent homology in latent manifolds.
+
+### **Part III: The Algebra of Thought: Vectors as Symbols**
+* **Chapter 7: The Complex Plane and Quantum Logic** — Complex-valued neural networks ($\mathbb{C}^D, \mathbb{H}^D$), phase vs. amplitude, and quantum-inspired cognitive interference spaces.
+* **Chapter 8: Vector Symbolic Architectures (VSA/HDC)** — Quasi-orthogonal vectors as symbols, bundling ($+$), binding ($\circledast$), permutation ($\Pi$), and associative cleanup memories.
+* **Chapter 9: Neuro-Symbolic Integration** — Smolensky's Tensor Product Representations (TPR), Logic Tensor Networks (LTN), and emergent compositionality in continuous weights.
+
+### **Part IV: Alignment, Transport, and Synthesis**
+* **Chapter 10: Cross-Domain Transfer and Optimal Transport** — Monge-Kantorovich transport, Wasserstein distances, and aligning disparate latent worlds across modalities.
+* **Epilogue: An Algebra of Thought** — Looking back at Cartesian coordinates from 10,000 dimensions: high-dimensional manifolds as the universal substrate of intelligence.
+
+---
+
+## Mathematical Notation & Conventions
+
+Throughout this book, we adopt standard mathematical notation:
+
+* **Scalars**: Lowercase italic letters ($x, y, \alpha, \lambda, \tau$).
+* **Vectors**: Lowercase bold letters ($\mathbf{x}, \mathbf{z}, \mathbf{v}, \boldsymbol{\mu}$). Vectors are column vectors in Euclidean space $\mathbb{R}^D$ unless specified otherwise.
+* **Matrices**: Uppercase bold letters ($\mathbf{W}, \mathbf{X}, \mathbf{\Sigma}, \mathbf{U}$).
+* **Manifolds & Sets**: Calligraphic letters ($\mathcal{M}, \mathcal{X}, \mathcal{S}, \mathbb{S}^{D-1}$).
+* **Inner Products**: $\langle \mathbf{u}, \mathbf{v} \rangle = \mathbf{u}^\top \mathbf{v} = \sum_{i=1}^D u_i v_i$.
+* **Norms**: Euclidean $L_2$ norm $\|\mathbf{x}\|_2 = \sqrt{\mathbf{x}^\top \mathbf{x}}$; $L_p$ norm $\|\mathbf{x}\|_p = (\sum_i |x_i|^p)^{1/p}$.
+* **Cosine Similarity**: $\cos(\theta) = \frac{\mathbf{u}^\top \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2}$. On the unit hypersphere $\mathbb{S}^{D-1}$, $\cos(\theta) = \mathbf{u}^\top \mathbf{v}$.
+
+---
+
+## Code & Computational Environment
+
+All code examples in this book are executable Python scripts and Jupyter notebooks using the project virtual environment (`.venv`). 
+
+```bash
+# Activate the book environment
+source .venv/bin/activate
+
+# Build all book formats (PDF, HTML)
+make book
+```
+
+Figures and computational simulations are generated programmatically using standard scientific Python libraries: NumPy, SciPy, PyTorch, Matplotlib, and Scikit-learn.
