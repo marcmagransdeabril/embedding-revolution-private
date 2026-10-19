@@ -45,13 +45,9 @@ Sections present, ordered, and labelled per the book's skeleton. Flag deviations
 - Preserve existing anecdotes, humour, and authorial voice.
 
 ### 3. Grammar and usage
-- Fix grammar and typos without altering style.
-- Consistent terminology within the chapter and across chapters.
-- Consistent number and decimal-separator formatting in text, math, and figures.
-- Idiomatic phrasing: flag correct-but-unnatural wording, calques, wrong prepositions.
-- Punctuation: parentheticals closed on both sides, correct dashes, ellipses, and locale-appropriate quotation marks.
-- Dialogue and internal monologue match the character's voice and the scene's register.
-- Suggest (don't apply) rewrites that would make the text more engaging.
+- Fix grammar/typos without altering style; keep terminology, numbers, and decimal-separators consistent across text, math, and figures.
+- Flag unnatural phrasing (calques, wrong prepositions) and punctuation errors (parentheticals, dashes, ellipses, locale quotes); match dialogue/monologue to character voice and scene register.
+- Suggest (don't apply) more engaging rewrites.
 
 ### 4. Cross-references
 - Every section/figure/table reference resolves to an existing target.
@@ -67,7 +63,7 @@ Every image path exists; every generated diagram has its source file; captions a
   1. **Existence and indexing**: Confirm that the referenced document (PDF or transcript) exists in `references/` or is cataloged in the bibliography, and is indexed in `references/.ground-index/index.sqlite` (run `python .github/skills/ground-truth-review/scripts/build_index.py` if missing or updated).
   2. **Bibliographic authenticity**: Verify the metadata (authors, title, year, venue, DOI/arXiv ID) against the actual publication to catch hallucinated, mangled, or misattributed citations (flag non-existent or hallucinated references as **`blocker`**).
   3. **Claim-to-source grounding**: Verify that each cited passage, theorem, formula, or empirical metric is genuinely supported by the referenced document (invoke `ground-truth-review` / `ground_check.py`). Flag contradicted or ungrounded citations as **`blocker`**.
-  4. **Document integrity**: Ensure the source PDF in `references/` is valid, readable, and non-corrupted; if markdown conversion is used, verify document health with `convert-references` (`verify.py`).
+  4. **Document integrity**: Ensure the source PDF in `references/` is valid, readable, and non-corrupted — `build_index.py` reports `Failed to open PDF` for corrupt files and warns about pages with no extractable text (a scanned/OCR-less PDF that BM25 retrieval cannot reach).
   5. **Primary source attribution**: Confirm seminal discoveries and primary formulations are cited directly rather than relying exclusively on secondary surveys.
 
 ### 7. Questions and solutions
@@ -93,7 +89,7 @@ Every image path exists; every generated diagram has its source file; captions a
 - Audit experimental protocol transparency: (1) verify verbatim prompt templates, system instructions, and generation hyperparameters (temperature, top-p, seeds) are disclosed, (2) check for stimulus contamination and few-shot exemplar leakage into test splits, (3) verify LLM-as-a-judge evaluations mitigate prompt framing demand characteristics, tone sycophancy, and position bias via neutral rubrics and counterbalanced controls, and (4) flag ungrounded persona role-play claiming unverified cognitive gains.
 
 ### 9. Markup
-Correct use of the book's callout/admonition environments. Collect all `TODO`/`FIXME` comments into the report.
+Correct callout/admonition usage; collect all `TODO`/`FIXME` comments into the report.
 
 ### 10. Acronyms
 - Defined on first appearance as *Full Name (ACR)* or *ACR (Full Name)*, never used before definition — including in summary boxes and headings.
@@ -119,8 +115,14 @@ If another language version exists:
 - **Quality** — established target-language technical vocabulary, natural prose (not translationese), anecdotes and humour preserved or adapted.
 
 ### 14. Build and test
-Run exactly what CI runs (check the CI workflow and `Makefile`): typically a full render plus the test suite. The review is not complete until these pass cleanly.
+Run exactly what CI runs (CI workflow / `Makefile`): full render plus test suite. Review incomplete until both pass cleanly.
 
 ## Output
 
-Group findings by check. For each: file and line reference, severity (blocker / should-fix / suggestion), and a proposed correction. For substantive and methodological findings, explicitly contrast the author's claimed conclusion against the raw empirical evidence (e.g. `[Claim: ...] vs [Evidence: ...]`). List applied fixes separately from items awaiting the author's decision. For a whole-book review, group by chapter first, then by check, and add a short cross-chapter summary (recurring issues, terminology drift, index/translation gaps spanning multiple chapters).
+Group findings into the 4-tier hierarchy:
+1. **Tier 1: Fatal Blockers (Methodological, Mathematical & Factual Contradictions)** — must include explicit contrastive evidence `[Claim: ...] vs [Ground-Truth Evidence: ...]`.
+2. **Tier 2: Major Methodological & Empirical Improvements (Should-Fix)** — structured with concrete, actionable remediation steps.
+3. **Tier 3: Epistemic Boundary / 'Too Hard' Box** — explicitly declare unverified external claims, closed datasets, proprietary APIs/models, unindexed proofs, or offline prior art, paired with recommended verification queries.
+4. **Tier 4: Minor Editorial, Typography & LaTeX Suggestions** — mechanical formatting and typo fixes.
+
+For each finding: file/line reference, severity (blocker / should-fix / suggestion), and proposed correction. List applied fixes separately from items awaiting author decision. For whole-book reviews, group by chapter first, then by tier, with a cross-chapter summary.

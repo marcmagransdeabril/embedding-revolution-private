@@ -265,6 +265,13 @@ hr {
   margin: 2em 0;
 }
 
+/* Page break support for EPUB e-readers */
+.pagebreak, [style*="page-break"] {
+  page-break-after: always;
+  break-after: page;
+}
+
+
 /* Figures and Captions */
 figure {
   margin: 1.5em 0;

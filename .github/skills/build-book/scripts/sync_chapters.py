@@ -22,7 +22,7 @@ INDEX_QMD = REPO_ROOT / "index.qmd"
 # Canonical master outline from book architecture
 MASTER_PARTS = [
     {
-        "part": "Part I: The Flat Vector Paradigm and Its Limits",
+        "part": "The Flat Vector Paradigm and Its Limits",
         "chapters": [
             {
                 "num": 1,
@@ -42,7 +42,7 @@ MASTER_PARTS = [
         ],
     },
     {
-        "part": "Part II: Curved Manifolds, Graphs, and Topologies",
+        "part": "Curved Manifolds, Graphs, and Topologies",
         "chapters": [
             {
                 "num": 4,
@@ -62,7 +62,7 @@ MASTER_PARTS = [
         ],
     },
     {
-        "part": "Part III: The Algebra of Thought: Vectors as Symbols",
+        "part": "The Algebra of Thought: Vectors as Symbols",
         "chapters": [
             {
                 "num": 7,
@@ -82,7 +82,7 @@ MASTER_PARTS = [
         ],
     },
     {
-        "part": "Part IV: Alignment, Transport, and Synthesis",
+        "part": "Alignment, Transport, and Synthesis",
         "chapters": [
             {
                 "num": 10,

@@ -42,15 +42,15 @@ check: validate
 
 pdf: sync-chapters
 	@echo "==> Building PDF Book (O'Reilly Format 7in x 9.1875in)..."
-	@$(EXPORT_PATH) quarto render --to pdf
+	@$(EXPORT_PATH) quarto render --to pdf --no-clean
 
 html: sync-chapters
 	@echo "==> Building Multi-Page HTML Book..."
-	@$(EXPORT_PATH) quarto render --to html
+	@$(EXPORT_PATH) quarto render --to html --no-clean
 
 epub: sync-chapters
 	@echo "==> Building EPUB 3 Book..."
-	@$(EXPORT_PATH) quarto render --to epub
+	@$(EXPORT_PATH) quarto render --to epub --no-clean
 
 preview:
 	@echo "==> Launching Quarto live preview server..."

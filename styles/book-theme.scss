@@ -153,3 +153,10 @@ div.sourceCode {
   color: #6c757d;
   margin-top: 1.2rem;
 }
+
+/* Page break support across print and web book */
+.pagebreak, [style*="page-break"] {
+  page-break-after: always;
+  break-after: page;
+}
+

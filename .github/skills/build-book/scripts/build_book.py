@@ -91,6 +91,10 @@ def render_format(
     if no_execute:
         cmd.append("--no-execute")
 
+    # Quarto cleans the project output-dir before each render by default, which
+    # would otherwise erase artifacts produced by earlier formats in this run.
+    cmd.append("--no-clean")
+
     if output_dir != OUTPUT_DIR:
         cmd.extend(["--output-dir", str(output_dir)])
 

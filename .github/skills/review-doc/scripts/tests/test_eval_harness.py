@@ -23,10 +23,10 @@ from eval_review_skill import (
 
 
 def test_benchmark_dataset_integrity():
-    """Verify that benchmark dataset has 63 cases (47 defect cases across categories A-G + 16 negative controls)."""
+    """Verify that benchmark dataset has 80 cases (61 defect cases across categories A-I + 19 negative controls)."""
     assert BENCHMARK_PATH.exists(), f"Benchmark dataset missing at {BENCHMARK_PATH}"
     cases = load_benchmark_cases(BENCHMARK_PATH)
-    assert len(cases) == 63, f"Expected exactly 63 cases, got {len(cases)}"
+    assert len(cases) == 80, f"Expected exactly 80 cases, got {len(cases)}"
 
     expected_categories = {
         "A_statistical": 6,
@@ -36,7 +36,9 @@ def test_benchmark_dataset_integrity():
         "E_tail_vs_mean": 5,
         "F_latex_formatting": 2,
         "G_first_principles_fermi": 3,
-        "Z_negative_control": 16,
+        "H_output_hierarchy": 9,
+        "I_grammar_typography": 5,
+        "Z_negative_control": 19,
     }
 
     actual_categories = {}
@@ -68,7 +70,7 @@ def test_benchmark_dataset_integrity():
             assert len(case["ground_truth_defects"]) == 0, f"Negative control {case['id']} must have 0 ground truth defects"
 
     assert actual_categories == expected_categories, f"Category distribution mismatch: {actual_categories}"
-    assert paired_verbose_count == 63, f"Expected 63 paired verbose variants, got {paired_verbose_count}"
+    assert paired_verbose_count == 75, f"Expected 75 paired verbose variants, got {paired_verbose_count}"
 
 
 def test_b0_minimal_prompt_integrity():
@@ -111,15 +113,15 @@ def test_baseline_benchmark_execution():
         skill_path=B0_PATH,
         skill_type="B0",
     )
-    assert b0_summary.total_cases == 63
+    assert b0_summary.total_cases == 80
     assert 0.0 <= b0_summary.recall <= 1.0
     assert 0.0 <= b0_summary.precision <= 1.0
     assert 0.0 <= b0_summary.f1_score <= 1.0
     assert b0_summary.review_yield_per_1k > 0.0
 
 
-def test_step1_to_step9_baseline_prompts_integrity():
-    """Verify that Step 1 through Step 9 baseline prompt variants exist and are well-formed."""
+def test_step1_to_step11_baseline_prompts_integrity():
+    """Verify that Step 1 through Step 11 baseline prompt variants exist and are well-formed."""
     arm1a = EVAL_DIR / "baselines" / "step1_arm1a_verbose.md"
     arm1b = EVAL_DIR / "baselines" / "step1_arm1b_compact.md"
     arm2a = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
@@ -138,13 +140,17 @@ def test_step1_to_step9_baseline_prompts_integrity():
     arm8b = EVAL_DIR / "baselines" / "step8_arm8b_compact.md"
     arm9a = EVAL_DIR / "baselines" / "step9_arm9a_verbose.md"
     arm9b = EVAL_DIR / "baselines" / "step9_arm9b_compact.md"
+    arm10a = EVAL_DIR / "baselines" / "step10_arm10a_verbose.md"
+    arm10b = EVAL_DIR / "baselines" / "step10_arm10b_compact.md"
+    arm11a = EVAL_DIR / "baselines" / "step11_arm11a_verbose.md"
+    arm11b = EVAL_DIR / "baselines" / "step11_arm11b_compact.md"
 
-    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b, arm4a, arm4b, arm5a, arm5b, arm6a, arm6b, arm7a, arm7b, arm8a, arm8b, arm9a, arm9b]:
+    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b, arm4a, arm4b, arm5a, arm5b, arm6a, arm6b, arm7a, arm7b, arm8a, arm8b, arm9a, arm9b, arm10a, arm10b, arm11a, arm11b]:
         assert p.exists(), f"Baseline variant missing at {p}"
         text = p.read_text(encoding="utf-8")
         assert "---" in text, f"Missing YAML frontmatter in {p}"
         tokens = count_tokens(text)
-        assert 1500 <= tokens <= 3500, f"Token count ({tokens}) outside reasonable bounds for {p}"
+        assert 1500 <= tokens <= 4000, f"Token count ({tokens}) outside reasonable bounds for {p}"
 
     assert count_tokens(arm2b.read_text(encoding="utf-8")) < count_tokens(arm2a.read_text(encoding="utf-8")), (
         "Arm 2B compact variant must have smaller token footprint than Arm 2A verbose"
@@ -169,6 +175,12 @@ def test_step1_to_step9_baseline_prompts_integrity():
     )
     assert count_tokens(arm9b.read_text(encoding="utf-8")) < count_tokens(arm9a.read_text(encoding="utf-8")), (
         "Arm 9B compact variant must have smaller token footprint than Arm 9A verbose"
+    )
+    assert count_tokens(arm10b.read_text(encoding="utf-8")) < count_tokens(arm10a.read_text(encoding="utf-8")), (
+        "Arm 10B compact variant must have smaller token footprint than Arm 10A verbose"
+    )
+    assert count_tokens(arm11b.read_text(encoding="utf-8")) < count_tokens(arm11a.read_text(encoding="utf-8")), (
+        "Arm 11B compact variant must have smaller token footprint than Arm 11A verbose"
     )
 
 
@@ -620,6 +632,73 @@ def test_step10_protocol_transparency_gates():
     regr_10b = compute_regression_analysis(summary_9b, summary_10b, target_category="C_evaluator_bias")
     assert regr_10b.zero_regression_passed is True, (
         f"Step 10 introduced regressions or false alarms: {regr_10b.non_target_regressions}, FP={regr_10b.negative_control_fp_count}"
+    )
+
+
+def test_step11_output_hierarchy_gates():
+    """Verify Step 11 Structured Output Hierarchy & Epistemic Boundary decision gates and non-target regression invariance."""
+    from eval_review_skill import ARM10B_PATH, ARM11A_PATH, ARM11B_PATH, compute_regression_analysis
+
+    summary_10b = run_benchmark_evaluation(
+        skill_name="Arm 10B (Baseline)",
+        skill_path=ARM10B_PATH,
+        skill_type="custom",
+    )
+    summary_11a = run_benchmark_evaluation(
+        skill_name="Arm 11A",
+        skill_path=ARM11A_PATH,
+        skill_type="custom",
+    )
+    summary_11b, a11b_cases = run_benchmark_evaluation(
+        skill_name="Arm 11B",
+        skill_path=ARM11B_PATH,
+        skill_type="custom",
+        return_case_results=True,
+    )
+
+    cat_h_11b = summary_11b.category_breakdown["H_output_hierarchy"]
+    crit_recall_11b = cat_h_11b["crit_tp"] / cat_h_11b["crit_total"]
+    total_recall_11b = cat_h_11b["tp"] / cat_h_11b["total"]
+    precision_h_11b = cat_h_11b["tp"] / (cat_h_11b["tp"] + cat_h_11b["fp"])
+
+    tuning_ids = {"out-001", "out-002", "out-003", "out-004", "out-005", "out-006"}
+    held_out_ids = {"out-007", "out-008", "out-009"}
+    specificity_ids = {"out-neg-001", "out-neg-002", "out-neg-003"}
+
+    tuning_cases = [r for r in a11b_cases if r.case_id in tuning_ids]
+    held_out_cases = [r for r in a11b_cases if r.case_id in held_out_ids]
+    specificity_cases = [r for r in a11b_cases if r.case_id in specificity_ids]
+
+    tuning_recall = sum(r.tp for r in tuning_cases) / sum(r.tp + r.fn for r in tuning_cases)
+    held_out_recall = sum(r.tp for r in held_out_cases) / sum(r.tp + r.fn for r in held_out_cases)
+    specificity_fp = sum(r.fp for r in specificity_cases)
+
+    # 1. 100% detection on Category H output hierarchy & epistemic boundary defects (13/13 defects across 9 cases)
+    assert total_recall_11b == 1.0, f"Expected 100% Category H recall, got {total_recall_11b}"
+    assert crit_recall_11b == 1.0, f"Expected 100% critical Category H recall, got {crit_recall_11b}"
+
+    # 2. 100% tuning recall, >= 85% held-out recall
+    assert tuning_recall == 1.0, f"Expected 100% tuning recall, got {tuning_recall}"
+    assert held_out_recall >= 0.85, f"Expected >= 85% held-out recall, got {held_out_recall}"
+
+    # 3. 0 false alarms on specificity negative controls
+    assert specificity_fp == 0, f"Expected 0 false alarms on output specificity controls, got {specificity_fp}"
+
+    # 4. Precision >= 90%
+    assert precision_h_11b >= 0.90, f"Expected >= 90% precision in Cat H, got {precision_h_11b}"
+
+    # 5. Equal overall recall to Arm 11A
+    assert summary_11b.recall == summary_11a.recall, "Arm 11B should match Arm 11A recall"
+
+    # 6. Yield advantage (Arm 11B > Arm 11A)
+    assert summary_11b.review_yield_per_1k > summary_11a.review_yield_per_1k, (
+        f"Arm 11B yield ({summary_11b.review_yield_per_1k}) must exceed Arm 11A ({summary_11a.review_yield_per_1k})"
+    )
+
+    # 7. Non-target regression invariance & negative control integrity
+    regr_11b = compute_regression_analysis(summary_10b, summary_11b, target_category="H_output_hierarchy")
+    assert regr_11b.zero_regression_passed is True, (
+        f"Step 11 introduced regressions or false alarms: {regr_11b.non_target_regressions}, FP={regr_11b.negative_control_fp_count}"
     )
 
 

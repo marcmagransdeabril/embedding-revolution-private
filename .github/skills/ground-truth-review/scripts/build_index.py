@@ -2,8 +2,7 @@
 """Build and maintain a page-level SQLite BM25 index over reference PDFs.
 
 Extracts per-page text and embedded PDF bookmarks (TOC) into an indexed SQLite
-store (FTS5 + Porter stemming). Supports incremental overlays from Marker chunk
-manifests (.convert-chunks/<name>/manifest.json).
+store (FTS5 + Porter stemming).
 """
 from __future__ import annotations
 
@@ -71,129 +70,6 @@ def sanitize_text(text: str) -> str:
     # Collapse 3+ newlines to 2 newlines
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
-
-
-def parse_paginated_md(md_text: str) -> dict[int, str]:
-    """Parse marker's {N}------+ page markers into a dict of {1_based_page_no: text}."""
-    parts = re.split(r'(?:^|\n)\s*\{(\d+)\}-+', md_text)
-    if len(parts) <= 1:
-        return {}
-    pages = {}
-    for i in range(1, len(parts), 2):
-        page_idx = int(parts[i])  # 0-based page index from marker
-        page_text = parts[i + 1] if i + 1 < len(parts) else ""
-        pages[page_idx + 1] = sanitize_text(page_text)
-    return pages
-
-
-def parse_page_range(raw_range: Any) -> tuple[int, int] | None:
-    if isinstance(raw_range, (list, tuple)) and len(raw_range) == 2:
-        try:
-            return int(raw_range[0]), int(raw_range[1])
-        except (ValueError, TypeError):
-            return None
-    elif isinstance(raw_range, str):
-        m = re.match(r"^(\d+)\s*[-:]\s*(\d+)$", raw_range.strip())
-        if m:
-            return int(m.group(1)), int(m.group(2))
-        try:
-            p = int(raw_range.strip())
-            return p, p
-        except ValueError:
-            return None
-    return None
-
-
-def load_chunk_overlays(doc_stem: str, references_dir: Path) -> dict[int, str]:
-    """Check for references/.convert-chunks/<name>/manifest.json and load done chunks.
-
-    Returns:
-        dict mapping 1-based page_no -> marker_text for done chunks.
-    """
-    manifest_path = references_dir / ".convert-chunks" / doc_stem / "manifest.json"
-    if not manifest_path.is_file():
-        # Check if full-document markdown exists as references/<doc_stem>.md
-        md_file = references_dir / f"{doc_stem}.md"
-        if md_file.is_file():
-            try:
-                md_text = md_file.read_text(encoding="utf-8")
-                return parse_paginated_md(md_text)
-            except Exception:
-                return {}
-        return {}
-
-    try:
-        data = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except Exception:
-        return {}
-
-    chunks = []
-    if isinstance(data, list):
-        chunks = data
-    elif isinstance(data, dict):
-        if "chunks" in data and isinstance(data["chunks"], list):
-            chunks = data["chunks"]
-        elif "chunks" in data and isinstance(data["chunks"], dict):
-            chunks = list(data["chunks"].values())
-        else:
-            chunks = [v for v in data.values() if isinstance(v, dict) and "status" in v]
-
-    overlays: dict[int, str] = {}
-    manifest_dir = manifest_path.parent
-
-    for chunk in chunks:
-        if not isinstance(chunk, dict):
-            continue
-        if chunk.get("status") != "done":
-            continue
-
-        page_range = parse_page_range(chunk.get("page_range"))
-        md_rel = chunk.get("md_path")
-        if not md_rel:
-            continue
-
-        md_path = Path(md_rel)
-        if not md_path.is_absolute():
-            candidate = manifest_dir / md_path
-            if candidate.is_file():
-                md_path = candidate
-            else:
-                candidate2 = references_dir / md_path
-                if candidate2.is_file():
-                    md_path = candidate2
-
-        if not md_path.is_file():
-            continue
-
-        try:
-            chunk_md = md_path.read_text(encoding="utf-8")
-        except Exception:
-            continue
-
-        parsed_pages = parse_paginated_md(chunk_md)
-        if parsed_pages:
-            if page_range:
-                start_p, end_p = page_range
-                min_p, max_p = min(parsed_pages.keys()), max(parsed_pages.keys())
-                # If marker paginated 1..N chunk-relatively:
-                if min_p == 1 and start_p > 1 and max_p <= (end_p - start_p + 1):
-                    for rel_p, p_text in parsed_pages.items():
-                        abs_p = start_p + rel_p - 1
-                        if abs_p <= end_p:
-                            overlays[abs_p] = sanitize_text(p_text)
-                else:
-                    for p_num, p_text in parsed_pages.items():
-                        if start_p <= p_num <= end_p:
-                            overlays[p_num] = sanitize_text(p_text)
-            else:
-                for p_num, p_text in parsed_pages.items():
-                    overlays[p_num] = sanitize_text(p_text)
-        elif page_range:
-            start_p, end_p = page_range
-            if start_p == end_p:
-                overlays[start_p] = sanitize_text(chunk_md)
-
-    return overlays
 
 
 def extract_and_normalize_toc(doc: pymupdf.Document, doc_stem: str) -> tuple[list[tuple[str, str, int, int]], list[str]]:
@@ -269,8 +145,8 @@ def init_db(db_path: Path) -> sqlite3.Connection:
         return con
 
 
-def extract_pdf_data(pdf_path: Path, references_dir: Path) -> dict[str, Any]:
-    """Extract pages, text, TOC, and manifest overlays for a PDF file."""
+def extract_pdf_data(pdf_path: Path) -> dict[str, Any]:
+    """Extract pages, text, and TOC for a PDF file."""
     doc_stem = pdf_path.stem
     warnings: list[str] = []
 
@@ -311,26 +187,20 @@ def extract_pdf_data(pdf_path: Path, references_dir: Path) -> dict[str, Any]:
     toc_rows, toc_warnings = extract_and_normalize_toc(doc, doc_stem)
     warnings.extend(toc_warnings)
 
-    chunk_overlays = load_chunk_overlays(doc_stem, references_dir)
-
     pages_rows = []
     empty_pages = []
-    source_counts = {"pymupdf": 0, "marker": 0}
+    source_counts = {"pymupdf": 0}
+    source = "pymupdf"
 
     for i in range(page_count):
         page_no = i + 1
-        if page_no in chunk_overlays and chunk_overlays[page_no]:
-            text = chunk_overlays[page_no]
-            source = "marker"
-        else:
-            try:
-                page = doc[i]
-                raw_text = page.get_text()
-                text = sanitize_text(raw_text)
-            except Exception as e:
-                warnings.append(f"Error extracting text from page {page_no}: {e}")
-                text = ""
-            source = "pymupdf"
+        try:
+            page = doc[i]
+            raw_text = page.get_text()
+            text = sanitize_text(raw_text)
+        except Exception as e:
+            warnings.append(f"Error extracting text from page {page_no}: {e}")
+            text = ""
 
         if not text:
             empty_pages.append(page_no)
@@ -409,7 +279,6 @@ def resolve_pdf_targets(names: list[str], references_dir: Path) -> list[Path]:
 
 def index_documents(
     pdf_paths: list[Path],
-    references_dir: Path,
     db_path: Path,
     force: bool = False,
     dry_run: bool = False,
@@ -433,8 +302,7 @@ def index_documents(
                 toc_count = cur.fetchone()[0]
                 cur.execute("SELECT source, COUNT(*) FROM pages WHERE doc = ? GROUP BY source", (doc_stem,))
                 sources = dict(cur.fetchall())
-                for s in ("pymupdf", "marker"):
-                    sources.setdefault(s, 0)
+                sources.setdefault("pymupdf", 0)
                 summaries.append({
                     "doc": doc_stem,
                     "status": "already_indexed",
@@ -447,7 +315,7 @@ def index_documents(
                 })
                 continue
 
-        data = extract_pdf_data(pdf_path, references_dir)
+        data = extract_pdf_data(pdf_path)
 
         if data["status"] == "ok" and not dry_run and con is not None:
             save_doc_to_db(con, doc_stem, data["pages"], data["toc"])
@@ -491,7 +359,6 @@ def main() -> None:
 
     summaries = index_documents(
         pdf_paths=targets,
-        references_dir=args.references_dir,
         db_path=db_path,
         force=args.force,
         dry_run=args.dry_run,

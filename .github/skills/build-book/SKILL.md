@@ -155,6 +155,11 @@ Knowledge is a continuous, high-dimensional geometric vector.
 * Standard callouts: `::: {.callout-note}`, `::: {.callout-tip}`, `::: {.callout-warning}`, `::: {.callout-important}`.
 * Custom Geek callouts: `::: {.callout-note appearance="simple"}` with `## The Geek's Epiphany` or `## The Geek's Lens`.
 
+### Section and Chapter Breaks
+* **Page Breaks**: Parts, chapters, and special unnumbered sections (`Prologue`, `Disclaimer`, `Acknowledgments`, `References`, `Mathematical Notation`, `Code & Computational Environment`) must be separated by `{{< pagebreak >}}` rather than horizontal rules (`---`).
+* In PDF/LaTeX, Quarto converts `{{< pagebreak >}}` to `\newpage` / `\clearpage`.
+* In HTML and EPUB, `{{< pagebreak >}}` inserts standard CSS page breaks (`break-after: page;`).
+
 ---
 
 ## Ancillary Architecture & Customization

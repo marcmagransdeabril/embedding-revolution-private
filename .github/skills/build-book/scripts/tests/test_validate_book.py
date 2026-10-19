@@ -80,3 +80,29 @@ def test_validate_math_delimiters():
     ]
     issues = validate_book.validate_math_delimiters(Path("test.qmd"), unclosed_math)
     assert any(i.severity == "ERROR" and "unclosed" in i.message.lower() for i in issues)
+
+
+def test_validate_section_breaks():
+    """Verify that horizontal rules separating sections trigger warnings to use page breaks."""
+    clean_lines = [
+        "# Chapter 1",
+        "Some introductory text.",
+        "{{< pagebreak >}}",
+        "## Acknowledgments {.unnumbered}",
+        "Thank you all.",
+    ]
+    issues = validate_book.validate_section_breaks(Path("test.qmd"), clean_lines)
+    assert len(issues) == 0
+
+    rule_separated_lines = [
+        "# Chapter 1",
+        "Some introductory text.",
+        "---",
+        "## Acknowledgments {.unnumbered}",
+        "Thank you all.",
+    ]
+    issues = validate_book.validate_section_breaks(Path("test.qmd"), rule_separated_lines)
+    assert len(issues) == 1
+    assert issues[0].severity == "WARNING"
+    assert "pagebreak" in issues[0].message.lower()
+

@@ -21,8 +21,6 @@ from build_index import (
     extract_pdf_data,
     index_documents,
     init_db,
-    load_chunk_overlays,
-    parse_paginated_md,
     resolve_pdf_targets,
     sanitize_text,
     save_doc_to_db,
@@ -120,7 +118,6 @@ def test_toc_normalization_and_edge_cases(tmp_path: Path):
 
     summaries = index_documents(
         [pdf_hier, pdf_no_toc],
-        references_dir=ref_dir,
         db_path=db_path,
         force=True,
     )
@@ -195,7 +192,7 @@ def test_text_sanitization_and_ligatures(tmp_path: Path):
         ],
     )
 
-    summaries = index_documents([pdf], references_dir=ref_dir, db_path=db_path, force=True)
+    summaries = index_documents([pdf], db_path=db_path, force=True)
     assert len(summaries) == 1
     assert summaries[0]["empty_pages"] == [2]
     assert any("no extractable text" in w for w in summaries[0]["warnings"])
@@ -227,7 +224,7 @@ def test_idempotent_reindexing(tmp_path: Path):
     )
 
     # First index pass
-    s1 = index_documents([pdf_path], references_dir=ref_dir, db_path=db_path, force=True)
+    s1 = index_documents([pdf_path], db_path=db_path, force=True)
     assert s1[0]["page_count"] == 3
     assert s1[0]["toc_entries"] == 3
 
@@ -238,7 +235,7 @@ def test_idempotent_reindexing(tmp_path: Path):
     con.close()
 
     # Second pass without force: should report already_indexed
-    s2 = index_documents([pdf_path], references_dir=ref_dir, db_path=db_path, force=False)
+    s2 = index_documents([pdf_path], db_path=db_path, force=False)
     assert s2[0]["status"] == "already_indexed"
 
     # Modify PDF: reduce to 2 pages with new content
@@ -249,7 +246,7 @@ def test_idempotent_reindexing(tmp_path: Path):
     )
 
     # Reindex with force=True
-    s3 = index_documents([pdf_path], references_dir=ref_dir, db_path=db_path, force=True)
+    s3 = index_documents([pdf_path], db_path=db_path, force=True)
     assert s3[0]["page_count"] == 2
     assert s3[0]["toc_entries"] == 1
 
@@ -265,66 +262,6 @@ def test_idempotent_reindexing(tmp_path: Path):
     con.close()
 
 
-def test_manifest_chunk_overlays(tmp_path: Path):
-    """Mocks manifest.json with done and pending chunks, verifying marker text overrides pymupdf text."""
-    ref_dir = tmp_path / "references"
-    db_path = ref_dir / ".ground-index" / "index.sqlite"
-
-    doc_stem = "chunked_doc"
-    pdf_path = make_synthetic_pdf(
-        ref_dir / f"{doc_stem}.pdf",
-        [
-            "PyMuPDF Raw Text 1",
-            "PyMuPDF Raw Text 2",
-            "PyMuPDF Raw Text 3",
-            "PyMuPDF Raw Text 4",
-        ],
-    )
-
-    # Create chunk directory and manifest
-    chunk_dir = ref_dir / ".convert-chunks" / doc_stem
-    chunk_dir.mkdir(parents=True, exist_ok=True)
-
-    chunk1_md = chunk_dir / "chunk1.md"
-    chunk1_md.write_text(
-        "{0}------------------------------------\nMarker High Fidelity Text Page 1\n"
-        "{1}------------------------------------\nMarker High Fidelity Text Page 2\n",
-        encoding="utf-8",
-    )
-
-    manifest_data = {
-        "doc": doc_stem,
-        "chunks": [
-            {
-                "chunk_id": "chunk_001",
-                "page_range": [1, 2],
-                "status": "done",
-                "md_path": "chunk1.md",
-            },
-            {
-                "chunk_id": "chunk_002",
-                "page_range": [3, 4],
-                "status": "pending",
-                "md_path": "chunk2.md",
-            },
-        ],
-    }
-    (chunk_dir / "manifest.json").write_text(json.dumps(manifest_data), encoding="utf-8")
-
-    summaries = index_documents([pdf_path], references_dir=ref_dir, db_path=db_path, force=True)
-    assert len(summaries) == 1
-    assert summaries[0]["sources"] == {"marker": 2, "pymupdf": 2}
-
-    con = sqlite3.connect(str(db_path))
-    rows = con.execute("SELECT page_no, text, source FROM pages WHERE doc = ? ORDER BY page_no", (doc_stem,)).fetchall()
-    con.close()
-
-    assert rows[0] == (1, "Marker High Fidelity Text Page 1", "marker")
-    assert rows[1] == (2, "Marker High Fidelity Text Page 2", "marker")
-    assert rows[2] == (3, "PyMuPDF Raw Text 3", "pymupdf")
-    assert rows[3] == (4, "PyMuPDF Raw Text 4", "pymupdf")
-
-
 def test_dry_run_flag(tmp_path: Path):
     """Verifies dry-run emits structured summary without creating or modifying the SQLite DB."""
     ref_dir = tmp_path / "references"
@@ -337,7 +274,7 @@ def test_dry_run_flag(tmp_path: Path):
     )
 
     # In-memory API dry-run
-    summaries = index_documents([pdf_path], references_dir=ref_dir, db_path=db_path, dry_run=True)
+    summaries = index_documents([pdf_path], db_path=db_path, dry_run=True)
     assert len(summaries) == 1
     assert summaries[0]["status"] == "ok"
     assert summaries[0]["page_count"] == 2
@@ -376,7 +313,7 @@ def test_error_handling(tmp_path: Path):
     empty_pdf = ref_dir / "empty.pdf"
     empty_pdf.write_bytes(b"")
 
-    summaries = index_documents([corrupt_pdf, empty_pdf], references_dir=ref_dir, db_path=db_path, force=True)
+    summaries = index_documents([corrupt_pdf, empty_pdf], db_path=db_path, force=True)
     assert len(summaries) == 2
     assert summaries[0]["status"] == "error"
     assert "error" in summaries[0]

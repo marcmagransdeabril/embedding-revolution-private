@@ -159,6 +159,41 @@ def validate_math_delimiters(path: Path, lines: list[str]) -> list[ValidationIss
     return issues
 
 
+def validate_section_breaks(path: Path, lines: list[str]) -> list[ValidationIssue]:
+    """Check that chapters and special sections use {{< pagebreak >}} instead of '---' horizontal rules."""
+    issues: list[ValidationIssue] = []
+
+    # Determine frontmatter boundary
+    in_frontmatter = False
+    fm_end_line = 0
+    if lines and lines[0].strip() == "---":
+        in_frontmatter = True
+        for idx in range(1, len(lines)):
+            if lines[idx].strip() == "---":
+                fm_end_line = idx + 1
+                break
+
+    for idx, line in enumerate(lines, start=1):
+        if idx <= fm_end_line:
+            continue
+
+        stripped = line.strip()
+        if stripped in ("---", "***", "___"):
+            # Check if this rule is separating sections or chapters
+            issues.append(
+                ValidationIssue(
+                    path,
+                    idx,
+                    "WARNING",
+                    "Found horizontal rule '---'. Parts, chapters, and special sections "
+                    "(Acknowledgments, Disclaimer, Prologue, References) should be separated by "
+                    "'{{< pagebreak >}}' instead of '---'.",
+                )
+            )
+
+    return issues
+
+
 def validate_qmd_file(path: Path) -> list[ValidationIssue]:
     """Run all validation passes on a single .qmd file."""
     if not path.is_file():
@@ -172,6 +207,7 @@ def validate_qmd_file(path: Path) -> list[ValidationIssue]:
     issues.extend(validate_callouts(path, lines))
     issues.extend(validate_code_chunks(path, text))
     issues.extend(validate_math_delimiters(path, lines))
+    issues.extend(validate_section_breaks(path, lines))
 
     return issues
 

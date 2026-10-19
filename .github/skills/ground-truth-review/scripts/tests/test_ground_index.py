@@ -84,28 +84,6 @@ def synthetic_corpus(tmp_path: Path) -> Path:
     ]
     make_synthetic_pdf(references_dir / "doc_history_survey.pdf", history_pages, toc=[])
 
-    # 4. Marker chunk overlay for doc_theory covering page 2
-    chunk_dir = references_dir / ".convert-chunks" / "doc_theory"
-    chunk_dir.mkdir(parents=True, exist_ok=True)
-    manifest = {
-        "chunks": [
-            {
-                "chunk_id": "chunk_001",
-                "page_range": [2, 2],
-                "status": "done",
-                "md_path": "chunk_001.md",
-            }
-        ]
-    }
-    (chunk_dir / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-    chunk_md_content = (
-        "{1}------\n"
-        "Section 1.1: Capacity Bounds\n"
-        "Theorem 1 capacity bound $C \\approx 0.18 d$ with circular convolution and $O(d \\log d)$ complexity in high dimensions. "
-        "Marker-specific enhanced OCR text."
-    )
-    (chunk_dir / "chunk_001.md").write_text(chunk_md_content, encoding="utf-8")
-
     return references_dir
 
 
@@ -413,9 +391,8 @@ def test_e2e_render_page_mode(synthetic_corpus: Path, tmp_path: Path):
     assert custom_img.read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
 
 
-def test_e2e_manifest_chunk_overlay(synthetic_corpus: Path):
-    """Tests that build_index.py integrates completed Marker chunks with source='marker' vs pymupdf."""
-    # Build index
+def test_e2e_pymupdf_source_tagging(synthetic_corpus: Path):
+    """Tests that build_index.py tags every indexed page with source='pymupdf'."""
     code, stdout, stderr = run_cli([
         sys.executable,
         str(BUILD_INDEX_SCRIPT),
@@ -424,23 +401,6 @@ def test_e2e_manifest_chunk_overlay(synthetic_corpus: Path):
     ])
     assert code == 0, stderr
 
-    # Query Marker-specific text injected via chunk_001.md overlay for page 2
-    code, stdout, stderr = run_cli([
-        sys.executable,
-        str(GROUND_CHECK_SCRIPT),
-        "Marker-specific enhanced OCR text",
-        "--references-dir",
-        str(synthetic_corpus),
-    ])
-    assert code == 0, stderr
-    res = json.loads(stdout)
-    assert res["total_hits"] > 0
-    top_hit = res["hits"][0]
-    assert top_hit["doc"] == "doc_theory"
-    assert top_hit["page_no"] == 2
-    assert top_hit["source"] == "marker"
-
-    # Query PyMuPDF text on page 3 of the same document (not in chunk manifest)
     code, stdout, stderr = run_cli([
         sys.executable,
         str(GROUND_CHECK_SCRIPT),
