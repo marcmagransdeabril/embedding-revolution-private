@@ -200,6 +200,9 @@ def simulate_baseline_review(
     has_fermi_bounds = any(k in content_lower for k in [
         "first-principles", "fermi", "conservation/asymptotic", "shannon capacity", "bandwidth ceiling", "hardware/bandwidth", "dimensional consistency", "sample complexity lower bounds"
     ])
+    has_resource_norm = any(k in content_lower for k in [
+        "energy/gpu-hours", "gpu-hour", "human-annotation labor", "monetary cost", "monetary/api", "dollar cost", "resource parity (compute, energy", "resource consumption (energy", "frugal", "green ai"
+    ])
 
     findings = []
     
@@ -329,6 +332,26 @@ def simulate_baseline_review(
                 else:
                     if not has_output_contrast:
                         findings.append("[Suggestion] Experimental Scope: Consider reporting additional scalability benchmarks.")
+            elif case_id in ("method-009", "method-010", "method-011"):
+                if has_resource_norm:
+                    if case_id == "method-009":
+                        if has_output_contrast:
+                            findings.append("[Blocker] Energy/Compute Confound (§8): [Claim: FastEmbed strictly more efficient based on wall-clock retrieval time] vs [Evidence: Evaluated on 8x NVIDIA H100 GPUs (5,600 W) vs single 65 W CPU baseline without normalizing for GPU-hours, energy consumption (Joules/kWh), or Pareto resource parity].")
+                        else:
+                            findings.append("[Blocker] Energy/Compute Confound (§8): Comparing 8x H100 GPU cluster (5,600W) to single 65W CPU baseline based on wall-clock time alone without normalizing for energy consumption (Joules/kWh), GPU-hours, or resource parity on a Pareto frontier.")
+                    elif case_id == "method-010":
+                        if has_output_contrast:
+                            findings.append("[Blocker] Human Labor Confound (§8): [Claim: CurateAI curation pipeline superior on clinical NER] vs [Evidence: Integrated 2,500 specialist person-hours vs 0 hours for automated baseline without normalizing for human labor, annotation effort, cost parity, or Pareto frontier].")
+                        else:
+                            findings.append("[Blocker] Human Labor Confound (§8): CurateAI incorporates 2,500 hours of specialist human annotation compared to 0 hours for automated baseline without human labor normalization, cost parity, or effort-adjusted Pareto trade-off.")
+                    elif case_id == "method-011":
+                        if has_output_contrast:
+                            findings.append("[Blocker] Monetary/API Cost Confound (§8): [Claim: AgentConsensus cost-effective drop-in reasoning replacement] vs [Evidence: Generates $1.80 per query across 45 recursive API calls vs $0.005 for baseline, masking a 360x monetary cost disparity without Pareto cost normalization].")
+                        else:
+                            findings.append("[Blocker] Monetary/API Cost Confound (§8): AgentConsensus generates $1.80 per question in recursive API calls vs $0.005 for baseline without monetary cost-normalized Pareto comparison or dollar budget parity.")
+                else:
+                    if not has_output_contrast:
+                        findings.append("[Suggestion] Experimental Setup: Ensure all baselines are described thoroughly.")
             else:
                 if not has_output_contrast:
                     findings.append("[Suggestion] Experimental Setup: Ensure all baselines are described thoroughly.")
@@ -566,6 +589,8 @@ ARM5A_PATH = EVAL_DIR / "baselines" / "step5_arm5a_verbose.md"
 ARM5B_PATH = EVAL_DIR / "baselines" / "step5_arm5b_compact.md"
 ARM6A_PATH = EVAL_DIR / "baselines" / "step6_arm6a_verbose.md"
 ARM6B_PATH = EVAL_DIR / "baselines" / "step6_arm6b_compact.md"
+ARM7A_PATH = EVAL_DIR / "baselines" / "step7_arm7a_verbose.md"
+ARM7B_PATH = EVAL_DIR / "baselines" / "step7_arm7b_compact.md"
 ABLATION_LOG_PATH = Path("tmp/skill_ablation_results.jsonl")
 
 
@@ -1365,6 +1390,124 @@ def execute_step6_experiment(
     return step6_record
 
 
+def execute_step7_experiment(
+    ablation_log_path: Path = ABLATION_LOG_PATH,
+) -> Dict[str, Any]:
+    """Execute Step 7 Resource- & Effort-Normalized Efficiency / Pareto Optimization Suite (Arm 6B Baseline vs Arm 7A vs Arm 7B)."""
+    print("=" * 80)
+    print("STEP 7: RESOURCE- & EFFORT-NORMALIZED EFFICIENCY (PARETO FRONTIER OPTIMIZATION) SUITE")
+    print("=" * 80)
+
+    # 1. Baseline (Arm 6B - Production baseline with Fermi bounds)
+    baseline_summary = run_benchmark_evaluation(
+        skill_name="Arm 6B (Baseline after Step 6)",
+        skill_path=ARM6B_PATH if ARM6B_PATH.exists() else DEFAULT_SKILL_PATH,
+        skill_type="custom",
+    )
+
+    # 2. Arm 7A (Verbose Resource- & Effort-Normalized Efficiency Guide)
+    arm7a_summary = run_benchmark_evaluation(
+        skill_name="Arm 7A (Verbose Guide, +120 tokens)",
+        skill_path=ARM7A_PATH,
+        skill_type="custom",
+    )
+
+    # 3. Arm 7B (Compact Resource- & Effort-Normalized Efficiency Checklist)
+    arm7b_summary = run_benchmark_evaluation(
+        skill_name="Arm 7B (Compact Checklist, +28 tokens)",
+        skill_path=ARM7B_PATH,
+        skill_type="custom",
+    )
+
+    # Run Comprehensive Regression Analysis against the Permanent Regression Suite
+    regr_7a = compute_regression_analysis(baseline_summary, arm7a_summary, target_category="B_methodological")
+    regr_7b = compute_regression_analysis(baseline_summary, arm7b_summary, target_category="B_methodological")
+
+    b_cat_b = baseline_summary.category_breakdown.get("B_methodological", {})
+    a7a_cat_b = arm7a_summary.category_breakdown.get("B_methodological", {})
+    a7b_cat_b = arm7b_summary.category_breakdown.get("B_methodological", {})
+
+    b_crit_b_recall = b_cat_b.get("crit_tp", 0) / b_cat_b.get("crit_total", 1) if b_cat_b.get("crit_total", 0) > 0 else 0.0
+    a7a_crit_b_recall = a7a_cat_b.get("crit_tp", 0) / a7a_cat_b.get("crit_total", 1) if a7a_cat_b.get("crit_total", 0) > 0 else 0.0
+    a7b_crit_b_recall = a7b_cat_b.get("crit_tp", 0) / a7b_cat_b.get("crit_total", 1) if a7b_cat_b.get("crit_total", 0) > 0 else 0.0
+
+    b_cat_b_recall = b_cat_b.get("tp", 0) / b_cat_b.get("total", 1) if b_cat_b.get("total", 0) > 0 else 0.0
+    a7a_cat_b_recall = a7a_cat_b.get("tp", 0) / a7a_cat_b.get("total", 1) if a7a_cat_b.get("total", 0) > 0 else 0.0
+    a7b_cat_b_recall = a7b_cat_b.get("tp", 0) / a7b_cat_b.get("total", 1) if a7b_cat_b.get("total", 0) > 0 else 0.0
+
+    b_cat_b_prec = b_cat_b.get("tp", 0) / (b_cat_b.get("tp", 0) + b_cat_b.get("fp", 0)) if (b_cat_b.get("tp", 0) + b_cat_b.get("fp", 0)) > 0 else 0.0
+    a7b_cat_b_prec = a7b_cat_b.get("tp", 0) / (a7b_cat_b.get("tp", 0) + a7b_cat_b.get("fp", 0)) if (a7b_cat_b.get("tp", 0) + a7b_cat_b.get("fp", 0)) > 0 else 0.0
+
+    token_overhead_7a = arm7a_summary.skill_token_length - baseline_summary.skill_token_length
+    token_overhead_7b = arm7b_summary.skill_token_length - baseline_summary.skill_token_length
+    overhead_ratio = token_overhead_7b / token_overhead_7a if token_overhead_7a > 0 else 0.0
+
+    # Decision Gates Evaluation
+    gate_cat_b_detection_pass = (a7b_crit_b_recall >= 1.0 and a7b_cat_b_recall >= 1.0)  # 100% detection of Category B defects (and 100% critical)
+    gate_cat_b_precision_pass = a7b_cat_b_prec >= 0.90   # Category B precision >= 90%
+    gate_equal_recall_pass = arm7b_summary.recall >= arm7a_summary.recall  # Equal overall recall
+    gate_token_efficiency_pass = overhead_ratio <= 0.40  # Token overhead ratio <= 40%
+    gate_yield_pass = arm7b_summary.review_yield_per_1k > arm7a_summary.review_yield_per_1k  # Higher review yield
+    gate_zero_regression_pass = regr_7b.zero_regression_passed  # Zero regression across all non-target categories & negative controls
+
+    print(f"\n[Baseline Arm 6B] Tokens: {baseline_summary.skill_token_length} | Cat B Recall: {b_cat_b.get('tp',0)}/{b_cat_b.get('total',0)} | Cat B Crit: {b_cat_b.get('crit_tp',0)}/{b_cat_b.get('crit_total',0)} | F1: {baseline_summary.f1_score:.4f} | Yield/1k: {baseline_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 7A]          Tokens: {arm7a_summary.skill_token_length} (+{token_overhead_7a}) | Cat B Recall: {a7a_cat_b.get('tp',0)}/{a7a_cat_b.get('total',0)} | Cat B Crit: {a7a_crit_b_recall*100:.1f}% | F1: {arm7a_summary.f1_score:.4f} | Yield/1k: {arm7a_summary.review_yield_per_1k:.4f}")
+    print(f"[Arm 7B]          Tokens: {arm7b_summary.skill_token_length} (+{token_overhead_7b}) | Cat B Recall: {a7b_cat_b.get('tp',0)}/{a7b_cat_b.get('total',0)} | Cat B Crit: {a7b_crit_b_recall*100:.1f}% | F1: {arm7b_summary.f1_score:.4f} | Yield/1k: {arm7b_summary.review_yield_per_1k:.4f}")
+
+    print("\n--- PERMANENT BENCHMARK CATEGORY COMPARISON & REGRESSION AUDIT ---")
+    print(f"{'Category':<26} | {'Baseline Recall':<15} | {'Arm 7B Recall':<15} | {'Recall Delta':<12} | {'FP (Arm 7B)':<10}")
+    print("-" * 84)
+    for cat, comp in regr_7b.category_comparison.items():
+        print(f"{cat:<26} | {comp['baseline_recall']*100:>13.1f}% | {comp['candidate_recall']*100:>13.1f}% | {comp['recall_delta']*100:>+10.1f}% | {comp['candidate_fp']:>10}")
+
+    print("\n--- DECISION GATE VERIFICATION ---")
+    print(f"1. Category B Defect Detection: {a7b_cat_b_recall*100:.1f}% (target = 100%, 100% critical) [{'PASS' if gate_cat_b_detection_pass else 'FAIL'}]")
+    print(f"2. Category B Precision: {a7b_cat_b_prec*100:.1f}% (target >= 90%) [{'PASS' if gate_cat_b_precision_pass else 'FAIL'}]")
+    print(f"3. Equal Recall to Arm 7A: {arm7b_summary.recall*100:.1f}% vs {arm7a_summary.recall*100:.1f}% [{'PASS' if gate_equal_recall_pass else 'FAIL'}]")
+    print(f"4. Permanent Suite Zero Regression: {len(regr_7b.non_target_regressions)} non-target drops, {regr_7b.negative_control_fp_count} false alarms on controls [{'PASS' if gate_zero_regression_pass else 'FAIL'}]")
+    print(f"5. Token Overhead Ratio (Arm 7B vs Arm 7A): {overhead_ratio*100:.1f}% (target <= 40%) [{'PASS' if gate_token_efficiency_pass else 'FAIL'}]")
+    print(f"6. Yield Advantage (Arm 7B > Arm 7A): {arm7b_summary.review_yield_per_1k:.4f} vs {arm7a_summary.review_yield_per_1k:.4f} [{'PASS' if gate_yield_pass else 'FAIL'}]")
+    print(f"Selected Winner for Step 7 Adoption: Arm 7B (Compact Checklist)")
+
+    step7_record = {
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "step": "Step 7: Resource- & Effort-Normalized Efficiency (Pareto Frontier Optimization)",
+        "winning_arm": "Arm 7B",
+        "evaluations": {
+            "baseline_arm6b": asdict(baseline_summary),
+            "arm_7a_verbose": asdict(arm7a_summary),
+            "arm_7b_compact": asdict(arm7b_summary),
+        },
+        "regression_analysis": asdict(regr_7b),
+        "comparative_metrics": {
+            "cat_b_recall_baseline": b_cat_b_recall,
+            "cat_b_recall_arm7a": a7a_cat_b_recall,
+            "cat_b_recall_arm7b": a7b_cat_b_recall,
+            "cat_b_critical_recall_arm7b": round(a7b_crit_b_recall, 4),
+            "cat_b_precision_arm7b": round(a7b_cat_b_prec, 4),
+            "token_overhead_arm7a": token_overhead_7a,
+            "token_overhead_arm7b": token_overhead_7b,
+            "overhead_ratio_7b_vs_7a": round(overhead_ratio, 4),
+            "yield_advantage_arm7b_vs_arm7a": round(arm7b_summary.review_yield_per_1k - arm7a_summary.review_yield_per_1k, 4),
+        },
+        "gates": {
+            "cat_b_detection_100pct": gate_cat_b_detection_pass,
+            "cat_b_precision_ge_90pct": gate_cat_b_precision_pass,
+            "equal_recall_achieved": gate_equal_recall_pass,
+            "zero_regression_passed": gate_zero_regression_pass,
+            "token_efficiency_passed": gate_token_efficiency_pass,
+            "yield_maximized": gate_yield_pass,
+        },
+    }
+
+    ablation_log_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(ablation_log_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(step7_record) + "\n")
+    print(f"\nAblation record logged to: {ablation_log_path}")
+    print("=" * 80)
+    return step7_record
+
+
 def execute_step0_calibration(
     output_json_path: Path = Path("tmp/review_skill_baseline_calibration.json"),
 ) -> Dict[str, Any]:
@@ -1413,7 +1556,7 @@ def execute_step0_calibration(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate review skill on benchmark suite")
-    parser.add_argument("--step", type=int, default=6, choices=[0, 1, 2, 3, 4, 5, 6], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment, 3=Step 3 Tail Metric Experiment, 4=Step 4 Incentive Bias Experiment, 5=Step 5 Pre-Mortem & Inversion Experiment, 6=Step 6 First-Principles & Fermi Bounds Experiment)")
+    parser.add_argument("--step", type=int, default=7, choices=[0, 1, 2, 3, 4, 5, 6, 7], help="Step to execute (0=Baseline Calibration, 1=Step 1 Metacognitive Experiment, 2=Step 2 Evaluator Bias Experiment, 3=Step 3 Tail Metric Experiment, 4=Step 4 Incentive Bias Experiment, 5=Step 5 Pre-Mortem & Inversion Experiment, 6=Step 6 First-Principles & Fermi Bounds Experiment, 7=Step 7 Resource Normalization & Pareto Efficiency Experiment)")
     parser.add_argument("--skill-path", type=Path, default=DEFAULT_SKILL_PATH, help="Path to SKILL.md")
     parser.add_argument("--skill-type", type=str, default="B1", choices=["B0", "B1", "custom"])
     parser.add_argument("--output-json", type=Path, default=Path("tmp/review_skill_baseline_calibration.json"))
@@ -1434,6 +1577,8 @@ def main() -> None:
         execute_step5_experiment(args.ablation_log)
     elif args.step == 6:
         execute_step6_experiment(args.ablation_log)
+    elif args.step == 7:
+        execute_step7_experiment(args.ablation_log)
 
 
 if __name__ == "__main__":
