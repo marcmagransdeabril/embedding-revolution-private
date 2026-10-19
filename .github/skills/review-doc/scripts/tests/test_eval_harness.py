@@ -23,10 +23,10 @@ from eval_review_skill import (
 
 
 def test_benchmark_dataset_integrity():
-    """Verify that benchmark dataset has 52 cases (42 defect cases across categories A-G + 10 negative controls)."""
+    """Verify that benchmark dataset has 55 cases (42 defect cases across categories A-G + 13 negative controls)."""
     assert BENCHMARK_PATH.exists(), f"Benchmark dataset missing at {BENCHMARK_PATH}"
     cases = load_benchmark_cases(BENCHMARK_PATH)
-    assert len(cases) == 52, f"Expected exactly 52 cases, got {len(cases)}"
+    assert len(cases) == 55, f"Expected exactly 55 cases, got {len(cases)}"
 
     expected_categories = {
         "A_statistical": 6,
@@ -36,7 +36,7 @@ def test_benchmark_dataset_integrity():
         "E_tail_vs_mean": 5,
         "F_latex_formatting": 2,
         "G_first_principles_fermi": 3,
-        "Z_negative_control": 10,
+        "Z_negative_control": 13,
     }
 
     actual_categories = {}
@@ -68,7 +68,7 @@ def test_benchmark_dataset_integrity():
             assert len(case["ground_truth_defects"]) == 0, f"Negative control {case['id']} must have 0 ground truth defects"
 
     assert actual_categories == expected_categories, f"Category distribution mismatch: {actual_categories}"
-    assert paired_verbose_count == 52, f"Expected 52 paired verbose variants, got {paired_verbose_count}"
+    assert paired_verbose_count == 55, f"Expected 55 paired verbose variants, got {paired_verbose_count}"
 
 
 def test_b0_minimal_prompt_integrity():
@@ -111,15 +111,15 @@ def test_baseline_benchmark_execution():
         skill_path=B0_PATH,
         skill_type="B0",
     )
-    assert b0_summary.total_cases == 52
+    assert b0_summary.total_cases == 55
     assert 0.0 <= b0_summary.recall <= 1.0
     assert 0.0 <= b0_summary.precision <= 1.0
     assert 0.0 <= b0_summary.f1_score <= 1.0
     assert b0_summary.review_yield_per_1k > 0.0
 
 
-def test_step1_to_step7_baseline_prompts_integrity():
-    """Verify that Step 1 through Step 7 baseline prompt variants exist and are well-formed."""
+def test_step1_to_step9_baseline_prompts_integrity():
+    """Verify that Step 1 through Step 9 baseline prompt variants exist and are well-formed."""
     arm1a = EVAL_DIR / "baselines" / "step1_arm1a_verbose.md"
     arm1b = EVAL_DIR / "baselines" / "step1_arm1b_compact.md"
     arm2a = EVAL_DIR / "baselines" / "step2_arm2a_verbose.md"
@@ -134,13 +134,17 @@ def test_step1_to_step7_baseline_prompts_integrity():
     arm6b = EVAL_DIR / "baselines" / "step6_arm6b_compact.md"
     arm7a = EVAL_DIR / "baselines" / "step7_arm7a_verbose.md"
     arm7b = EVAL_DIR / "baselines" / "step7_arm7b_compact.md"
+    arm8a = EVAL_DIR / "baselines" / "step8_arm8a_verbose.md"
+    arm8b = EVAL_DIR / "baselines" / "step8_arm8b_compact.md"
+    arm9a = EVAL_DIR / "baselines" / "step9_arm9a_verbose.md"
+    arm9b = EVAL_DIR / "baselines" / "step9_arm9b_compact.md"
 
-    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b, arm4a, arm4b, arm5a, arm5b, arm6a, arm6b, arm7a, arm7b]:
+    for p in [arm1a, arm1b, arm2a, arm2b, arm3a, arm3b, arm4a, arm4b, arm5a, arm5b, arm6a, arm6b, arm7a, arm7b, arm8a, arm8b, arm9a, arm9b]:
         assert p.exists(), f"Baseline variant missing at {p}"
         text = p.read_text(encoding="utf-8")
         assert "---" in text, f"Missing YAML frontmatter in {p}"
         tokens = count_tokens(text)
-        assert 1500 <= tokens <= 3200, f"Token count ({tokens}) outside reasonable bounds for {p}"
+        assert 1500 <= tokens <= 3500, f"Token count ({tokens}) outside reasonable bounds for {p}"
 
     assert count_tokens(arm2b.read_text(encoding="utf-8")) < count_tokens(arm2a.read_text(encoding="utf-8")), (
         "Arm 2B compact variant must have smaller token footprint than Arm 2A verbose"
@@ -159,6 +163,12 @@ def test_step1_to_step7_baseline_prompts_integrity():
     )
     assert count_tokens(arm7b.read_text(encoding="utf-8")) < count_tokens(arm7a.read_text(encoding="utf-8")), (
         "Arm 7B compact variant must have smaller token footprint than Arm 7A verbose"
+    )
+    assert count_tokens(arm8b.read_text(encoding="utf-8")) < count_tokens(arm8a.read_text(encoding="utf-8")), (
+        "Arm 8B compact variant must have smaller token footprint than Arm 8A verbose"
+    )
+    assert count_tokens(arm9b.read_text(encoding="utf-8")) < count_tokens(arm9a.read_text(encoding="utf-8")), (
+        "Arm 9B compact variant must have smaller token footprint than Arm 9A verbose"
     )
 
 
@@ -441,6 +451,106 @@ def test_step7_resource_normalization_gates():
     )
     assert len(regr_7b.non_target_regressions) == 0, f"Non-target regressions found: {regr_7b.non_target_regressions}"
     assert regr_7b.negative_control_fp_count == 0, f"Negative control false positives found: {regr_7b.negative_control_fp_count}"
+
+
+def test_step8_prior_art_gates():
+    """Verify Step 8 Prior-Art Grounding & Epistemic Circle of Competence decision gates and non-target regression invariance."""
+    from eval_review_skill import ARM7B_PATH, ARM8A_PATH, ARM8B_PATH, compute_regression_analysis
+
+    summary_7b = run_benchmark_evaluation(
+        skill_name="Arm 7B (Baseline)",
+        skill_path=ARM7B_PATH,
+        skill_type="custom",
+    )
+    summary_8a = run_benchmark_evaluation(
+        skill_name="Arm 8A",
+        skill_path=ARM8A_PATH,
+        skill_type="custom",
+    )
+    summary_8b, a8b_cases = run_benchmark_evaluation(
+        skill_name="Arm 8B",
+        skill_path=ARM8B_PATH,
+        skill_type="custom",
+        return_case_results=True,
+    )
+
+    cat_d_8b = summary_8b.category_breakdown["D_prior_art"]
+    crit_recall_8b = cat_d_8b["crit_tp"] / cat_d_8b["crit_total"]
+    total_recall_8b = cat_d_8b["tp"] / cat_d_8b["total"]
+    precision_d_8b = cat_d_8b["tp"] / (cat_d_8b["tp"] + cat_d_8b["fp"])
+
+    # 1. 100% detection on Category D prior-art defects (10/10 cases)
+    assert total_recall_8b == 1.0, f"Expected 100% Category D recall, got {total_recall_8b}"
+    assert crit_recall_8b == 1.0, f"Expected 100% critical Category D recall, got {crit_recall_8b}"
+
+    # 2. Precision >= 90%
+    assert precision_d_8b >= 0.90, f"Expected >= 90% precision in Cat D, got {precision_d_8b}"
+
+    # 3. Equal overall recall to Arm 8A
+    assert summary_8b.recall == summary_8a.recall, "Arm 8B should match Arm 8A recall"
+
+    # 4. Yield advantage (Arm 8B > Arm 8A)
+    assert summary_8b.review_yield_per_1k > summary_8a.review_yield_per_1k, (
+        f"Arm 8B yield ({summary_8b.review_yield_per_1k}) must exceed Arm 8A ({summary_8a.review_yield_per_1k})"
+    )
+
+    # 5. Non-target regression invariance & negative control integrity
+    regr_8b = compute_regression_analysis(summary_7b, summary_8b, target_category="D_prior_art")
+    assert regr_8b.zero_regression_passed is True, (
+        f"Step 8 introduced regressions or false alarms: {regr_8b.non_target_regressions}, FP={regr_8b.negative_control_fp_count}"
+    )
+
+
+def test_step9_statistical_consistency_gates():
+    """Verify Step 9 Statistical Consistency & Anomaly Auditing decision gates and non-target regression invariance."""
+    from eval_review_skill import ARM8B_PATH, ARM9A_PATH, ARM9B_PATH, compute_regression_analysis
+
+    summary_8b = run_benchmark_evaluation(
+        skill_name="Arm 8B (Baseline)",
+        skill_path=ARM8B_PATH,
+        skill_type="custom",
+    )
+    summary_9a = run_benchmark_evaluation(
+        skill_name="Arm 9A",
+        skill_path=ARM9A_PATH,
+        skill_type="custom",
+    )
+    summary_9b, a9b_cases = run_benchmark_evaluation(
+        skill_name="Arm 9B",
+        skill_path=ARM9B_PATH,
+        skill_type="custom",
+        return_case_results=True,
+    )
+
+    cat_a_9b = summary_9b.category_breakdown["A_statistical"]
+    crit_recall_9b = cat_a_9b["crit_tp"] / cat_a_9b["crit_total"]
+    total_recall_9b = cat_a_9b["tp"] / cat_a_9b["total"]
+    precision_a_9b = cat_a_9b["tp"] / (cat_a_9b["tp"] + cat_a_9b["fp"])
+
+    # 1. 100% detection on Category A statistical defects (6/6 cases)
+    assert total_recall_9b == 1.0, f"Expected 100% Category A recall, got {total_recall_9b}"
+    assert crit_recall_9b == 1.0, f"Expected 100% critical Category A recall, got {crit_recall_9b}"
+
+    # 2. Precision >= 90%
+    assert precision_a_9b >= 0.90, f"Expected >= 90% precision in Cat A, got {precision_a_9b}"
+
+    # 3. 0 false alarms on specificity negative controls
+    specificity_fp = sum(r.fp for r in a9b_cases if r.case_id in {"stat-neg-001", "stat-neg-002", "stat-neg-003"})
+    assert specificity_fp == 0, f"Expected 0 false alarms on statistical specificity controls, got {specificity_fp}"
+
+    # 4. Equal overall recall to Arm 9A
+    assert summary_9b.recall == summary_9a.recall, "Arm 9B should match Arm 9A recall"
+
+    # 5. Yield advantage (Arm 9B > Arm 9A)
+    assert summary_9b.review_yield_per_1k > summary_9a.review_yield_per_1k, (
+        f"Arm 9B yield ({summary_9b.review_yield_per_1k}) must exceed Arm 9A ({summary_9a.review_yield_per_1k})"
+    )
+
+    # 6. Non-target regression invariance & negative control integrity
+    regr_9b = compute_regression_analysis(summary_8b, summary_9b, target_category="A_statistical")
+    assert regr_9b.zero_regression_passed is True, (
+        f"Step 9 introduced regressions or false alarms: {regr_9b.non_target_regressions}, FP={regr_9b.negative_control_fp_count}"
+    )
 
 
 

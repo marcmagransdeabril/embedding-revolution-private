@@ -89,6 +89,7 @@ Every image path exists; every generated diagram has its source file; captions a
 - Pre-Mortem (Inversion): Identify top 2–3 failure modes (e.g., regime/distribution shifts, boundary/edge-case inputs, saturation, degradation under stress) within claimed scope. Audit if boundary stress-tests are reported vs 'sunny-day' results. Credit declared limitations; avoid speculative out-of-scope critiques.
 - Audit claims against first-principles and conservation/asymptotic bounds (physical laws, Shannon capacity, dimensional consistency, sample complexity lower bounds, hardware/bandwidth ceilings). Flag claims that mathematically or physically contradict declared experimental conditions or physical limits.
 - Audit novelty and epistemic boundaries: verify claims of priority or unassisted discovery against external patents and prior art. When offline, declare an Epistemic Boundary with recommended search queries.
+- Audit statistical consistency: (1) check test-statistic/df/p-value coherence (StatCheck), (2) verify discrete Likert/count means respect sample granularity (GRIM test), (3) verify FDR/Bonferroni corrections for multiple testing, (4) check SE scaling (SE ~ 1/sqrt(N)) and confidence interval overlap claims, and (5) confirm post-hoc findings are not presented as confirmatory hypotheses (anti-HARKing).
 
 ### 9. Markup
 Correct use of the book's callout/admonition environments. Collect all `TODO`/`FIXME` comments into the report.
