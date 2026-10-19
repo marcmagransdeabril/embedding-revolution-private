@@ -13,9 +13,6 @@ book:
     right: Marc Magrans de Abril
   chapters:
   - index.qmd
-  - part: 'Part I: The Flat Vector Paradigm and Its Limits'
-    chapters:
-    - chapters/embedding_spaces.qmd
 format:
   html:
     theme:
