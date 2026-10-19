@@ -39,26 +39,26 @@ format:
     - twoside=true
     - fontsize=10pt
     geometry:
-    - paperwidth=155mm
-    - paperheight=235mm
-    - top=24mm
-    - bottom=26mm
-    - inner=22mm
-    - outer=20mm
+    - paperwidth=7in
+    - paperheight=9.1875in
+    - top=0.8in
+    - bottom=0.85in
+    - inner=0.85in
+    - outer=0.75in
     - headheight=14pt
-    - headsep=6mm
-    - footskip=12mm
+    - headsep=0.25in
+    - footskip=0.35in
     pdf-engine: xelatex
     toc: true
     toc-depth: 3
     number-sections: true
     number-depth: 3
     colorlinks: true
-    linkcolor: NavyBlue
-    urlcolor: NavyBlue
-    citecolor: NavyBlue
+    linkcolor: DarkRed
+    urlcolor: DarkRed
+    citecolor: DarkRed
     include-in-header:
-    - styles/springer-preamble.tex
+    - styles/oreilly-preamble.tex
     filters:
     - filters/book-callouts.lua
     - filters/book-typography.lua

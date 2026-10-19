@@ -28,7 +28,7 @@ def test_build_env_contains_tinytex_and_python():
 
 def test_dry_run_builds():
     """Verify that dry-run builds succeed across all format options."""
-    for fmt in ["pdf", "pdf-springer", "pdf-oreilly", "html", "epub", "all"]:
+    for fmt in ["pdf", "html", "epub", "all"]:
         success = build_book.build_book(
             fmt=fmt,
             dry_run=True,

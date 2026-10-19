@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build book in publishing formats (Springer 155x235mm, O'Reilly 7x9.1875in, HTML, EPUB).
+"""Build book in publishing formats (O'Reilly 7x9.1875in PDF, HTML, EPUB).
 
 CLI driver for Quarto book compilation with automatic environment
 configuration (Python venv, TinyTeX path, format presets, validation).
@@ -80,10 +80,8 @@ def render_format(
 
     if target_format == "html":
         cmd.extend(["--to", "html"])
-    elif target_format in ("pdf", "pdf-springer", "springer"):
-        cmd.extend(["--to", "pdf", "--profile", "springer"])
-    elif target_format in ("pdf-oreilly", "oreilly"):
-        cmd.extend(["--to", "pdf", "--profile", "oreilly"])
+    elif target_format in ("pdf", "pdf-oreilly", "oreilly"):
+        cmd.extend(["--to", "pdf"])
     elif target_format == "epub":
         cmd.extend(["--to", "epub"])
     else:
@@ -99,14 +97,6 @@ def render_format(
     success = run_command(cmd, dry_run=dry_run, verbose=verbose)
     if not success:
         return False
-
-    # Retain distinct format filenames if in standard output directory
-    if not dry_run and output_dir == OUTPUT_DIR:
-        default_pdf = OUTPUT_DIR / "The-Embedding-Revolution.pdf"
-        if target_format in ("pdf-springer", "springer") and default_pdf.is_file():
-            shutil.copy2(default_pdf, OUTPUT_DIR / "The-Embedding-Revolution-Springer.pdf")
-        elif target_format in ("pdf-oreilly", "oreilly") and default_pdf.is_file():
-            shutil.copy2(default_pdf, OUTPUT_DIR / "The-Embedding-Revolution-OReilly.pdf")
 
     return True
 
@@ -124,7 +114,7 @@ def inspect_outputs(target_format: str) -> None:
 
 
 def build_book(
-    fmt: str = "pdf-springer",
+    fmt: str = "pdf",
     output_dir: Path = OUTPUT_DIR,
     clean: bool = False,
     sync: bool = True,
@@ -162,12 +152,11 @@ def build_book(
     # Step 3: Render requested format(s)
     formats_to_build: list[str] = []
     if fmt == "all":
-        formats_to_build = ["html", "pdf-springer", "pdf-oreilly", "epub"]
-    elif fmt in ("pdf", "springer"):
-        formats_to_build = ["pdf-springer"]
-    elif fmt == "oreilly":
-        formats_to_build = ["pdf-oreilly"]
+        formats_to_build = ["html", "pdf", "epub"]
+    elif fmt in ("pdf", "oreilly", "pdf-oreilly"):
+        formats_to_build = ["pdf"]
     else:
+        formats_to_build = [fmt]
         formats_to_build = [fmt]
 
     for f in formats_to_build:
@@ -195,9 +184,9 @@ def main() -> None:
     parser.add_argument(
         "--format",
         "-f",
-        default="pdf-springer",
-        choices=["all", "pdf", "pdf-springer", "springer", "pdf-oreilly", "oreilly", "html", "epub"],
-        help="Target format (default: pdf-springer)",
+        default="pdf",
+        choices=["all", "pdf", "pdf-oreilly", "oreilly", "html", "epub"],
+        help="Target format (default: pdf)",
     )
     parser.add_argument("--output-dir", "-o", type=Path, default=OUTPUT_DIR, help="Custom output directory")
     parser.add_argument("--clean", "-c", action="store_true", help="Clean artifacts before build")

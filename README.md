@@ -41,15 +41,14 @@ Or run commands directly via the virtual environment:
 
 ### Building the Book
 
-The repository includes a comprehensive `Makefile` supporting multiple standard publication outputs:
+The repository includes a comprehensive `Makefile` supporting publication outputs:
 
 ```bash
-# Build HTML and default PDF (Springer 155mm x 235mm)
+# Build HTML and PDF book (O'Reilly 7in x 9.1875in format)
 make book
 
-# Build format-specific PDFs
-make pdf-springer   # Springer format (155mm x 235mm)
-make pdf-oreilly    # O'Reilly format (7in x 9.1875in)
+# Build PDF book
+make pdf
 
 # Build interactive HTML book
 make html
