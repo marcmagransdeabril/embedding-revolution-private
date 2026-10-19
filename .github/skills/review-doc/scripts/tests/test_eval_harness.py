@@ -23,20 +23,20 @@ from eval_review_skill import (
 
 
 def test_benchmark_dataset_integrity():
-    """Verify that benchmark dataset has 55 cases (42 defect cases across categories A-G + 13 negative controls)."""
+    """Verify that benchmark dataset has 63 cases (47 defect cases across categories A-G + 16 negative controls)."""
     assert BENCHMARK_PATH.exists(), f"Benchmark dataset missing at {BENCHMARK_PATH}"
     cases = load_benchmark_cases(BENCHMARK_PATH)
-    assert len(cases) == 55, f"Expected exactly 55 cases, got {len(cases)}"
+    assert len(cases) == 63, f"Expected exactly 63 cases, got {len(cases)}"
 
     expected_categories = {
         "A_statistical": 6,
-        "B_methodological": 11,
-        "C_evaluator_bias": 5,
+        "B_methodological": 14,
+        "C_evaluator_bias": 7,
         "D_prior_art": 10,
         "E_tail_vs_mean": 5,
         "F_latex_formatting": 2,
         "G_first_principles_fermi": 3,
-        "Z_negative_control": 13,
+        "Z_negative_control": 16,
     }
 
     actual_categories = {}
@@ -68,7 +68,7 @@ def test_benchmark_dataset_integrity():
             assert len(case["ground_truth_defects"]) == 0, f"Negative control {case['id']} must have 0 ground truth defects"
 
     assert actual_categories == expected_categories, f"Category distribution mismatch: {actual_categories}"
-    assert paired_verbose_count == 55, f"Expected 55 paired verbose variants, got {paired_verbose_count}"
+    assert paired_verbose_count == 63, f"Expected 63 paired verbose variants, got {paired_verbose_count}"
 
 
 def test_b0_minimal_prompt_integrity():
@@ -111,7 +111,7 @@ def test_baseline_benchmark_execution():
         skill_path=B0_PATH,
         skill_type="B0",
     )
-    assert b0_summary.total_cases == 55
+    assert b0_summary.total_cases == 63
     assert 0.0 <= b0_summary.recall <= 1.0
     assert 0.0 <= b0_summary.precision <= 1.0
     assert 0.0 <= b0_summary.f1_score <= 1.0
@@ -418,16 +418,19 @@ def test_step7_resource_normalization_gates():
         skill_path=ARM7A_PATH,
         skill_type="custom",
     )
-    summary_7b = run_benchmark_evaluation(
+    summary_7b, a7b_cases = run_benchmark_evaluation(
         skill_name="Arm 7B",
         skill_path=ARM7B_PATH,
         skill_type="custom",
+        return_case_results=True,
     )
 
-    cat_b_7b = summary_7b.category_breakdown["B_methodological"]
-    crit_recall_7b = cat_b_7b["crit_tp"] / cat_b_7b["crit_total"]
-    total_recall_7b = cat_b_7b["tp"] / cat_b_7b["total"]
-    precision_b_7b = cat_b_7b["tp"] / (cat_b_7b["tp"] + cat_b_7b["fp"])
+    step7_cat_b_ids = {f"method-{i:03d}" for i in range(1, 12)}
+    step7_cases = [r for r in a7b_cases if r.case_id in step7_cat_b_ids]
+    total_recall_7b = sum(r.tp for r in step7_cases) / sum(r.tp + r.fn for r in step7_cases)
+    crit_cases = [r for r in step7_cases if r.is_critical]
+    crit_recall_7b = sum(r.tp for r in crit_cases) / len(crit_cases)
+    precision_b_7b = sum(r.tp for r in step7_cases) / (sum(r.tp for r in step7_cases) + sum(r.fp for r in step7_cases))
 
     # 1. 100% detection on Category B resource normalization & methodological defects (11/11 cases)
     assert total_recall_7b == 1.0, f"Expected 100% Category B recall, got {total_recall_7b}"
@@ -551,6 +554,74 @@ def test_step9_statistical_consistency_gates():
     assert regr_9b.zero_regression_passed is True, (
         f"Step 9 introduced regressions or false alarms: {regr_9b.non_target_regressions}, FP={regr_9b.negative_control_fp_count}"
     )
+
+
+def test_step10_protocol_transparency_gates():
+    """Verify Step 10 Protocol Transparency & Demand Characteristics decision gates and non-target regression invariance."""
+    from eval_review_skill import ARM9B_PATH, ARM10A_PATH, ARM10B_PATH, compute_regression_analysis
+
+    summary_9b = run_benchmark_evaluation(
+        skill_name="Arm 9B (Baseline)",
+        skill_path=ARM9B_PATH,
+        skill_type="custom",
+    )
+    summary_10a = run_benchmark_evaluation(
+        skill_name="Arm 10A",
+        skill_path=ARM10A_PATH,
+        skill_type="custom",
+    )
+    summary_10b, a10b_cases = run_benchmark_evaluation(
+        skill_name="Arm 10B",
+        skill_path=ARM10B_PATH,
+        skill_type="custom",
+        return_case_results=True,
+    )
+
+    cat_c_10b = summary_10b.category_breakdown["C_evaluator_bias"]
+    crit_recall_10b = cat_c_10b["crit_tp"] / cat_c_10b["crit_total"]
+    total_recall_10b = cat_c_10b["tp"] / cat_c_10b["total"]
+    precision_c_10b = cat_c_10b["tp"] / (cat_c_10b["tp"] + cat_c_10b["fp"])
+
+    tuning_ids = {"bias-005", "proto-001", "proto-002"}
+    held_out_ids = {"proto-003", "proto-004", "proto-005"}
+    specificity_ids = {"proto-neg-001", "proto-neg-002", "proto-neg-003"}
+
+    tuning_cases = [r for r in a10b_cases if r.case_id in tuning_ids]
+    held_out_cases = [r for r in a10b_cases if r.case_id in held_out_ids]
+    specificity_cases = [r for r in a10b_cases if r.case_id in specificity_ids]
+
+    tuning_recall = sum(r.tp for r in tuning_cases) / sum(r.tp + r.fn for r in tuning_cases)
+    held_out_recall = sum(r.tp for r in held_out_cases) / sum(r.tp + r.fn for r in held_out_cases)
+    specificity_fp = sum(r.fp for r in specificity_cases)
+
+    # 1. 100% detection on Category C evaluator bias & protocol defects (7/7 cases)
+    assert total_recall_10b == 1.0, f"Expected 100% Category C recall, got {total_recall_10b}"
+    assert crit_recall_10b == 1.0, f"Expected 100% critical Category C recall, got {crit_recall_10b}"
+
+    # 2. 100% tuning recall, >= 75% held-out recall
+    assert tuning_recall == 1.0, f"Expected 100% tuning recall, got {tuning_recall}"
+    assert held_out_recall >= 0.75, f"Expected >= 75% held-out recall, got {held_out_recall}"
+
+    # 3. 0 false alarms on specificity negative controls
+    assert specificity_fp == 0, f"Expected 0 false alarms on protocol specificity controls, got {specificity_fp}"
+
+    # 4. Precision >= 90%
+    assert precision_c_10b >= 0.90, f"Expected >= 90% precision in Cat C, got {precision_c_10b}"
+
+    # 5. Equal overall recall to Arm 10A
+    assert summary_10b.recall == summary_10a.recall, "Arm 10B should match Arm 10A recall"
+
+    # 6. Yield advantage (Arm 10B > Arm 10A)
+    assert summary_10b.review_yield_per_1k > summary_10a.review_yield_per_1k, (
+        f"Arm 10B yield ({summary_10b.review_yield_per_1k}) must exceed Arm 10A ({summary_10a.review_yield_per_1k})"
+    )
+
+    # 7. Non-target regression invariance & negative control integrity
+    regr_10b = compute_regression_analysis(summary_9b, summary_10b, target_category="C_evaluator_bias")
+    assert regr_10b.zero_regression_passed is True, (
+        f"Step 10 introduced regressions or false alarms: {regr_10b.non_target_regressions}, FP={regr_10b.negative_control_fp_count}"
+    )
+
 
 
 
