@@ -1,4 +1,0 @@
-marker-pdf
-pymupdf
-pylatexenc
-pytest  # dev/test only
