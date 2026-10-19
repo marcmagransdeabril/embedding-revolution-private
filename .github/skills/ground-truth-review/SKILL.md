@@ -29,11 +29,12 @@ All indexing, search, and page-rendering tools execute using the repository Pyth
 ## Execution Procedure
 
 ### Step 1: Index Check / Build
-Verify that `references/.ground-index/index.sqlite` exists and is up to date. If the database file is missing or if `references/` has changed (new PDFs added):
+Verify that `references/.ground-index/index.sqlite` exists and is up to date. If the database file is missing or if `references/` has changed (PDFs added or removed):
 - Run the fast PyMuPDF index builder (indexes the full corpus in ~5 seconds):
   ```bash
   .venv/bin/python .github/skills/ground-truth-review/scripts/build_index.py
   ```
+- This builder both **adds** newly-present PDFs (skipping already-indexed ones unless `--force`) and **prunes** any indexed document whose source PDF is no longer in `references/` (pass `--no-prune` to skip the prune step, or `--dry-run` to preview adds/prunes with no DB changes — pruned-but-not-yet-removed entries are reported with status `would_prune`).
 
 ### Step 2: Live Claim Extraction & Query Formulation
 For each discrete assertion in the text under review, classify its claim type and construct a concise, term-dense query (typically 2–4 key terms). Formulate queries tailored to how that claim type appears in literature across the 5 claim archetypes:

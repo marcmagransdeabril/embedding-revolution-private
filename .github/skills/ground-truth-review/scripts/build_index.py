@@ -277,11 +277,51 @@ def resolve_pdf_targets(names: list[str], references_dir: Path) -> list[Path]:
     return targets
 
 
+def prune_missing_docs(
+    con: sqlite3.Connection,
+    references_dir: Path,
+    dry_run: bool = False,
+) -> list[dict[str, Any]]:
+    """Remove indexed documents whose source PDF no longer exists in references_dir.
+
+    Compares the set of doc stems present in the `pages` table against the PDFs
+    currently on disk and deletes any orphaned rows (pages, toc, pages_fts).
+    """
+    cur = con.cursor()
+    cur.execute("SELECT DISTINCT doc FROM pages")
+    indexed_docs = {row[0] for row in cur.fetchall()}
+
+    existing_stems = {p.stem for p in references_dir.glob("*.pdf")}
+    stale_docs = sorted(indexed_docs - existing_stems)
+
+    summaries = []
+    for doc_stem in stale_docs:
+        if not dry_run:
+            with con:
+                con.execute("DELETE FROM pages WHERE doc = ?", (doc_stem,))
+                con.execute("DELETE FROM toc WHERE doc = ?", (doc_stem,))
+                con.execute("DELETE FROM pages_fts WHERE doc = ?", (doc_stem,))
+        summaries.append({
+            "doc": doc_stem,
+            "status": "pruned" if not dry_run else "would_prune",
+            "page_count": 0,
+            "toc_entries": 0,
+            "outline_status": "removed (source PDF no longer in references/)",
+            "sources": {},
+            "empty_pages": [],
+            "warnings": [],
+        })
+
+    return summaries
+
+
 def index_documents(
     pdf_paths: list[Path],
     db_path: Path,
     force: bool = False,
     dry_run: bool = False,
+    references_dir: Path | None = None,
+    prune: bool = True,
 ) -> list[dict[str, Any]]:
     """Build or audit index for specified PDF files."""
     summaries = []
@@ -334,6 +374,17 @@ def index_documents(
             summary["error"] = data["error"]
         summaries.append(summary)
 
+    if prune and references_dir is not None:
+        prune_con = con
+        opened_for_prune = False
+        if prune_con is None and db_path.exists():
+            prune_con = sqlite3.connect(str(db_path))
+            opened_for_prune = True
+        if prune_con is not None:
+            summaries.extend(prune_missing_docs(prune_con, references_dir, dry_run=dry_run))
+            if opened_for_prune:
+                prune_con.close()
+
     if con is not None:
         con.close()
 
@@ -347,6 +398,11 @@ def main() -> None:
     ap.add_argument("--db-path", type=Path, default=None, help="path to SQLite database file")
     ap.add_argument("--force", action="store_true", help="reindex documents even if already in database")
     ap.add_argument("--dry-run", action="store_true", help="audit and validate without creating/modifying SQLite DB")
+    ap.add_argument(
+        "--no-prune",
+        action="store_true",
+        help="skip removing indexed documents whose source PDF no longer exists in references-dir",
+    )
     args = ap.parse_args()
 
     db_path = args.db_path or (args.references_dir / ".ground-index" / "index.sqlite")
@@ -362,6 +418,8 @@ def main() -> None:
         db_path=db_path,
         force=args.force,
         dry_run=args.dry_run,
+        references_dir=args.references_dir,
+        prune=not args.no_prune,
     )
 
     print(json.dumps(summaries, indent=2))

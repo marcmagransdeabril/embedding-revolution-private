@@ -262,6 +262,84 @@ def test_idempotent_reindexing(tmp_path: Path):
     con.close()
 
 
+def test_prune_removes_deleted_document(tmp_path: Path):
+    """Documents removed from references/ are pruned from the index on the next build."""
+    ref_dir = tmp_path / "references"
+    db_path = ref_dir / ".ground-index" / "index.sqlite"
+
+    pdf_a = make_synthetic_pdf(ref_dir / "doc_a.pdf", ["Keep me alpha"])
+    pdf_b = make_synthetic_pdf(ref_dir / "doc_b.pdf", ["Remove me beta"])
+
+    index_documents([pdf_a, pdf_b], db_path=db_path, force=True, references_dir=ref_dir)
+
+    con = sqlite3.connect(str(db_path))
+    assert con.execute("SELECT COUNT(*) FROM pages WHERE doc = 'doc_a'").fetchone()[0] == 1
+    assert con.execute("SELECT COUNT(*) FROM pages WHERE doc = 'doc_b'").fetchone()[0] == 1
+    con.close()
+
+    # Simulate doc_b.pdf being removed from references/
+    pdf_b.unlink()
+
+    summaries = index_documents(
+        resolve_pdf_targets([], ref_dir), db_path=db_path, force=False, references_dir=ref_dir
+    )
+
+    pruned = [s for s in summaries if s["doc"] == "doc_b"]
+    assert len(pruned) == 1
+    assert pruned[0]["status"] == "pruned"
+
+    con = sqlite3.connect(str(db_path))
+    assert con.execute("SELECT COUNT(*) FROM pages WHERE doc = 'doc_b'").fetchone()[0] == 0
+    assert con.execute("SELECT COUNT(*) FROM toc WHERE doc = 'doc_b'").fetchone()[0] == 0
+    assert con.execute("SELECT COUNT(*) FROM pages_fts WHERE doc = 'doc_b'").fetchone()[0] == 0
+    # Untouched document remains intact
+    assert con.execute("SELECT COUNT(*) FROM pages WHERE doc = 'doc_a'").fetchone()[0] == 1
+    con.close()
+
+
+def test_prune_dry_run_reports_without_deleting(tmp_path: Path):
+    """--dry-run / dry_run=True reports stale docs as 'would_prune' without modifying the DB."""
+    ref_dir = tmp_path / "references"
+    db_path = ref_dir / ".ground-index" / "index.sqlite"
+
+    pdf_a = make_synthetic_pdf(ref_dir / "doc_a.pdf", ["Keep me alpha"])
+    pdf_b = make_synthetic_pdf(ref_dir / "doc_b.pdf", ["Remove me beta"])
+
+    index_documents([pdf_a, pdf_b], db_path=db_path, force=True, references_dir=ref_dir)
+    pdf_b.unlink()
+
+    summaries = index_documents([], db_path=db_path, dry_run=True, references_dir=ref_dir)
+
+    pruned = [s for s in summaries if s["doc"] == "doc_b"]
+    assert len(pruned) == 1
+    assert pruned[0]["status"] == "would_prune"
+
+    # Index must remain unchanged since this was a dry run
+    con = sqlite3.connect(str(db_path))
+    assert con.execute("SELECT COUNT(*) FROM pages WHERE doc = 'doc_b'").fetchone()[0] == 1
+    con.close()
+
+
+def test_no_prune_flag_skips_pruning(tmp_path: Path):
+    """prune=False (CLI --no-prune) leaves stale documents in the index."""
+    ref_dir = tmp_path / "references"
+    db_path = ref_dir / ".ground-index" / "index.sqlite"
+
+    pdf_a = make_synthetic_pdf(ref_dir / "doc_a.pdf", ["Keep me alpha"])
+    pdf_b = make_synthetic_pdf(ref_dir / "doc_b.pdf", ["Remove me beta"])
+
+    index_documents([pdf_a, pdf_b], db_path=db_path, force=True, references_dir=ref_dir)
+    pdf_b.unlink()
+
+    summaries = index_documents([], db_path=db_path, references_dir=ref_dir, prune=False)
+
+    assert all(s["doc"] != "doc_b" for s in summaries)
+
+    con = sqlite3.connect(str(db_path))
+    assert con.execute("SELECT COUNT(*) FROM pages WHERE doc = 'doc_b'").fetchone()[0] == 1
+    con.close()
+
+
 def test_dry_run_flag(tmp_path: Path):
     """Verifies dry-run emits structured summary without creating or modifying the SQLite DB."""
     ref_dir = tmp_path / "references"
