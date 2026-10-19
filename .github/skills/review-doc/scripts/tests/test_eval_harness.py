@@ -23,20 +23,20 @@ from eval_review_skill import (
 
 
 def test_benchmark_dataset_integrity():
-    """Verify that benchmark dataset has 42 cases (36 defect cases across categories A-G + 6 negative controls)."""
+    """Verify that benchmark dataset has 52 cases (42 defect cases across categories A-G + 10 negative controls)."""
     assert BENCHMARK_PATH.exists(), f"Benchmark dataset missing at {BENCHMARK_PATH}"
     cases = load_benchmark_cases(BENCHMARK_PATH)
-    assert len(cases) == 42, f"Expected exactly 42 cases, got {len(cases)}"
+    assert len(cases) == 52, f"Expected exactly 52 cases, got {len(cases)}"
 
     expected_categories = {
         "A_statistical": 6,
         "B_methodological": 11,
         "C_evaluator_bias": 5,
-        "D_prior_art": 4,
+        "D_prior_art": 10,
         "E_tail_vs_mean": 5,
         "F_latex_formatting": 2,
         "G_first_principles_fermi": 3,
-        "Z_negative_control": 6,
+        "Z_negative_control": 10,
     }
 
     actual_categories = {}
@@ -68,7 +68,7 @@ def test_benchmark_dataset_integrity():
             assert len(case["ground_truth_defects"]) == 0, f"Negative control {case['id']} must have 0 ground truth defects"
 
     assert actual_categories == expected_categories, f"Category distribution mismatch: {actual_categories}"
-    assert paired_verbose_count == 42, f"Expected 42 paired verbose variants, got {paired_verbose_count}"
+    assert paired_verbose_count == 52, f"Expected 52 paired verbose variants, got {paired_verbose_count}"
 
 
 def test_b0_minimal_prompt_integrity():
@@ -111,7 +111,7 @@ def test_baseline_benchmark_execution():
         skill_path=B0_PATH,
         skill_type="B0",
     )
-    assert b0_summary.total_cases == 42
+    assert b0_summary.total_cases == 52
     assert 0.0 <= b0_summary.recall <= 1.0
     assert 0.0 <= b0_summary.precision <= 1.0
     assert 0.0 <= b0_summary.f1_score <= 1.0
