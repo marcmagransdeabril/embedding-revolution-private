@@ -70,3 +70,8 @@ format:
     toc: true
     toc-depth: 2
     number-sections: true
+    css:
+    - styles/epub.css
+    filters:
+    - filters/book-callouts.lua
+    - filters/book-typography.lua

@@ -5,8 +5,8 @@ local function is_latex()
   return FORMAT:match("latex") ~= nil
 end
 
-local function is_html()
-  return FORMAT:match("html") ~= nil
+local function is_html_or_epub()
+  return FORMAT:match("html") ~= nil or FORMAT:match("epub") ~= nil
 end
 
 function Div(el)
@@ -32,7 +32,7 @@ function Div(el)
     end
   end
 
-  if is_html() and is_geek_box then
+  if is_html_or_epub() and is_geek_box then
     table.insert(el.classes, "callout-geek-epiphany")
   end
 

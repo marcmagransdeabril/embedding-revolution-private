@@ -13,6 +13,13 @@ function Str(el)
     text = text:gsub("(Figure)%s+(%d+)", "%1~%2")
     text = text:gsub("(Eq%.)%s+([%(%d])", "%1~%2")
     text = text:gsub("(Equation)%s+([%(%d])", "%1~%2")
+  elseif FORMAT:match("html") or FORMAT:match("epub") then
+    text = text:gsub("(Chapter)%s+(%d+)", "%1 %2")
+    text = text:gsub("(Section)%s+(%d+)", "%1 %2")
+    text = text:gsub("(Fig%.)%s+(%d+)", "%1 %2")
+    text = text:gsub("(Figure)%s+(%d+)", "%1 %2")
+    text = text:gsub("(Eq%.)%s+([%(%d])", "%1 %2")
+    text = text:gsub("(Equation)%s+([%(%d])", "%1 %2")
   end
 
   el.text = text
