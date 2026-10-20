@@ -1,19 +1,19 @@
 ---
 name: build-book
-description: "Build, render, export, validate, and format the multi-chapter book in standard publishing formats (Springer 155x235mm, O'Reilly 7x9.1875in, HTML, EPUB) from chapters/*.qmd. Use when: building or rendering the book, generating PDF/HTML/EPUB, adding new chapters, syncing book chapter registry, validating chapter markdown/math/references, or configuring book styling."
+description: "Build, render, export, validate, and format the multi-chapter book in standard publishing formats (O'Reilly 7x9.1875in, HTML, EPUB) from chapters/*.qmd. Use when: building or rendering the book, generating PDF/HTML/EPUB, adding new chapters, syncing book chapter registry, validating chapter markdown/math/references/citations, or configuring book styling."
 ---
 
 # Build Book
 
-Automated build system and publishing pipeline for *The Embedding Revolution*, generating production-grade books in standard publisher trim sizes (Springer monograph 155mm $\times$ 235mm, O'Reilly 7in $\times$ 9.1875in, multi-page HTML, and EPUB) from Quarto markdown (`.qmd`) chapter files.
+Automated build system and publishing pipeline for *The Embedding Revolution*, generating production-grade books in the O'Reilly 7in $\times$ 9.1875in print trim size, multi-page HTML, and EPUB from Quarto markdown (`.qmd`) chapter files.
 
 ## When to Invoke (Triggers)
 
 Invoke this skill whenever:
-- **Building / Rendering the Book**: Generating the complete book in PDF (Springer or O'Reilly), HTML website, or EPUB format.
+- **Building / Rendering the Book**: Generating the complete book in PDF (O'Reilly), HTML website, or EPUB format.
 - **Adding or Renaming Chapters**: Adding new chapter drafts into `chapters/` and synchronizing the chapter outline into `_quarto.yml`.
-- **Pre-flight Validation & Linting**: Checking chapter frontmatter, math syntax (`$$`), balanced callout divs (`:::`), Python code chunks, figure labels, and cross-references.
-- **Styling & Layout Customization**: Adjusting publisher geometries, LaTeX preambles, Lua filters, or HTML theme styles.
+- **Pre-flight Validation & Linting**: Checking chapter frontmatter, math syntax (`$$`), balanced callout divs (`:::`), Python code chunks, figure labels, cross-references, and `@citekey` citations against `references.bib`.
+- **Styling & Layout Customization**: Adjusting the publisher geometry, LaTeX preamble, Lua filters, or HTML theme styles.
 - **Exporting Standalone Artifacts**: Creating distribution builds for reading, review, or print.
 
 ---
@@ -23,7 +23,7 @@ Invoke this skill whenever:
 The build pipeline leverages Quarto, TinyTeX (XeLaTeX), Pandoc, and the project Python virtual environment (`.venv`):
 
 * **Python Virtual Environment**: `.venv/bin/python` provides the Python kernel and data science libraries (NumPy, SciPy, Matplotlib, PyTorch, etc.) for executing interactive code chunks.
-* **Quarto**: Quarto CLI (v1.5+) drives multi-format document rendering and book orchestration.
+* **Quarto**: Quarto CLI (v1.5+) drives multi-format document rendering and book orchestration, and resolves `@citekey` citations against the `bibliography: references.bib` entry in `_quarto.yml`.
 * **TinyTeX / XeLaTeX**: LaTeX engine located at `~/.TinyTeX/bin/x86_64-linux` for high-precision book typography and mathematics.
 * **Pandoc**: Built-in document conversion engine with custom Lua filters.
 
@@ -33,8 +33,7 @@ The build pipeline leverages Quarto, TinyTeX (XeLaTeX), Pandoc, and the project 
 
 | Format | Target | Trim Dimensions | Geometry & Margins | Layout Characteristics |
 | :--- | :--- | :--- | :--- | :--- |
-| **Springer Monograph** | `pdf-springer` / `pdf` | **155mm $\times$ 235mm** (6.1in $\times$ 9.25in) | Inner: 22mm, Outer: 20mm, Top: 24mm, Bottom: 26mm | Classic Springer Navy palette (`#003366`), Palatino/KOMA `scrbook`, running heads with chapter/section titles on alternating pages, boxed theorems and callouts. |
-| **O'Reilly Standard** | `pdf-oreilly` | **7.0in $\times$ 9.1875in** (178mm $\times$ 233mm) | Inner: 0.85in, Outer: 0.75in, Top: 0.80in, Bottom: 0.85in | Distinctive O'Reilly dark red / charcoal palette, accent horizontal rules, left-border callout bars, framed code listings. |
+| **O'Reilly Standard** | `pdf` | **7.0in $\times$ 9.1875in** (178mm $\times$ 233mm) | Inner: 0.85in, Outer: 0.75in, Top: 0.80in, Bottom: 0.85in | Distinctive O'Reilly dark red / charcoal palette, accent horizontal rules, left-border callout bars, framed code listings. |
 | **Interactive Web Book** | `html` | Responsive | Flexible multi-column | Dark/light theme toggle, interactive collapsible code blocks, MathJax math, search, sidebar navigation. |
 | **E-reader** | `epub` | Dynamic e-reader | Reflowable text | EPUB 3 standard, MathML equations, structured navigation. |
 
@@ -45,20 +44,19 @@ The build pipeline leverages Quarto, TinyTeX (XeLaTeX), Pandoc, and the project 
 The repository root includes a comprehensive `Makefile` wrapping all build operations:
 
 ```bash
-# Build complete book (HTML + default Springer PDF)
+# Build complete book (HTML + PDF)
 make book
 
-# Build specific PDF formats
-make pdf-springer       # Standard Springer format (155mm x 235mm)
-make pdf-oreilly        # Standard O'Reilly format (7in x 9.1875in)
-make pdf FORMAT=oreilly # Select via variable
+# Build PDF (O'Reilly 7in x 9.1875in)
+make pdf
 
 # Build HTML web book or EPUB
 make html
 make epub
 
 # Pre-build validation and chapter synchronization
-make validate           # Audit chapter markdown, math, and code syntax
+make validate           # Audit chapter markdown, math, code syntax, and citations
+make validate-citations # Audit only @citekey citations against references.bib
 make sync-chapters      # Auto-discover chapters/*.qmd and update _quarto.yml
 
 # Live editing preview server
@@ -78,10 +76,10 @@ Located in `.github/skills/build-book/scripts/`:
 Drives the entire build lifecycle with automatic environment variable injection (`QUARTO_PYTHON`, `PATH`):
 
 ```bash
-# Build default Springer PDF
-.venv/bin/python .github/skills/build-book/scripts/build_book.py --format pdf-springer
+# Build default PDF (O'Reilly)
+.venv/bin/python .github/skills/build-book/scripts/build_book.py --format pdf
 
-# Build all formats (HTML, Springer PDF, O'Reilly PDF, EPUB)
+# Build all formats (HTML, PDF, EPUB)
 .venv/bin/python .github/skills/build-book/scripts/build_book.py --format all
 
 # Fast draft build (skip re-executing Python code cells)
@@ -92,11 +90,11 @@ Drives the entire build lifecycle with automatic environment variable injection 
 ```
 
 **Key Arguments**:
-- `--format, -f`: `pdf-springer`, `pdf-oreilly`, `html`, `epub`, `all`.
+- `--format, -f`: `pdf`, `pdf-oreilly`/`oreilly`, `html`, `epub`, `all`.
 - `--clean, -c`: Remove previous `_book`, `_freeze`, and temporary files before building.
 - `--no-execute`: Render using cached code cell outputs.
 - `--no-sync`: Skip automatic chapter registry synchronization.
-- `--no-validate`: Skip syntax and math validation.
+- `--no-validate`: Skip syntax, math, and citation validation.
 
 ### 2. `sync_chapters.py` — Dynamic Chapter Registry
 Scans `chapters/*.qmd`, maps files to the canonical Parts I–IV + Epilogue structure, and updates `_quarto.yml`:
@@ -110,6 +108,12 @@ Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 
 ```bash
 .venv/bin/python .github/skills/build-book/scripts/validate_book.py --verbose
+
+# Citation checks only touch one file (no corpus-wide orphan detection)
+.venv/bin/python .github/skills/build-book/scripts/validate_book.py --file chapters/embedding_spaces.qmd
+
+# Skip citation validation entirely
+.venv/bin/python .github/skills/build-book/scripts/validate_book.py --no-citations
 ```
 
 **Checks Performed**:
@@ -117,6 +121,8 @@ Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 2. **Callouts**: Perfectly balanced `:::` container blocks.
 3. **Executable Code**: Valid Python syntax within ````{python}`` blocks.
 4. **Display Math**: Balanced `$$` delimiters and valid LaTeX math environments.
+5. **Section Breaks**: `{{< pagebreak >}}` used instead of `---` horizontal rules between parts/chapters/special sections.
+6. **Citations**: Every `@citekey` resolves against `references.bib`; no orphan bib entries; `file =` paths exist under `references/`; no legacy hand-numbered `## References` lists (gated by `--citations`/`--no-citations`, default on).
 
 ---
 
@@ -160,30 +166,56 @@ Knowledge is a continuous, high-dimensional geometric vector.
 * In PDF/LaTeX, Quarto converts `{{< pagebreak >}}` to `\newpage` / `\clearpage`.
 * In HTML and EPUB, `{{< pagebreak >}}` inserts standard CSS page breaks (`break-after: page;`).
 
+### Citations and Bibliography
+All citations resolve against the single repository-root `references.bib`, declared via `bibliography: references.bib` in `_quarto.yml`. Do not hand-number references — every chapter's reference list is generated by Pandoc from `references.bib`.
+
+* **Citekey convention**: `surnameYYYYfirstword`, lowercase, no punctuation (e.g. `mikolov2013efficient`, `levy2014neural`). Disambiguate collisions with a trailing letter (`levy2014neurala`).
+* **Required fields**: standard bibliographic fields (`author`, `title`, `year`, plus venue-specific fields) **plus two project-specific fields**:
+  - `file =` — path to the PDF in `references/` when a local copy is held (empty `{}` otherwise). This is the join key `ground-truth-review` uses to go from citekey → PDF → page evidence.
+  - `keywords =` — chapter tags (`ch01`) and section tags (`blueprint2`), used to generate per-chapter further-reading lists and audit coverage.
+  - Add `doi` or `arxiv` wherever one exists.
+* **Citation style in prose**: default to narrative or parenthetical Pandoc citations (`@levy2014neural showed that…` / `…implicit matrix factorization [@levy2014neural]`). **Locators are mandatory for any specific claim** (theorem, number, benchmark): `[@levy2014neural, p. 2180]`.
+* Keep inline citations sparse; push breadth into an end-of-chapter **Further Reading** section (prose + citekeys).
+* End each chapter with:
+  ```markdown
+  {{< pagebreak >}}
+
+  ## Further Reading {.unnumbered}
+
+  …short prose pointers using @citekeys…
+
+  ## References {.unnumbered}
+
+  ::: {#refs}
+  :::
+  ```
+  The `::: {#refs}` div is where Pandoc injects the generated bibliography.
+* Run `make validate-citations` after adding or editing citations — it catches unresolved `@key`s, orphan bib entries, broken `file =` paths, and any backsliding into a hand-numbered reference list.
+
 ---
 
 ## Ancillary Architecture & Customization
 
 ```text
-├── _quarto.yml                  # Master Quarto book configuration
-├── _quarto-springer.yml         # Springer profile (155x235mm)
-├── _quarto-oreilly.yml          # O'Reilly profile (7x9.1875in)
+├── _quarto.yml                  # Master Quarto book configuration (incl. bibliography: references.bib)
+├── references.bib               # Single BibTeX database for the whole book
+├── references/                  # PDF corpus used by ground-truth-review (NOT the same as references.bib)
 ├── index.qmd                    # Book Welcome, Preface, & Table of Contents
 ├── Makefile                     # Root build automation targets
 ├── filters/
 │   ├── book-callouts.lua        # Callout box transformation filter
 │   └── book-typography.lua      # Typographic non-breaking space & quote filter
 ├── styles/
-│   ├── springer-preamble.tex    # Springer LaTeX geometry, headers, tcolorboxes
 │   ├── oreilly-preamble.tex     # O'Reilly LaTeX geometry, rules, code frames
 │   ├── book-theme.scss          # Modern responsive HTML web book SCSS
+│   ├── epub.css                 # EPUB stylesheet
 │   └── book.typ                 # Custom Typst book template
 └── .github/skills/build-book/
     ├── SKILL.md                 # Skill definition and instructions
     └── scripts/
         ├── build_book.py        # Master build driver
         ├── sync_chapters.py     # Dynamic chapter discovery
-        └── validate_book.py     # Markdown/math/code auditor
+        └── validate_book.py     # Markdown/math/code/citation auditor
 ```
 
 ---
@@ -196,3 +228,5 @@ Knowledge is a continuous, high-dimensional geometric vector.
 | `! LaTeX Error: File 'fvextra.sty' not found` | First-time LaTeX package fetch | Let TinyTeX download packages via `tlmgr` automatically, or ensure `PATH` contains `~/.TinyTeX/bin/x86_64-linux`. |
 | `Unclosed ':::' block` | Missing closing delimiter in chapter markdown | Run `make validate` to locate the exact file and line number. |
 | `Chapters appearing in wrong order` | File naming mismatch in `chapters/` | Ensure chapter filename or title matches canonical keywords or check `sync_chapters.py` rules. |
+| Citation renders as literal `@key` in output | Key missing from `references.bib` | Run `make validate-citations` to locate the unresolved key, then add the entry. |
+| Bibliography empty / `::: {#refs}` renders as an empty div | `bibliography:` key missing from `_quarto.yml`, or `references.bib` not found relative to the project root | Confirm `_quarto.yml` has a top-level `bibliography: references.bib` and that the file exists at the repository root. |

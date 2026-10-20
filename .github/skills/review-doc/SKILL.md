@@ -53,16 +53,19 @@ Sections present, ordered, and labelled per the book's skeleton. Flag deviations
 - Every section/figure/table reference resolves to an existing target.
 - Forward references in future tense, backward references in past tense.
 - A reference to a distant figure or table also names its section, so the reader knows where to look.
+- Citations (`@citekey`) are *not* cross-references and are governed entirely by §6 below — do not double-report a citation issue under both tiers.
 
 ### 5. Figures and diagrams
 Every image path exists; every generated diagram has its source file; captions are meaningful and in the chapter's language.
 
 ### 6. Citations and referenced documents
-- Every citation key exists in the bibliography; every empirical claim is sourced; keep inline citations minimal and prefer the further-reading section.
+- Every `@citekey` cited in the unit under review resolves to an entry in `references.bib` (run `make validate-citations`); every entry with a `file =` field points at an existing PDF in `references/`; every entry whose claims are load-bearing should have a `file =` field or an explicit note that no local copy is held. Keep inline citations minimal and prefer the further-reading section.
+- **Citekey hygiene**: convention `surnameYYYYfirstword` (lowercase, no punctuation, trailing letter to disambiguate collisions), no duplicate keys, no orphan entries (an entry cited nowhere in the book — `make validate-citations` reports these).
+- **Specific claims require page locators**: a theorem, number, or benchmark attributed to a citation must carry a locator (`[@key, p. N]`), because the downstream `ground-truth-review` evidence unit is the page — without a locator the grounding check cannot be targeted and degrades to a corpus-wide search.
 - **Referenced document validation**: Validate each document referenced or cited in the unit under review:
-  1. **Existence and indexing**: Confirm that the referenced document (PDF or transcript) exists in `references/` or is cataloged in the bibliography, and is indexed in `references/.ground-index/index.sqlite` (run `python .github/skills/ground-truth-review/scripts/build_index.py` if missing or updated).
+  1. **Existence and indexing**: Confirm that the referenced document (PDF or transcript) exists in `references/` or is cataloged as an entry in `references.bib`, and is indexed in `references/.ground-index/index.sqlite` (run `python .github/skills/ground-truth-review/scripts/build_index.py` if missing or updated). Note the three-way naming: `references.bib` (the BibTeX database), `references/` (the PDF corpus), and `references/.ground-index/index.sqlite` (the BM25 index over that corpus) are three distinct things.
   2. **Bibliographic authenticity**: Verify the metadata (authors, title, year, venue, DOI/arXiv ID) against the actual publication to catch hallucinated, mangled, or misattributed citations (flag non-existent or hallucinated references as **`blocker`**).
-  3. **Claim-to-source grounding**: Verify that each cited passage, theorem, formula, or empirical metric is genuinely supported by the referenced document (invoke `ground-truth-review` / `ground_check.py`). Flag contradicted or ungrounded citations as **`blocker`**.
+  3. **Claim-to-source grounding**: Verify that each cited passage, theorem, formula, or empirical metric is genuinely supported by the referenced document (invoke `ground-truth-review` / `ground_check.py`, restricting the search to the resolved `file =` document via `--doc` when one is held). Flag contradicted or ungrounded citations as **`blocker`**.
   4. **Document integrity**: Ensure the source PDF in `references/` is valid, readable, and non-corrupted — `build_index.py` reports `Failed to open PDF` for corrupt files and warns about pages with no extractable text (a scanned/OCR-less PDF that BM25 retrieval cannot reach).
   5. **Primary source attribution**: Confirm seminal discoveries and primary formulations are cited directly rather than relying exclusively on secondary surveys.
 

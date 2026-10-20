@@ -14,14 +14,14 @@ This chapter establishes the foundational paradigm of the book—moving from dis
 *Shannon quantified the transmission of uncertainty while ignoring meaning; the embedding revolution reconstructs semantics as continuous coordinates in space.*
 
 - **The Personal Hook:** The frustration of 1980s-style keyword databases (`WHERE content LIKE '%monarch%'`) treating concepts as opaque character bytes.
-- **Shannon's Masterstroke (1948):** Mathematical definition of information entropy ($H(X) = -\sum p(x) \log_2 p(x)$) and the deliberate exclusion of semantic meaning from channel transmission.
+- **Shannon's Masterstroke (1948):** Mathematical definition of information entropy ($H(X) = -\sum p(x) \log_2 p(x)$) and the deliberate exclusion of semantic meaning from channel transmission [@shannon1948mathematical].
 - **The Paradigm Shift:** Shifting from discrete bits and combinatorial lookup tables to continuous semantic manifolds $\mathcal{M} \subset \mathbb{R}^D$.
 
 ## The Discrete Collapse: Why Symbolic Tables Hit a Geometric Wall
 *One-hot tokens and relational tables create an orthogonal catastrophe where all concepts are mutually equidistant ($\sqrt{2}$), necessitating distributed continuous representations.*
 
 - **The Orthogonal Catastrophe:** Standard basis vectors $\mathbf{e}_i, \mathbf{e}_j \in \mathbb{R}^{|V|}$ where $\langle \mathbf{e}_i, \mathbf{e}_j \rangle = \delta_{ij} = 0$ and $\|\mathbf{e}_i - \mathbf{e}_j\|_2 = \sqrt{2}$, making all distinct concepts equidistant.
-- **Distributed Representations:** Geoffrey Hinton's 1986 insight—distributing meaning across continuous dimensions where dot products measure semantic overlap.
+- **Distributed Representations:** Geoffrey Hinton's 1986 insight [@hinton1986learning]—distributing meaning across continuous dimensions where dot products measure semantic overlap.
 - **Feature Engineering vs. Latent Manifolds:** Why handcrafted extrinsic features are brittle compared to self-supervised intrinsic manifolds.
 
 ## How Latent Spaces Are Born: The Four Generative Blueprints
@@ -29,19 +29,19 @@ This chapter establishes the foundational paradigm of the book—moving from dis
 
 ### Spectral & Distributional Factorization (SVD, PPMI, GloVe)
 *Deriving low-rank coordinate systems from co-occurrence statistics.*
-- Firth's distributional hypothesis (*"You shall know a word by the company it keeps"*).
+- Firth's distributional hypothesis [@firth1957synopsis] (*"You shall know a word by the company it keeps"*).
 - Positive Pointwise Mutual Information (PPMI) and low-rank Eckart-Young approximation via SVD ($\mathbf{M} \approx \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$).
-- GloVe log-bilinear co-occurrence regression.
+- GloVe log-bilinear co-occurrence regression [@pennington2014glove].
 
 ### Predictive Push-Forwards (Word2Vec, Transformers)
 *Optimizing local log-bilinear prediction and dynamic attention trajectories.*
-- Word2Vec Skip-Gram with Negative Sampling (SGNS) and Levy & Goldberg's proof of implicit shifted-PMI factorization.
+- Word2Vec Skip-Gram with Negative Sampling (SGNS) and Levy & Goldberg's proof of implicit shifted-PMI factorization [@levy2014neural].
 - Dynamic contextual latents in Transformers: token coordinates as trajectories through multi-head attention layers.
 
 ### Contrastive Metric Learning (InfoNCE, Triplet Loss)
 *Pulling semantic neighbors together and repelling negatives on hyperspheres.*
 - InfoNCE loss and temperature hyperparameter $\tau$ as a hard-negative mining dial.
-- Wang & Isola's decomposition into *alignment* (pulling positive pairs) and *uniformity* (spreading points across the hypersphere $\mathbb{S}^{D-1}$).
+- Wang & Isola's decomposition into *alignment* (pulling positive pairs) and *uniformity* (spreading points across the hypersphere $\mathbb{S}^{D-1}$) [@wang2020understanding].
 
 ### Probabilistic Manifolds (VAEs, Diffusion Latents)
 *Enforcing continuous, gap-free semantic coverage via Gaussian priors and KL regularizers.*
@@ -58,8 +58,8 @@ This chapter establishes the foundational paradigm of the book—moving from dis
 ## The Miracle of Vector Arithmetic: Linear Substructures of Thought
 *Log-odds probability ratios map multiplicative linguistic relationships to additive vector translations ($\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$) and LLM activation steering.*
 
-- **The Analogical Parallelogram:** Mikolov's discovery of linear relational offsets ($\mathbf{v}_{\text{king}} - \mathbf{v}_{\text{man}} + \mathbf{v}_{\text{woman}} \approx \mathbf{v}_{\text{queen}}$).
-- **Mathematical Origin:** Arora and Pennington's derivation showing how log-odds ratios in co-occurrences map multiplicative probabilities to linear displacements.
+- **The Analogical Parallelogram:** Mikolov's discovery of linear relational offsets [@mikolov2013efficient] ($\mathbf{v}_{\text{king}} - \mathbf{v}_{\text{man}} + \mathbf{v}_{\text{woman}} \approx \mathbf{v}_{\text{queen}}$).
+- **Mathematical Origin:** Arora and Pennington's derivation showing how log-odds ratios in co-occurrences map multiplicative probabilities to linear displacements [@arora2016latent; @pennington2014glove].
 - **Steering Vectors in Modern LLMs:** Activation addition in Transformer residual streams for model steering and safety.
 
 ## Pathologies of Flat Space: Anisotropy, Cones, and Hubness
@@ -84,15 +84,21 @@ This chapter establishes the foundational paradigm of the book—moving from dis
 
 {{< pagebreak >}}
 
+## Further Reading {.unnumbered}
+
+The four generative blueprints surveyed here are not unrelated techniques but convergent
+estimators of the same underlying co-occurrence statistic; @arora2016latent develops the
+latent-variable argument for why PMI-based factorization and log-bilinear regression
+agree, and @levy2014neural shows the predictive Word2Vec objective is itself an implicit
+factorization of a shifted-PMI matrix — readers wanting the full derivation of the
+log-bilinear GloVe objective should consult @pennington2014glove directly. The next
+chapter's argument about embedding dimensionality rests on the Johnson–Lindenstrauss
+lemma [@johnson1984extensions, pp. 189-206], which bounds how much a point set can be
+projected into lower dimensions while approximately preserving pairwise distances.
+
 ## References {.unnumbered}
 
-1. Arora, S., Li, Y., Liang, Y., Ma, T., & Risteski, A. (2016). *A Latent Variable Model Approach to PMI-based Word Embeddings*. Transactions of the Association for Computational Linguistics, 4, 385–399.
-2. Firth, J. R. (1957). *A synopsis of linguistic theory, 1930–1955*. Studies in Linguistic Analysis, 1–32.
-3. Hinton, G. E. (1986). *Learning distributed representations of concepts*. Proceedings of the Eighth Annual Conference of the Cognitive Science Society, 1–12.
-4. Johnson, W. B., & Lindenstrauss, J. (1984). *Extensions of Lipschitz mappings into a Hilbert space*. Contemporary Mathematics, 26(189-206), 1.
-5. Mikolov, T., Chen, K., Corrado, G., & Dean, J. (2013). *Efficient Estimation of Word Representations in Vector Space*. arXiv:1301.3781.
-6. Pennington, J., Socher, R., & Manning, C. D. (2014). *GloVe: Global Vectors for Word Representation*. Proceedings of EMNLP 2014, 1532–1543.
-7. Shannon, C. E. (1948). *A Mathematical Theory of Communication*. Bell System Technical Journal, 27(3), 379–423.
-8. Wang, T., & Isola, P. (2020). *Understanding Contrastive Representation Learning through Alignment and Uniformity on the Hypersphere*. ICML 2020.
+::: {#refs}
+:::
 
 

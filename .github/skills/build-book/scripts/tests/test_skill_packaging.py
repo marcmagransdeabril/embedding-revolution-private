@@ -60,8 +60,6 @@ def test_procedure_and_documentation_completeness():
     assert "TinyTeX" in body or "xelatex" in body.lower()
 
     # Formats and Dimensions
-    assert "Springer" in body
-    assert "155mm" in body or "155" in body
     assert "O'Reilly" in body or "oreilly" in body.lower()
     assert "7in" in body or "7.0in" in body
     assert "HTML" in body or "html" in body
@@ -75,6 +73,10 @@ def test_procedure_and_documentation_completeness():
     assert "build_book.py" in body
     assert "sync_chapters.py" in body
     assert "validate_book.py" in body
+
+    # Citations / bibliography
+    assert "references.bib" in body
+    assert "validate-citations" in body
 
     # Troubleshooting
     assert "Troubleshooting" in body or "Recovery" in body

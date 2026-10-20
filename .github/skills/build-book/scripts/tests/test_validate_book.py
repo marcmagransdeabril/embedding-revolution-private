@@ -82,6 +82,120 @@ def test_validate_math_delimiters():
     assert any(i.severity == "ERROR" and "unclosed" in i.message.lower() for i in issues)
 
 
+def test_validate_citations_unresolved_key():
+    """Verify an unresolved citekey is flagged as an ERROR."""
+    text = "Some prose citing [@totally_unknown_key_2099, p. 3] a claim."
+    issues = validate_book.validate_citations(Path("test.qmd"), text, known_keys=set())
+    assert any(i.severity == "ERROR" and "unresolved" in i.message.lower() for i in issues)
+
+
+def test_validate_citations_resolved_key():
+    """Verify a citekey present in known_keys produces no error."""
+    text = "Some prose citing [@shannon1948mathematical, p. 3] a claim."
+    issues = validate_book.validate_citations(Path("test.qmd"), text, known_keys={"shannon1948mathematical"})
+    assert len([i for i in issues if i.severity == "ERROR"]) == 0
+
+
+def test_validate_citations_ignores_code_fence_and_inline_code():
+    """Verify citekey-like strings inside fenced/inline code are not flagged."""
+    text = (
+        "```python\n"
+        "x = [@not_a_real_citation]\n"
+        "```\n"
+        "Inline `@also_not_a_citation` span.\n"
+        "Real citation [@shannon1948mathematical].\n"
+    )
+    issues = validate_book.validate_citations(Path("test.qmd"), text, known_keys={"shannon1948mathematical"})
+    assert len([i for i in issues if i.severity == "ERROR"]) == 0
+
+
+def test_validate_citations_ignores_math():
+    """Verify citekey-like strings inside math delimiters are not flagged."""
+    text = "The expression $x@y$ and $$a@b$$ are math, not citations."
+    issues = validate_book.validate_citations(Path("test.qmd"), text, known_keys=set())
+    assert len([i for i in issues if i.severity == "ERROR"]) == 0
+
+
+def test_validate_citations_ignores_email_addresses():
+    """Verify email-like strings are not mistaken for citations."""
+    text = "Contact the author at jane.doe@example.com for questions."
+    issues = validate_book.validate_citations(Path("test.qmd"), text, known_keys=set())
+    assert len(issues) == 0
+
+
+def test_validate_citations_legacy_numbered_list():
+    """Verify a hand-numbered '## References' list is flagged as a legacy list."""
+    text = "## References {.unnumbered}\n\n1. Author, A. (2020). Title.\n2. Another, B.\n"
+    issues = validate_book.validate_citations(Path("test.qmd"), text, known_keys=set())
+    assert any(i.severity == "WARNING" and "legacy" in i.message.lower() for i in issues)
+
+
+def test_validate_citations_refs_div_not_flagged_as_legacy():
+    """Verify a well-formed '::: {#refs}' div does not trigger the legacy-list warning."""
+    text = "## References {.unnumbered}\n\n::: {#refs}\n:::\n"
+    issues = validate_book.validate_citations(Path("test.qmd"), text, known_keys=set())
+    assert not any("legacy" in i.message.lower() for i in issues)
+
+
+def test_parse_bibliography_orphan_and_missing_fields(tmp_path):
+    """Verify orphan-entry and missing-required-field detection on a scratch bib file."""
+    bib_path = tmp_path / "scratch.bib"
+    bib_path.write_text(
+        "@article{cited_entry,\n"
+        "  author = {Doe, Jane},\n"
+        "  title = {A Cited Paper},\n"
+        "  year = {2020},\n"
+        "  file = {}\n"
+        "}\n"
+        "@article{orphan_entry,\n"
+        "  author = {Roe, Jim},\n"
+        "  title = {An Uncited Paper},\n"
+        "  year = {2021},\n"
+        "  file = {}\n"
+        "}\n"
+        "@article{missing_fields_entry,\n"
+        "  title = {Only Title}\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    original_bib = validate_book.REFERENCES_BIB
+    try:
+        validate_book.REFERENCES_BIB = bib_path
+        issues = validate_book.validate_bibliography_corpus({"cited_entry"})
+    finally:
+        validate_book.REFERENCES_BIB = original_bib
+
+    messages = [i.message for i in issues]
+    assert any("orphan_entry" in m and "not cited" in m for m in messages)
+    assert any("missing_fields_entry" in m and "missing required field" in m for m in messages)
+    assert not any("cited_entry" in m and "not cited" in m for m in messages)
+
+
+def test_validate_bibliography_corpus_broken_file_path(tmp_path):
+    """Verify a `file =` field pointing at a non-existent PDF is flagged as an ERROR."""
+    bib_path = tmp_path / "scratch.bib"
+    bib_path.write_text(
+        "@article{broken_file_entry,\n"
+        "  author = {Doe, Jane},\n"
+        "  title = {A Paper},\n"
+        "  year = {2020},\n"
+        "  file = {does_not_exist_xyz.pdf}\n"
+        "}\n",
+        encoding="utf-8",
+    )
+    original_bib = validate_book.REFERENCES_BIB
+    try:
+        validate_book.REFERENCES_BIB = bib_path
+        issues = validate_book.validate_bibliography_corpus({"broken_file_entry"})
+    finally:
+        validate_book.REFERENCES_BIB = original_bib
+
+    assert any(
+        i.severity == "ERROR" and "broken_file_entry" in i.message and "does not exist" in i.message
+        for i in issues
+    )
+
+
 def test_validate_section_breaks():
     """Verify that horizontal rules separating sections trigger warnings to use page breaks."""
     clean_lines = [

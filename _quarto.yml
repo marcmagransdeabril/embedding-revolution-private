@@ -1,6 +1,7 @@
 project:
   type: book
   output-dir: _book
+bibliography: references.bib
 book:
   title: The Embedding Revolution
   subtitle: Navigating High-Dimensional Knowledge Manifolds Through the Geek's Lens

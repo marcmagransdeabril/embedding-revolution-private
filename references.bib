@@ -1,0 +1,110 @@
+% references.bib — The Embedding Revolution
+%
+% Single BibTeX database for the whole book. Pandoc/Quarto resolves
+% `@citekey` citations against this file (see `bibliography:` in
+% _quarto.yml). Do not confuse this file with the `references/` directory
+% (the PDF corpus used by the ground-truth-review skill) or with
+% `references/.ground-index/index.sqlite` (the BM25 index built over that
+% corpus).
+%
+% Citekey convention: surnameYYYYfirstword, lowercase, no punctuation.
+% Disambiguate collisions with a trailing letter (e.g. levy2014neurala).
+%
+% Each entry carries two project-specific fields in addition to the
+% standard BibTeX fields:
+%   - file     — path to a local PDF copy in references/, or {} if none held.
+%   - keywords — chapter tags (ch01, ch02, ...) and section tags, used to
+%                generate per-chapter further-reading lists and coverage audits.
+
+@article{shannon1948mathematical,
+  author   = {Shannon, Claude E.},
+  title    = {A Mathematical Theory of Communication},
+  journal  = {Bell System Technical Journal},
+  year     = {1948},
+  volume   = {27},
+  number   = {3},
+  pages    = {379--423},
+  keywords = {ch01},
+  file     = {}
+}
+
+@inproceedings{firth1957synopsis,
+  author    = {Firth, J. R.},
+  title     = {A Synopsis of Linguistic Theory, 1930--1955},
+  booktitle = {Studies in Linguistic Analysis},
+  year      = {1957},
+  pages     = {1--32},
+  keywords  = {ch01,blueprint1},
+  file      = {}
+}
+
+@inproceedings{hinton1986learning,
+  author    = {Hinton, Geoffrey E.},
+  title     = {Learning Distributed Representations of Concepts},
+  booktitle = {Proceedings of the Eighth Annual Conference of the Cognitive Science Society},
+  year      = {1986},
+  pages     = {1--12},
+  keywords  = {ch01},
+  file      = {}
+}
+
+@article{johnson1984extensions,
+  author   = {Johnson, William B. and Lindenstrauss, Joram},
+  title    = {Extensions of {L}ipschitz Mappings into a {H}ilbert Space},
+  journal  = {Contemporary Mathematics},
+  year     = {1984},
+  volume   = {26},
+  pages    = {189--206},
+  keywords = {ch01,ch03},
+  file     = {}
+}
+
+@article{mikolov2013efficient,
+  author  = {Mikolov, Tomas and Chen, Kai and Corrado, Greg and Dean, Jeffrey},
+  title    = {Efficient Estimation of Word Representations in Vector Space},
+  journal  = {arXiv preprint arXiv:1301.3781},
+  year     = {2013},
+  keywords = {ch01,blueprint2},
+  file     = {}
+}
+
+@inproceedings{levy2014neural,
+  author    = {Levy, Omer and Goldberg, Yoav},
+  title     = {Neural Word Embedding as Implicit Matrix Factorization},
+  booktitle = {Advances in Neural Information Processing Systems 27},
+  year      = {2014},
+  pages     = {2177--2185},
+  url       = {https://papers.nips.cc/paper/5477},
+  keywords  = {ch01,blueprint2},
+  file      = {}
+}
+
+@inproceedings{pennington2014glove,
+  author    = {Pennington, Jeffrey and Socher, Richard and Manning, Christopher D.},
+  title     = {{GloVe}: Global Vectors for Word Representation},
+  booktitle = {Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
+  year      = {2014},
+  pages     = {1532--1543},
+  keywords  = {ch01,blueprint1},
+  file      = {}
+}
+
+@inproceedings{wang2020understanding,
+  author    = {Wang, Tongzhou and Isola, Phillip},
+  title     = {Understanding Contrastive Representation Learning through Alignment and Uniformity on the Hypersphere},
+  booktitle = {Proceedings of the 37th International Conference on Machine Learning (ICML)},
+  year      = {2020},
+  keywords  = {ch01,blueprint3},
+  file      = {}
+}
+
+@article{arora2016latent,
+  author   = {Arora, Sanjeev and Li, Yuanzhi and Liang, Yingyu and Ma, Tengyu and Risteski, Andrej},
+  title    = {A Latent Variable Model Approach to {PMI}-based Word Embeddings},
+  journal  = {Transactions of the Association for Computational Linguistics},
+  year     = {2016},
+  volume   = {4},
+  pages    = {385--399},
+  keywords = {ch01,blueprint1},
+  file     = {}
+}

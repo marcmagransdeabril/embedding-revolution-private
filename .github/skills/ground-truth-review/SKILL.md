@@ -23,6 +23,7 @@ All indexing, search, and page-rendering tools execute using the repository Pyth
 
 ## Design Principles
 
+- **Three distinct artifacts share the "references" name — do not confuse them.** `references.bib` (repository root) is the BibTeX database of citekeys; `references/` is the directory of PDF files; `references/.ground-index/index.sqlite` is the BM25 index built over that PDF directory. A citekey's `file =` field in `references.bib` is the join key from a citation to a PDF in `references/`.
 - **Claims are never pre-indexed on the book side.** Only `references/` (ground truth) gets a persistent index. Claims in the chapter/paragraph under review are identified live, by reading the full unit under review (already required by `review-doc/SKILL.md`) and turning each discrete assertion into a short, term-dense query — favor specific technical noun phrases likely to appear verbatim in a source (`"circular convolution"`, `"capacity bound"`), not full conversational sentences.
 - **Page text/snippets are candidate pointers, not evidence.** `ground_check.py` locates candidate pages; the reviewer must inspect the actual page (via `--render-page` image inspection or full page text) before asserting any verdict.
 
@@ -35,6 +36,13 @@ Verify that `references/.ground-index/index.sqlite` exists and is up to date. If
   .venv/bin/python .github/skills/ground-truth-review/scripts/build_index.py
   ```
 - This builder both **adds** newly-present PDFs (skipping already-indexed ones unless `--force`) and **prunes** any indexed document whose source PDF is no longer in `references/` (pass `--no-prune` to skip the prune step, or `--dry-run` to preview adds/prunes with no DB changes — pruned-but-not-yet-removed entries are reported with status `would_prune`).
+
+### Step 1.5: Citation-Scoped Retrieval (when the claim carries a citation)
+If the claim under review carries a citation (`[@citekey]` or `[@citekey, p. N]`), resolve the citekey in `references.bib` **first**, rather than searching the whole corpus:
+- Look up the citekey's `file =` field.
+  - If it names a PDF under `references/`, pass `--doc <doc_stem>` to `ground_check.py` to restrict the search to that single document — this is a precision win over a corpus-wide search and is the main practical payoff of having `file =` fields.
+  - If `file =` is empty, there is no local copy: skip candidate retrieval, verify only the bibliographic metadata (authors, title, year, venue), and report the claim as **unverifiable locally** (see Step 5) rather than unsupported.
+- If the claim carries a page locator (`[@key, p. N]`), prefer `--render-page <doc_stem> <N>` directly over a blind search — the locator already tells you where to look.
 
 ### Step 2: Live Claim Extraction & Query Formulation
 For each discrete assertion in the text under review, classify its claim type and construct a concise, term-dense query (typically 2–4 key terms). Formulate queries tailored to how that claim type appears in literature across the 5 claim archetypes:
@@ -88,7 +96,7 @@ Inspect the actual page content of candidate hits before asserting any verdict. 
 - Alternatively, call `render_page_image(doc, page_no)` from Python.
 
 ### Step 5: Emit Findings & Severity Mapping (Integration with `review-doc/SKILL.md`)
-Map verified evidence into review findings according to three verdict categories:
+Map verified evidence into review findings according to four verdict categories:
 
 - **Supported** `(doc, page, section)`:
   - The claim is verified against the ground truth reference.
@@ -97,10 +105,13 @@ Map verified evidence into review findings according to three verdict categories
   - The source contradicts the claim in the draft (e.g. wrong bound, inverted relationship, misattributed discovery, inaccurate metric).
   - Emitted as **`blocker`** severity under §8 (Technical explanations and factual accuracy).
   - State the file and line, the exact claim in the draft, citation `(doc, page)`, what the source states, and the required correction.
-- **Not found** (after synonym/analogy retries):
+- **Not found / ungrounded** (after synonym/analogy retries):
   - No reference in `references/` supports the assertion after thorough query reformulation and synonym searches.
   - Emitted as **`blocker`** severity under §8 (Technical explanations and factual accuracy).
   - State the file and line, the ungrounded assertion, report the nearest below-floor candidate (if any) or note that no matching reference exists, and require the author to supply a valid citation or revise the claim.
+- **Unverifiable locally**:
+  - The claim's citekey resolves in `references.bib`, but its `file =` field is empty — no local PDF copy is held, so there is nothing in `references/` to search or render.
+  - This is **distinct from both Contradicted and Not found/ungrounded**: it is not an error in the draft, only a gap in the local corpus. Report it as a note (not a `blocker`), stating that the claim could only be checked against bibliographic metadata and recommending a local copy be added if the claim is load-bearing.
 
 ### Step 6: Multi-step Arguments
 For multi-step mathematical derivations, algorithmic proofs, or conceptual chains:

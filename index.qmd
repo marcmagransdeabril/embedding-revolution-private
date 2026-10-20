@@ -7,7 +7,7 @@
 
 ## Prologue: The Geometry of Meaning {.unnumbered}
 
-### The Personal Hook: Realizing a Word is a Coordinate
+### Realizing a Word is a Coordinate
 
 There is a distinct moment every engineer remembers when the abstraction behind their tools suddenly dissolves into something far more visceral. For me, that moment arrived while inspecting the internals of a neural language model. Up until then, software had always dealt with words as arbitrary integers or ASCII byte sequences—opaque strings compared with `==` operators or indexed in B-trees.
 
