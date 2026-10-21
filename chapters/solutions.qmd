@@ -17,4 +17,43 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
 1. The surprisal of a one is $-\log_2 0.8 \approx 0.32$ bits and that of a zero is $-\log_2 0.2 \approx 2.32$ bits. The entropy is their average, $H_b(0.8) = 0.8 \times 0.322 + 0.2 \times 2.322 \approx 0.72$ bits per symbol. By Shannon's source coding theorem, a 10,000-symbol log cannot be compressed losslessly below about $7{,}219$ bits on average, whereas a fair coin has $H_b(0.5) = 1$ bit per flip and needs the full 10,000 bits.
 
 2. Each message has probability $1/2$, so it carries $-\log_2(1/2) = 1$ bit, and the source has an entropy of 1 bit. Replacing "attack at dusk" with "xqzv jwk" changes nothing: entropy depends only on the probabilities of the messages, not on what they say. Relabelling the outcomes leaves it invariant, which is why Shannon could ignore meaning, and also why entropy alone can never tell us what a message means.
+
+3. Download a book as plain text, lowercase it, count the letters `a`–`z` with `collections.Counter`, and apply $H = -\sum_i p_i \log_2 p_i$ to the relative frequencies:
+
+   ```python
+   import re
+   from collections import Counter
+   from math import log2
+
+   def entropy(counts):
+       n = sum(counts.values())
+       return -sum(c / n * log2(c / n) for c in counts.values())
+
+   text = open("book.txt", encoding="utf-8").read().lower()
+   print(entropy(Counter(re.findall(r"[a-z]", text))))
+   ```
+
+   For English prose the result is about $4.1$ to $4.2$ bits per letter (4.18 for *Pride and Prejudice*), below the maximum $\log_2 26 \approx 4.70$ of a uniform alphabet because letters are very unevenly used (`e`, `t`, `a` are frequent, `z`, `q`, `j` rare). Strip the Project Gutenberg header and licence first if you want a clean estimate.
+
+4. Reuse `entropy` on the words, `Counter(re.findall(r"[a-z']+", text))`. A novel gives roughly $9$ to $11$ bits per word (9.15 for *Pride and Prejudice*, with about 7,000 distinct words), far above the letter entropy. The reason is the size of the alphabet: a word is drawn from thousands of possibilities, not from 26, so each symbol carries more surprise. The fair comparison is per character. Dividing by the average word length plus the space (about 5.4 characters) gives roughly $1.7$ bits per character, much lower than $4.2$. Words capture the spelling constraints between letters, which the single-letter model ignores. Shannon's 1951 estimates, which let humans guess the next letter, reached a similar order of magnitude of about one bit per letter [@shannon1951prediction]. Note that the plug-in estimate underestimates the entropy for short texts, as rare words are under-sampled.
+
+5. Build a table that maps each context of $n$ consecutive words to the list of words that followed it in the book, then repeatedly sample the next word from the list of the current context (sampling from a list with repetitions reproduces the empirical probabilities):
+
+   ```python
+   import random
+   from collections import defaultdict
+
+   words = re.findall(r"[a-z']+", text)
+   n = 1                                   # context length; n = 1 is Shannon's word-pair model
+   model = defaultdict(list)
+   for i in range(len(words) - n):
+       model[tuple(words[i:i + n])].append(words[i + n])
+
+   out = list(random.choice(list(model)))
+   for _ in range(40):
+       out.append(random.choice(model.get(tuple(out[-n:]), words)))
+   print(" ".join(out))
+   ```
+
+   With $n = 1$ the output resembles Shannon's sample: each pair of neighbours is plausible, but the sentence wanders and means nothing. With $n = 2$ and $n = 3$ it becomes more fluent, and from $n = 3$ on it starts copying long passages verbatim from the book. In a single book most contexts of three words occur only once, so the model has no choice but to repeat the source. Larger contexts need exponentially more data and memory, the trade-off that neural language models solve by compressing the context into a dense vector, an embedding.
 :::
