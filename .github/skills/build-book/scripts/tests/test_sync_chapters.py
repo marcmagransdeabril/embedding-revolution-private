@@ -61,3 +61,14 @@ def test_sync_quarto_yml_dry_run():
     """Verify that sync_quarto_yml succeeds in dry-run mode."""
     success = sync_chapters.sync_quarto_yml(dry_run=True, verbose=False)
     assert success is True
+
+
+def test_solutions_file_is_listed_last_and_not_a_chapter():
+    """chapters/solutions.qmd is back matter: never matched to a Part, always last."""
+    chapters_struct = sync_chapters.discover_and_build_chapters_list()
+    flat = []
+    for entry in chapters_struct:
+        flat.extend(entry["chapters"] if isinstance(entry, dict) else [entry])
+    if sync_chapters.SOLUTIONS_QMD.is_file():
+        assert flat[-1] == "chapters/solutions.qmd"
+        assert flat.count("chapters/solutions.qmd") == 1

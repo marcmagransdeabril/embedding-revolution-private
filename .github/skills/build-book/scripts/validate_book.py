@@ -23,6 +23,13 @@ REFERENCES_BIB = REPO_ROOT / "references.bib"
 REFERENCES_DIR = REPO_ROOT / "references"
 
 
+_UNNUMBERED_H1_RE = re.compile(r"^# .*\{[^}]*(?:\.unnumbered|-)[^}]*\}\s*$")
+_LIST_ITEM_RE = re.compile(r"^\d+\.\s")
+_QUESTIONS_OPEN_RE = re.compile(r"^:::\s*\{\.questions\}\s*$")
+_SOLUTION_OPEN_RE = re.compile(r"^:::\s*\{\.answers(\s[^}]*)?\}\s*$")
+_REF_RE = re.compile(r'ref="([^"]+)"')
+
+
 class ValidationIssue:
     def __init__(self, file: Path, line: int, severity: str, message: str) -> None:
         self.file = file
@@ -39,6 +46,12 @@ def validate_frontmatter(path: Path, text: str) -> list[ValidationIssue]:
     """Check YAML frontmatter if present."""
     issues: list[ValidationIssue] = []
     if path == INDEX_QMD:
+        return issues
+
+    # Unnumbered back-matter chapters (e.g. chapters/solutions.qmd) start with
+    # `# Title {.unnumbered}` and carry no YAML frontmatter.
+    first_line = next((ln for ln in text.splitlines() if ln.strip()), "")
+    if _UNNUMBERED_H1_RE.match(first_line):
         return issues
 
     fm_match = re.match(r"^---\r?\n(.*?)\r?\n---", text, flags=re.DOTALL)
@@ -398,6 +411,76 @@ def validate_bibliography_corpus(cited_keys: set[str]) -> list[ValidationIssue]:
     return issues
 
 
+def _div_item_counts(text: str, open_re: re.Pattern[str]) -> list[tuple[int, str, int]]:
+    """Return (line, attrs, n_items) for every fenced div matching `open_re`.
+
+    `n_items` counts top-level ordered-list items (`1.`, `2.`, ...) in the div.
+    Lines inside fenced code blocks are ignored.
+    """
+    blocks: list[tuple[int, str, int]] = []
+    in_fence = False
+    current: list[Any] | None = None
+    for lineno, raw in enumerate(text.splitlines(), start=1):
+        line = raw.strip()
+        if line.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        if current is None:
+            m = open_re.match(line)
+            if m:
+                current = [lineno, m.group(1) if m.groups() and m.group(1) else "", 0]
+        elif line == ":::":
+            blocks.append((current[0], current[1], current[2]))
+            current = None
+        elif _LIST_ITEM_RE.match(raw):
+            current[2] += 1
+    return blocks
+
+
+def validate_questions_and_solutions(chapter_files: list[Path]) -> list[ValidationIssue]:
+    """Check that every chapter's review questions have matching solutions.
+
+    Questions live in `::: {.questions}` blocks inside chapter files; solutions
+    live in `::: {.answers ref="<chapter-file-stem>"}` blocks (normally all in
+    chapters/solutions.qmd). Per chapter, the number of solution items must
+    equal the number of questions, and every `ref` must name a chapter.
+    """
+    issues: list[ValidationIssue] = []
+    questions: dict[str, int] = {}
+    solutions: dict[str, int] = {}
+    solution_sites: dict[str, tuple[Path, int]] = {}
+    stems = {p.stem for p in chapter_files}
+
+    for path in chapter_files:
+        text = path.read_text(encoding="utf-8")
+        n_questions = sum(n for _, _, n in _div_item_counts(text, _QUESTIONS_OPEN_RE))
+        if n_questions:
+            questions[path.stem] = questions.get(path.stem, 0) + n_questions
+        for lineno, attrs, n in _div_item_counts(text, _SOLUTION_OPEN_RE):
+            ref_match = _REF_RE.search(attrs)
+            if not ref_match:
+                issues.append(ValidationIssue(path, lineno, "ERROR", '.answers block needs ref="<chapter-file-stem>"'))
+                continue
+            ref = ref_match.group(1)
+            if ref not in stems:
+                issues.append(ValidationIssue(path, lineno, "ERROR", f'.answers ref="{ref}" does not match any chapters/*.qmd file'))
+                continue
+            solutions[ref] = solutions.get(ref, 0) + n
+            solution_sites.setdefault(ref, (path, lineno))
+
+    for stem in sorted(set(questions) | set(solutions)):
+        q, s = questions.get(stem, 0), solutions.get(stem, 0)
+        if q != s:
+            path, lineno = solution_sites.get(stem, (CHAPTERS_DIR / f"{stem}.qmd", 1))
+            issues.append(ValidationIssue(
+                path, lineno, "ERROR",
+                f"Chapter '{stem}' has {q} review question(s) but {s} solution(s)",
+            ))
+    return issues
+
+
 def validate_qmd_file(path: Path, citations: bool = True, strict: bool = False) -> list[ValidationIssue]:
     """Run all validation passes on a single .qmd file.
 
@@ -460,6 +543,19 @@ def validate_all(verbose: bool = False, citations: bool = True, strict: bool = F
                 print(f"  {issue}")
         elif verbose:
             print(f"✓ {rel}: Valid (0 errors, 0 warnings)")
+
+    # Corpus-level check: every review question has a matching solution.
+    chapter_files = sorted(CHAPTERS_DIR.glob("*.qmd")) if CHAPTERS_DIR.is_dir() else []
+    qs_issues = validate_questions_and_solutions(chapter_files)
+    if qs_issues:
+        qs_errors = sum(1 for i in qs_issues if i.severity == "ERROR")
+        total_errors += qs_errors
+        total_warnings += len(qs_issues) - qs_errors
+        print(f"Validation for review questions/solutions: {qs_errors} error(s)")
+        for issue in qs_issues:
+            print(f"  {issue}")
+    elif verbose:
+        print("✓ Review questions and solutions: consistent")
 
     # Corpus-level bibliography checks (orphan entries, missing fields, broken
     # file= paths) require the full cited-key set, so they run once after the

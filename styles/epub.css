@@ -308,3 +308,38 @@ nav#toc a {
   color: #003366;
   font-weight: 500;
 }
+
+/* Review questions and their solutions (filters/book-questions.lua) */
+div.questions {
+  border: 1px solid #6b9bd2;
+  border-left: 4px solid #6b9bd2;
+  padding: 1em 1.2em;
+  margin: 1.3em 0;
+  background-color: #f0f5fb;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+div.questions::before {
+  content: "🎓 Review Questions";
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  font-size: 1.05em;
+}
+
+div.question,
+div.answer {
+  margin: 0.5em 0;
+}
+
+div.question > p:first-child,
+div.answer > p:first-child {
+  margin-top: 0;
+}
+
+a.question-num,
+a.answer-num {
+  text-decoration: none;
+  color: inherit;
+}

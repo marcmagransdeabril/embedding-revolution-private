@@ -7,7 +7,7 @@
 -- Markup
 --   In a chapter, at the end of a section:
 --
---       ::: {.repaso}
+--       ::: {.questions}
 --       1. First question.
 --
 --       2. Second question.
@@ -16,7 +16,7 @@
 --   In chapters/solutions.qmd, ONE block per chapter, referencing the chapter
 --   file stem (chapters/embedding_spaces.qmd -> ref="embedding_spaces"):
 --
---       ::: {.solucion ref="embedding_spaces"}
+--       ::: {.answers ref="embedding_spaces"}
 --       1. First solution.
 --
 --       2. Second solution.
@@ -26,7 +26,7 @@
 --   The N-th numbered chapter of `_quarto.yml` (in book order, skipping
 --   index.qmd and any file whose first heading is `{.unnumbered}`) is chapter N.
 --   Questions of a chapter are numbered N.1, N.2, ... cumulatively across all
---   of its `.repaso` blocks; the i-th item of a `.solucion` block is the
+--   of its `.questions` blocks; the i-th item of a `.answers` block is the
 --   solution to question N.i of the chapter given by `ref`.
 --
 -- Anchors
@@ -36,8 +36,9 @@
 -- How the current chapter is found
 --   * HTML renders every file in its own pandoc run: the chapter is identified
 --     by the input file name.
---   * PDF and EPUB render one merged document: the chapter is the n-th
---     numbered level-1 heading (parts are raw LaTeX / not headings).
+--   * PDF and EPUB render one merged document: the chapter is recognised by
+--     the text of its level-1 heading (Quarto also emits Part titles as
+--     level-1 headings, so counting headings would be wrong).
 
 local SOLUTIONS_FILE = "solutions"   -- stem of chapters/solutions.qmd
 local CHAPTER_DIR_HTML = ""          -- chapters and solutions live in the same dir
@@ -49,17 +50,20 @@ local function is_html()  return FORMAT:match("html") ~= nil end
 
 local chapter_num = {}     -- stem -> chapter number
 local chapter_title = {}   -- stem -> chapter title
-local numbered_stems = {}  -- ordered stems of numbered chapters
+local title_to_stem = {}    -- normalized chapter title -> stem
 
 local fixed_chapter = false  -- true when the file name identifies the chapter
 local current_chapter = nil  -- stem of the chapter being walked
-local h1_count = 0           -- numbered H1 seen so far (merged documents)
 
 local q_count, s_count = {}, {}
 
 local function bump(tbl, key)
   tbl[key] = (tbl[key] or 0) + 1
   return tbl[key]
+end
+
+local function normalize(text)
+  return (text:lower():gsub("[^%w]", ""))
 end
 
 local function read_file(path)
@@ -125,7 +129,7 @@ local function load_registry()
         local stem = stem_of(path)
         chapter_num[stem] = n
         chapter_title[stem] = title or stem
-        numbered_stems[#numbered_stems + 1] = stem
+        title_to_stem[normalize(title or stem)] = stem
       end
     end
   end
@@ -143,15 +147,12 @@ local function init(doc)
   return nil
 end
 
--- Track the current chapter in merged (PDF / EPUB) documents.
+-- Track the current chapter in merged (PDF / EPUB) documents. Quarto also
+-- emits Part titles as level-1 headings, so chapters are recognised by their
+-- title (taken from each chapter's source file) instead of by counting.
 local function Header(el)
   if el.level == 1 and not fixed_chapter then
-    if el.classes:includes("unnumbered") then
-      current_chapter = nil
-    else
-      h1_count = h1_count + 1
-      current_chapter = numbered_stems[h1_count]
-    end
+    current_chapter = title_to_stem[normalize(pandoc.utils.stringify(el.content))]
   end
   return nil
 end
@@ -225,22 +226,22 @@ end
 
 -- Block handlers -------------------------------------------------------------
 
-local function handle_repaso(el)
+local function handle_questions(el)
   local stem = current_chapter
   local chap_n = stem and chapter_num[stem]
   if not chap_n then
-    io.stderr:write("WARNING [book-questions]: .repaso block outside a numbered chapter; not numbered\n")
+    io.stderr:write("WARNING [book-questions]: .questions block outside a numbered chapter; not numbered\n")
     if is_latex() then
-      local out = pandoc.List({ pandoc.RawBlock("latex", "\\begin{repaso}") })
+      local out = pandoc.List({ pandoc.RawBlock("latex", "\\begin{questions}") })
       out:extend(el.content)
-      out:insert(pandoc.RawBlock("latex", "\\end{repaso}"))
+      out:insert(pandoc.RawBlock("latex", "\\end{questions}"))
       return out
     end
     return el
   end
 
   if is_latex() then
-    local out = pandoc.List({ pandoc.RawBlock("latex", "\\begin{repaso}") })
+    local out = pandoc.List({ pandoc.RawBlock("latex", "\\begin{questions}") })
     for _, block in ipairs(el.content) do
       if block.t == "OrderedList" then
         out:insert(pandoc.RawBlock("latex", "\\begin{enumerate}\\tightlist"))
@@ -254,7 +255,7 @@ local function handle_repaso(el)
         out:insert(block)
       end
     end
-    out:insert(pandoc.RawBlock("latex", "\\end{repaso}"))
+    out:insert(pandoc.RawBlock("latex", "\\end{questions}"))
     return out
   end
 
@@ -265,7 +266,7 @@ local function handle_repaso(el)
         local num = bump(q_count, stem)
         local label = chap_n .. "." .. num .. "."
         new_content:insert(html_item(item, qid(stem, num),
-          href_to(SOLUTIONS_FILE, sid(stem, num)), label, "pregunta"))
+          href_to(SOLUTIONS_FILE, sid(stem, num)), label, "question"))
       end
     else
       new_content:insert(block)
@@ -274,17 +275,19 @@ local function handle_repaso(el)
   return pandoc.Div(new_content, el.attr)
 end
 
-local function handle_solucion(el)
+local function handle_solution(el)
   local stem = el.attributes["ref"]
   if not stem or not chapter_num[stem] then
-    error("[book-questions] .solucion block has missing or unknown ref=\""
+    error("[book-questions] .answers block has missing or unknown ref=\""
       .. tostring(stem) .. "\" (expected a numbered chapter file stem)")
   end
   local chap_n = chapter_num[stem]
 
   -- Automatic heading: "Chapter N. <title>", unnumbered.
   local heading = pandoc.Header(2,
-    { pandoc.Str("Chapter " .. chap_n .. "."), pandoc.Space(),
+    -- NBSP (U+00A0) keeps "Chapter N." together without tripping the
+    -- "Chapter N" -> "Chapter~N" rewrite of book-typography.lua.
+    { pandoc.Str("Chapter\u{00A0}" .. chap_n .. "."), pandoc.Space(),
       pandoc.Str(chapter_title[stem]) },
     pandoc.Attr("solutions-" .. stem, { "unnumbered" }))
 
@@ -312,19 +315,22 @@ local function handle_solucion(el)
         local num = bump(s_count, stem)
         local label = chap_n .. "." .. num .. "."
         new_content:insert(html_item(item, sid(stem, num),
-          href_to(stem, qid(stem, num)), label, "solucion"))
+          href_to(stem, qid(stem, num)), label, "answer"))
       end
     else
       new_content:insert(block)
     end
   end
-  out:insert(pandoc.Div(new_content, pandoc.Attr("", { "solucion" })))
+  out:insert(pandoc.Div(new_content, pandoc.Attr("", { "answer-list" })))
   return out
 end
 
 local function Div(el)
-  if el.classes:includes("repaso") then return handle_repaso(el) end
-  if el.classes:includes("solucion") then return handle_solucion(el) end
+  if el.classes:includes("questions") then return handle_questions(el) end
+  if el.classes:includes("answers") then
+    -- Only authored blocks carry this class (generated items use `answer`).
+    return handle_solution(el)
+  end
   return nil
 end
 

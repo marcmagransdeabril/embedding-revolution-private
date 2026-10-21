@@ -160,3 +160,46 @@ div.sourceCode {
   break-after: page;
 }
 
+
+/* Review questions and their solutions (filters/book-questions.lua) */
+/* Same markup/format as the little-book. Each question is a div.question  */
+/* (id q-<chapter>-<n>) and each answer a div.answer (id sol-...); the */
+/* leading bold N.M. label links to its counterpart.                       */
+div.questions {
+  border: 1px solid #6b9bd2;
+  border-left: 4px solid #6b9bd2;
+  border-radius: 0 6px 6px 0;
+  padding: 1em 1.2em;
+  margin: 1.5rem 0;
+  background-color: rgba(107, 155, 210, 0.12);
+}
+
+div.questions::before {
+  content: "🎓 Review Questions";
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  font-size: 1.05em;
+}
+
+div.question,
+div.answer {
+  margin: 0.5em 0;
+}
+
+div.question > p:first-child,
+div.answer > p:first-child {
+  margin-top: 0;
+}
+
+a.question-num,
+a.answer-num {
+  text-decoration: none;
+  color: inherit;
+}
+
+a.question-num:hover,
+a.answer-num:hover {
+  text-decoration: underline;
+  color: $link-color;
+}

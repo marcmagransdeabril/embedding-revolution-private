@@ -204,6 +204,7 @@ All citations resolve against the single repository-root `references.bib`, decla
 ├── Makefile                     # Root build automation targets
 ├── filters/
 │   ├── book-callouts.lua        # Callout box transformation filter
+│   ├── book-questions.lua       # Review questions: auto-numbering + question<->solution links
 │   └── book-typography.lua      # Typographic non-breaking space & quote filter
 ├── styles/
 │   ├── oreilly-preamble.tex     # O'Reilly LaTeX geometry, rules, code frames
@@ -217,6 +218,12 @@ All citations resolve against the single repository-root `references.bib`, decla
         ├── sync_chapters.py     # Dynamic chapter discovery
         └── validate_book.py     # Markdown/math/code/citation auditor
 ```
+
+---
+
+## Review Questions & Solutions
+
+Same markup and numbering as the little-book. Put 2–3 questions at the end of each section as an ordered list inside `::: {.questions}`; they are numbered `<chapter>.<n>` automatically (cumulative per chapter). Write the answers in `chapters/solutions.qmd` (listed last in the book, unnumbered), one `::: {.answers ref="<chapter-file-stem>"}` block per chapter, same order as the questions. `filters/book-questions.lua` adds the numbers, the per-chapter headings in the solutions, and the links between each question and its solution (HTML, EPUB, PDF). `make validate` fails if a chapter's question and solution counts differ or a `ref` is unknown.
 
 ---
 

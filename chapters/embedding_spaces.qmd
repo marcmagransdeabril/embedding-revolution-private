@@ -51,7 +51,7 @@ Shannon also showed how far statistics alone can go. In the 1948 paper he genera
 
 Locally the text is plausible, since each word follows its predecessor with a believable frequency, and globally it is meaningless. It is a language model in embryo: it has absorbed the syntax and none of the semantics. Was this the last word on the nature of information, or was there a complementary perspective waiting to be discovered?
 
-::: {.repaso}
+::: {.questions}
 1. A sensor emits a one with probability $p = 0.8$ and a zero otherwise, independently at each step. Compute the surprisal of a one and of a zero, the entropy $H_b(0.8)$, and the minimum expected size, in bits, of a lossless encoding of a 10,000-symbol log. How does this compare with a fair coin?
 
 2. A general sends one of two equally likely messages: "attack at dawn" or "attack at dusk". How many bits does each message carry according to Shannon? Now replace "attack at dusk" with the meaningless string "xqzv jwk", keeping its probability fixed. Does the entropy change, and what does this tell you about the relationship between entropy and meaning?

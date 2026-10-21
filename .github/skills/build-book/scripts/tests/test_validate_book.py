@@ -220,3 +220,46 @@ def test_validate_section_breaks():
     assert issues[0].severity == "WARNING"
     assert "pagebreak" in issues[0].message.lower()
 
+
+
+def test_validate_frontmatter_allows_unnumbered_back_matter():
+    """Back-matter chapters start with an unnumbered H1 and need no YAML."""
+    text = "# Solutions {.unnumbered}\n\nBody\n"
+    assert validate_book.validate_frontmatter(Path("solutions.qmd"), text) == []
+
+
+def _write_chapters(tmp_path, chapter_text, solutions_text):
+    ch = tmp_path / "ch1.qmd"
+    ch.write_text(chapter_text, encoding="utf-8")
+    sol = tmp_path / "solutions.qmd"
+    sol.write_text(solutions_text, encoding="utf-8")
+    return [ch, sol]
+
+
+def test_validate_questions_and_solutions_consistent(tmp_path):
+    files = _write_chapters(
+        tmp_path,
+        "---\ntitle: T\n---\n\n::: {.questions}\n1. Q one\n\n2. Q two\n:::\n",
+        '# Solutions {.unnumbered}\n\n::: {.answers ref="ch1"}\n1. A one\n\n2. A two\n:::\n',
+    )
+    assert validate_book.validate_questions_and_solutions(files) == []
+
+
+def test_validate_questions_and_solutions_count_mismatch(tmp_path):
+    files = _write_chapters(
+        tmp_path,
+        "---\ntitle: T\n---\n\n::: {.questions}\n1. Q one\n\n2. Q two\n:::\n",
+        '# Solutions {.unnumbered}\n\n::: {.answers ref="ch1"}\n1. A one\n:::\n',
+    )
+    issues = validate_book.validate_questions_and_solutions(files)
+    assert len(issues) == 1 and "2 review question(s) but 1 solution(s)" in issues[0].message
+
+
+def test_validate_questions_and_solutions_unknown_ref(tmp_path):
+    files = _write_chapters(
+        tmp_path,
+        "---\ntitle: T\n---\n\nNo questions here.\n",
+        '# Solutions {.unnumbered}\n\n::: {.answers ref="nope"}\n1. A\n:::\n',
+    )
+    issues = validate_book.validate_questions_and_solutions(files)
+    assert any("does not match any chapters" in i.message for i in issues)
