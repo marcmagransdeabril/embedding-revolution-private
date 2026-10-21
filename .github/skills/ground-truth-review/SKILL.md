@@ -11,7 +11,7 @@ Audit factual, mathematical, empirical, attribution, architectural, and taxonomi
 
 Invoke this skill whenever:
 - **Factual & Technical Claim Verification**: Auditing mathematical theorems, bounds, proofs, equations, empirical benchmark numbers, architectural mechanisms, or historical attributions against primary sources in `references/`.
-- **Chapter Draft Fact-Checking**: Reviewing chapter drafts or manuscripts (e.g. invoked from `review-doc` §6 Citations or §8 Factual accuracy) whenever substantive technical assertions are made.
+- **Chapter Draft Fact-Checking**: Reviewing chapter drafts or manuscripts whenever substantive technical assertions are made.
 - **Citation & Bibliography Grounding**: Verifying that cited literature in `references/` actually contains and supports what the text attributes to it.
 - **Literature Lookups & Queries**: Answering questions regarding where a concept, theorem, definition, formula, or empirical result is defined or proved across the reference library.
 
@@ -24,7 +24,7 @@ All indexing, search, and page-rendering tools execute using the repository Pyth
 ## Design Principles
 
 - **Three distinct artifacts share the "references" name — do not confuse them.** `references.bib` (repository root) is the BibTeX database of citekeys; `references/` is the directory of PDF files; `references/.ground-index/index.sqlite` is the BM25 index built over that PDF directory. A citekey's `file =` field in `references.bib` is the join key from a citation to a PDF in `references/`.
-- **Claims are never pre-indexed on the book side.** Only `references/` (ground truth) gets a persistent index. Claims in the chapter/paragraph under review are identified live, by reading the full unit under review (already required by `review-doc/SKILL.md`) and turning each discrete assertion into a short, term-dense query — favor specific technical noun phrases likely to appear verbatim in a source (`"circular convolution"`, `"capacity bound"`), not full conversational sentences.
+- **Claims are never pre-indexed on the book side.** Only `references/` (ground truth) gets a persistent index. Claims in the chapter/paragraph under review are identified live, by reading the full unit under review and turning each discrete assertion into a short, term-dense query — favor specific technical noun phrases likely to appear verbatim in a source (`"circular convolution"`, `"capacity bound"`), not full conversational sentences.
 - **Page text/snippets are candidate pointers, not evidence.** `ground_check.py` locates candidate pages; the reviewer must inspect the actual page (via `--render-page` image inspection or full page text) before asserting any verdict.
 
 ## Execution Procedure
@@ -95,19 +95,19 @@ Inspect the actual page content of candidate hits before asserting any verdict. 
   *(Saves rendered PNG to `references/.ground-index/renders/<doc_stem>_p<page_no>.png` for exact visual validation of formulas, proof details, tables, or diagrams.)*
 - Alternatively, call `render_page_image(doc, page_no)` from Python.
 
-### Step 5: Emit Findings & Severity Mapping (Integration with `review-doc/SKILL.md`)
-Map verified evidence into review findings according to four verdict categories:
+### Step 5: Emit Findings & Severity Mapping
+Map verified evidence into findings according to four verdict categories:
 
 - **Supported** `(doc, page, section)`:
   - The claim is verified against the ground truth reference.
   - No error reported (optionally noted in the review summary as verified).
 - **Contradicted** `(doc, page, what differs)`:
   - The source contradicts the claim in the draft (e.g. wrong bound, inverted relationship, misattributed discovery, inaccurate metric).
-  - Emitted as **`blocker`** severity under §8 (Technical explanations and factual accuracy).
+  - Recommended severity: **`blocker`**.
   - State the file and line, the exact claim in the draft, citation `(doc, page)`, what the source states, and the required correction.
 - **Not found / ungrounded** (after synonym/analogy retries):
   - No reference in `references/` supports the assertion after thorough query reformulation and synonym searches.
-  - Emitted as **`blocker`** severity under §8 (Technical explanations and factual accuracy).
+  - Recommended severity: **`blocker`**.
   - State the file and line, the ungrounded assertion, report the nearest below-floor candidate (if any) or note that no matching reference exists, and require the author to supply a valid citation or revise the claim.
 - **Unverifiable locally**:
   - The claim's citekey resolves in `references.bib`, but its `file =` field is empty — no local PDF copy is held, so there is nothing in `references/` to search or render.

@@ -3,14 +3,68 @@ title: "The Anatomy of Embedding and Latent Spaces"
 subtitle: "From Shannon's Bits to High-Dimensional Geometric Knowledge"
 ---
 
-::: {.callout-note appearance="simple"}
-## The Epistemological Leap
-In 1948, Claude Shannon formalized information as discrete uncertainty reduction (entropy in bits), deliberately decoupling transmission from semantic meaning. The **Embedding Revolution** represents the reciprocal triumph: reconstructing the geometry of meaning by discovering that knowledge can be formalized as continuous coordinates on high-dimensional manifolds.
+In 1948, Claude Shannon defined information as the reduction of uncertainty, measured in bits [@shannon1948mathematical]. His entropy formula turned out to be identical in form to the one Boltzmann and Gibbs had used for thermodynamic systems in the late nineteenth and early twentieth centuries—a resemblance Shannon himself noted, though it was Edwin T. Jaynes who, in 1957, argued that statistical mechanics is itself a form of inference. But Shannon drew a deliberate boundary: "[t]hese semantic aspects of communication are irrelevant to the engineering problem." A bit is a unit of uncertainty, not of meaning.
+
+The **Embedding Revolution** is the complement to Shannon's syntactic theory: it represents meaning itself—or at least its statistical shadow—as continuous coordinates on high-dimensional manifolds. Fittingly, it does so using Shannon's own tools: cross-entropy and mutual information are the objectives that shape these spaces.
+
+This chapter lays the foundation for the rest of the book. We start with why discrete, orthogonal representations hit a geometric wall, then examine how latent manifolds are built and what their geometry looks like. We close with the structural cracks in this first abstraction—cracks that motivate the refinements explored in later chapters.
+
+## Shannon's Boundary Problem
+
+Shannon measured the information of a message by its surprise: a message with probability $p$ carries $-\log_2 p$ bits. Near-certain messages ($p \approx 1$) tell us almost nothing, while rare ones ($p \approx 0$) are highly informative. The *entropy* of a source is the average of this surprise. For a binary source that emits a one with probability $p$ and a zero with probability $1-p$, it is
+
+$$
+H_b(p) = -p \log_2 p - (1-p)\log_2(1-p),
+$$
+
+which peaks at one bit when $p = 1/2$ and vanishes when the outcome is certain. For a stream of $n$ bits that are independent and identically distributed, entropies add:
+
+$$
+H(X_1,\dots,X_n) = \sum_{i=1}^{n} H(X_i) = n\,H_b(p).
+$$
+
+Consider a faulty sensor that outputs a one with probability $p = 0.9$. Seeing a one is unsurprising, while seeing a zero is a rare event:
+
+| $p$ | Surprisal of a one | Surprisal of a zero | Entropy $H_b(p)$ |
+|:---:|:---:|:---:|:---:|
+| 0.50 | 1.000 bits | 1.000 bits | 1.000 bits |
+| 0.90 | 0.152 bits | 3.322 bits | 0.469 bits |
+| 0.99 | 0.014 bits | 6.644 bits | 0.081 bits |
+
+: Surprisal of each outcome and entropy of a binary source. {#tbl-binary-entropy}
+
+For $p = 0.9$ the average is $H_b(0.9) = 0.9 \times 0.152 + 0.1 \times 3.322 \approx 0.47$ bits per symbol. The zeros are individually informative, but they are so rare that the stream as a whole is highly predictable. A fair coin cannot be compressed, because every flip costs a full bit. The sensor stream can: a log of 1000 symbols can, on average, be squeezed into about 470 bits, and no lossless scheme can do better.
+
+### The Power of a Purely Syntactic Theory
+
+That last claim is Shannon's source coding theorem, and it is the first reason his theory was so successful. The entropy $H$ is the exact price of the data, the minimum average number of bits per symbol for lossless compression, and it can be computed without knowing what the symbols mean. English text is a good example. A uniformly random choice among 26 letters and a space would cost $\log_2 27 \approx 4.75$ bits per character, but English is so redundant that Shannon's own guessing experiments bounded its entropy at roughly 0.6 to 1.3 bits per character [@shannon1951prediction]. The statistical structure of the language, which includes letter frequencies, common digrams and predictable word endings, is what compression exploits.
+
+The second result is the channel coding theorem. For a noisy channel there is a capacity $C$ (for a Gaussian channel of bandwidth $B$ and signal-to-noise ratio $\mathrm{SNR}$, $C = B\log_2(1+\mathrm{SNR})$), and communication with arbitrarily small error is possible at any rate below it. Together the two theorems explain why a single abstraction, the bit, underlies file formats, modems, error-correcting codes and the internet. None of this machinery needs to know what a message says.
+
+### Where the Syntactic View Stops
+
+That indifference is also the boundary. The messages "attack at dawn" and "attack at dusk" can have the same probability, and so exactly the same information content, yet they mean very different things. A one-bit message has the same entropy whether it says that a coin landed heads or that a biopsy is malignant. For Shannon this was a feature: the engineer's job is to deliver the message faithfully, not to understand it.
+
+Shannon also showed how far statistics alone can go. In the 1948 paper he generated English-like text from the statistics of word pairs, and obtained [@shannon1948mathematical]:
+
+> THE HEAD AND IN FRONTAL ATTACK ON AN ENGLISH WRITER THAT THE CHARACTER OF THIS POINT IS THEREFORE ANOTHER METHOD FOR THE LETTERS THAT THE TIME OF WHO EVER TOLD THE PROBLEM FOR AN UNEXPECTED
+
+Locally the text is plausible, since each word follows its predecessor with a believable frequency, and globally it is meaningless. It is a language model in embryo: it has absorbed the syntax and none of the semantics. Was this the last word on the nature of information, or was there a complementary perspective waiting to be discovered?
+
+::: {.repaso}
+1. A sensor emits a one with probability $p = 0.8$ and a zero otherwise, independently at each step. Compute the surprisal of a one and of a zero, the entropy $H_b(0.8)$, and the minimum expected size, in bits, of a lossless encoding of a 10,000-symbol log. How does this compare with a fair coin?
+
+2. A general sends one of two equally likely messages: "attack at dawn" or "attack at dusk". How many bits does each message carry according to Shannon? Now replace "attack at dusk" with the meaningless string "xqzv jwk", keeping its probability fixed. Does the entropy change, and what does this tell you about the relationship between entropy and meaning?
 :::
 
-This chapter establishes the foundational paradigm of the book—moving from discrete orthogonal tables to continuous metric spaces, exploring how latent manifolds are constructed, examining their geometric properties, and identifying the structural cracks in flat vector arithmetic that motivate the subsequent chapters.
 
-## The Epistemological Leap: From Shannon's Bits to Geometric Knowledge
+The chapter presents embeddings as the complement
+to that theory: they put meaning back in as coordinates on a continuous space. The irony is that they're trained with Shannon's own tools, cross-entropy and mutual
+  information. The personal hook is the frustration of LIKE '%monarch%' keyword search.
+
+
+The Epistemological Leap: From Shannon's Bits to Geometric Knowledge
+/
 *Shannon quantified the transmission of uncertainty while ignoring meaning; the embedding revolution reconstructs semantics as continuous coordinates in space.*
 
 - **The Personal Hook:** The frustration of 1980s-style keyword databases (`WHERE content LIKE '%monarch%'`) treating concepts as opaque character bytes.

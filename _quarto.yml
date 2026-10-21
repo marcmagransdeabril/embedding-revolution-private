@@ -17,6 +17,7 @@ book:
   - part: The Flat Vector Paradigm and Its Limits
     chapters:
     - chapters/embedding_spaces.qmd
+  - chapters/solutions.qmd
 format:
   html:
     theme:
@@ -33,6 +34,7 @@ format:
     code-tools: true
     html-math-method: mathjax
     filters:
+    - filters/book-questions.lua
     - filters/book-callouts.lua
     - filters/book-typography.lua
   pdf:
@@ -64,6 +66,7 @@ format:
     include-in-header:
     - styles/oreilly-preamble.tex
     filters:
+    - filters/book-questions.lua
     - filters/book-callouts.lua
     - filters/book-typography.lua
   epub:
@@ -74,5 +77,6 @@ format:
     css:
     - styles/epub.css
     filters:
+    - filters/book-questions.lua
     - filters/book-callouts.lua
     - filters/book-typography.lua

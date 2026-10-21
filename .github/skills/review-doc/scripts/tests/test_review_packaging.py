@@ -63,6 +63,24 @@ def test_cross_skill_linkage_and_severity_invariant():
     assert "suggestion" in content.lower(), "SKILL.md must specify suggestion severity"
 
 
+def test_section8_delegates_to_ground_truth_review():
+    """§8 must delegate to ground-truth-review and map Contradicted/Not found to blocker.
+
+    review-doc owns this dependency; ground-truth-review must not reference review-doc.
+    """
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec8 = re.search(
+        r"### 8\. Technical explanations and factual accuracy(.*?)(?=### 9\.|\Z)",
+        content,
+        flags=re.DOTALL,
+    )
+    assert sec8 is not None, "Failed to locate §8 in review-doc/SKILL.md"
+    text = sec8.group(1)
+    assert "ground-truth-review" in text
+    assert "Contradicted" in text and "Not found" in text
+    assert "blocker" in text
+
+
 def test_referenced_documents_validation_step():
     """Verify that SKILL.md contains a procedure for validating referenced documents."""
     content = SKILL_MD.read_text(encoding="utf-8")

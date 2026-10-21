@@ -18,6 +18,9 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 QUARTO_YML = REPO_ROOT / "_quarto.yml"
 CHAPTERS_DIR = REPO_ROOT / "chapters"
 INDEX_QMD = REPO_ROOT / "index.qmd"
+# Back matter: solutions to the review questions of every chapter. It is not a
+# numbered chapter, so it is excluded from discovery and always listed last.
+SOLUTIONS_QMD = CHAPTERS_DIR / "solutions.qmd"
 
 # Canonical master outline from book architecture
 MASTER_PARTS = [
@@ -143,7 +146,7 @@ def match_chapter_to_outline(qmd_file: Path) -> tuple[int, int] | None:
 
 def discover_and_build_chapters_list() -> list[Any]:
     """Scan chapters/ directory and construct Quarto chapters structure."""
-    discovered_qmds = sorted(CHAPTERS_DIR.glob("*.qmd"))
+    discovered_qmds = sorted(p for p in CHAPTERS_DIR.glob("*.qmd") if p != SOLUTIONS_QMD)
     
     # Chapters structure starting with index.qmd
     chapters_struct: list[Any] = ["index.qmd"]
@@ -185,6 +188,10 @@ def discover_and_build_chapters_list() -> list[Any]:
             "chapters": unmatched_paths,
         })
 
+    # Solutions to the review questions always close the book
+    if SOLUTIONS_QMD.is_file():
+        chapters_struct.append(f"chapters/{SOLUTIONS_QMD.name}")
+
     return chapters_struct
 
 
@@ -216,7 +223,7 @@ def sync_quarto_yml(dry_run: bool = False, verbose: bool = False) -> bool:
     with open(QUARTO_YML, "w", encoding="utf-8") as f:
         yaml.dump(config, f, sort_keys=False, default_flow_style=False, allow_unicode=True)
 
-    print(f"✓ Synchronized _quarto.yml with {len(list(CHAPTERS_DIR.glob('*.qmd')))} chapter(s).")
+    print(f"✓ Synchronized _quarto.yml with {len([p for p in CHAPTERS_DIR.glob('*.qmd') if p != SOLUTIONS_QMD])} chapter(s).")
     return True
 
 

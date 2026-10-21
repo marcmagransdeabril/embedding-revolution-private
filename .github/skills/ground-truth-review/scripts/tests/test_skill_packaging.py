@@ -11,7 +11,6 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[5]
 SKILLS_DIR = REPO_ROOT / ".github" / "skills"
 GT_SKILL_MD = SKILLS_DIR / "ground-truth-review" / "SKILL.md"
-REVIEW_SKILL_MD = SKILLS_DIR / "review-doc" / "SKILL.md"
 
 
 def parse_frontmatter(path: Path) -> tuple[dict[str, Any], str]:
@@ -92,33 +91,20 @@ def test_procedure_and_execution_completeness():
     assert "Multi-step" in body or "multi-step" in body.lower()
 
 
-def test_cross_skill_linkage_and_severity_invariant():
-    """Verify cross-skill linkage in review/SKILL.md §8 and bidirectional severity alignment."""
-    assert REVIEW_SKILL_MD.is_file(), f"Missing review skill at {REVIEW_SKILL_MD}"
+def test_verdict_severity_recommendation():
+    """Verify the skill recommends blocker severity for Contradicted and Not found verdicts.
 
-    review_text = REVIEW_SKILL_MD.read_text(encoding="utf-8")
-    assert "### 8. Technical explanations and factual accuracy" in review_text
-
-    # Extract section 8
-    sec8_match = re.search(
-        r"### 8\. Technical explanations and factual accuracy(.*?)(?=### 9\.|\Z)",
-        review_text,
-        flags=re.DOTALL,
-    )
-    assert sec8_match is not None, "Failed to locate §8 in review/SKILL.md"
-    sec8_text = sec8_match.group(1)
-
-    # Check reference to ground-truth-review
-    assert "ground-truth-review" in sec8_text, "§8 in review/SKILL.md must mention 'ground-truth-review'"
-
-    # Check blocker severity requirement for Contradicted and Not found
-    assert "Contradicted" in sec8_text, "§8 must mention Contradicted findings"
-    assert "Not found" in sec8_text, "§8 must mention Not found findings"
-    assert "blocker" in sec8_text, "§8 must specify 'blocker' severity for Contradicted/Not found"
-
-    # Also verify ground-truth-review/SKILL.md aligns with blocker severity
+    This skill is standalone: it must not reference any caller skill. Callers
+    (e.g. review-doc) own the dependency and test their own linkage.
+    """
     _, gt_body = parse_frontmatter(GT_SKILL_MD)
-    assert "blocker" in gt_body, "ground-truth-review/SKILL.md must classify Contradicted/Not found as blocker"
+    assert "blocker" in gt_body, "ground-truth-review/SKILL.md must recommend blocker for Contradicted/Not found"
+
+
+def test_no_back_reference_to_callers():
+    """Dependency is one-way: ground-truth-review must not reference review-doc."""
+    raw = GT_SKILL_MD.read_text(encoding="utf-8")
+    assert "review-doc" not in raw, "ground-truth-review must not reference review-doc (would create a cycle)"
 
 
 def test_claim_taxonomy_coverage():
