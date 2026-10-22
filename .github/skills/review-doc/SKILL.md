@@ -41,7 +41,8 @@ Sections present, ordered, and labelled per the book's skeleton. Flag deviations
 ### 2. Style
 - Tone, register, and difficulty consistent with the rest of the book.
 - No uninterrupted stretch of text longer than ~2 pages without a break.
-- Each subsection opens by linking to the previous one and closes with a bridge to the next.
+- Each section and subsection opens by linking to the previous one and closes with a bridge to the next. Read the last paragraph of the preceding section and check that the first sentence of the current one picks up from it: no dangling demonstratives ("That", "This", "These") whose antecedent sits in an earlier section, and no abrupt change of topic. When the link is missing, propose an opening sentence that restates what the previous section established. Check the closing bridge against the actual first lines of the next section, not against its title.
+- The same logic applies between consecutive chapters: the first paragraph of a chapter must pick up from the last paragraph of the previous chapter (no dangling references to material the reader has not just seen), and the chapter's closing paragraph must set up the opening of the next one. Read both chapter boundaries (end of the previous chapter, start of the next one) whenever a chapter is reviewed, and check that any "next chapter" announcement matches what the next chapter actually opens with.
 - Preserve existing anecdotes, humour, and authorial voice.
 
 ### 3. Grammar and usage
