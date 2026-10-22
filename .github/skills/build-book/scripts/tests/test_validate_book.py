@@ -116,6 +116,15 @@ def test_validate_citations_ignores_math():
     assert len([i for i in issues if i.severity == "ERROR"]) == 0
 
 
+def test_validate_citations_ignores_quarto_crossrefs():
+    """Verify Quarto cross-references (@sec-, @tbl-, ...) are not treated as citations."""
+    text = "See @sec-hyperbolic-spaces and (@tbl-binary-entropy), but cite [@unknown2099key]."
+    issues = validate_book.validate_citations(Path("test.qmd"), text, known_keys=set())
+    errors = [i for i in issues if i.severity == "ERROR"]
+    assert len(errors) == 1
+    assert "unknown2099key" in errors[0].message
+
+
 def test_validate_citations_ignores_email_addresses():
     """Verify email-like strings are not mistaken for citations."""
     text = "Contact the author at jane.doe@example.com for questions."

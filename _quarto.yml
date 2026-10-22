@@ -17,6 +17,9 @@ book:
   - part: The Flat Vector Paradigm and Its Limits
     chapters:
     - chapters/embedding_spaces.qmd
+  - part: Curved Manifolds, Graphs, and Topologies
+    chapters:
+    - chapters/tangent_spaces_geodesics.qmd
   - chapters/solutions.qmd
 format:
   html:

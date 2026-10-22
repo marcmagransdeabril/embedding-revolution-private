@@ -56,4 +56,77 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
    ```
 
    The script `shannon_ngram_text.py` runs this for $n = 1, 2, 3$ and measures how much of the output is copied from the book. With $n = 1$ the output resembles Shannon's sample: each pair of neighbours is plausible, but the sentence wanders and means nothing. With $n = 2$ and $n = 3$ it becomes more fluent, and from $n = 3$ on it starts copying long passages verbatim from the book. In a single book most contexts of three words occur only once, so the model has no choice but to repeat the source. Larger contexts need exponentially more data and memory, the trade-off that neural language models solve by compressing the context into a dense vector, an embedding.
+
+6. Push every opening bracket onto a stack. On a closing bracket, pop and check that the popped bracket is its partner. Accept if no check failed and the stack is empty at the end:
+
+   ```python
+   PAIRS = {")": "(", "]": "[", "}": "{"}
+
+   def balanced(s):
+       stack = []
+       for ch in s:
+           if ch in PAIRS.values():
+               stack.append(ch)
+           elif ch in PAIRS:
+               if not stack or stack.pop() != PAIRS[ch]:
+                   return False
+       return not stack
+   ```
+
+   The script `chomsky_balanced_brackets.py` runs it on a few balanced and unbalanced examples. With a single kind of bracket a counter would be enough, but with several kinds the machine must remember which bracket is open, in order, which is why `([)]` is rejected.
+
+7. Cross off one `a`, one `b` and one `c` per pass, overwriting the cells in place, and accept when all three letters run out together:
+
+   ```python
+   def in_language(s):
+       if not re.fullmatch(r"a*b*c*", s):  # a finite automaton checks the shape
+           return False
+       tape = list(s)
+       while True:
+           crossed = 0  # how many of a, b, c we crossed off in this pass
+           for symbol in "abc":
+               head = 0
+               while head < len(tape) and tape[head] != symbol:  # scan right
+                   head += 1
+               if head < len(tape):
+                   tape[head] = symbol.upper()  # cross it off
+                   crossed += 1
+           if crossed == 0:
+               return True  # all three letters ran out together
+           if crossed < 3:
+               return False  # one letter ran out before the others
+   ```
+
+   The script `chomsky_anbncn.py` checks it against the definition on every string of up to nine letters. The program never leaves the input: it overwrites cells and keeps a constant number of variables, which is exactly what a linear-bounded automaton may do. The stack-based solution fails because the stack is consumed: pushing the `a`'s and popping one per `b` matches the first two counts, but when the `b`'s are done the stack is empty and nothing is left to compare the `c`'s with. The adapted program accepts $a^n b^n c^m$ for every $m$, for example `aabbccccc`, so it recognizes the context-free language $\{a^n b^n c^*\}$ and not the context-sensitive one. That no pushdown automaton can do better is proved by the pumping lemma for context-free languages.
+
+8. The interpreter needs a program counter, a tape that grows on demand, and a table of matching brackets:
+
+   ```python
+   from collections import defaultdict
+
+   def run(program, max_steps=100_000):
+       jump, stack = {}, []
+       for i, op in enumerate(program):  # match the brackets once, with a stack
+           if op == "[":
+               stack.append(i)
+           elif op == "]":
+               j = stack.pop()
+               jump[i], jump[j] = j, i
+
+       tape, ptr, pc, out, steps = defaultdict(int), 0, 0, [], 0
+       while pc < len(program) and steps < max_steps:
+           steps += 1
+           op = program[pc]
+           if op == ">": ptr += 1
+           elif op == "<": ptr -= 1
+           elif op == "+": tape[ptr] += 1
+           elif op == "-": tape[ptr] -= 1
+           elif op == ".": out.append(tape[ptr])
+           elif op == "[" and tape[ptr] == 0: pc = jump[pc]
+           elif op == "]" and tape[ptr] != 0: pc = jump[pc]
+           pc += 1
+       return out, len(tape), pc >= len(program)  # printed values, cells used, halted?
+   ```
+
+   The script `chomsky_bf_interpreter.py` runs the three programs. The first prints `[65]`, since $8 \times 8 + 1 = 65$. The second, `+[>+]`, never halts and touches a new cell at every iteration: after 10,000 steps it has used 3,334 cells, and the number grows with the time allowed. The third, `+[]`, loops in place forever. With the step limit we can only give up, never conclude that they will not stop. A linear-bounded automaton cannot do this for two reasons. First, its tape is as long as its input, whereas `+[>+]`, a five-character program, needs a tape that keeps growing. Second, it has only finitely many configurations (tape contents, head position and state), so running it long enough either halts or repeats a configuration, and its halting is decidable. For Brainf*** programs the halting problem is undecidable, which is the Turing machine's extra power, and the same halting problem is behind Rice's theorem in the next section.
 :::

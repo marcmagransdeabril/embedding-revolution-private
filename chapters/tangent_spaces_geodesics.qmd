@@ -1,0 +1,20 @@
+---
+title: "Tangent Spaces, Geodesics, and Geometric Deep Learning"
+---
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that earlier chapters can already cross-reference its sections.
+
+## The Erlangen Programme for Deep Learning
+*Symmetries, invariances, and equivariances.*
+
+## Tangent Spaces and Geodesics
+*Parallel transport, Riemannian metrics, and semantic interpolation along curves.*
+
+## Lie Groups and Continuous Symmetries
+*$SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE).*
+
+## Hyperbolic Latent Spaces {#sec-hyperbolic-spaces}
+*Poincaré ball and Lorentz hyperboloid models for embedding trees and hierarchical taxonomies with low distortion.*
+
+## Gauge Equivariance
+*When coordinate frames depend on local manifold position.*

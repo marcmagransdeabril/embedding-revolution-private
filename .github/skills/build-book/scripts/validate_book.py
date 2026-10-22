@@ -217,6 +217,9 @@ _BIB_ENTRY_RE = re.compile(r"@(\w+)\s*\{\s*([^,\s]+)\s*,", re.MULTILINE)
 _BIB_FIELD_RE = re.compile(r"(\w+)\s*=\s*\{(.*?)\}\s*,?\s*(?=\n\s*\w+\s*=|\n\})", re.DOTALL)
 _CITEKEY_RE = re.compile(r"(?<![\w@])@([A-Za-z][\w:.#$%&\-+?<>~/]*)")
 _EMAIL_RE = re.compile(r"\b[\w.+-]+@[\w-]+(?:\.[\w-]+)+\b")
+# Quarto cross-reference keys (e.g. @sec-intro, @tbl-binary-entropy) share the
+# `@key` syntax with citations but resolve against labels, not references.bib.
+_CROSSREF_RE = re.compile(r"^(?:sec|fig|tbl|eq|lst|thm|lem|cor|prp|cnj|def|exm|exr)-")
 _LOCATOR_RE = re.compile(r",\s*p{1,2}\.\s*\d")
 
 
@@ -257,6 +260,8 @@ def extract_citekeys(text: str) -> list[tuple[str, int]]:
     prose = strip_non_prose(text)
     hits: list[tuple[str, int]] = []
     for m in _CITEKEY_RE.finditer(prose):
+        if _CROSSREF_RE.match(m.group(1)):
+            continue
         line_no = prose[: m.start()].count("\n") + 1
         hits.append((m.group(1), line_no))
     return hits
