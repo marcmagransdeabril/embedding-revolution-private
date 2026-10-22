@@ -12,3 +12,4 @@ _freeze/
 
 
 /.luarc.json
+.code-tests/

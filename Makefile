@@ -9,7 +9,12 @@ VENV_PYTHON := $(CURDIR)/.venv/bin/python
 TINYTEX_BIN := $(HOME)/.TinyTeX/bin/x86_64-linux
 EXPORT_PATH := PATH="$(TINYTEX_BIN):$(PATH)" QUARTO_PYTHON="$(VENV_PYTHON)"
 
-.PHONY: help all book pdf html epub sync-chapters validate validate-citations check preview clean
+# Solution scripts (code/<chapter>/*.py) are re-run only when they or their shared helper change
+CODE_HELPERS := $(wildcard code/*/utils.py)
+CODE_SCRIPTS := $(filter-out $(CODE_HELPERS),$(wildcard code/*/*.py))
+CODE_STAMPS  := $(CODE_SCRIPTS:code/%.py=.code-tests/%.ok)
+
+.PHONY: help all book pdf html epub sync-chapters test-code validate validate-citations check preview clean
 
 # Default target
 all: book
@@ -18,7 +23,8 @@ help:
 	@echo "======================================================================"
 	@echo " The Embedding Revolution - Book Build System"
 	@echo "======================================================================"
-	@echo " make book              - Build HTML and PDF book (O'Reilly 7in x 9.1875in)"
+	@echo " make book              - Run code tests, then build HTML and PDF book (O'Reilly 7in x 9.1875in)"
+	@echo " make test-code         - Run the solution scripts in code/ that changed since their last pass"
 	@echo " make pdf               - Build PDF book (O'Reilly 7in x 9.1875in)"
 	@echo " make html              - Build interactive multi-page HTML book"
 	@echo " make epub              - Build EPUB 3 ebook"
@@ -29,7 +35,15 @@ help:
 	@echo " make clean             - Clean build artifacts (_book, _freeze, .quarto)"
 	@echo "======================================================================"
 
-book: sync-chapters html pdf
+book: test-code sync-chapters html pdf
+
+test-code: $(CODE_STAMPS)
+
+.code-tests/%.ok: code/%.py $(CODE_HELPERS)
+	@echo "==> Running $<..."
+	@mkdir -p $(@D)
+	@cd $(<D) && $(VENV_PYTHON) $(<F)
+	@touch $@
 
 sync-chapters:
 	@echo "==> Synchronizing book chapters from chapters/*.qmd..."
@@ -63,6 +77,6 @@ preview:
 
 clean:
 	@echo "==> Cleaning build artifacts..."
-	@rm -rf _book _freeze .quarto
+	@rm -rf _book _freeze .quarto .code-tests
 	@rm -f index.tex index.pdf chapters/*.html chapters/*.tex
 	@echo "==> Clean complete."
