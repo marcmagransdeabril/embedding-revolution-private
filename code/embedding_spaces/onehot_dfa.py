@@ -1,4 +1,4 @@
-"""The Discrete Collapse, question 1: a finite automaton is a product of 0/1 matrices on a one-hot state."""
+"""The Orthogonal Catastrophe, question 1: a finite automaton is a product of 0/1 matrices on a one-hot state."""
 import itertools
 
 import numpy as np

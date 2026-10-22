@@ -37,7 +37,7 @@ def sample(counts: Counter, k: int, rng: np.random.Generator | None = None) -> l
     return rng.choice(symbols, size=k, p=p).tolist()
 
 
-# Toy vocabulary of the Discrete Collapse section, in the order of the one-hot table.
+# Toy vocabulary of the Orthogonal Catastrophe section, in the order of the one-hot table.
 WORDS = ["dawn", "dusk", "king", "queen", "xqzv"]
 # Hand-made dense vectors (illustrative values, not learned), one row per word. The features are
 # time of day, person, royal, male and brightness; the meaningless `xqzv` gets a small noise vector.

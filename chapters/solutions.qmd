@@ -190,4 +190,55 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
     For `dawn`, `dusk`, `king`, `queen` and `xqzv` the script gives the probabilities $(0.996, \mathbf{0.5}, 0.004, 0.004, \mathbf{0.5})$ with one-hot inputs and $(0.997, \mathbf{0.984}, 0.001, 0.001, \mathbf{0.812})$ with dense inputs. With one-hot vectors the weights $w_{\text{dusk}}$ and $w_{\text{xqzv}}$ never move from 0, since no training example has a 1 in those coordinates, so the model has learned nothing about them and answers $\sigma(0) = 0.5$ for both. With dense vectors the model learns a positive weight on "time of day" and negative ones on "person" and "royal", and `dusk` inherits the answer because it shares the first feature with `dawn`. This is transfer: what is learned about one word moves to the words that are close to it. The price is that the same mechanism acts on `xqzv`, which means nothing: its noise vector projects onto the learned weights and the model answers $0.812$, an arbitrary value with no more meaning than the noise. Transfer is only as good as the vectors, which is why the rest of the chapter is about where they come from.
 
 11. Relabelling the words permutes the rows of the matrix of vectors, and the distances between the new rows are those of the old ones with their labels permuted. The script `onehot_renaming.py` loops over `itertools.permutations(range(5))` and confirms that `distances(E[list(perm)])` equals `distances(E)` for all 120 of them. This holds in general: a permutation of the coordinates of $\mathbb{R}^{|V|}$ is an isometry, and permuting the words of a one-hot basis is the same as permuting the coordinates. In the dense table, exchanging `dawn` and `king` changes the distance between `dawn` and `dusk` from $0.80$ to $1.85$, because `dawn` now has the vector of a king. The one-hot geometry cannot tell a correct assignment of words from a scrambled one, so it contains no information about which word is which except for identity: it is the geometry of alpha-equivalence, in which `customer_balance` and `x7` are interchangeable. A representation that can contain meaning must be sensitive to this exchange, since swapping `dawn` and `king` in a sentence does change what it says.
+
+12. Run the interpreter under a step budget and report what happened:
+
+    ```python
+    from chomsky_bf_interpreter import run   # the interpreter of the Chomsky exercises
+
+    def prints_65(program, budget):
+        out, _, halted = run(program, budget)
+        if not halted:
+            return None                      # unknown: the budget ran out
+        return out == [65]
+    ```
+
+    The script `rice_semidecider.py` runs the tests. The program `++++++++[>++++++++<-]>+.` and the 65 `+` followed by `.` both give `True`: they have different texts and the same meaning. `+.` halts and prints 1, so it gives a firm `False`. The programs `+[]` and `+[>+]` give `None` with budgets of 10, 1,000 and 100,000, and the same is true of a program that prints 65 and then loops forever, because the property asks that the program halt. A slow program such as `+` $\times 30$, `[>` `+` $\times 30$ `[>+<-]<-]>>[-]`, `+` $\times 65$, `.` gives `None` with a budget of 1,000 and `True` once the budget reaches 7,450 steps. A larger budget can turn `None` into `True` or `False`, but only for programs that halt. For a program that never halts, `None` stays `None` at any budget, and the tester cannot tell it from a program that is merely slow. It would be a firm `False` for all of them only if we had a decider for "halts and prints exactly 65", and since the property is semantic and non-trivial, Rice's theorem says that none exists. What survives is one-sided: if the property holds, running long enough will confirm it.
+
+13. The construction is a few lines once `yield from` chains the two programs:
+
+    ```python
+    def run(program, y, budget):
+        steps = program(y)
+        for _ in range(budget):
+            try:
+                next(steps)
+            except StopIteration as done:
+                return done.value
+        return None                          # unknown
+
+    def Q(y):                                # has P: returns 1
+        return 1
+        yield
+
+    def build(M, x):
+        def M_prime(y):
+            yield from M(x)                  # first run M on x ...
+            return (yield from Q(y))         # ... and only if it halts, run Q on y
+        return M_prime
+    ```
+
+    The script `rice_reduction.py` checks both cases. For an $M$ that halts after 100 steps, `run(build(M, 0), 0, 1000)` returns 1, so $M'$ has $P$. For `while True: yield`, it returns `None` with budgets of 10, 1,000 and 100,000: $M'$ never returns, so it does not have $P$, but no finite run can show it. Given a decider for $P$, we could feed it $M'$ and read off the answer without running anything: it says "yes" exactly when $M$ halts on $x$. Since the construction $(M, x) \mapsto M'$ is mechanical, the decider would solve the halting problem, which Turing proved impossible, and therefore the decider does not exist. The construction fails for "contains a `while` loop" because that property depends on the text of $M'$, not on its behaviour. The reduction needs a property whose answer for $M'$ flips between the case where $M$ halts and the case where it does not. A property of the text cannot flip like that: it is decided by reading the text, with no need to run $M$, so no decider for it can be turned into a decider for halting. That is why syntactic properties are decidable and the semantic ones are not.
+
+14. The script `rice_behavioural_embedding.py` builds both representations. As symbols, the five programs are the rows of the identity matrix and every pair is at distance $\sqrt{2} \approx 1.41$: `bubble_sort` is as far from `insertion_sort` as from `identity`, the orthogonal catastrophe in a new vocabulary. As behaviour vectors of 180 numbers (30 lists of 6 digits), the distances are:
+
+    | | bubble | insertion | descending | identity | unless_huge |
+    |:---|:---:|:---:|:---:|:---:|:---:|
+    | bubble | 0 | 0 | 71.6 | 50.1 | 0 |
+    | insertion | 0 | 0 | 71.6 | 50.1 | 0 |
+    | descending | 71.6 | 71.6 | 0 | 53.6 | 71.6 |
+    | identity | 50.1 | 50.1 | 53.6 | 0 | 50.1 |
+    | unless_huge | 0 | 0 | 71.6 | 50.1 | 0 |
+
+    The distance is graded: `bubble_sort` and `insertion_sort` coincide, `identity` is nearer to the sorters than `sort_descending` is, and the groups have a structure that one-hot vectors could not express. But `bubble_sort` and `sort_unless_huge` are also at distance 0, although they are different functions: they disagree only on lists of 1,000 items or more, such as `list(range(1000, 0, -1))`, which none of the probes comes close to. A positive distance is a proof: any probe on which the two outputs differ, for example any list that is not already sorted for `bubble_sort` and `identity`, is a counterexample to equality that can be checked. A zero distance is only the absence of evidence, since finitely many probes cannot cover the infinitely many inputs. This is Rice's theorem seen from the side of embeddings: deciding whether two programs are the same function is impossible, but we can find differences by testing and obtain a graded similarity from the tests that survive, with no guarantee for the rest. Learned code embeddings do the same with a far richer notion of behaviour.
 :::

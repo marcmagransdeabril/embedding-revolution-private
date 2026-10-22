@@ -1,4 +1,4 @@
-"""The Discrete Collapse, question 3: one-hot geometry is blind to renaming, a meaningful one is not."""
+"""The Orthogonal Catastrophe, question 3: one-hot geometry is blind to renaming, a meaningful one is not."""
 import itertools
 
 import numpy as np

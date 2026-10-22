@@ -70,7 +70,7 @@ This book is organized into four interconnected parts, taking you from flat Eucl
 ### **Part I: The Flat Vector Paradigm and Its Limits**
 * **Chapter 1: The Anatomy of Embedding and Latent Spaces**
   * *From Shannon to Geometry:* Quantifying uncertainty vs. reconstructing continuous semantics.
-  * *The Discrete Collapse:* Why one-hot representations create an orthogonal catastrophe ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
+  * *The Orthogonal Catastrophe:* Why one-hot representations make every symbol equally far from every other ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
   * *The Four Generative Blueprints:* Spectral factorization (SVD, PPMI, GloVe), predictive push-forwards (Word2Vec, Transformers), contrastive metric learning (InfoNCE, Triplet Loss), and probabilistic manifolds (VAEs, Diffusion).
   * *Vector Arithmetic & Linear Substructures:* $\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$ and LLM activation steering.
   * *Pathologies of Flat Space:* Anisotropy cones, the hubness phenomenon, and isotropic regularization.

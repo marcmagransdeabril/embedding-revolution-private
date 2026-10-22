@@ -1,4 +1,4 @@
-"""The Discrete Collapse, question 2: a linear model on one-hot inputs transfers nothing between words."""
+"""The Orthogonal Catastrophe, question 2: a linear model on one-hot inputs transfers nothing between words."""
 import numpy as np
 
 from utils import DENSE, WORDS
