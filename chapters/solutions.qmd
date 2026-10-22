@@ -129,4 +129,65 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
    ```
 
    The script `chomsky_bf_interpreter.py` runs the three programs. The first prints `[65]`, since $8 \times 8 + 1 = 65$. The second, `+[>+]`, never halts and touches a new cell at every iteration: after 10,000 steps it has used 3,334 cells, and the number grows with the time allowed. The third, `+[]`, loops in place forever. With the step limit we can only give up, never conclude that they will not stop. A linear-bounded automaton cannot do this for two reasons. First, its tape is as long as its input, whereas `+[>+]`, a five-character program, needs a tape that keeps growing. Second, it has only finitely many configurations (tape contents, head position and state), so running it long enough either halts or repeats a configuration, and its halting is decidable. For Brainf*** programs the halting problem is undecidable, which is the Turing machine's extra power, and the same halting problem is behind Rice's theorem in the next section.
+
+9. Let $\mathbf{s} = (1, 0)$ be the initial state "even" and let reading a `0` multiply by the identity and reading a `1` by the matrix that swaps the two states:
+
+    ```python
+    import itertools
+    import numpy as np
+
+    T = {"0": np.array([[1, 0], [0, 1]]), "1": np.array([[0, 1], [1, 0]])}
+
+    def accepts(s):
+        state = np.array([1, 0])        # one-hot vector of the initial state "even"
+        for ch in s:
+            state = T[ch] @ state       # reading a symbol = multiplying by its matrix
+        return bool(state[0])           # accept if the final state is "even"
+
+    for n in range(11):                 # every binary string of up to 10 symbols
+        for bits in itertools.product("01", repeat=n):
+            s = "".join(bits)
+            assert accepts(s) == (s.count("1") % 2 == 0)
+    ```
+
+    The script `onehot_dfa.py` verifies `accepts(s) == (s.count("1") % 2 == 0)` on all strings of up to 10 symbols. In a deterministic automaton every column of every matrix has exactly one 1 and the rest zeros (a permutation matrix here, in general a 0/1 matrix), because each state moves to exactly one next state. In a probabilistic automaton each column holds the probabilities of the next state, so the entries are in $[0, 1]$ and every column sums to 1 (a column-stochastic matrix). For example, if a `1` flips the state with probability $0.9$, the matrix is $0.9\,T_1 + 0.1\,T_0$, and after reading `111` the state is $(0.244, 0.756)$. The one-hot vector is the special case of a state with all its probability on one entry.
+
+10. For one example, $p = \sigma(\langle \mathbf{w}, \mathbf{x} \rangle)$ and $\sigma'(t) = \sigma(t)(1-\sigma(t))$, so $\partial p / \partial \mathbf{w} = p(1-p)\,\mathbf{x}$ and, by the chain rule,
+
+    $$
+    \nabla_{\mathbf{w}} L = \left(-\frac{y}{p} + \frac{1-y}{1-p}\right) p(1-p)\,\mathbf{x} = (p - y)\,\mathbf{x}.
+    $$
+
+    Gradient descent therefore updates $\mathbf{w} \leftarrow \mathbf{w} - \eta\,(p - y)\,\mathbf{x}$: the weights move by a multiple of the input, in the direction that reduces the error $p - y$. If $\mathbf{x} = \mathbf{e}_i$ is one-hot, only $w_i$ changes, $w_i \leftarrow w_i - \eta\,(p - y)$, and every other weight stays where it was. Training on one word cannot alter what the model says about any other. The update is a single line of code, and the script `onehot_transfer.py` also checks the gradient against finite differences:
+
+    ```python
+    import numpy as np
+
+    WORDS = ["dawn", "dusk", "king", "queen", "xqzv"]
+    ONE_HOT = np.eye(5)
+    DENSE = np.array([[1, 0, 0, 0, 0.4],        # dawn
+                      [1, 0, 0, 0, -0.4],       # dusk
+                      [0, 1, 1, 0.5, 0],        # king
+                      [0, 1, 1, -0.5, 0],       # queen
+                      [0.2, -0.3, 0.1, 0.3, -0.1]])  # xqzv: noise
+    y = {"dawn": 1.0, "king": 0.0, "queen": 0.0}  # the only labelled words
+
+    def sigmoid(t):
+        return 1 / (1 + np.exp(-t))
+
+    def train(x, steps=500, lr=0.5):
+        w = np.zeros(x.shape[1])
+        for _ in range(steps):
+            for word, label in y.items():
+                xi = x[WORDS.index(word)]
+                w -= lr * (sigmoid(w @ xi) - label) * xi  # w <- w - lr * (p - y) * x
+        return w
+
+    for x in (ONE_HOT, DENSE):
+        print(sigmoid(x @ train(x)).round(3))  # probability for each of the five words
+    ```
+
+    For `dawn`, `dusk`, `king`, `queen` and `xqzv` the script gives the probabilities $(0.996, \mathbf{0.5}, 0.004, 0.004, \mathbf{0.5})$ with one-hot inputs and $(0.997, \mathbf{0.984}, 0.001, 0.001, \mathbf{0.812})$ with dense inputs. With one-hot vectors the weights $w_{\text{dusk}}$ and $w_{\text{xqzv}}$ never move from 0, since no training example has a 1 in those coordinates, so the model has learned nothing about them and answers $\sigma(0) = 0.5$ for both. With dense vectors the model learns a positive weight on "time of day" and negative ones on "person" and "royal", and `dusk` inherits the answer because it shares the first feature with `dawn`. This is transfer: what is learned about one word moves to the words that are close to it. The price is that the same mechanism acts on `xqzv`, which means nothing: its noise vector projects onto the learned weights and the model answers $0.812$, an arbitrary value with no more meaning than the noise. Transfer is only as good as the vectors, which is why the rest of the chapter is about where they come from.
+
+11. Relabelling the words permutes the rows of the matrix of vectors, and the distances between the new rows are those of the old ones with their labels permuted. The script `onehot_renaming.py` loops over `itertools.permutations(range(5))` and confirms that `distances(E[list(perm)])` equals `distances(E)` for all 120 of them. This holds in general: a permutation of the coordinates of $\mathbb{R}^{|V|}$ is an isometry, and permuting the words of a one-hot basis is the same as permuting the coordinates. In the dense table, exchanging `dawn` and `king` changes the distance between `dawn` and `dusk` from $0.80$ to $1.85$, because `dawn` now has the vector of a king. The one-hot geometry cannot tell a correct assignment of words from a scrambled one, so it contains no information about which word is which except for identity: it is the geometry of alpha-equivalence, in which `customer_balance` and `x7` are interchangeable. A representation that can contain meaning must be sensitive to this exchange, since swapping `dawn` and `king` in a sentence does change what it says.
 :::

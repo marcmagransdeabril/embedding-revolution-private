@@ -1,4 +1,4 @@
-"""Shared helpers for the solution scripts: cached Project Gutenberg download and Shannon entropy."""
+"""Shared helpers for the solution scripts: cached Project Gutenberg download, Shannon entropy and a toy vocabulary."""
 import tempfile
 import urllib.request
 from collections import Counter
@@ -35,3 +35,21 @@ def sample(counts: Counter, k: int, rng: np.random.Generator | None = None) -> l
     symbols = list(counts)
     p = np.array([counts[s] for s in symbols]) / sum(counts.values())
     return rng.choice(symbols, size=k, p=p).tolist()
+
+
+# Toy vocabulary of the Discrete Collapse section, in the order of the one-hot table.
+WORDS = ["dawn", "dusk", "king", "queen", "xqzv"]
+# Hand-made dense vectors (illustrative values, not learned), one row per word. The features are
+# time of day, person, royal, male and brightness; the meaningless `xqzv` gets a small noise vector.
+DENSE = np.array([
+    [1, 0, 0, 0.0, 0.4],  # dawn
+    [1, 0, 0, 0.0, -0.4],  # dusk
+    [0, 1, 1, 0.5, 0.0],  # king
+    [0, 1, 1, -0.5, 0.0],  # queen
+    [0.2, -0.3, 0.1, 0.3, -0.1],  # xqzv
+])
+
+
+def distances(x: np.ndarray) -> np.ndarray:
+    """Matrix of Euclidean distances between the rows of x."""
+    return np.linalg.norm(x[:, None, :] - x[None, :, :], axis=-1)
