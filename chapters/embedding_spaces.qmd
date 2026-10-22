@@ -3,15 +3,15 @@ title: "The Anatomy of Embedding and Latent Spaces"
 subtitle: "From Shannon's Bits to High-Dimensional Geometric Knowledge"
 ---
 
-In 1948, Claude Shannon defined information as the reduction of uncertainty, measured in bits [@shannon1948mathematical]. His entropy formula turned out to be identical in form to the one Boltzmann and Gibbs had used for thermodynamic systems in the late nineteenth and early twentieth centuries—a resemblance Shannon himself noted, though it was Edwin T. Jaynes who, in 1957, argued that statistical mechanics is itself a form of inference. But Shannon drew a deliberate boundary: "[t]hese semantic aspects of communication are irrelevant to the engineering problem." A bit is a unit of uncertainty, not of meaning.
+In 1948, Claude Shannon defined information as the reduction of uncertainty, measured in bits [@shannon1948mathematical]. His entropy formula turned out to be identical in form to the one Boltzmann and Gibbs had used for thermodynamic systems in the late nineteenth and early twentieth centuries—a resemblance Shannon himself noted, though it was Edwin T. Jaynes who, in 1957, argued that statistical mechanics is itself a form of inference [@jaynes1957information]. But Shannon drew a deliberate boundary: "[t]hese semantic aspects of communication are irrelevant to the engineering problem" [@shannon1948mathematical]. A bit is a unit of uncertainty, not of meaning.
 
 The **Embedding Revolution** is the complement to Shannon's syntactic theory: it represents meaning itself—or at least its statistical shadow—as continuous coordinates on high-dimensional manifolds. Fittingly, it does so using Shannon's own tools: cross-entropy and mutual information are the objectives that shape these spaces.
 
-This chapter lays the foundation for the rest of the book. We start with why discrete, orthogonal representations hit a geometric wall, then examine how latent manifolds are built and what their geometry looks like. We close with the structural cracks in this first abstraction—cracks that motivate the refinements explored in later chapters.
+This chapter lays the foundation for the rest of the book. We start with Shannon's information theory and the boundary he drew around meaning, then climb Chomsky's staircase of formal languages to see what structure alone can and cannot capture. From there we show why discrete, orthogonal representations hit a geometric wall, and examine how latent manifolds are built and what their geometry looks like. We close with the structural cracks in this first abstraction—cracks that motivate the refinements explored in later chapters.
 
 ## Shannon's Information Theory
 
-Shannon measured the information of a message by its surprise: a message with probability $p$ carries $-\log_2 p$ bits. Near-certain messages ($p \approx 1$) tell us almost nothing, while rare ones ($p \approx 0$) are highly informative. The *entropy* of a source is the average of this surprise. For a binary source that emits a one with probability $p$ and a zero with probability $1-p$, it is
+Shannon measured the information of a message by its surprise: a message with probability $p$ carries $-\log_2 p$ bits. Near-certain messages ($p \approx 1$) tell us almost nothing, while rare ones ($p \approx 0$) are highly informative. The *entropy* of a source is the average of this surprisal. For a binary source that emits a one with probability $p$ and a zero with probability $1-p$, it is
 
 $$
 H_b(p) = -p \log_2 p - (1-p)\log_2(1-p),
@@ -23,7 +23,7 @@ $$
 H(X_1,\dots,X_n) = \sum_{i=1}^{n} H(X_i) = n\,H_b(p).
 $$
 
-Consider a faulty sensor that outputs a one with probability $p = 0.9$. Seeing a one is unsurprising, while seeing a zero is a rare event:
+Consider a faulty sensor that outputs a one with probability $p = 0.9$. Seeing a one is unsurprising, while seeing a zero is a rare event. @tbl-binary-entropy compares this sensor with a fair coin ($p = 0.5$) and with an even more reliable one ($p = 0.99$):
 
 | $p$ | Surprisal of a one | Surprisal of a zero | Entropy $H_b(p)$ |
 |:---:|:---:|:---:|:---:|
@@ -33,7 +33,7 @@ Consider a faulty sensor that outputs a one with probability $p = 0.9$. Seeing a
 
 : Surprisal of each outcome and entropy of a binary source. {#tbl-binary-entropy}
 
-For $p = 0.9$ the average is $H_b(0.9) = 0.9 \times 0.152 + 0.1 \times 3.322 \approx 0.47$ bits per symbol. The zeros are individually informative, but they are so rare that the stream as a whole is highly predictable. A fair coin cannot be compressed, because every flip costs a full bit. The sensor stream can: a log of 1000 symbols can, on average, be squeezed into about 470 bits, and no lossless scheme can do better.
+For $p = 0.9$ the average is $H_b(0.9) = 0.9 \times 0.152 + 0.1 \times 3.322 \approx 0.47$ bits per symbol. The zeros are individually informative, but they are so rare that the stream as a whole is highly predictable. The table shows the trend: the rarer the zeros become, the more informative each one is (6.644 bits at $p = 0.99$) and yet the lower the entropy of the whole stream (0.081 bits per symbol), because almost every symbol is a predictable one. A fair coin cannot be compressed, because every flip costs a full bit. The sensor stream can: a log of 1000 symbols can, on average, be squeezed into about 470 bits, and no lossless scheme can do better.
 
 
 ::: {.questions}
@@ -45,17 +45,17 @@ For $p = 0.9$ the average is $H_b(0.9) = 0.9 \times 0.152 + 0.1 \times 3.322 \ap
 
 ## Shannon's Boundary Problem
 
-Notice what the calculations above needed: the probabilities of the symbols, and nothing else. The sensor could report temperatures, heartbeats or coin flips and its entropy would be the same. Ignoring meaning was not a weakness but the source of the theory's power. Because entropy depends only on probabilities, the same mathematics applies to any source and any channel, and it became foundational across computer science: the compression behind every ZIP, JPEG and MP3, the error-correcting codes in our disks, QR codes and mobile networks, the capacity limits that govern Wi-Fi and fiber, and, through cross-entropy, the loss function that trains modern neural networks. Shannon had already laid the other foundation of computing in his 1937 master's thesis, where he showed that Boolean algebra describes switching circuits. 
+Notice what the calculations above needed: the probabilities of the symbols, and nothing else. The sensor could report temperatures, heartbeats or coin flips and its entropy would be the same. Ignoring meaning was not a weakness but the source of the theory's power. Because entropy depends only on probabilities, the same mathematics applies to any source and any channel, and it became foundational across computer science: the compression behind every ZIP, JPEG and MP3, the error-correcting codes in our disks, QR codes and mobile networks, the capacity limits that govern Wi-Fi and fiber, and, through cross-entropy, the loss function that trains modern neural networks. Shannon had already laid the other foundation of computing in his 1937 master's thesis, where he showed that Boolean algebra describes switching circuits [@shannon1937symbolic].
 
-However, that indifference to meaning is also the boundary of the theory. The messages "attack at dawn" and "attack at dusk" can have the same probability, and therefore exactly the same information content, yet they mean very different things. A one-bit message has the same entropy whether it says that a coin landed heads or that a biopsy is malignant. For Shannon this was a feature: the engineer's job is to deliver the message faithfully through a channel, not to understand it.
+However, that indifference to meaning is also the boundary of the theory. The messages "attack at dawn" and "attack at dusk" can have the same probability, and therefore exactly the same information content, yet they mean very different things. A one-bit message has the same entropy whether it says that a coin landed heads or that today is raining. For Shannon this was a feature: the engineer's job is to deliver the message faithfully through a channel, not to understand it.
 
-His collaborator Warren Weaver made the division explicit in 1949 by splitting the communication problem into three levels: **A**, the technical problem (how accurately can symbols be transmitted?); **B**, the semantic problem (how precisely do the symbols convey the desired meaning?); and **C**, the effectiveness problem (how well does the received meaning change behavior?). Shannon solved level A. Embeddings are an attempt at level B, and alignment techniques such as RLHF and agents are arguably attempts at level C. This is a map of the whole book.
+His collaborator Warren Weaver made the division explicit in 1949 by splitting the communication problem into three levels [@weaver1949recent]: **A**, the technical problem (how accurately can symbols be transmitted?); **B**, the semantic problem (how precisely do the symbols convey the desired meaning?); and **C**, the effectiveness problem (how well does the received meaning change behavior?). Shannon solved level A. Embeddings are an attempt at level B, and alignment techniques such as RLHF and agents are arguably attempts at level C. This is a map of the whole book.
 
 Shannon also showed, in the same 1948 paper, how far statistics alone can go. He generated English-like text by choosing each word according to how often it follows the previous one, and obtained [@shannon1948mathematical]:
 
-> THE HEAD AND IN FRONTAL ATTACK ON AN ENGLISH WRITER THAT THE CHARACTER OF THIS POINT IS THEREFORE ANOTHER METHOD FOR THE LETTERS THAT THE TIME OF WHO EVER TOLD THE PROBLEM FOR AN UNEXPECTED
+> `THE HEAD AND IN FRONTAL ATTACK ON AN ENGLISH WRITER...`
 
-Locally the text is plausible, since each word follows its predecessor with a believable frequency, yet globally it is meaningless. It is a language model in embryo: it has absorbed some of the syntax and none of the semantics. Seventy years later, the same recipe with vastly more data and a far richer notion of context produces the large language models we will meet in this book. Shannon himself was wary of the hype that success brought. In "The Bandwagon" (1956) he warned that information theory had become a fashion, and that borrowing its vocabulary for psychology, biology or linguistics did not make those fields more rigorous. Like relativity and quantum theory, it suffered the fate of successful theories: its words travelled much further than its mathematics. Yet the separation of form from meaning was not Shannon's alone: linguistics reached it independently.
+Locally the text is plausible, since each word follows its predecessor with a believable frequency, yet globally it is meaningless. It is a language model in embryo: it has absorbed some of the syntax and none of the semantics. Seventy years later, the same recipe with vastly more data and a far richer notion of context produces the large language models we will meet in this book. Shannon himself was wary of the hype that success brought. In "The Bandwagon" (1956) he warned [@shannon1956bandwagon] that information theory had become a fashion, and that borrowing its vocabulary for psychology, biology or linguistics did not make those fields more rigorous. Like relativity and quantum theory, it suffered the fate of successful theories: its words travelled much further than its mathematics. Yet the separation of form from meaning was not Shannon's alone: linguistics reached it independently.
 
 ::: {.questions}
 1. Take a plain-text book from the Internet (for example, from Project Gutenberg) and compute the probability of each letter. What is the entropy of this distribution, and how does it compare with $\log_2 26$?
