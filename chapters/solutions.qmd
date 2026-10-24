@@ -205,30 +205,40 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
 
     The script `rice_semidecider.py` runs the tests. The program `++++++++[>++++++++<-]>+.` and the 65 `+` followed by `.` both give `True`: they have different texts and the same meaning. `+.` halts and prints 1, so it gives a firm `False`. The programs `+[]` and `+[>+]` give `None` with budgets of 10, 1,000 and 100,000, and the same is true of a program that prints 65 and then loops forever, because the property asks that the program halt. A slow program such as `+` $\times 30$, `[>` `+` $\times 30$ `[>+<-]<-]>>[-]`, `+` $\times 65$, `.` gives `None` with a budget of 1,000 and `True` once the budget reaches 7,450 steps. A larger budget can turn `None` into `True` or `False`, but only for programs that halt. For a program that never halts, `None` stays `None` at any budget, and the tester cannot tell it from a program that is merely slow. It would be a firm `False` for all of them only if we had a decider for "halts and prints exactly 65", and since the property is semantic and non-trivial, Rice's theorem says that none exists. What survives is one-sided: if the property holds, running long enough will confirm it.
 
-13. The construction is a few lines once `yield from` chains the two programs:
+13. The script `rice_decidable_neighbours.py` decides the three questions that can be decided.
+
+    (a) "Does the text contain a `[`?" is `"[" in program`. It is decidable because it reads the text and never asks what the program does: the 65-`+` program and `++++++++[>++++++++<-]>+.` print the same thing and give different answers.
+
+    (b) "Does the program halt within 1,000 steps and print exactly 65?" is decidable because the clock bounds the search: run the interpreter for 1,000 steps and look.
 
     ```python
-    def run(program, y, budget):
-        steps = program(y)
-        for _ in range(budget):
-            try:
-                next(steps)
-            except StopIteration as done:
-                return done.value
-        return None                          # unknown
-
-    def Q(y):                                # has P: returns 1
-        return 1
-        yield
-
-    def build(M, x):
-        def M_prime(y):
-            yield from M(x)                  # first run M on x ...
-            return (yield from Q(y))         # ... and only if it halts, run Q on y
-        return M_prime
+    def prints_65_within(program, steps=1_000):
+        out, _, halted = run(program, steps)
+        return halted and out == [65]
     ```
 
-    The script `rice_reduction.py` checks both cases. For an $M$ that halts after 100 steps, `run(build(M, 0), 0, 1000)` returns 1, so $M'$ has $P$. For `while True: yield`, it returns `None` with budgets of 10, 1,000 and 100,000: $M'$ never returns, so it does not have $P$, but no finite run can show it. Given a decider for $P$, we could feed it $M'$ and read off the answer without running anything: it says "yes" exactly when $M$ halts on $x$. Since the construction $(M, x) \mapsto M'$ is mechanical, the decider would solve the halting problem, which Turing proved impossible, and therefore the decider does not exist. The construction fails for "contains a `while` loop" because that property depends on the text of $M'$, not on its behaviour. The reduction needs a property whose answer for $M'$ flips between the case where $M$ halts and the case where it does not. A property of the text cannot flip like that: it is decided by reading the text, with no need to run $M$, so no decider for it can be turned into a decider for halting. That is why syntactic properties are decidable and the semantic ones are not.
+    It says `True` for both programs that print 65, and `False` for `+.` and for `+[]`. For `+[]` the `False` only means "not within 1,000 steps", which is a different question from "never": the property mentions the clock, so it is not only about what the program computes, and Rice's theorem does not apply.
+
+    (c) "Does the program halt and print exactly 65?" has no bound on the running time, and depends only on what the program does: it is covered by Rice's theorem and has no decider. The best we can do is the step-limited test of question 12, which answers `True`, `False` or "unknown".
+
+    (d) Two finite automata accept the same strings if and only if no reachable pair of states, one from each automaton, disagrees on acceptance. There are finitely many pairs, so a breadth-first search over them always terminates:
+
+    ```python
+    def dfa_equivalent(a, b, alphabet="01"):
+        (sa, fa, da), (sb, fb, db) = a, b
+        seen, queue = {(sa, sb)}, deque([(sa, sb)])
+        while queue:
+            p, q = queue.popleft()
+            if (p in fa) != (q in fb):
+                return False
+            for c in alphabet:
+                nxt = (da[(p, c)], db[(q, c)])
+                if nxt not in seen:
+                    seen.add(nxt); queue.append(nxt)
+        return True
+    ```
+
+    The 2-state "even number of 1s" automaton and the 4-state one that tracks the parity twice are equivalent, even though one has twice as many states as the other. "Even number of 1s" and "even length" are not: the string `0` tells them apart. Only (c) is covered by Rice's theorem, since it is the only one that asks a semantic question of a Turing-complete machine with no bound on time. (a) is about the text, (b) is about the clock, and (d) is about a machine on the bottom step of the staircase, where finitely many states make every such question finite. The same question for two context-free grammars is undecidable, so the line falls between the regular and the context-free step of the staircase.
 
 14. The script `rice_behavioural_embedding.py` builds both representations. As symbols, the five programs are the rows of the identity matrix and every pair is at distance $\sqrt{2} \approx 1.41$: `bubble_sort` is as far from `insertion_sort` as from `identity`, the orthogonal catastrophe in a new vocabulary. As behaviour vectors of 180 numbers (30 lists of 6 digits), the distances are:
 
