@@ -3,7 +3,7 @@ from collections import defaultdict
 
 
 def run(program: str, max_steps: int = 100_000):
-    """Run a Brainf*** program (six instructions, no input) for at most `max_steps` instructions.
+    """Run a Brainf*** program (seven instructions, no input) for at most `max_steps` instructions.
 
     Returns (printed_values, cells_used, halted). The tape is unbounded to the right: it is not limited by the
     length of the program. If the step budget runs out, `halted` is False, and that is all we can say.
