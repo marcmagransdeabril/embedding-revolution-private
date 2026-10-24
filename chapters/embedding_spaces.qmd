@@ -196,82 +196,31 @@ Just as the previous section associated vectors with words, we can associate num
 3. Compare two ways of representing five programs: `bubble_sort`, `insertion_sort`, `sort_descending`, `identity` and `sort_unless_huge`, which sorts any list with fewer than 1,000 items and returns longer ones unchanged. In the first, each program is a symbol, a one-hot vector. In the second, it is the vector of its outputs on 30 random lists of 6 digits, concatenated. Compute the matrix of Euclidean distances for both representations. What does each say about `bubble_sort` and `insertion_sort`, and about `bubble_sort` and `sort_unless_huge`? Find an input that proves two of the programs different, and explain why a distance of zero between two programs proves nothing while a positive distance proves something. How does this connect to Rice's theorem?
 :::
 
-## Distributed Representations and Learned Manifolds
+## From Counting to Geometry
 
-- **Distributed Representations:** Geoffrey Hinton's 1986 insight [@hinton1986learning]—distributing meaning across continuous dimensions where dot products measure semantic overlap.
-- **Feature Engineering vs. Latent Manifolds:** Why handcrafted extrinsic features are brittle compared to self-supervised intrinsic manifolds.
+*Plan (4–5 pages).* Open with Hinton's distributed representations [@hinton1986learning], the idea promised at the end of the previous section: a symbol described by a pattern spread across many continuous dimensions, so that the dot product measures shared meaning. Return to Firth's "company it keeps" [@firth1957synopsis] from the Chomsky section and make it computable: build the co-occurrence matrix of the toy vocabulary `dawn`, `dusk`, `king`, `queen`, `xqzv` on a small corpus, reweight it with positive pointwise mutual information (Shannon's quantity again), and factor it with a truncated SVD ($\mathbf{M} \approx \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$, Eckart–Young). The rows are the first learned embedding: `dawn` now lies close to `dusk` and far from `xqzv`. Exercises: build the PPMI matrix and its SVD by hand on a toy corpus, and on a real book.
 
-## How Latent Spaces Are Born: The Four Generative Blueprints
-*Four mathematical mechanisms convert raw unstructured data into continuous semantic manifolds:*
+## Learning by Prediction
 
-### Spectral & Distributional Factorization (SVD, PPMI, GloVe)
-*Deriving low-rank coordinate systems from co-occurrence statistics.*
-- Firth's distributional hypothesis [@firth1957synopsis] (*"You shall know a word by the company it keeps"*).
-- Positive Pointwise Mutual Information (PPMI) and low-rank Eckart-Young approximation via SVD ($\mathbf{M} \approx \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$).
-- GloVe log-bilinear co-occurrence regression [@pennington2014glove].
+*Plan (3–4 pages).* Word2Vec skip-gram with negative sampling: predict the context of a word and minimize a cross-entropy, Shannon's second quantity. Levy and Goldberg's result [@levy2014neural] that SGNS implicitly factors the shifted PMI matrix of the previous section, so counting and predicting are two routes to the same geometry. One paragraph on GloVe as the explicit regression on log co-occurrences [@pennington2014glove], and one on contextual embeddings in Transformers, where the vector of a word depends on its sentence. Exercises: train a tiny SGNS model and compare its vectors with the SVD ones.
 
-### Predictive Push-Forwards (Word2Vec, Transformers)
-*Optimizing local log-bilinear prediction and dynamic attention trajectories.*
-- Word2Vec Skip-Gram with Negative Sampling (SGNS) and Levy & Goldberg's proof of implicit shifted-PMI factorization [@levy2014neural].
-- Dynamic contextual latents in Transformers: token coordinates as trajectories through multi-head attention layers.
+## Learning by Contrast
 
-### Contrastive Metric Learning (InfoNCE, Triplet Loss)
-*Pulling semantic neighbors together and repelling negatives on hyperspheres.*
-- InfoNCE loss and temperature hyperparameter $\tau$ as a hard-negative mining dial.
-- Wang & Isola's decomposition into *alignment* (pulling positive pairs) and *uniformity* (spreading points across the hypersphere $\mathbb{S}^{D-1}$) [@wang2020understanding].
+*Plan (3 pages).* InfoNCE: pull positive pairs together and push negatives apart, a lower bound on mutual information, Shannon's third quantity. The temperature $\tau$ as the dial between easy and hard negatives. Wang and Isola's decomposition into alignment and uniformity on the hypersphere [@wang2020understanding]. Connect back to the behavioural embedding of programs in the Rice exercises: two programs that agree on the probes are a positive pair. This is the objective behind the sentence embeddings used for retrieval in the next chapter. Exercise: contrastive training of program or sentence embeddings on a toy set.
 
-### Probabilistic Manifolds (VAEs, Diffusion Latents)
-*Enforcing continuous, gap-free semantic coverage via Gaussian priors and KL regularizers.*
-- The failure of deterministic autoencoders (disconnected Dirac clusters and reconstruction voids).
-- Variational Autoencoders (VAEs) and the KL divergence term as a geometric spring enforcing continuous manifold coverage.
+## The Geometry of Meaning
 
-## The Metric Geometry of Latent Space: Spheres, Angles, and Distances
-*On unit hyperspheres, cosine similarity and Euclidean distance are monotonically linked, separating categorical direction ($\mathbf{z} / \|\mathbf{z}\|$) from salience/frequency ($\|\mathbf{z}\|$).*
+*Plan (3–4 pages).* On the unit sphere cosine similarity and Euclidean distance carry the same information, $\|\mathbf{u} - \mathbf{v}\|_2^2 = 2 - 2\cos\theta$; the direction of a vector encodes its category and its norm encodes frequency and salience. Mikolov's analogy parallelogram, $\mathbf{v}_{\text{king}} - \mathbf{v}_{\text{man}} + \mathbf{v}_{\text{woman}} \approx \mathbf{v}_{\text{queen}}$ [@mikolov2013efficient], and why it follows from ratios of co-occurrence probabilities becoming differences of logarithms [@arora2016latent; @pennington2014glove]. A brief note on steering vectors: the same linear structure, found inside the activations of modern LLMs. Exercise: test analogies on pre-trained vectors and find where they fail.
 
-- **Cosine vs. Euclidean Metrics:** Geometric equivalence on the unit hypersphere $\mathbb{S}^{D-1}$ ($\|\mathbf{u} - \mathbf{v}\|_2^2 = 2 - 2 \cos \theta$).
-- **Direction vs. Magnitude:** Semantic angle encoding category/domain vs. vector norm encoding certainty, salience, and frequency.
-- **Intrinsic vs. Extrinsic Dimensionality:** The Manifold Hypothesis ($d_{\text{int}} \ll D_{\text{ambient}}$).
+## Where Flat Space Cracks
 
-## The Miracle of Vector Arithmetic: Linear Substructures of Thought
-*Log-odds probability ratios map multiplicative linguistic relationships to additive vector translations ($\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$) and LLM activation steering.*
-
-- **The Analogical Parallelogram:** Mikolov's discovery of linear relational offsets [@mikolov2013efficient] ($\mathbf{v}_{\text{king}} - \mathbf{v}_{\text{man}} + \mathbf{v}_{\text{woman}} \approx \mathbf{v}_{\text{queen}}$).
-- **Mathematical Origin:** Arora and Pennington's derivation showing how log-odds ratios in co-occurrences map multiplicative probabilities to linear displacements [@arora2016latent; @pennington2014glove].
-- **Steering Vectors in Modern LLMs:** Activation addition in Transformer residual streams for model steering and safety.
-
-## Pathologies of Flat Space: Anisotropy, Cones, and Hubness
-*Unconstrained high-dimensional embeddings collapse into narrow eccentric cones with spurious nearest-neighbor hubs, requiring centering, whitening, and isotropic regularization.*
-
-- **The Anisotropy Trap:** Dimensional collapse where all embeddings cluster inside a narrow eccentric cone ($\cos \theta \ge 0.85$).
-- **The Hubness Phenomenon:** Spurious universal nearest neighbors in high-dimensional vector spaces.
-- **Geometric Remedies:** Mean-centering, PCA whitening, and uniformity regularization.
-
-## The Cracks in Flat Space: Exploration Hints and the Road Ahead
-*The breakdown of flat Euclidean vector arithmetic reveals the structural limitations that motivate the rest of the book:*
-
-- **$\rightarrow$ Chapter 2 (RAG & Vector DBs):** *Nearest-neighbor lookup cannot perform multi-hop reasoning or logical negation.*
-- **$\rightarrow$ Chapter 3 (The High-Dimensional Trap):** *Orthogonal collapse and empty volumes in 1,536 dimensions.*
-- **$\rightarrow$ Chapter 4 (Hyperbolic Spaces):** *Flat space cannot embed hierarchical taxonomies without exponential distortion.*
-- **$\rightarrow$ Chapter 5 (Knowledge Graphs):** *Symmetric dot products fail on asymmetric and typed relations, requiring complex rotations (RotatE).*
-- **$\rightarrow$ Chapter 6 (Topological Deep Learning):** *Pairwise distances miss multi-way interactions and topological holes.*
-- **$\rightarrow$ Chapter 7 (Complex & Quantum Latents):** *Non-commutative reasoning and phase interference in $\mathbb{C}^D$.*
-- **$\rightarrow$ Chapter 8 (Vector Symbolic Architectures):** *Exact variable binding ($\circledast$) and bundling without neural retraining.*
-- **$\rightarrow$ Chapter 9 (Neurosymbolic AI):** *Tensor Product Representations and emergent compositional syntax.*
-- **$\rightarrow$ Chapter 10 (Optimal Transport):** *Aligning disconnected multimodal manifolds with Wasserstein geometry.*
+*Plan (2–3 pages).* Anisotropy: trained embeddings crowd into a narrow cone, so that all cosines are high, and the simple remedies of centering and whitening. Hubness, a few points that are the nearest neighbour of almost everything, as a first sign of the strangeness of high dimensions studied in Chapter 3. Close with, in prose, the three or four limits that motivate the rest of the book: nearest neighbours cannot negate or chain (Chapter 2), flat space distorts hierarchies (Chapter 4), symmetric dot products cannot express asymmetric relations (Chapter 5), and vectors do not bind variables (Chapter 8).
 
 {{< pagebreak >}}
 
 ## Further Reading {.unnumbered}
 
-The four generative blueprints surveyed here are not unrelated techniques but convergent
-estimators of the same underlying co-occurrence statistic; @arora2016latent develops the
-latent-variable argument for why PMI-based factorization and log-bilinear regression
-agree, and @levy2014neural shows the predictive Word2Vec objective is itself an implicit
-factorization of a shifted-PMI matrix — readers wanting the full derivation of the
-log-bilinear GloVe objective should consult @pennington2014glove directly. The next
-chapter's argument about embedding dimensionality rests on the Johnson–Lindenstrauss
-lemma [@johnson1984extensions, pp. 189-206], which bounds how much a point set can be
-projected into lower dimensions while approximately preserving pairwise distances.
+Counting, predicting and contrasting are not unrelated techniques but convergent estimators of the same co-occurrence statistics. @levy2014neural shows that the predictive Word2Vec objective is an implicit factorization of a shifted PMI matrix, @arora2016latent develops the latent-variable argument for why PMI-based factorization and log-bilinear regression agree, and @pennington2014glove derives the GloVe objective in full. The next chapter's argument about embedding dimensionality rests on the Johnson–Lindenstrauss lemma [@johnson1984extensions, pp. 189-206], which bounds how much a point set can be projected into lower dimensions while approximately preserving pairwise distances.
 
 ## References {.unnumbered}
 

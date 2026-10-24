@@ -71,9 +71,10 @@ This book is organized into four interconnected parts, taking you from flat Eucl
 * **Chapter 1: The Anatomy of Embedding and Latent Spaces**
   * *From Shannon to Geometry:* Quantifying uncertainty vs. reconstructing continuous semantics.
   * *The Orthogonal Catastrophe:* Why one-hot representations make every symbol equally far from every other ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
-  * *The Four Generative Blueprints:* Spectral factorization (SVD, PPMI, GloVe), predictive push-forwards (Word2Vec, Transformers), contrastive metric learning (InfoNCE, Triplet Loss), and probabilistic manifolds (VAEs, Diffusion).
-  * *Vector Arithmetic & Linear Substructures:* $\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$ and LLM activation steering.
-  * *Pathologies of Flat Space:* Anisotropy cones, the hubness phenomenon, and isotropic regularization.
+  * *Rice's Theorem:* Why exact meaning is out of reach even for programs, and why similarity must be graded.
+  * *Counting, Predicting, Contrasting:* PPMI and SVD, Word2Vec and its hidden PMI matrix, and InfoNCE: three ways of turning Shannon's quantities into geometry.
+  * *The Geometry of Meaning:* Cosine and norm on the sphere, $\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$, and LLM activation steering.
+  * *Where Flat Space Cracks:* Anisotropy cones, hubness, and the limits that motivate the rest of the book.
 * **Chapter 2: Vector Databases, RAG, and the Limits of Flat Latent Retrieval**
   * *Approximate Nearest Neighbor (ANN) Indexing:* Navigating billion-scale vector indexes (HNSW graphs, IVFFlat inverted files, Product Quantization).
   * *Retrieval-Augmented Generation (RAG):* Bridging parametric model memory with external latent storage.
