@@ -191,54 +191,24 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
 
 11. Relabelling the words permutes the rows of the matrix of vectors, and the distances between the new rows are those of the old ones with their labels permuted. The script `onehot_renaming.py` loops over `itertools.permutations(range(5))` and confirms that `distances(E[list(perm)])` equals `distances(E)` for all 120 of them. This holds in general: a permutation of the coordinates of $\mathbb{R}^{|V|}$ is an isometry, and permuting the words of a one-hot basis is the same as permuting the coordinates. In the dense table, exchanging `dawn` and `king` changes the distance between `dawn` and `dusk` from $0.80$ to $1.85$, because `dawn` now has the vector of a king. The one-hot geometry cannot tell a correct assignment of words from a scrambled one, so it contains no information about which word is which except for identity: it is the geometry of alpha-equivalence, in which `customer_balance` and `x7` are interchangeable. A representation that can contain meaning must be sensitive to this exchange, since swapping `dawn` and `king` in a sentence does change what it says.
 
-12. Run the interpreter under a step budget and report what happened:
+12. The script `rice_llm_probe.py` gives the ground truth for the variations. `steps(27)` returns 111, and so do the recursive version and the version with other names, dead code and a different control structure: a good LLM describes all three correctly, because they are the same behaviour in three texts. Changing `3 * n + 1` into `3 * n - 1` changes the behaviour with one character: the sequence from 27 now falls into a cycle and never reaches 1. A careful LLM that traces a few steps will notice, and a hasty one will keep describing the original. Note that here the answer can be certain, because the program has no state other than `n`, so a repeated value proves that it loops forever. The last program is different. It halts if and only if Goldbach's conjecture is false, and nobody knows whether it is, although no counterexample has been found among the numbers checked, up to $4 \times 10^{18}$. An LLM can say that it probably never halts because the conjecture is believed true, and that is a bet and not an answer; if it answers "it halts" or "it does not halt" with confidence, nothing in the answer lets us check it.
+
+    A good LLM does not disprove Rice's theorem, for three reasons. First, the theorem is about one fixed procedure that is correct on *every* program and always gives an answer, and a conversation tests the LLM on the programs a person thinks of, which are short, readable and mostly benign. "It was right every time we asked" is a statement about a sample. Second, an LLM is itself a program with a finite set of weights that produces its answer in finitely many steps. If it were right about every program, it would be the decider the theorem forbids. Third, we could not tell: to certify the LLM we need the correct answer for each question, and for the programs that matter, such as the Goldbach one, nobody has it. What a good LLM does is behave like a step-limited tester, with a far richer notion of "step": it answers correctly on the programs whose behaviour can be read off, and for the others it either says that it cannot tell or, worse, it is confidently wrong. Its error rate grows with the difficulty and the adversarial nature of the programs, which is the graded, approximate kind of answer that Rice's theorem leaves open and that this chapter is about.
+
+13. Call `next` on the generator once per step, and stop when the generator ends or the budget runs out:
 
     ```python
-    from chomsky_bf_interpreter import run   # the interpreter of the Chomsky exercises
-
-    def prints_65(program, budget):
-        out, _, halted = run(program, budget)
-        if not halted:
-            return None                      # unknown: the budget ran out
-        return out == [65]
+    def check(program, budget):
+        steps = program()
+        for _ in range(budget):
+            try:
+                next(steps)
+            except StopIteration as done:
+                return done.value == 65      # the program ended: a firm True or False
+        return None                          # the budget ran out: unknown
     ```
 
-    The script `rice_semidecider.py` runs the tests. The program `++++++++[>++++++++<-]>+.` and the 65 `+` followed by `.` both give `True`: they have different texts and the same meaning. `+.` halts and prints 1, so it gives a firm `False`. The programs `+[]` and `+[>+]` give `None` with budgets of 10, 1,000 and 100,000, and the same is true of a program that prints 65 and then loops forever, because the property asks that the program halt. A slow program such as `+` $\times 30$, `[>` `+` $\times 30$ `[>+<-]<-]>>[-]`, `+` $\times 65$, `.` gives `None` with a budget of 1,000 and `True` once the budget reaches 7,450 steps. A larger budget can turn `None` into `True` or `False`, but only for programs that halt. For a program that never halts, `None` stays `None` at any budget, and the tester cannot tell it from a program that is merely slow. It would be a firm `False` for all of them only if we had a decider for "halts and prints exactly 65", and since the property is semantic and non-trivial, Rice's theorem says that none exists. What survives is one-sided: if the property holds, running long enough will confirm it.
-
-13. The script `rice_decidable_neighbours.py` decides the three questions that can be decided.
-
-    (a) "Does the text contain a `[`?" is `"[" in program`. It is decidable because it reads the text and never asks what the program does: the 65-`+` program and `++++++++[>++++++++<-]>+.` print the same thing and give different answers.
-
-    (b) "Does the program halt within 1,000 steps and print exactly 65?" is decidable because the clock bounds the search: run the interpreter for 1,000 steps and look.
-
-    ```python
-    def prints_65_within(program, steps=1_000):
-        out, _, halted = run(program, steps)
-        return halted and out == [65]
-    ```
-
-    It says `True` for both programs that print 65, and `False` for `+.` and for `+[]`. For `+[]` the `False` only means "not within 1,000 steps", which is a different question from "never": the property mentions the clock, so it is not only about what the program computes, and Rice's theorem does not apply.
-
-    (c) "Does the program halt and print exactly 65?" has no bound on the running time, and depends only on what the program does: it is covered by Rice's theorem and has no decider. The best we can do is the step-limited test of question 12, which answers `True`, `False` or "unknown".
-
-    (d) Two finite automata accept the same strings if and only if no reachable pair of states, one from each automaton, disagrees on acceptance. There are finitely many pairs, so a breadth-first search over them always terminates:
-
-    ```python
-    def dfa_equivalent(a, b, alphabet="01"):
-        (sa, fa, da), (sb, fb, db) = a, b
-        seen, queue = {(sa, sb)}, deque([(sa, sb)])
-        while queue:
-            p, q = queue.popleft()
-            if (p in fa) != (q in fb):
-                return False
-            for c in alphabet:
-                nxt = (da[(p, c)], db[(q, c)])
-                if nxt not in seen:
-                    seen.add(nxt); queue.append(nxt)
-        return True
-    ```
-
-    The 2-state "even number of 1s" automaton and the 4-state one that tracks the parity twice are equivalent, even though one has twice as many states as the other. "Even number of 1s" and "even length" are not: the string `0` tells them apart. Only (c) is covered by Rice's theorem, since it is the only one that asks a semantic question of a Turing-complete machine with no bound on time. (a) is about the text, (b) is about the clock, and (d) is about a machine on the bottom step of the staircase, where finitely many states make every such question finite. The same question for two context-free grammars is undecidable, so the line falls between the regular and the context-free step of the staircase.
+    The script `rice_semidecider.py` runs the tests. `quick` gives `True` with both budgets, and a program that returns 1 gives a firm `False`. `slow` gives `None` with a budget of 10 and `True` with a budget of 10,000, since it needs 5,001 calls to `next` to end. `forever` gives `None` with every budget, and no budget can do better: after a million steps the tester cannot tell `forever` from a program that would end at step a million and one, so it can never answer `False`. A larger budget can turn `None` into `True` or `False`, but only for programs that end. A firm `False` for every program would need a procedure that decides whether any program ends with the result 65, and since this is a question about what the program does, Rice's theorem says that no such procedure exists. What survives is one-sided: if the program ends with 65, waiting long enough will confirm it.
 
 14. The script `rice_behavioural_embedding.py` builds both representations. As symbols, the five programs are the rows of the identity matrix and every pair is at distance $\sqrt{2} \approx 1.41$: `bubble_sort` is as far from `insertion_sort` as from `identity`, the orthogonal catastrophe in a new vocabulary. As behaviour vectors of 180 numbers (30 lists of 6 digits), the distances are:
 

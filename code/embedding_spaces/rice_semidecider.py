@@ -1,33 +1,47 @@
-"""Rice's Theorem, question 1: a step-limited test of a semantic property answers "yes" or "unknown", never a firm "no" for loops."""
-from chomsky_bf_interpreter import run
+"""Rice's Theorem, question 2: a step-limited test answers "yes", "no" or "unknown", and "unknown" never goes away for loops."""
 
 
-def prints_65(program: str, budget: int):
-    """Semantic property P = "halts and prints exactly 65". True/False if the program halts within `budget`
-    steps, None ("unknown") if the budget runs out first."""
-    out, _, halted = run(program, budget)
-    if not halted:
-        return None
-    return out == [65]
+# A program is a generator: it does one step of work at each `yield` and returns its result when it ends.
+def quick():
+    yield
+    return 65
+
+
+def other():
+    yield
+    return 1
+
+
+def slow():  # halts, but only after 5,000 steps
+    for _ in range(5_000):
+        yield
+    return 65
+
+
+def forever():
+    while True:
+        yield
+
+
+def check(program, budget: int):
+    """True if the program finishes within `budget` steps with result 65, False if it finishes with another result,
+    None ("unknown") if the budget runs out first."""
+    steps = program()
+    for _ in range(budget):
+        try:
+            next(steps)
+        except StopIteration as done:
+            return done.value == 65
+    return None
 
 
 def main():
-    loop_program = "++++++++[>++++++++<-]>+."  # 8 * 8 + 1 = 65
-    flat_program = "+" * 65 + "."  # same behaviour, different text
-    assert loop_program != flat_program
-    assert prints_65(loop_program, 1_000) is True and prints_65(flat_program, 1_000) is True
-
-    assert prints_65("+.", 1_000) is False  # halts and prints 1: a definite "no"
-
-    # Endless loops: "unknown" at every budget we try, however large.
-    for forever in ("+[]", "+[>+]", loop_program[:-1] + ".[]"):  # the last one prints 65 and then never stops
-        assert all(prints_65(forever, b) is None for b in (10, 1_000, 100_000)), forever
-
-    # A slow program that does halt: "unknown" with a small budget, "yes" once the budget is large enough.
-    slow = "+" * 30 + "[>" + "+" * 30 + "[>+<-]<-]>>[-]" + "+" * 65 + "."  # a few thousand steps, then prints 65
-    assert prints_65(slow, 1_000) is None
-    assert prints_65(slow, 1_000_000) is True
-    print("prints_65: True/False when the program halts within the budget, None for every program that does not")
+    assert check(quick, 10) is True and check(quick, 10_000) is True
+    assert check(other, 10) is False  # halts with another result: a definite "no"
+    assert check(slow, 10) is None  # unknown with a small budget...
+    assert check(slow, 5_000) is None and check(slow, 5_001) is True  # ...and "yes" once the budget is large enough
+    assert all(check(forever, b) is None for b in (10, 10_000, 1_000_000))  # unknown at every budget
+    print("check: True/False when the program halts within the budget, None for every program that does not")
 
 
 if __name__ == "__main__":

@@ -160,9 +160,37 @@ So the possibility of using formal languages to extract meaning from symbols is 
 Learned code embeddings [@alon2019code2vec] push the same idea much further, placing snippets with similar behaviour close together, with no guarantee. Analogously to what we saw in the previous section, it is possible to associate numeric vectors to programs as we did for words and text. These embeddings do not escape Rice's theorem; they trade the impossible exact answer for a useful graded one, and the price is certainty. The same trade off will reappear for words: there is no table of exact meanings to look up, only positions in a space from which similarity can be read. What remains is to see how such positions are obtained, and the next section starts with the idea that made them practical: to stop describing a symbol by its identity and describe it by a pattern spread across many continuous dimensions.
 
 ::: {.questions}
-1. Use the interpreter of the previous exercises to write `prints_65(program, budget)` for the semantic property "halts and prints exactly 65". It runs the program for at most `budget` steps and returns `True` or `False` if the program halts within the budget, and `None` ("unknown") if the budget runs out. Test it on `++++++++[>++++++++<-]>+.`, on a program of 65 `+` followed by `.`, on `+.`, on `+[]` and `+[>+]`, and on a program of your own that prints 65 after a few thousand steps. How does the answer change when the budget grows? Which of the answers can never become a firm `False`, and what would it mean to get one for every program?
+1. Take this program, which counts how many steps the Collatz iteration needs to reach 1:
 
-2. Decide which of these questions about a MiniBrainf*** program can be answered by an algorithm that always terminates, and write it when it can: (a) does the text contain a `[`; (b) does the program halt within 1,000 steps and print exactly 65; (c) does the program halt and print exactly 65; (d) do two finite automata over `{0, 1}` accept the same strings. For (d), compare the 2-state automaton for "even number of 1s" with a 4-state automaton that tracks the same parity twice, and with an automaton for "even length". For each question that cannot be decided, say what a step-limited or sample-based test can still tell you. Which of these questions does Rice's theorem cover, and why not the others?
+   ```python
+   def steps(n):
+       count = 0
+       while n != 1:
+           n = n // 2 if n % 2 == 0 else 3 * n + 1
+           count += 1
+       return count
+   ```
+
+   Ask an LLM what it does and what `steps(27)` returns, then run it to check. Then keep varying the program and keep asking: rename the variables, replace the loop by recursion, add dead code, change `3 * n + 1` into `3 * n - 1`, and finally ask whether a program that tries the even numbers 4, 6, 8, ... and stops at the first one that is not the sum of two primes ever halts. How does the LLM do on each variation, and how do you know when it is right? If you found an LLM that always described correctly what a program does, would it disprove Rice's theorem?
+
+2. In this exercise a program is a Python generator: it does one step of work each time it reaches a `yield`, and returns its result when it ends.
+
+   ```python
+   def quick():
+       yield
+       return 65
+
+   def slow():
+       for _ in range(5000):
+           yield
+       return 65
+
+   def forever():
+       while True:
+           yield
+   ```
+
+   Write `check(program, budget)`, which runs a program for at most `budget` steps and returns `True` if it ends with the result 65, `False` if it ends with another result, and `None` ("unknown") if the budget runs out first. Try it on the three programs and on one of your own that returns 1, with budgets of 10 and 10,000. For which program does a larger budget change the answer? For the `forever` generator, does `check` ever stop answering `None`, however large the budget? Why can it not simply answer `False` after a very large number of steps?
 
 3. Compare two ways of representing five programs: `bubble_sort`, `insertion_sort`, `sort_descending`, `identity` and `sort_unless_huge`, which sorts any list with fewer than 1,000 items and returns longer ones unchanged. In the first, each program is a symbol, a one-hot vector. In the second, it is the vector of its outputs on 30 random lists of 6 digits, concatenated. Compute the matrix of Euclidean distances for both representations. What does each say about `bubble_sort` and `insertion_sort`, and about `bubble_sort` and `sort_unless_huge`? Find an input that proves two of the programs different, and explain why a distance of zero between two programs proves nothing while a positive distance proves something. How does this connect to Rice's theorem?
 :::
