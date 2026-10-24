@@ -1,6 +1,6 @@
 ---
 name: ground-truth-review
-description: "Audit factual, mathematical, empirical, attribution, architectural, and taxonomic claims against reference PDFs in references/ using page-level BM25 search and on-demand page evidence verification. Use when: auditing technical claims, fact-checking chapter drafts against references/, verifying citations or bibliography entries, searching references for theorems/definitions/benchmarks, or answering where a specific concept is established in the literature."
+description: "Audit factual, mathematical, empirical, attribution, architectural, and taxonomic claims against reference PDFs in references/ using page-level BM25 search and on-demand page evidence verification. Use when: auditing technical claims, fact-checking chapter drafts against references/, verifying citations or bibliography entries, downloading references missing from references/ and refreshing the ground-truth index, searching references for theorems/definitions/benchmarks, or answering where a specific concept is established in the literature."
 ---
 
 # Ground-Truth Review
@@ -29,9 +29,23 @@ All indexing, search, and page-rendering tools execute using the repository Pyth
 
 ## Execution Procedure
 
+### Step 0: Sync references.bib with references/ (download missing PDFs, then refresh the index)
+Run this first whenever `references.bib` may have gained entries, or when the user asks to fetch references or update the ground-truth database:
+```bash
+.venv/bin/python .github/skills/ground-truth-review/scripts/fetch_references.py
+```
+The script uses paths relative to the project root and does the following:
+1. Checks that `references.bib` exists. If it does not, it says so and stops (there is nothing to download and the index is left as it is).
+2. Lists the entries whose `file =` field is empty or names a PDF that is not in `references/`.
+3. Tries **open, legitimate sources only** for each of them: a `pdf_url` field, a `url` field that points to a PDF, arXiv, ACL Anthology, Unpaywall (set `UNPAYWALL_EMAIL` to enable it) and OpenAlex (by DOI, then by title). It never uses shadow libraries (Sci-Hub, Anna's Archive and similar); do not add them.
+4. Keeps a download only if it is a readable PDF whose first pages contain most words of the title (scans, which have no text to check, are accepted only from sources tied to the work by an identifier or by `pdf_url`). The file is saved as `references/YYYY_surname_firstwords.pdf` and its name is written in the entry's `file =` field.
+5. Runs the index builder (adds the new PDFs, prunes removed ones). Pass `--no-index` to skip this.
+
+Options: `--dry-run` only lists what is missing, `--only <citekey> ...` restricts the run, `--bib` and `--references-dir` override the default locations. Entries that could not be found are listed at the end: ask the user for the PDF, or for a legal direct link that you can store in a `pdf_url` field (BibTeX ignores unknown fields), and run the script again. A reference without a PDF is reported as **unverifiable locally** (Step 5), not as an error of the draft.
+
 ### Step 1: Index Check / Build
 Verify that `references/.ground-index/index.sqlite` exists and is up to date. If the database file is missing or if `references/` has changed (PDFs added or removed):
-- Run the fast PyMuPDF index builder (indexes the full corpus in ~5 seconds):
+- Step 0 already refreshes the index. To rebuild it on its own, run the fast PyMuPDF index builder (indexes the full corpus in ~5 seconds):
   ```bash
   .venv/bin/python .github/skills/ground-truth-review/scripts/build_index.py
   ```

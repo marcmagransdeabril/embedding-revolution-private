@@ -53,3 +53,59 @@ DENSE = np.array([
 def distances(x: np.ndarray) -> np.ndarray:
     """Matrix of Euclidean distances between the rows of x."""
     return np.linalg.norm(x[:, None, :] - x[None, :, :], axis=-1)
+
+
+# Toy corpus of the Counting to Geometry section: one sentence per line, no punctuation. `xqzv` and `jwk`
+# occur only next to each other, so they carry no information about any other word.
+TOY_CORPUS = """the dawn breaks over the hills
+the dusk falls over the hills
+the dawn breaks over the sea
+the dusk falls over the sea
+the dawn breaks over the sea
+the king wears the crown
+the queen wears the crown
+the king rules the land
+the queen rules the land
+the king rules the land
+the xqzv jwk
+the jwk xqzv jwk
+the xqzv jwk jwk xqzv""".split("\n")
+
+
+def cooccurrence(sentences: list[list[str]], window: int = 1) -> tuple[list[str], np.ndarray]:
+    """Vocabulary (sorted) and symmetric matrix C with C[w, c] = number of times c lies within `window`
+    words of w, inside the same sentence."""
+    vocab = sorted({w for s in sentences for w in s})
+    index = {w: i for i, w in enumerate(vocab)}
+    counts = np.zeros((len(vocab), len(vocab)))
+    for s in sentences:
+        for i, w in enumerate(s):
+            for j in range(max(0, i - window), min(len(s), i + window + 1)):
+                if j != i:
+                    counts[index[w], index[s[j]]] += 1
+    return vocab, counts
+
+
+def ppmi(counts: np.ndarray, alpha: float = 1.0) -> np.ndarray:
+    """Positive pointwise mutual information in bits, max(0, log2 P(w,c) / (P(w) P_alpha(c))).
+    alpha < 1 smooths the context distribution P_alpha(c) ~ count(c)^alpha, which lowers the bonus
+    that very rare contexts get."""
+    total = counts.sum()
+    p_w = counts.sum(1) / total
+    p_c = counts.sum(0) ** alpha
+    p_c = p_c / p_c.sum()
+    with np.errstate(divide="ignore", invalid="ignore"):
+        pmi = np.log2(counts / total / np.outer(p_w, p_c))
+    return np.where(counts > 0, np.maximum(pmi, 0), 0)  # unseen pairs (PMI = -inf) and negative PMI become 0
+
+
+def truncated_svd(m: np.ndarray, d: int) -> np.ndarray:
+    """Rows of U_d Sigma_d (powers of Sigma: see the exercises): the d-dimensional embeddings of the rows of m."""
+    u, s, _ = np.linalg.svd(m)
+    return u[:, :d] * s[:d]
+
+
+def cosine(u: np.ndarray, v: np.ndarray) -> float:
+    """Cosine of the angle between u and v (0 if one of them is the zero vector)."""
+    n = np.linalg.norm(u) * np.linalg.norm(v)
+    return float(u @ v / n) if n else 0.0

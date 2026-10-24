@@ -221,4 +221,51 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
     | unless_huge | 0 | 0 | 71.6 | 50.1 | 0 |
 
     The distance is graded: `bubble_sort` and `insertion_sort` coincide, `identity` is nearer to the sorters than `sort_descending` is, and the groups have a structure that one-hot vectors could not express. But `bubble_sort` and `sort_unless_huge` are also at distance 0, although they are different functions: they disagree only on lists of 1,000 items or more, such as `list(range(1000, 0, -1))`, which none of the probes comes close to. A positive distance is a proof: any probe on which the two outputs differ, for example any list that is not already sorted for `bubble_sort` and `identity`, is a counterexample to equality that can be checked. A zero distance is only the absence of evidence, since finitely many probes cannot cover the infinitely many inputs. This is Rice's theorem seen from the side of embeddings: deciding whether two programs are the same function is impossible, but we can find differences by testing and obtain a graded similarity from the tests that survive, with no guarantee for the rest. Learned code embeddings do the same with a far richer notion of behaviour.
+
+15. The script `counting_ppmi_svd.py` does it. Count the neighbours inside each sentence, then convert to PPMI and truncate the SVD:
+
+    ```python
+    import numpy as np
+
+    sentences = [line.split() for line in corpus]       # the thirteen sentences
+    vocab = sorted({w for s in sentences for w in s})
+    index = {w: i for i, w in enumerate(vocab)}
+    C = np.zeros((len(vocab), len(vocab)))
+    for s in sentences:
+        for i in range(len(s) - 1):                      # window of one word, in both directions
+            C[index[s[i]], index[s[i + 1]]] += 1
+            C[index[s[i + 1]], index[s[i]]] += 1
+
+    N = C.sum()                                          # 108 pairs
+    pw, pc = C.sum(1) / N, C.sum(0) / N
+    with np.errstate(divide="ignore"):
+        pmi = np.log2(C / N / np.outer(pw, pc))          # -inf where C = 0
+    ppmi = np.where(C > 0, np.maximum(pmi, 0), 0)
+
+    u, s_, vt = np.linalg.svd(ppmi)
+    E = u[:, :5] * s_[:5]                                # embeddings, d = 5
+    ```
+
+    The row of `dawn` is `{breaks: 3, the: 3}` and that of `dusk` is `{falls: 2, the: 2}`. By hand, $N = 108$, `dawn` appears in 6 pairs, `breaks` in 6 and `the` in 33, so $\mathrm{PMI}(\text{dawn}, \text{breaks}) = \log_2 \frac{3/108}{(6/108)(6/108)} = \log_2 9 = 3.17$ bits, while $\mathrm{PMI}(\text{dawn}, \text{the}) = \log_2 \frac{3/108}{(6/108)(33/108)} = \log_2 1.64 = 0.71$ bits. The cosines of @tbl-counting follow: raw counts rank `dawn`–`king` (0.57) above `dawn`–`dusk` (0.50) because of `the`; PPMI removes that pull (0.05) but leaves `dawn` and `dusk` unrelated (0.04); the rank-5 embeddings give 1.00 for `dawn`–`dusk` and `king`–`queen`, 0.09 for `dawn`–`king` and 0.00 for `dawn`–`xqzv`. `breaks` and `falls` share only the neighbour `over`, so their cosine in the PPMI matrix is just 0.33, whereas in the rank-5 embeddings it is above 0.99: the factorization has merged the two axes, and with them `dawn` and `dusk`.
+
+16. The script `counting_book_svd.py` builds the $2000 \times 2000$ matrix by adding, for each distance $k = 1, 2$, the pairs of words that are $k$ positions apart (in both directions), computes the PPMI with `alpha=0.75` for the context probabilities, and takes the SVD with $d = 30$ (scaling the columns of $\mathbf{U}_d$ by $\sqrt{\sigma_i}$, which gives similar neighbours here). For *Pride and Prejudice* the nearest neighbours are:
+
+    | Word | Raw counts (top 5) | PPMI (top 5) | SVD, $d=30$ (top 8) |
+    |:---|:---|:---|:---|
+    | `sister` | mother, daughter, brother, own, father | friend, jane, my, brother, daughter | father, daughter, mother, cousin, aunt, friend, uncle, lydia |
+    | `morning` | day, house, evening, room, of | day, evening, saturday, hours, sentence | day, evening, next, week, last, passed, subject, whole |
+    | `darcy` | collins, bingley, wickham, jones, denny | mr, he, elizabeth, bingley, bennet | bingley, bennet, wickham, mr, gardiner, mrs, miss, collins |
+    | `london` | town, meryton, love, general, hertfordshire | bed, town, saturday, netherfield, gone | town, meryton, bed, came, brighton, cross, morrow, down |
+
+    The SVD gives the cleanest lists, but the margin is smaller than in the toy world, and the result is not perfect. Raw counts are dominated by frequent words (`own`, `of`, `house`, `room`); PPMI alone removes them but is noisy, since in a single novel many pairs are seen once or twice (`my`, `jane`, `bed`, `sentence`); and the SVD averages that noise away by keeping only the patterns that many words share. The remaining errors say what the similarity is: `lydia` is a sister in the novel, `bed` and `came` are what happens in and to `london` in this one book, and the neighbours of `darcy` are other characters and titles (`mr`, `mrs`, `miss`) rather than synonyms. The distributional hypothesis delivers words that occur in similar contexts, which includes substitutes (`mother` for `sister`) and associates (`bed` for `london`), and a corpus of 128,000 words is small: the lists improve with more text.
+
+17. The script `counting_eckart_young.py` computes the error and checks the identity with `np.isclose`, and compares it with the projection $\mathbf{Q}\mathbf{Q}^\top\mathbf{M}$ onto 1,000 random $d$-dimensional subspaces ($\mathbf{Q}$ comes from a QR decomposition of a Gaussian matrix):
+
+    | $d$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+    |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    | $\|\mathbf{M}-\mathbf{M}_d\|_F$ | 11.93 | 10.74 | 9.56 | 8.24 | 7.05 | 6.13 | 5.07 | 3.86 |
+    | best random subspace | 12.31 | 11.60 | 11.18 | 10.48 | 9.85 | 9.33 | 8.65 | 7.97 |
+    | cosine(`dawn`, `dusk`) | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | 0.48 | 0.10 | 0.04 |
+
+    The truncated SVD is always better than the best of 1,000 random subspaces, as Eckart–Young predicts, and its error falls steadily to zero at $d = 12$, the rank of the matrix. A smaller error is not a better embedding, though. The error measures how faithfully $\mathbf{M}_d$ copies $\mathbf{M}$, and $\mathbf{M}$ is the evidence, not the truth: it records that `dawn` was followed by `breaks` and `dusk` by `falls`, a difference of the sample. The approximation that generalizes is the one that ignores it, which happens at $d \le 5$; from $d = 6$ the model starts to reproduce the idiosyncrasies of the corpus and `dawn` and `dusk` move apart. This is the usual trade-off between fit and generalization, and in practice $d$ is chosen by evaluating the embeddings on a task and not by the reconstruction error.
 :::
