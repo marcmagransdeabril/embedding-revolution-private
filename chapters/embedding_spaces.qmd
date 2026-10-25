@@ -255,7 +255,7 @@ In our world `dawn` stands next to `breaks` nine times more often than chance, $
 
 : Cosine similarity of four pairs of words in the toy world, for raw counts and for PPMI. {#tbl-counting}
 
-The second column of @tbl-counting shows the effect. The pull of `the` is gone, and `dawn` is no longer close to `king` (0.05). But `dawn` and `dusk` have also drifted apart (0.04), because they never stand next to the same informative word: one is followed by `breaks` and the other by `falls`. We have reweighted the counts and kept the geometry of the one-hot vectors, rows that are long, sparse and nearly orthogonal. Yet `dawn` and `dusk` should be alike, since both appear in the same kind of sentence. The next section shows how to make a matrix discover it.
+The second column of @tbl-counting shows the effect. The pull of `the` is gone, and `dawn` is no longer close to `king` (0.05). But `dawn` and `dusk` have also drifted apart (0.04), because they never stand next to the same informative word: one is followed by `breaks` and the other by `falls`. We have reweighted the counts and kept the geometry of the one-hot vectors, rows that are long, sparse and nearly orthogonal. Yet `dawn` and `dusk` should be alike, since both appear in the same kind of sentence. What can we do to fix this? 
 
 ::: {.questions}
 1. Using the thirteen sentences of this section, build the co-occurrence matrix with a window of one word and the PPMI matrix with `numpy`, and reproduce @tbl-counting. Print the rows of `dawn` and `dusk` of $\mathbf{C}$ and compute $\mathrm{PMI}(\text{dawn}, \text{breaks})$ and $\mathrm{PMI}(\text{dawn}, \text{the})$ by hand. Which pair does PPMI fail to bring together, and why?
@@ -265,7 +265,7 @@ The second column of @tbl-counting shows the effect. The pull of `the` is gone, 
 
 ## From Counting to Geometry
 
-The PPMI matrix keeps `dawn` and `dusk` apart because one is followed by `breaks` and the other by `falls`. Look at the rows of `breaks` and `falls` in @tbl-cooc-over, restricted to the three columns where they have non-zero counts:
+The PPMI matrix of the previous section keeps `dawn` and `dusk` apart because one is followed by `breaks` and the other by `falls`. But, if we look at the rows of `breaks` and `falls` in @tbl-cooc-over, restricted to the three columns where they have non-zero counts:
 
 | | `dawn` | `dusk` | `over` |
 |:---|:---:|:---:|:---:|
