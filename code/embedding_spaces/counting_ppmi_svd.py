@@ -1,4 +1,4 @@
-"""From Counting to Geometry, question 1: co-occurrence counts, PPMI and truncated SVD on the toy corpus."""
+"""Counting Company question 1 and From Counting to Geometry question 1: co-occurrence counts, PPMI and truncated SVD on the toy corpus."""
 import numpy as np
 
 from utils import TOY_CORPUS, cooccurrence, cosine, ppmi, truncated_svd

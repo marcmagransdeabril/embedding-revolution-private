@@ -196,13 +196,13 @@ Just as the previous section associated vectors with words, we can associate num
 3. Compare two ways of representing five programs: `bubble_sort`, `insertion_sort`, `sort_descending`, `identity` and `sort_unless_huge`, which sorts any list with fewer than 1,000 items and returns longer ones unchanged. In the first, each program is a symbol, a one-hot vector. In the second, it is the vector of its outputs on 30 random lists of 6 digits, concatenated. Compute the matrix of Euclidean distances for both representations. What does each say about `bubble_sort` and `insertion_sort`, and about `bubble_sort` and `sort_unless_huge`? Find an input that proves two of the programs different, and explain why a distance of zero between two programs proves nothing while a positive distance proves something. How does this connect to Rice's theorem?
 :::
 
-## From Counting to Geometry
+## Counting Company: Co-occurrence and Mutual Information
 
-Both the Orthogonal Catastrophe and Rice's Theorem expose the limits of one-hot representations: every symbol is equally far from every other, and exact meaning cannot be computed. The alternative is to describe a symbol by a pattern spread across many continuous dimensions. The idea is older than it looks. In 1986 Geoffrey Hinton contrasted two ways in which a neural network can represent concepts [@hinton1986learning]. In the *localist* representation each concept is a single unit, which is the one-hot vector under another name. In the *distributed* representation a concept is a pattern of activity over many units, and each unit takes part in many concepts. Its advantage, he argued, is automatic generalization: when the weights change to absorb something new about one concept, the change also affects every concept whose pattern is similar. This is the transfer that the one-hot model of the previous section could not deliver and the dense vectors could, in exercise 2 of that section: `dusk` got a probability of 0.98 of being a time of day without ever appearing in the training set.
+Both the Orthogonal Catastrophe and Rice's theorem expose the limits of one-hot representations: every symbol is equally far from every other, and exact meaning cannot be computed. The alternative is to describe a symbol by a pattern spread across many continuous dimensions. The idea is older than it looks. In 1986 Geoffrey Hinton contrasted two ways in which a neural network can represent concepts [@hinton1986learning]. In the *localist* representation each concept is a single unit, which is the one-hot vector under another name. In the *distributed* representation a concept is a pattern of activity over many units, and each unit takes part in many concepts. Its advantage, he argued, is automatic generalization: when the weights change to absorb something new about one concept, the change also affects every concept whose pattern is similar. This is the transfer that the one-hot model of the Orthogonal Catastrophe could not deliver and the dense vectors could, in exercise 2 of that section: `dusk` got a probability of 0.98 of being a time of day without ever appearing in the training set. Counting, the subject of this section, is the first step towards such patterns for words; the next section turns the counts into dense vectors.
 
-For words we have a problem. The dense table of the previous section was written by hand, by someone who already knew what `dawn` and `dusk` mean, which is a circular recipe, and no one can write one for 50,000 words. We need a source of meaning that requires no human annotator. Firth's slogan, "you shall know a word by the company it keeps", points to one, because company is something a machine can count.
+For words we have a problem. The dense table of the Orthogonal Catastrophe was written by hand, by someone who already knew what `dawn` and `dusk` mean, which is a circular recipe, and no one can write one for 50,000 words. We need a source of meaning that requires no human annotator. Firth's slogan, "you shall know a word by the company it keeps", points to one, because company is something a machine can count.
 
-Here is a toy world of thirteen sentences, one per line. Ten describe a sky and a court, and the last three contain the meaningless `xqzv` and a companion `jwk`, which stand only next to each other and to `the`:
+Here is a toy world of thirteen sentences, laid out in two columns. Ten describe a sky and a court, and the last three contain the meaningless `xqzv` and a companion `jwk`, which stand only next to each other, to themselves and to `the`:
 
 ```
 the dawn breaks over the hills      the king wears the crown
@@ -214,17 +214,29 @@ the xqzv jwk                        the jwk xqzv jwk
 the xqzv jwk jwk xqzv
 ```
 
-Fix a window of one word on each side, and let $C_{wc}$ be the number of times the word $c$ appears immediately before or immediately after the word $w$, counting both sides together. Since the window is symmetric, $C_{wc} = C_{cw}$, and the matrix forgets the order: `the dawn` and `dawn the` add the same count. This is unrealistic, because in a real language the left and right neighbours play different roles (an article comes before its noun, a verb after its subject), and a richer model would count the two sides separately; we merge them for simplicity. Given the set $V$ of words, the result is a $|V| \times |V|$ matrix $\mathbf{C}$, of size $16 \times 16$ here, and the row of $w$ is a vector with one entry per word of the vocabulary: a profile of its neighbours, where the one-hot vector had a single 1 at the position of the word itself. The row of `dawn` has two non-zero entries, `breaks` (3 times) and `the` (3 times), and that of `dusk` has `falls` (2) and `the` (2). Their cosine similarity, the dot product of the two rows divided by the product of their lengths (the cosine of the angle between them: 1 if they point in the same direction, 0 if they are orthogonal), is $6/(\sqrt{18}\sqrt{8}) = 0.50$, all of it contributed by `the`. We will follow the cosine of four pairs of words through three representations of the same corpus, collected in @tbl-counting at the end of this derivation. Raw counts get `king` and `queen` right (0.98), but they put `dawn` closer to `king` (0.57) than to `dusk` (0.50), and even give it some similarity to the meaningless `xqzv` (0.26). The culprit is `the`, which stands next to everything, so that sharing it says almost nothing.
+Fix a window of one word on each side, and let $C_{wc}$ be the number of times the word $c$ appears immediately before or immediately after the word $w$, counting both sides together. Since the window is symmetric, $C_{wc} = C_{cw}$, and the matrix forgets the order: `the dawn` and `dawn the` add the same count. In a real language the left and right neighbours play different roles (an article comes before its noun, a verb after its subject), so merging them loses the direction. That matters for syntax but little for similarity, which is what we are after, and question 2 shows the cost; a richer model would count the two sides separately. Given the set $V$ of words, the result is a $|V| \times |V|$ matrix $\mathbf{C}$, of size $16 \times 16$ here, and the row of $w$ is a vector with one entry per word of the vocabulary: a profile of its neighbours, where the one-hot vector had a single 1 at the position of the word itself. @tbl-cooc shows the rows of five words, restricted to the six columns where any of them has a non-zero count.
 
-Raw counts fail because they ignore how common each neighbour is. A more fundamental way to measure how related two words are is Shannon's: how much does seeing one of them tell us about the other? Pick a pair of adjacent words at random, and call $W$ the first and $C$ the second. If they were independent, the pair $(w,c)$ would appear with probability $P(w)\,P(c)$, the product of the probabilities of each word. The information that this particular pair gives about the relation between the two words is the log-ratio of what we observe to what independence predicts, the **pointwise mutual information** (PMI):
+| | `the` | `breaks` | `falls` | `wears` | `rules` | `jwk` |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| `dawn` | 3 | 3 | 0 | 0 | 0 | 0 |
+| `dusk` | 2 | 0 | 2 | 0 | 0 | 0 |
+| `king` | 3 | 0 | 0 | 1 | 2 | 0 |
+| `queen` | 2 | 0 | 0 | 1 | 1 | 0 |
+| `xqzv` | 2 | 0 | 0 | 0 | 0 | 5 |
+
+: Rows of the co-occurrence matrix $\mathbf{C}$ for five words of the toy world. {#tbl-cooc}
+
+The row of `dawn` has two non-zero entries, `breaks` (3 times) and `the` (3 times), and that of `dusk` has `falls` (2) and `the` (2). Their cosine similarity, the dot product of the two rows divided by the product of their lengths (the cosine of the angle between them: 1 if they point in the same direction, 0 if they are orthogonal, and never negative for counts, which cannot be negative), is $6/(\sqrt{18}\sqrt{8}) = 0.50$, all of it contributed by `the`. The first column of @tbl-counting, further below, gives the cosine of four pairs of words. Raw counts get `king` and `queen` right (0.98), but they put `dawn` closer to `king` (0.57) than to `dusk` (0.50), and even give it some similarity to the meaningless `xqzv` (0.26). The culprit is `the`, which stands next to everything, so that sharing it says almost nothing.
+
+Raw counts fail because they ignore how common each neighbour is. A more fundamental way to measure how related two words are is Shannon's: how much does seeing one of them tell us about the other? Pick at random one of the pairs counted in $\mathbf{C}$: a word $W$ and one of its neighbours $W'$. If they were independent, the pair $(w,c)$ would appear with probability $P(w)\,P(c)$, the product of the probabilities of each word. The log-ratio of what we observe to what independence predicts is the **pointwise mutual information** (PMI):
 
 $$
-\mathrm{PMI}(w,c) = \log_2 \frac{P(w,c)}{P(w)\,P(c)}.
+\mathrm{PMI}(w,c) = \log_2 \frac{P(w,c)}{P(w)\,P(c)} = \log_2 \frac{P(c \mid w)}{P(c)}.
 $$
 
-It is zero if $w$ and $c$ are independent, positive if they attract each other, and negative if they avoid each other. Averaged over all the pairs, weighted by $P(w,c)$, it gives Shannon's mutual information between $W$ and $C$; we need only the value for a single pair, which Church and Hanks used to find word associations for lexicography [@church1990word].
+The second form reads it as information: the number of bits by which knowing that the neighbour of $c$ is $w$ changes the probability of $c$. It is zero if $w$ and $c$ are independent, positive if they attract each other, and negative if they avoid each other. Averaged over all the pairs, weighted by $P(w,c)$, it gives Shannon's mutual information between $W$ and $W'$; we need only the value for a single pair, which Church and Hanks used to find word associations for lexicography [@church1990word].
 
-The true probabilities are unknown, but we can estimate them by the relative frequencies in the corpus. Let $N = \sum_{w,c} C_{wc}$ be the total number of pairs. We estimate can estimate the joint and marginal probabilities of wordsas follows:
+The true probabilities are unknown, but we can estimate them by the relative frequencies in the corpus. Let $N = \sum_{w,c} C_{wc}$ be the total number of pairs. The estimates are
 
 $$
 \hat{P}(w,c) = \frac{C_{wc}}{N}, \qquad \hat{P}(w) = \frac{\sum_c C_{wc}}{N}, \qquad \hat{P}(c) = \frac{\sum_w C_{wc}}{N},
@@ -234,9 +246,35 @@ where the marginals are the sums of the rows and the columns of the matrix, divi
 
 In our world `dawn` stands next to `breaks` nine times more often than chance, $\mathrm{PMI} = \log_2 9 = 3.17$ bits, but next to `the` only 1.64 times more often, 0.71 bits. A pair that never occurs has $\mathrm{PMI} = -\infty$, and a negative value estimated from a handful of counts is hardly more reliable, so the usual remedy is to keep only the positive evidence, the **positive PMI** (PPMI), $\mathrm{PPMI}(w,c) = \max(0, \mathrm{PMI}(w,c))$.
 
-The second column of @tbl-counting, further below, shows the effect. The pull of `the` is gone, and `dawn` is no longer close to `king` (0.05). But `dawn` and `dusk` have also drifted apart (0.04), because they never stand next to the same informative word: one is followed by `breaks` and the other by `falls`. We have fixed the weights and kept the geometry of the previous section, rows that are long, sparse and nearly orthogonal.
+| Pair | Counts | PPMI |
+|:---|:---:|:---:|
+| `dawn`–`dusk` | 0.50 | 0.04 |
+| `king`–`queen` | 0.98 | 0.98 |
+| `dawn`–`king` | 0.57 | 0.05 |
+| `dawn`–`xqzv` | 0.26 | 0.00 |
 
-Look at the matrix again. The words `breaks` and `falls` have different rows, but both stand next to `over`, so they play the same role, and if `dawn` is followed by one and `dusk` by the other, then `dawn` and `dusk` should be alike. To discover this, a matrix must be forced to describe its rows with fewer patterns than it has columns. The **singular value decomposition** (SVD) does it: any matrix $\mathbf{M}$ can be written as $\mathbf{M} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top$, where $\mathbf{U}$ and $\mathbf{V}$ have orthonormal columns and $\mathbf{\Sigma}$ is diagonal, with singular values $\sigma_1 \ge \sigma_2 \ge \dots \ge 0$. Keeping only the first $d$ gives $\mathbf{M}_d = \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$. The Eckart–Young theorem [@eckart1936approximation, pp. 211-218] says that among all matrices of rank at most $d$, $\mathbf{M}_d$ is the closest to $\mathbf{M}$, and that its error, in the Frobenius norm, is $\sqrt{\sum_{i>d} \sigma_i^2}$. The decomposition does not need to be invented for words: Deerwester and colleagues had applied it to the matrix of words by documents in 1990 and called it latent semantic analysis [@deerwester1990indexing].
+: Cosine similarity of four pairs of words in the toy world, for raw counts and for PPMI. {#tbl-counting}
+
+The second column of @tbl-counting shows the effect. The pull of `the` is gone, and `dawn` is no longer close to `king` (0.05). But `dawn` and `dusk` have also drifted apart (0.04), because they never stand next to the same informative word: one is followed by `breaks` and the other by `falls`. We have reweighted the counts and kept the geometry of the one-hot vectors, rows that are long, sparse and nearly orthogonal. Yet `dawn` and `dusk` should be alike, since both appear in the same kind of sentence. The next section shows how to make a matrix discover it.
+
+::: {.questions}
+1. Using the thirteen sentences of this section, build the co-occurrence matrix with a window of one word and the PPMI matrix with `numpy`, and reproduce @tbl-counting. Print the rows of `dawn` and `dusk` of $\mathbf{C}$ and compute $\mathrm{PMI}(\text{dawn}, \text{breaks})$ and $\mathrm{PMI}(\text{dawn}, \text{the})$ by hand. Which pair does PPMI fail to bring together, and why?
+
+2. Download a book as plain text from the Internet (for example, from Project Gutenberg) and count its co-occurrences with a window of one word, as in this section. Use the estimates $\hat{P}(w,c)$ to generate text as a Markov chain: starting from a word $w$, draw the next word $c$ with probability $\hat{P}(c \mid w) = \hat{P}(w,c)/\hat{P}(w)$, then continue from $c$. Generate thirty words. Then count only the word that *follows* each word, as in the $n = 1$ model of the exercise in Shannon's Boundary Problem, and generate thirty words again. Which text reads better, and what does the difference say about what the matrix $\mathbf{C}$ has lost?
+:::
+
+## From Counting to Geometry
+
+The PPMI matrix keeps `dawn` and `dusk` apart because one is followed by `breaks` and the other by `falls`. Look at the rows of `breaks` and `falls` in @tbl-cooc-over, restricted to the three columns where they have non-zero counts:
+
+| | `dawn` | `dusk` | `over` |
+|:---|:---:|:---:|:---:|
+| `breaks` | 3 | 0 | 3 |
+| `falls` | 0 | 2 | 2 |
+
+: Rows of $\mathbf{C}$ for `breaks` and `falls`. {#tbl-cooc-over}
+
+The rows are different, because one word stands next to `dawn` and the other next to `dusk`, but both stand next to `over`, so they play the same role, and if `dawn` is followed by one and `dusk` by the other, then `dawn` and `dusk` should be alike. To discover this, a matrix must be forced to describe its rows with fewer patterns than it has columns. The **singular value decomposition** (SVD) does it: any matrix $\mathbf{M}$ can be written as $\mathbf{M} = \mathbf{U}\mathbf{\Sigma}\mathbf{V}^\top$, where $\mathbf{U}$ and $\mathbf{V}$ have orthonormal columns and $\mathbf{\Sigma}$ is diagonal, with singular values $\sigma_1 \ge \sigma_2 \ge \dots \ge 0$. Keeping only the first $d$ gives $\mathbf{M}_d = \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$. The Eckart–Young theorem [@eckart1936approximation, pp. 211-218] says that among all matrices of rank at most $d$, $\mathbf{M}_d$ is the closest to $\mathbf{M}$, and that its error, in the Frobenius norm, is $\sqrt{\sum_{i>d} \sigma_i^2}$. The decomposition does not need to be invented for words: Deerwester and colleagues had applied it to the matrix of words by documents in 1990 and called it latent semantic analysis [@deerwester1990indexing].
 
 Take $\mathbf{M}$ to be the PPMI matrix and define
 
@@ -244,16 +282,16 @@ $$
 \mathbf{E} = \mathbf{U}_d \mathbf{\Sigma}_d \in \mathbb{R}^{|V| \times d}.
 $$
 
-This is the matrix $\mathbf{E}$ of the previous section, whose rows are the embeddings, with one difference: nobody chose its values. Since $\mathbf{E}\mathbf{E}^\top = \mathbf{M}_d \mathbf{M}_d^\top$, the dot product of two embeddings is the dot product of the corresponding rows of the best rank-$d$ approximation of $\mathbf{M}$, so two words are close when the same $d$ patterns explain their neighbours. The third column of @tbl-counting is the result for $d = 5$: `dawn` and `dusk` have a cosine of 1.00, `king` and `queen` 1.00, and `dawn` is far from `king` and from the meaningless `xqzv`. The mechanism is the one we guessed: in the same embedding, `breaks` and `falls` have a cosine above 0.99.
+This is the matrix $\mathbf{E}$ of the Orthogonal Catastrophe, whose rows are the embeddings, with one difference: nobody chose its values. Since $\mathbf{E}\mathbf{E}^\top = \mathbf{M}_d \mathbf{M}_d^\top$, the dot product of two embeddings is the dot product of the corresponding rows of the best rank-$d$ approximation of $\mathbf{M}$, so two words are close when the same $d$ patterns explain their neighbours. The second column of @tbl-svd is the result for $d = 5$: `dawn` and `dusk` have a cosine of 1.00, `king` and `queen` 1.00, and `dawn` is far from `king` and from the meaningless `xqzv`. The mechanism is the one we guessed: in the same embedding, `breaks` and `falls` have a cosine above 0.99.
 
-| Pair | Counts | PPMI | SVD, $d=5$ |
-|:---|:---:|:---:|:---:|
-| `dawn`–`dusk` | 0.50 | 0.04 | **1.00** |
-| `king`–`queen` | 0.98 | 0.98 | **1.00** |
-| `dawn`–`king` | 0.57 | 0.05 | 0.09 |
-| `dawn`–`xqzv` | 0.26 | 0.00 | 0.00 |
+| Pair | PPMI | SVD, $d=5$ |
+|:---|:---:|:---:|
+| `dawn`–`dusk` | 0.04 | **1.00** |
+| `king`–`queen` | 0.98 | **1.00** |
+| `dawn`–`king` | 0.05 | 0.09 |
+| `dawn`–`xqzv` | 0.00 | 0.00 |
 
-: Cosine similarity of four pairs of words in the toy world, for three representations of the same corpus. {#tbl-counting}
+: Cosine similarity of the same four pairs of words, for the PPMI matrix and for its rank-5 SVD embeddings. {#tbl-svd}
 
 The dimension $d$ is a dial, and it is easy to see what happens at both ends. With $d = 1$ every word is described by its position along the dominant pattern and everything looks alike, even `dawn` and `king`. At $d = 2$ the cosine between them is still 0.59, and from $d = 3$ to $d = 5$ it stays between 0.09 and 0.13, while that of `dawn` and `dusk` remains at 1.00. Beyond that, the extra directions are spent on the remaining differences between the two words: at $d = 6$ the cosine drops to 0.48, at $d = 8$ to 0.04, and at $d = 12$, the rank of this matrix, we recover the PPMI matrix exactly, and with it all its distinctions. Low rank is not a compromise that we accept to save memory; it is the mechanism. Compression forces the model to find what the rows have in common, and what they have in common is what generalizes.
 
@@ -262,7 +300,7 @@ The same recipe works on a real text. We counted the neighbours within two words
 This is a first embedding that was computed rather than written, and it comes with the costs of its method. The matrix $\mathbf{C}$ has $|V|^2$ entries, ten billion for a vocabulary of 100,000 words, and the SVD needs it complete before it can start, so that new text means starting again. In the next section we meet a family of models that never build this matrix. They walk through the text and learn to predict, and, as we will see, what they end up computing is very close to the matrix we have just factored.
 
 ::: {.questions}
-1. Using the thirteen sentences of this section, build the co-occurrence matrix with a window of one word, then the PPMI matrix and its SVD with `numpy`, and reproduce @tbl-counting. Print the rows of `dawn` and `dusk` of $\mathbf{C}$ and compute $\mathrm{PMI}(\text{dawn}, \text{breaks})$ and $\mathrm{PMI}(\text{dawn}, \text{the})$ by hand. Then check the claim that `breaks` and `falls` become similar: what is their cosine in the PPMI matrix and in the embeddings with $d = 5$?
+1. Take the PPMI matrix of the thirteen sentences and compute its SVD with `numpy`. Reproduce the second column of @tbl-svd with $d = 5$. Then check the claim that `breaks` and `falls` become similar: what is their cosine in the PPMI matrix and in the embeddings with $d = 5$?
 
 2. Repeat the experiment on a real book: take the 2,000 most frequent words, count the neighbours within a window of two words, compute the PPMI with the context distribution raised to the power 0.75, and factor it with $d = 30$. For `sister`, `morning`, `darcy` and `london`, list the nearest neighbours by cosine in three representations: raw counts, PPMI and SVD. Which representation gives the cleanest lists, which words in them are not similar in meaning, and why?
 
@@ -271,7 +309,7 @@ This is a first embedding that was computed rather than written, and it comes wi
 
 ## Learning by Prediction
 
-*Plan (3–4 pages).* Word2Vec skip-gram with negative sampling: predict the context of a word and minimize a cross-entropy, Shannon's second quantity. Levy and Goldberg's result [@levy2014neural] that SGNS implicitly factors the shifted PMI matrix of the previous section, so counting and predicting are two routes to the same geometry. One paragraph on GloVe as the explicit regression on log co-occurrences [@pennington2014glove], and one on contextual embeddings in Transformers, where the vector of a word depends on its sentence. Exercises: train a tiny SGNS model and compare its vectors with the SVD ones.
+*Plan (3–4 pages).* Word2Vec skip-gram with negative sampling: predict the context of a word and minimize a cross-entropy, Shannon's second quantity. Levy and Goldberg's result [@levy2014neural] that SGNS implicitly factors the shifted PMI matrix of the last two sections, so counting and predicting are two routes to the same geometry. One paragraph on GloVe as the explicit regression on log co-occurrences [@pennington2014glove], and one on contextual embeddings in Transformers, where the vector of a word depends on its sentence. Exercises: train a tiny SGNS model and compare its vectors with the SVD ones.
 
 ## Learning by Contrast
 

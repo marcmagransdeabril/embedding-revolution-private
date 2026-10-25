@@ -222,7 +222,7 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
 
     The distance is graded: `bubble_sort` and `insertion_sort` coincide, `identity` is nearer to the sorters than `sort_descending` is, and the groups have a structure that one-hot vectors could not express. But `bubble_sort` and `sort_unless_huge` are also at distance 0, although they are different functions: they disagree only on lists of 1,000 items or more, such as `list(range(1000, 0, -1))`, which none of the probes comes close to. A positive distance is a proof: any probe on which the two outputs differ, for example any list that is not already sorted for `bubble_sort` and `identity`, is a counterexample to equality that can be checked. A zero distance is only the absence of evidence, since finitely many probes cannot cover the infinitely many inputs. This is Rice's theorem seen from the side of embeddings: deciding whether two programs are the same function is impossible, but we can find differences by testing and obtain a graded similarity from the tests that survive, with no guarantee for the rest. Learned code embeddings do the same with a far richer notion of behaviour.
 
-15. The script `counting_ppmi_svd.py` does it. Count the neighbours inside each sentence, then convert to PPMI and truncate the SVD:
+15. The script `counting_ppmi_svd.py` does it. Count the neighbours inside each sentence, then convert to PPMI:
 
     ```python
     import numpy as np
@@ -241,14 +241,42 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
     with np.errstate(divide="ignore"):
         pmi = np.log2(C / N / np.outer(pw, pc))          # -inf where C = 0
     ppmi = np.where(C > 0, np.maximum(pmi, 0), 0)
+    ```
 
+    The row of `dawn` is `{breaks: 3, the: 3}` and that of `dusk` is `{falls: 2, the: 2}`. By hand, $N = 108$, `dawn` appears in 6 pairs, `breaks` in 6 and `the` in 33, so $\mathrm{PMI}(\text{dawn}, \text{breaks}) = \log_2 \frac{3/108}{(6/108)(6/108)} = \log_2 9 = 3.17$ bits, while $\mathrm{PMI}(\text{dawn}, \text{the}) = \log_2 \frac{3/108}{(6/108)(33/108)} = \log_2 1.64 = 0.71$ bits. The cosines of @tbl-counting follow: raw counts rank `dawn`–`king` (0.57) above `dawn`–`dusk` (0.50) because of `the`; PPMI removes that pull (0.05) but leaves `dawn` and `dusk` unrelated (0.04), because they never stand next to the same informative word: one is followed by `breaks` and the other by `falls`. The pair that PPMI fails to bring together is `dawn`–`dusk`.
+
+16. The script `counting_markov_text.py` counts the neighbours of every word of *Pride and Prejudice* in two ways, with a symmetric window (`c` right before or right after `w`, the matrix $\mathbf{C}$ of this section) and with a directed one (`c` right after `w`), and runs the chain:
+
+    ```python
+    import random
+    from collections import Counter, defaultdict
+
+    counts = defaultdict(Counter)
+    for w, c in zip(words, words[1:]):
+        counts[w][c] += 1
+        if symmetric:
+            counts[c][w] += 1                      # the matrix forgets the order
+
+    def generate(start, length):
+        out = [start]
+        while len(out) < length:
+            row = counts[out[-1]]                  # drawing from the row with weights C[w, c] is drawing from P(c | w)
+            out += random.choices(list(row), weights=row.values())
+        return out
+    ```
+
+    Dividing $\hat{P}(w,c) = C_{wc}/N$ by $\hat{P}(w)$ cancels $N$, so the chain needs only the row of the current word. With the symmetric counts, a run starting at `the` gives "the door it was attending of their sight of score the sir dear my comparative height comparative their indulged and it pleased with me showed me but bingley when she", and with the directed counts "the beautiful grounds of lamentations resounding perpetually talked to mr collins begins to know no opinion i am the old friends this she will carry everything worse timed there is". Neither is a meaningful sentence, but the second has stretches of plausible English ("talked to mr collins", "i am the old friends"), while the first has hardly any ("of score the sir", "comparative height comparative"). The reason is that the symmetric chain can step backwards as well as forwards: over 2,000 generated words, only 63% of the pairs of consecutive words stand in that order in the book, against 100% for the directed chain, which can only follow transitions that occur. A symmetric matrix cannot tell "the king" from "king the", so it keeps which words are neighbours and loses the direction in which they are. That is enough to compare the contexts of words, which is why it works for embeddings, and not enough to produce sentences.
+
+17. Take the `ppmi` matrix of the counting and PPMI exercise and truncate its SVD (script `counting_ppmi_svd.py`):
+
+    ```python
     u, s_, vt = np.linalg.svd(ppmi)
     E = u[:, :5] * s_[:5]                                # embeddings, d = 5
     ```
 
-    The row of `dawn` is `{breaks: 3, the: 3}` and that of `dusk` is `{falls: 2, the: 2}`. By hand, $N = 108$, `dawn` appears in 6 pairs, `breaks` in 6 and `the` in 33, so $\mathrm{PMI}(\text{dawn}, \text{breaks}) = \log_2 \frac{3/108}{(6/108)(6/108)} = \log_2 9 = 3.17$ bits, while $\mathrm{PMI}(\text{dawn}, \text{the}) = \log_2 \frac{3/108}{(6/108)(33/108)} = \log_2 1.64 = 0.71$ bits. The cosines of @tbl-counting follow: raw counts rank `dawn`–`king` (0.57) above `dawn`–`dusk` (0.50) because of `the`; PPMI removes that pull (0.05) but leaves `dawn` and `dusk` unrelated (0.04); the rank-5 embeddings give 1.00 for `dawn`–`dusk` and `king`–`queen`, 0.09 for `dawn`–`king` and 0.00 for `dawn`–`xqzv`. `breaks` and `falls` share only the neighbour `over`, so their cosine in the PPMI matrix is just 0.33, whereas in the rank-5 embeddings it is above 0.99: the factorization has merged the two axes, and with them `dawn` and `dusk`.
+    The rank-5 embeddings give 1.00 for `dawn`–`dusk` and `king`–`queen`, 0.09 for `dawn`–`king` and 0.00 for `dawn`–`xqzv` (second column of @tbl-svd). `breaks` and `falls` share only the neighbour `over`, so their cosine in the PPMI matrix is just 0.33, whereas in the rank-5 embeddings it is above 0.99: the factorization has merged the two axes, and with them `dawn` and `dusk`.
 
-16. The script `counting_book_svd.py` builds the $2000 \times 2000$ matrix by adding, for each distance $k = 1, 2$, the pairs of words that are $k$ positions apart (in both directions), computes the PPMI with `alpha=0.75` for the context probabilities, and takes the SVD with $d = 30$ (scaling the columns of $\mathbf{U}_d$ by $\sqrt{\sigma_i}$, which gives similar neighbours here). For *Pride and Prejudice* the nearest neighbours are:
+18. The script `counting_book_svd.py` builds the $2000 \times 2000$ matrix by adding, for each distance $k = 1, 2$, the pairs of words that are $k$ positions apart (in both directions), computes the PPMI with `alpha=0.75` for the context probabilities, and takes the SVD with $d = 30$ (scaling the columns of $\mathbf{U}_d$ by $\sqrt{\sigma_i}$, which gives similar neighbours here). For *Pride and Prejudice* the nearest neighbours are:
 
     | Word | Raw counts (top 5) | PPMI (top 5) | SVD, $d=30$ (top 8) |
     |:---|:---|:---|:---|
@@ -259,7 +287,7 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
 
     The SVD gives the cleanest lists, but the margin is smaller than in the toy world, and the result is not perfect. Raw counts are dominated by frequent words (`own`, `of`, `house`, `room`); PPMI alone removes them but is noisy, since in a single novel many pairs are seen once or twice (`my`, `jane`, `bed`, `sentence`); and the SVD averages that noise away by keeping only the patterns that many words share. The remaining errors say what the similarity is: `lydia` is a sister in the novel, `bed` and `came` are what happens in and to `london` in this one book, and the neighbours of `darcy` are other characters and titles (`mr`, `mrs`, `miss`) rather than synonyms. The distributional hypothesis delivers words that occur in similar contexts, which includes substitutes (`mother` for `sister`) and associates (`bed` for `london`), and a corpus of 128,000 words is small: the lists improve with more text.
 
-17. The script `counting_eckart_young.py` computes the error and checks the identity with `np.isclose`, and compares it with the projection $\mathbf{Q}\mathbf{Q}^\top\mathbf{M}$ onto 1,000 random $d$-dimensional subspaces ($\mathbf{Q}$ comes from a QR decomposition of a Gaussian matrix):
+19. The script `counting_eckart_young.py` computes the error and checks the identity with `np.isclose`, and compares it with the projection $\mathbf{Q}\mathbf{Q}^\top\mathbf{M}$ onto 1,000 random $d$-dimensional subspaces ($\mathbf{Q}$ comes from a QR decomposition of a Gaussian matrix):
 
     | $d$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
     |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
