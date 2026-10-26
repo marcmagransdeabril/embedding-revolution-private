@@ -222,7 +222,7 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
 
     The distance is graded: `bubble_sort` and `insertion_sort` coincide, `identity` is nearer to the sorters than `sort_descending` is, and the groups have a structure that one-hot vectors could not express. But `bubble_sort` and `sort_unless_huge` are also at distance 0, although they are different functions: they disagree only on lists of 1,000 items or more, such as `list(range(1000, 0, -1))`, which none of the probes comes close to. A positive distance is a proof: any probe on which the two outputs differ, for example any list that is not already sorted for `bubble_sort` and `identity`, is a counterexample to equality that can be checked. A zero distance is only the absence of evidence, since finitely many probes cannot cover the infinitely many inputs. This is Rice's theorem seen from the side of embeddings: deciding whether two programs are the same function is impossible, but we can find differences by testing and obtain a graded similarity from the tests that survive, with no guarantee for the rest. Learned code embeddings do the same with a far richer notion of behaviour.
 
-15. The script `counting_ppmi_svd.py` does it. Count the neighbours inside each sentence, then convert to PPMI:
+15. The script `counting_ppmi.py` does it. Count the neighbours inside each sentence, then convert to PPMI:
 
     ```python
     import numpy as np
@@ -267,7 +267,7 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
 
     Dividing $\hat{P}(w,c) = C_{wc}/N$ by $\hat{P}(w)$ cancels $N$, so the chain needs only the row of the current word. With the symmetric counts, a run starting at `the` gives "the door it was attending of their sight of score the sir dear my comparative height comparative their indulged and it pleased with me showed me but bingley when she", and with the directed counts "the beautiful grounds of lamentations resounding perpetually talked to mr collins begins to know no opinion i am the old friends this she will carry everything worse timed there is". Neither is a meaningful sentence, but the second has stretches of plausible English ("talked to mr collins", "i am the old friends"), while the first has hardly any ("of score the sir", "comparative height comparative"). The reason is that the symmetric chain can step backwards as well as forwards: over 2,000 generated words, only 63% of the pairs of consecutive words stand in that order in the book, against 100% for the directed chain, which can only follow transitions that occur. A symmetric matrix cannot tell "the king" from "king the", so it keeps which words are neighbours and loses the direction in which they are. That is enough to compare the contexts of words, which is why it works for embeddings, and not enough to produce sentences.
 
-17. Take the `ppmi` matrix of the counting and PPMI exercise and truncate its SVD (script `counting_ppmi_svd.py`):
+17. Take the `ppmi` matrix of the counting and PPMI exercise and truncate its SVD (script `counting_toy_svd.py`):
 
     ```python
     u, s_, vt = np.linalg.svd(ppmi)

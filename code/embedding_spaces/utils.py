@@ -100,7 +100,8 @@ def ppmi(counts: np.ndarray, alpha: float = 1.0) -> np.ndarray:
 
 
 def truncated_svd(m: np.ndarray, d: int) -> np.ndarray:
-    """Rows of U_d Sigma_d (powers of Sigma: see the exercises): the d-dimensional embeddings of the rows of m."""
+    """Rows of U_d Sigma_d: the d-dimensional embeddings of the rows of m.
+    (The real-text script counting_book_svd.py uses U_d Sigma_d^(1/2) instead, see solution 18.)"""
     u, s, _ = np.linalg.svd(m)
     return u[:, :d] * s[:d]
 
