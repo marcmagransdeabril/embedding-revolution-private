@@ -202,7 +202,7 @@ Both the Orthogonal Catastrophe and Rice's theorem expose the limits of one-hot 
 
 For words we have a problem. The dense table of the Orthogonal Catastrophe was written by hand, by someone who already knew what `dawn` and `dusk` mean, which is a circular recipe, and no one can write one for 50,000 words. We need a source of meaning that requires no human annotator. Firth's slogan, "you shall know a word by the company it keeps", points to one, because company is something a machine can count.
 
-Here is a toy world of thirteen sentences, laid out in two columns. Ten describe a sky and a court, and the last three contain the meaningless `xqzv` and a companion `jwk`, which stand only next to each other, to themselves and to `the`:
+Here is a toy world of thirteen sentences, laid out in two columns. Ten describe a sky and a court with queens and kings, and the last three contain the meaningless `xqzv` and a companion `jwk`, which stand only next to each other, to themselves and to `the`:
 
 ```
 the dawn breaks over the hills      the king wears the crown
@@ -265,18 +265,20 @@ The second column of @tbl-counting shows the effect. The pull of `the` is gone, 
 
 ## From Counting to Geometry
 
-The PPMI matrix of the previous section keeps `dawn` and `dusk` apart because one is followed by `breaks` and the other by `falls`. Yet the rows of `breaks` and `falls` in @tbl-cooc-over, restricted to the three columns where they have non-zero counts, are not unrelated:
+The PPMI matrix of the previous section keeps `dawn` and `dusk` apart because one is followed by `breaks` and the other by `falls`. @tbl-cooc-over shows the rows of that matrix for these two words and for `breaks` and `falls`, restricted to the six columns where any of them is non-zero:
 
-| | `dawn` | `dusk` | `over` |
-|:---|:---:|:---:|:---:|
-| `breaks` | 3 | 0 | 3 |
-| `falls` | 0 | 2 | 2 |
+| | `the` | `breaks` | `falls` | `dawn` | `dusk` | `over` |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+| `dawn` | 0.71 | 3.17 | 0 | 0 | 0 | 0 |
+| `dusk` | 0.71 | 0 | 3.75 | 0 | 0 | 0 |
+| `breaks` | 0 | 0 | 0 | 3.17 | 0 | 2.43 |
+| `falls` | 0 | 0 | 0 | 0 | 3.75 | 2.43 |
 
-: Rows of $\mathbf{C}$ for `breaks` and `falls`. {#tbl-cooc-over}
+: Rows of the PPMI matrix $\mathbf{M}$ for `dawn`, `dusk`, `breaks` and `falls`, in bits. Zeros are pairs that never occur. {#tbl-cooc-over}
 
-The rows are different, because one word stands next to `dawn` and the other next to `dusk`, but both stand next to `over` (e.g., `the dawn breaks over the hills` and `the dusk falls over the hills`), so they play the same role, and if `dawn` is followed by one and `dusk` by the other, then `dawn` and `dusk` should be alike. How can a method discover this?
+The rows of `dawn` and `dusk` share only `the`, which has a small value, and they are kept apart by two columns: `dawn` stands next to `breaks` and `dusk` next to `falls`. But those two columns are not completely unrelated. The rows of `breaks` and `falls` are different, because one word stands next to `dawn` and the other next to `dusk`, but both stand next to `over` (e.g., `the dawn breaks over the hills` and `the dusk falls over the hills`), so they play the same role, and their cosine is 0.33. If `breaks` and `falls` counted as the same coordinate, `dawn` and `dusk` should be alike. But whether they are alike depends on whether `breaks` and `falls` are, and the reverse. How can a method discover all of this at once?
 
-Think of the rows of the PPMI matrix $\mathbf{M}$ as a data set with one point per word: the row $\mathbf{m}_w$ tells how $w$ combines with each of the $|V|$ context words. Comparing two words by the cosine of their rows is richer than looking at the PMI of the pair, because it compares how both words combine with all the other words. But it does so coordinate by coordinate, and the coordinates `breaks` and `falls` are as unrelated as two axes of a one-hot vector: `dawn` is large on one, `dusk` on the other, and their cosine is 0.04. We need coordinates in which `breaks` and `falls` count as the same thing.
+Think of the rows of the PPMI matrix $\mathbf{M}$ as a data set with one point per word: the row $\mathbf{m}_w$ tells how $w$ combines with each of the $|V|$ context words. The PMI of a pair tells us whether two words keep each other's company, and `dawn` and `dusk` never do. Instead, we can compare whether the two words have the same companions, that is, how both combine with all the other words, which is what the cosine of their rows does. But it does so coordinate by coordinate, and the coordinates `breaks` and `falls` are as unrelated as two axes of a one-hot vector: `dawn` is large on one, `dusk` on the other, and their cosine is 0.04. We need coordinates in which `breaks` and `falls` count as the same thing.
 
 There is also a practical reason. With a vocabulary of 50,000 to 100,000 words, each word has 50,000 to 100,000 coordinates, and we would like to keep only $d \ll |V|$ of them. We can get both goals by changing coordinates and then dropping some of them. Changing coordinates means choosing a new orthonormal basis of **patterns**, unit vectors that mix many context words, and describing each word by its coordinates along them. This loses nothing: it is a rotation, and all dot products, distances and cosines stay the same, because the dot product of two rows is the sum, over the patterns, of the products of their coordinates. Dropping coordinates, keeping only those along the first $d$ patterns, is the step that loses, and the only one that changes distances: it removes the terms of that sum that belong to the other patterns. So everything depends on which patterns we keep.
 
