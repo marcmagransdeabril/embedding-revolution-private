@@ -131,9 +131,10 @@ Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 ### File Placement and Naming
 Place new chapters in `chapters/`:
 - `chapters/embedding_spaces.qmd` (Chapter 1)
-- `chapters/vector_databases.qmd` (Chapter 2)
-- `chapters/curse_of_dimensionality.qmd` (Chapter 3)
-- `chapters/tangent_spaces_geodesics.qmd` (Chapter 4)
+- `chapters/curse_of_dimensionality.qmd` (Chapter 2)
+- `chapters/vector_databases.qmd` (Chapter 3)
+- `chapters/contextual_vectors.qmd` (Chapter 4)
+- `chapters/tangent_spaces_geodesics.qmd` (Chapter 5)
 - ...
 
 Run `make sync-chapters` to automatically register newly added files into `_quarto.yml`.

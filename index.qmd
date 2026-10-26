@@ -11,13 +11,13 @@
 
 There is a distinct moment every engineer remembers when the abstraction behind their tools suddenly dissolves into something far more visceral. For me, that moment arrived while inspecting the internals of a neural language model. Up until then, software had always dealt with words as arbitrary integers or ASCII byte sequences—opaque strings compared with `==` operators or indexed in B-trees.
 
-Looking into the high-dimensional latent layer, however, the text ceased to be strings. A single English word was represented as a point in a 1,536-dimensional Euclidean universe: a vector of floating-point numbers $\mathbf{z} \in \mathbb{R}^{1536}$. Even more striking was that its location was not random. Words with related meanings occupied tight geometric neighborhoods. Abstract relations mapped to spatial offsets: moving across a specific vector subspace turned verbs from present to past tense, shifted countries to their capitals, or modulated formal language into casual speech. Meaning was no longer an intangible philosophical construct; it was a physical location in a continuous geometric space.
+Looking into the high-dimensional latent layer, however, the text ceased to be strings. Each word, in its context, was represented as a point in a Euclidean space of a thousand or more dimensions: a vector of floating-point numbers $\mathbf{z} \in \mathbb{R}^{D}$. Even more striking was that its location was not random. Words with related meanings occupied tight geometric neighborhoods. Abstract relations mapped to spatial offsets: moving across a specific vector subspace turned verbs from present to past tense, shifted countries to their capitals, or modulated formal language into casual speech. Meaning was no longer an intangible philosophical construct; it was a physical location in a continuous geometric space.
 
 ### From Cartesian Coordinates to Latent Worlds
 
 For more than seven decades, computer science operated on a foundational dogma: **information is discrete, and computation is symbolic manipulation over structured records**. 
 
-In 1948, Claude Shannon laid the mathematical bedrock of digital telecommunications by formalizing information as statistical uncertainty reduction over discrete alphabets:
+In 1948, Claude Shannon laid the mathematical bedrock of digital telecommunications by formalizing information as statistical uncertainty reduction, whose simplest form is the entropy of a discrete source:
 
 $$H(X) = -\sum_{x \in \mathcal{X}} p(x) \log_2 p(x)$$
 
@@ -27,29 +27,37 @@ In doing so, Shannon deliberately set aside the question of *meaning*:
 
 Today, modern artificial intelligence has arrived at the reciprocal breakthrough: **the Embedding Revolution**. 
 
-Beneath transformer attention mechanisms, diffusion models, and generative chatbots lies a profound mathematical shift: almost any complex domain of reality—human language, protein folding, robotic trajectories, logical deductions, and relational graphs—can be mapped onto continuous, high-dimensional geometric manifolds. Once embedded, semantics become vectors, affinities become inner products, analogies become parallel transports, and reasoning becomes a smooth trajectory through latent space.
+Beneath transformer attention mechanisms, diffusion models, and generative chatbots lies a profound shift: language, images, molecules, robot trajectories, and relational graphs have all been mapped, with remarkable success, to points in continuous, high-dimensional spaces. Once embedded, similarity becomes an inner product, and analogies often become offsets between vectors.
+
+### The Thesis of This Book
+
+The thesis is not that some fashionable geometry, whether curved, topological, quantum, or hyperdimensional, is better than the others. The thesis is that **representing meaning as vectors is a good approach**, and this book explores why it works, what it can express, where it strains, and what each proposed extension buys and costs.
+
+Two ideas run through the exploration. The first is that the mathematics that explains why vectors work (Shannon, Chomsky, Rice, concentration of measure, symmetry, algebra) is far more durable than any model, so each chapter is built around a question of that kind, and tells the methods that explored it as history, with dates. The second is the **bitter lesson**: general methods that keep improving as computation grows have repeatedly beaten methods that build in what researchers know. The lesson is about how an algorithm uses computation, not about the shape of the model, and the winner is sometimes linear. Every structure in this book faces that test.
 
 ### Why Everything is Becoming a Vector
 
-The power of this paradigm is its universal applicability:
+The reach of this paradigm is broad, and so are the questions it raises:
 
 - **Natural Language:** Tokens, sentences, and documents mapped to continuous semantic coordinates.
-- **Computer Vision & Multimodal:** Pixels, audio waveforms, and video frames projected into unified cross-modal metric spaces (e.g., CLIP).
-- **Biology & Chemistry:** Amino acid sequences and molecular structures represented as continuous coordinates on structural protein manifolds (AlphaFold).
+- **Computer Vision & Multimodal:** Pixels, audio waveforms, and video frames projected into shared metric spaces (e.g., CLIP).
+- **Biology & Chemistry:** Amino acid sequences and molecular structures represented as continuous vectors (e.g., protein language models).
 - **Knowledge Graphs & Logic:** Discrete entities and relational predicates transformed into continuous translational and rotational operators ($\mathbb{R}^D, \mathbb{C}^D$).
-- **Agentic Trajectories:** Goals, world states, and sub-plans represented as differentiable paths through latent action manifolds.
+- **Agentic Trajectories:** Goals, world states, and plans represented as vectors, and behaviour as trajectories of such vectors.
+
+Each item is also a question: what does the vector keep, and what does it lose?
 
 ### The Geek's Compass: Navigating Thousands of Dimensions
 
-High-dimensional spaces do not behave like our 3D intuitive world. In 1,000 dimensions, nearly all the volume of a hypersphere concentrates in an infinitely thin outer shell; random vectors are almost guaranteed to be mutually orthogonal ($\langle \mathbf{u}, \mathbf{v} \rangle \approx 0$); and traditional Euclidean distance metrics lose discriminative power without careful geometric regularization.
+High-dimensional spaces do not behave like our 3D intuitive world. In 1,000 dimensions, nearly all the volume of a hypersphere concentrates in a thin outer shell, thinner as the dimension grows; random vectors are almost certainly close to orthogonal ($\langle \mathbf{u}, \mathbf{v} \rangle \approx 0$); and traditional Euclidean distance metrics lose discriminative power without careful geometric regularization. The same strangeness is a resource: there is room for exponentially many nearly orthogonal directions, which is what lets a distributed representation hold far more concepts than it has dimensions.
 
-Navigating this counter-intuitive landscape requires a new toolkit: blending linear algebra, differential geometry, group theory, topology, and hyperdimensional algebras. This book is your compass for that journey.
+Navigating this counter-intuitive landscape requires a toolkit that blends linear algebra, differential geometry, group theory, topology, and hyperdimensional algebras. This book is your compass for that journey.
 
 {{< pagebreak >}}
 
 ## Disclaimer {.unnumbered}
 
-The concepts, code, and mathematical formulations presented in this book reflect the state of artificial intelligence, geometric deep learning, and neurosymbolic computing as of 2026. Because this field evolves at a rapid pace, specific software libraries, API interfaces, and benchmark numbers may change over time. 
+The mathematics presented in this book, and the historical arguments that connect it, are meant to last: Shannon's entropy, Rice's theorem, and concentration of measure will not change with the next model release. Descriptions of specific systems, software libraries, API interfaces, model sizes, and benchmark numbers, by contrast, are a snapshot of the state of artificial intelligence, geometric deep learning, and neurosymbolic computing as of 2026. They are written as dated history wherever possible, and snapshots that are likely to change are marked in callouts titled "State of the art" with a year and month. 
 
 All code examples, mathematical proofs, and architectural blueprints are provided for educational and research purposes. While derivations are presented with rigorous mathematical grounding, simplified toy implementations are designed for conceptual clarity rather than production deployment. The author and publisher assume no liability for errors, omissions, or damages resulting from the use of the information contained herein.
 
@@ -65,79 +73,103 @@ I would like to express my deepest gratitude to the researchers, mathematicians,
 
 ## Book Architecture & Master Roadmap {.unnumbered}
 
-This book is organized into four interconnected parts, taking you from flat Euclidean vector spaces to curved Riemannian geometries, hyperdimensional algebras, and neurosymbolic architectures:
+This book is organized into four interconnected parts. It starts from the question of what it means to give a symbol an interior, shows why vectors are a good answer, and then asks what a vector space can carry beyond similarity (symmetry, curvature, relations, topology, logic, and composition) and what each addition costs. Every chapter is built around a question that will outlast any model: a theorem, a counting argument, or a historical debate. The methods that explored it are told as history.
 
-### **Part I: The Flat Vector Paradigm and Its Limits**
+Two devices connect the chapters. Chapter 1 ends with a *ledger of limits*, each stated as a cost rather than an impossibility, and later chapters take them up one by one. Chapters 3 to 11 close with a *scale test*: as computation and data grow, is this structure absorbed by learning, does it survive because it is cheap, or does it survive because the problem demands it?
+
+### **Part I: Vectors as Meaning: Why It Works and Where It Strains**
 * **Chapter 1: The Anatomy of Embedding and Latent Spaces**
   * *From Shannon to Geometry:* Quantifying uncertainty vs. reconstructing continuous semantics.
+  * *Chomsky's Staircase:* Structure without meaning, and why every machine on the staircase can only ask whether two symbols are the same.
   * *The Orthogonal Catastrophe:* Why one-hot representations make every symbol equally far from every other ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
   * *Rice's Theorem:* Why exact meaning is out of reach even for programs, and why similarity must be graded.
-  * *Counting, Predicting, Contrasting:* PPMI and SVD, Word2Vec and its hidden PMI matrix, and InfoNCE: three ways of turning Shannon's quantities into geometry.
+  * *Counting, Predicting, Contrasting:* PPMI and SVD, Word2Vec and its hidden PMI matrix, and InfoNCE: three ways of turning Shannon's quantities into geometry, and a first appearance of the bitter lesson.
   * *The Geometry of Meaning:* Cosine and norm on the sphere, $\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$, and LLM activation steering.
-  * *Where Flat Space Cracks:* Anisotropy cones, hubness, and the limits that motivate the rest of the book.
-* **Chapter 2: Vector Databases, RAG, and the Limits of Flat Latent Retrieval**
-  * *Approximate Nearest Neighbor (ANN) Indexing:* Navigating billion-scale vector indexes (HNSW graphs, IVFFlat inverted files, Product Quantization).
-  * *Retrieval-Augmented Generation (RAG):* Bridging parametric model memory with external latent storage.
-  * *Hybrid Search & Multi-Vector Alignments:* Fusing lexical BM25 with dense semantic recall and ColBERT late interaction.
-  * *The Flatness Fallacy & The Missing Arithmetic:* Why vector DBs treat latent space as static point clouds rather than continuous manifolds, failing at logical negation and multi-hop compositional reasoning.
-  * *The Geometry of Hallucinations:* When retrieval queries land in out-of-distribution manifold voids and topological holes.
-* **Chapter 3: The Detour: The Curse (and Blessing) of Dimensionality**
-  * *The High-Dimensional Trap:* Why volume concentrates in the crust and corners are empty.
-  * *Concentration of Measure:* Why random vectors are mutually orthogonal and Euclidean distances collapse.
+  * *Where a Single Vector Strains:* Anisotropy cones, hubness, and the ledger of limits that the rest of the book examines.
+* **Chapter 2: Why Vectors Work: The Blessing (and Curse) of Dimensionality**
+  * *The High-Dimensional Trap:* Why volume concentrates in a thin shell and corners are empty.
+  * *Concentration of Measure:* Why random vectors are nearly orthogonal and Euclidean distances concentrate, with hubness and anisotropy as consequences.
+  * *Room for Exponentially Many Directions:* Why a space that holds only $d$ orthogonal vectors still holds exponentially many nearly orthogonal ones, the resource that distributed representations, superposition, and hyperdimensional computing exploit.
   * *The Johnson-Lindenstrauss Lemma:* The mathematical foundation preserving pairwise distances under random projections.
-  * *Optimization & Overparameterization:* How high dimensionality eliminates local minima traps and turns saddle points into escape routes.
   * *The Manifold Hypothesis:* Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$).
+  * *An Aside on Optimization:* Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, and what overparameterization changes. This concerns parameter space, not embedding space.
+* **Chapter 3: Vector Databases, RAG, and the Limits of Single-Vector Retrieval**
+  * *From Exact to Approximate Search:* Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.
+  * *What a Fixed-Dimension Dot Product Can Express:* The structural limit: how many distinct rankings and subsets a query vector of dimension $d$ can realize, and what that means for negation, conjunction, and multi-hop queries.
+  * *Retrieval-Augmented Generation:* Bridging parametric model memory with external latent storage, told as the answer of the 2020s.
+  * *Hybrid Search & Multi-Vector Alignments:* Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item.
+  * *Negation, Multi-Hop Reasoning, and Hallucination (a dated case study):* How retrieval systems behaved, what followed, and why the structural limit remains.
+  * *Scale Test:* Scale forced approximation. Will long contexts and agentic search absorb retrieval, or does external memory survive on cost?
+* **Chapter 4: Contextual Vectors: Attention, Transformers, and Looking Inside**
+  * *From Word Vectors to Contextual Vectors:* Why the vector of a word must depend on its sentence, and what transformers compute.
+  * *Attention as Similarity-Weighted Retrieval:* The dot-product machinery of Chapter 3 inside the model, and its link to associative memory.
+  * *Features as Directions:* The linear representation and superposition hypotheses, stated as claims together with the experiments that test them (probing and steering). Results are told as dated history.
+  * *Sparse Autoencoders and Dictionary Learning:* Recovering more features than dimensions, which uses the near-orthogonality of Chapter 2.
+  * *Do Different Models Share a Geometry?* Claims of representational convergence across models, as a bridge to Chapter 11.
+  * *Scale Test:* Here the geometry is learned rather than designed. Which of the structures of Chapters 5 to 11 do trained transformers discover on their own?
 
-### **Part II: Curved Manifolds, Graphs, and Topologies**
-* **Chapter 4: Tangent Spaces, Geodesics, and Geometric Deep Learning**
-  * *The Erlangen Programme for Deep Learning:* Symmetries, invariances, and equivariances.
+### **Part II: Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology**
+* **Chapter 5: Tangent Spaces, Geodesics, and Geometric Deep Learning**
+  * *The Erlangen Programme for Deep Learning:* What is a representation invariant to? Symmetries, invariances, and equivariances.
   * *Tangent Spaces & Geodesics:* Parallel transport, Riemannian metrics, and semantic interpolation along curves.
-  * *Lie Groups & Continuous Symmetries:* $SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE).
-  * *Hyperbolic Latent Spaces:* Poincaré ball and Lorentz hyperboloid models for embedding trees and hierarchical taxonomies with zero distortion.
+  * *Lie Groups & Continuous Symmetries:* $SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE), a structure that was adopted at scale.
+  * *Hyperbolic Latent Spaces:* Why negative curvature suits trees (volume grows exponentially with radius), and the Poincaré ball and Lorentz hyperboloid models for embedding trees and hierarchical taxonomies with arbitrarily low distortion in few dimensions, against the dimension cost of doing the same in flat space.
   * *Gauge Equivariance:* When coordinate frames depend on local manifold position.
-* **Chapter 5: From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry**
+  * *Scale Test:* Sutton's essay itself keeps convolution and certain invariances. Which symmetries does scale absorb through data and augmentation, which survive because they are cheap, and is hyperbolic geometry worth its cost?
+* **Chapter 6: From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry**
   * *Representing Graphs in Vector Spaces:* Graph Neural Networks (GNNs) and Message Passing architectures.
-  * *Knowledge Graph Embeddings:*
+  * *What a Relation Can Be:* Symmetric, antisymmetric, inverse, and compositional relations, and the algebra each one needs.
+  * *Knowledge Graph Embeddings, as a Historical Sequence:* Each model fixes a relation pattern that the previous one could not express.
     * *Translational Models (TransE):* Relations as spatial translations ($\mathbf{h} + \mathbf{r} \approx \mathbf{t}$).
-    * *Rotational Models (RotatE):* Relations as rotations in the complex plane ($\mathbb{C}^D$).
     * *Bilinear & Multiplicative Models (DistMult, ComplEx).*
+    * *Rotational Models (RotatE):* Relations as rotations in the complex plane ($\mathbb{C}^D$).
   * *Graph Databases vs. Vector Databases:* The convergence of discrete graph topology and continuous latent coordinates.
-* **Chapter 6: Beyond Graphs: Topological Deep Learning**
-  * *Higher-Order Networks:* Moving beyond pairwise edges to simplicial complexes, cell complexes, and Combinatorial Complexes (CCs).
+  * *Scale Test:* Do embeddings learned from data make explicit graph structure unnecessary, or do the graph and the vector converge?
+* **Chapter 7: Beyond Graphs: Topological Deep Learning**
+  * *What Pairwise Structure Cannot Express:* Moving beyond pairwise edges to simplicial complexes, cell complexes, and Combinatorial Complexes (CCs).
   * *Topological Cochains & Boundary Operators:* Modeling multi-way interactions, flows, faces, and higher-order cavities.
-  * *Hodge Theory & Topological Message Passing:* Learning representations on manifolds with topological holes.
-  * *Persistent Homology in Latent Spaces:* Extracting topological barcodes and persistence diagrams from learned representations.
+  * *Hodge Theory & Topological Message Passing:* Decomposing flows into gradient, curl, and harmonic parts, and learning representations on manifolds with topological holes.
+  * *Measuring the Shape of a Representation:* Persistent homology in latent spaces, with barcodes and persistence diagrams as tools to test the manifold hypothesis of Chapter 2.
+  * *Scale Test:* Much of this machinery is young. Which parts earn their cost at scale, and which are mainly analysis tools?
 
 ### **Part III: The Algebra of Thought: Vectors as Symbols**
-* **Chapter 7: The Complex Plane and Quantum Logic: Wave-Nature in Latent Space**
+* **Chapter 8: The Complex Plane and Quantum Logic: Wave-Nature in Latent Space**
+  * *Concepts as Subspaces:* The logic of subspaces (Birkhoff and von Neumann): negation as orthogonal complement, and why that logic is not distributive.
   * *Complex-Valued Neural Networks (CVNN):* Embedding data into $\mathbb{C}^D$ and hypercomplex quaternions $\mathbb{H}^D$.
   * *Phase vs. Amplitude:* Separating categorical identity from intensity, resolving phase singularities, and orthogonal decision boundaries.
-  * *Quantum Decision Making in Vector Spaces:* Superposition, phase interference, and non-commutative cognitive logic.
+  * *Quantum Decision Making in Vector Spaces:* Superposition, phase interference, and non-commutative models of cognition, a debated line of work.
   * *Quantum-Inspired Embeddings:* Replacing classical probability logits with probability amplitudes.
-* **Chapter 8: Vector Symbolic Architectures and Hyperdimensional Computing**
-  * *Quasi-Orthogonal Vectors as Symbols:* Representing concepts directly in 10,000-dimensional hypervectors.
+  * *Scale Test:* Do complex-valued or quantum-inspired models beat real-valued ones when parameter count and compute are matched?
+* **Chapter 9: Vector Symbolic Architectures and Hyperdimensional Computing**
+  * *Near-Orthogonality as a Resource:* The payoff of Chapter 2, representing concepts directly in 10,000-dimensional hypervectors.
   * *Algebraic Operations on Thoughts:*
     * *Bundling ($+$):* Superposition and set representation.
     * *Binding ($\odot$ / $\circledast$):* Role-filler pairing and circular convolution.
     * *Permutation ($\Pi$):* Sequence ordering and hierarchical encoding.
-  * *Associative Clean-Up Memories & Capacity Bounds:* Theoretical bounds on robust concept retrieval without weight retraining.
-* **Chapter 9: Neuro-Symbolic Integration and Emergent Compositionality**
+  * *Associative Clean-Up Memories & Capacity Bounds:* Theoretical bounds on robust concept retrieval without weight retraining, and the relation to attention as associative memory.
+  * *Scale Test:* Capacity grows with dimension, and dimension is cheap. When does a hyperdimensional encoding beat a learned one?
+* **Chapter 10: Neuro-Symbolic Integration and Emergent Compositionality**
+  * *The Systematicity Challenge:* Fodor and Pylyshyn's argument that thought is compositional, the connectionist replies, and the staircase of Chapter 1 revisited: which steps can a vector system climb?
   * *Bridging Connectionism and Logic:* Differentiable reasoning over structured knowledge.
   * *Logic Tensor Networks (LTN):* Translating first-order logic into continuous real-valued constraints via fuzzy logic t-norms.
   * *Smolensky's Tensor Product Representations (TPR):* The foundational algebra for binding variable roles to continuous fillers.
-  * *Emergent Symbolic Structure:* How neural networks spontaneously develop compositional role-filler algebra (the DISCOVER framework).
+  * *Emergent Symbolic Structure:* How trained networks come to show compositional role-filler structure, with the DISCOVER framework as one recent instance.
   * *Neural Theorem Proving:* Searching discrete proof trees along continuous latent trajectories.
+  * *Scale Test:* Do networks acquire systematic composition from data and scale, or must it be built in?
 
 ### **Part IV: Alignment, Transport, and Synthesis**
-* **Chapter 10: Cross-Domain Transfer and Optimal Transport**
+* **Chapter 11: Cross-Domain Transfer and Optimal Transport**
+  * *Gauge Freedom:* A trained space is determined only up to an isometry, the relabelling invariance of Chapter 1 seen from the other side, so comparing two spaces is a geometric problem.
   * *Shared Latent Spaces:* Multimodal fusion across text, vision, audio, and sensor streams.
   * *Optimal Transport & Wasserstein Distances:* Monge-Kantorovich formulations for transporting probability mass across latent manifolds.
   * *Domain Adaptation & Distribution Alignment:* Maximum Mean Discrepancy (MMD) and adversarial manifold alignment.
-  * *Zero-Shot Cross-Domain Transfer:* Projecting unseen tasks into pre-aligned universal coordinate frames.
+  * *Zero-Shot Cross-Domain Transfer:* Transfer through aligned spaces, and the evidence for and against representational convergence across models.
+  * *Scale Test:* Does scale make independently trained spaces more alike, and if so, what is left for alignment to do?
 * **Epilogue: An Algebra of Thought**
-  * *Looking Back from 10,000 Dimensions:* From Boole's discrete laws of thought to continuous manifolds.
-  * *The Unified Picture:* High-dimensional geometry as the universal medium of intelligence.
-  * *Open Frontiers:* Scaling laws, interpretability, and geometric bounds on reasoning.
+  * *Looking Back:* From Boole's discrete laws of thought to continuous vectors.
+  * *A Ledger of Limits:* What vector representations give and what they cost, and which limits were structural and which contingent.
+  * *The Bitter Lesson and the Geometry of Meaning:* Which structures of this book were absorbed by scale, which survived because they are cheap, and which because the problem demands them.
+  * *Open Frontiers:* Interpretability, geometric bounds on reasoning, and the open questions of each chapter.
   * *Final Geek Musings:* Where does human intuition live in the latent space?
 
 {{< pagebreak >}}

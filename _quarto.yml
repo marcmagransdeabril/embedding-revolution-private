@@ -14,10 +14,10 @@ book:
     right: Marc Magrans de Abril
   chapters:
   - index.qmd
-  - part: The Flat Vector Paradigm and Its Limits
+  - part: 'Vectors as Meaning: Why It Works and Where It Strains'
     chapters:
     - chapters/embedding_spaces.qmd
-  - part: Curved Manifolds, Graphs, and Topologies
+  - part: 'Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology'
     chapters:
     - chapters/tangent_spaces_geodesics.qmd
   - chapters/solutions.qmd

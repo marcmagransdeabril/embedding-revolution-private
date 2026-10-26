@@ -31,15 +31,16 @@ def test_match_future_chapter_patterns():
     """Verify pattern matching for future chapter filenames."""
     test_cases = [
         ("embedding_spaces.qmd", 0, 0),       # Part I, Ch 1
-        ("vector_databases.qmd", 0, 1),       # Part I, Ch 2
-        ("curse_of_dimensionality.qmd", 0, 2), # Part I, Ch 3
-        ("tangent_spaces.qmd", 1, 0),         # Part II, Ch 4
-        ("graph_embeddings.qmd", 1, 1),       # Part II, Ch 5
-        ("topological_deep_learning.qmd", 1, 2), # Part II, Ch 6
-        ("complex_plane.qmd", 2, 0),          # Part III, Ch 7
-        ("vsa_hyperdimensional.qmd", 2, 1),   # Part III, Ch 8
-        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 9
-        ("optimal_transport.qmd", 3, 0),      # Part IV, Ch 10
+        ("curse_of_dimensionality.qmd", 0, 1), # Part I, Ch 2
+        ("vector_databases.qmd", 0, 2),       # Part I, Ch 3
+        ("contextual_vectors.qmd", 0, 3),     # Part I, Ch 4
+        ("tangent_spaces.qmd", 1, 0),         # Part II, Ch 5
+        ("graph_embeddings.qmd", 1, 1),       # Part II, Ch 6
+        ("topological_deep_learning.qmd", 1, 2), # Part II, Ch 7
+        ("complex_plane.qmd", 2, 0),          # Part III, Ch 8
+        ("vsa_hyperdimensional.qmd", 2, 1),   # Part III, Ch 9
+        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 10
+        ("optimal_transport.qmd", 3, 0),      # Part IV, Ch 11
     ]
 
     for filename, expected_part, expected_ch in test_cases:
