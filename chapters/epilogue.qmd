@@ -1,0 +1,175 @@
+---
+title: "Epilogue: An Algebra of Thought"
+subtitle: "What Others Knew About Meaning Before It Became a Vector"
+---
+
+<!--
+SKETCH FOR REVIEW. Only the argumental arc and the references of each section
+are written; the prose is not. Each section lists:
+  - Claim: the step of the argument the section makes.
+  - Precedent: work outside computer science that reached the same idea first.
+  - Challenge: work that disputes it, and the ledger entry it maps to.
+  - Unused: ideas the book does not use yet and could.
+  - Hooks: chapters of the book the section closes.
+-->
+
+*Arc in one paragraph.* The book argued that meaning can be treated as position in a space shaped by company, and that each limit of a single vector is a cost, not an impossibility. Computer science arrived at that idea late. Linguistics, psychology, neuroscience, biology, psychiatry, literature, theology, and mathematics had each reached a version of it before, and each had found, in its own vocabulary, most of the limits in the ledger of Chapter 1. The epilogue reads the book again through those traditions: first what they anticipated, then what they disputed, then what they hold that the book does not yet use. It ends where the Prologue began, with the dog, and with the answer that meaning is a relation rather than a place.
+
+## Looking Back: From Boole's Laws of Thought to Vectors
+
+*Plan (1 page).* Short recap of the arc of the book: Boole's discrete laws of thought [@boole1854investigation], Shannon's deliberate exclusion of meaning [@shannon1948mathematical], Weaver's three levels [@weaver1949recent], the orthogonal catastrophe, Rice's theorem, and the move to graded similarity. State the question of the epilogue: was the move from symbol to geometry a discovery of computer science, or a rediscovery?
+
+- Claim: computer science excluded meaning by design and readmitted it as geometry; other fields never excluded it.
+- Hooks: Chapter 1 (Shannon's Boundary Problem, Orthogonal Catastrophe).
+
+## The Meaning of Meaning
+
+*Plan (1–2 pages).* Ogden and Richards listed sixteen senses of "meaning" in 1923 and drew the semiotic triangle of symbol, thought, and referent [@ogden1923meaning]. Use the triangle as the map of the epilogue: embeddings model the symbol–thought edge (sense), grounding is the thought–referent edge (reference), and Frege's distinction between the two [@frege1948sense] says which edge a vector can carry. Philosophy also tried to cross Shannon's boundary from the other side: semantic information as the content excluded by a message [@barhillel1953semantic], information as the carrier of knowledge [@dretske1981knowledge], and semantic information as well-formed, meaningful, truthful data [@floridi2005semantic]. Grice's speaker meaning [@grice1957meaning] sits at Weaver's level C.
+
+- Claim: "meaning" is several things; embeddings capture one of them (sense, or inferential role) and the epilogue should say which.
+- Precedent: Bar-Hillel and Carnap measure meaning as excluded possibilities, the logical cousin of Shannon's surprisal.
+- Unused: the triangle as an explicit frame for the ledger (which limit belongs to which edge).
+
+## The Perfect Language: A Religious and Philosophical Dream
+
+*Plan (2 pages).* The search for a language in which the sign reveals the thing [@eco1995search]: the Adamic language, Kabbalistic gematria, in which words become numbers and equal numbers reveal hidden connections [@scholem1941major] (a one-dimensional embedding with hash collisions), Llull's combinatorial wheels of divine attributes [@bonner2007art], and Wilkins's *Real Character* [@wilkins1668essay], a hand-built hierarchical code in which the spelling of a word is its address in a taxonomy. Borges's essay on Wilkins and the "Chinese encyclopedia" [@borges1964other] is the critique: every hand-made taxonomy is arbitrary. Eco's opposition of the dictionary (a tree of definitions) and the encyclopedia (a network without a root) [@eco1984semiotics] frames the choice between hierarchy and graph that Chapters 5 and 6 make in geometry.
+
+- Claim: the perfect-language tradition is the opposite of the bitter lesson [@sutton2019bitter], the hand-written dense table of Chapter 1 at the scale of a civilization, and it failed for the same reason.
+- Precedent: Wilkins's code is a tree address, the discrete ancestor of hyperbolic embeddings of taxonomies.
+- Challenge: Borges, against any fixed set of dimensions of meaning.
+- Hooks: Chapter 1 (hand-made dense table, bitter lesson), Chapter 5 (hierarchies).
+
+## Meaning by Difference and by Company
+
+*Plan (3 pages).* The relational idea of meaning, in four traditions. Saussure: in language there are only differences, and the value of a sign is its position among the others [@saussure1916cours]. Buddhist *apoha*: a word means by excluding what it is not, "cow" as not non-cow [@siderits2011apoha], which is meaning by negatives, the logic of contrastive learning. Harris's distributional hypothesis [@harris1954distributional], three years before Firth [@firth1957synopsis], and the late Wittgenstein [@wittgenstein1953philosophical]. Holism and inferential role: Quine's web of belief [@quine1951two], conceptual role semantics [@block1986advertisement], and inferentialism [@brandom1994making]. Jakobson's two axes of language, similarity (metaphor, substitution) and contiguity (metonymy, combination), and their dissociation in two kinds of aphasia [@jakobson1956fundamentals].
+
+- Claim: the core move of the book, a symbol described by its relations to all others, is the structuralist and holist thesis restated in linear algebra.
+- Precedent: Saussure (relational value), apoha (meaning by negatives, InfoNCE), Harris (distribution), Jakobson (substitutability versus association, the `darcy`–`mr` observation of Chapter 1).
+- Challenge: holism makes meaning unstable under any change of the whole (retraining changes every vector), Quine's indeterminacy of translation [@quine1960word].
+- Unused: apoha as the philosophical ancestor of contrastive learning; Jakobson's two axes as a test that distinguishes the two kinds of neighbour.
+- Hooks: Chapter 1 (Counting Company, Learning by Contrast), Chapter 11 (indeterminacy as gauge freedom).
+
+## Measuring Meaning Before Computers
+
+*Plan (3 pages).* Psychology built semantic spaces by hand fifty years before word2vec. Osgood's semantic differential: people rate words on bipolar scales, factor analysis finds three dimensions (evaluation, potency, activity), and the result is called a "semantic space" [@osgood1952nature; @osgood1957measurement]. Multidimensional scaling recovers a space from judged distances alone [@torgerson1952multidimensional; @shepard1962analysis]. Rumelhart and Abrahamson's parallelogram model of analogy in such a space [@rumelhart1973model] is the king–queen analogy forty years early. Shepard's universal law: generalization decays exponentially with distance in psychological space [@shepard1987toward]. Co-occurrence spaces in psychology: HAL [@lund1996producing] and LSA as an answer to Plato's problem of how so much is learned from so little [@landauer1997solution], the problem of the *Meno*, while the *Cratylus* had already asked whether names are natural or conventional [@cooper1997plato]. Word association norms began in psychiatry [@kent1910study; @jung1910association], eighty years before the association ratio of lexicography [@church1990word]. Affect as a circle [@russell1980circumplex]. Implicit associations reappear in trained embeddings [@caliskan2017semantics].
+
+- Claim: the semantic space is a psychological construct that computers learned to estimate, not a computer-science invention.
+- Precedent: the term "semantic space" (Osgood), the parallelogram (Rumelhart and Abrahamson, against @mikolov2013efficient), an exponential similarity kernel (Shepard, against the $\exp(\cos/\tau)$ of InfoNCE).
+- Unused: Shepard's law as a psychological justification of the softmax kernel; the circumplex as a natural case for phase (Chapter 8).
+- Hooks: Chapter 1 (Geometry of Meaning, Learning by Contrast), Chapter 8.
+
+## Where Psychology Said No
+
+*Plan (2–3 pages).* The objections, each mapped to a line of the ledger. Tversky: judged similarity is asymmetric and violates the triangle inequality, so it is not a metric [@tversky1977features]. Topic models fit human association better than spaces because of those violations [@griffiths2007topics]. Goodman: similarity is always similarity in some respect [@goodman1972seven]. Concepts are held together by theories, not similarity [@murphy1985role]. Analogy is mapping of relational structure, not vector offsets [@gentner1983structure]. Categories have prototypes and graded membership [@rosch1975cognitive] and hierarchies [@collins1969retrieval], and activation spreads through a network [@collins1975spreading]. The reply from inside psychology: an attention-weighted metric that changes with the task [@nosofsky1986attention].
+
+- Claim: every objection is a cost on the ledger, and the reply each time was more structure or a context-dependent metric.
+- Challenge: Tversky → asymmetric relations (Chapter 6); Goodman and Nosofsky → contextual vectors (Chapter 4); Gentner → composition (Chapter 10); Rosch and Collins–Quillian → hierarchy (Chapter 5); Murphy and Medin → similarity is not a logic (Chapter 8).
+- Hooks: Chapter 1 (ledger of limits), and the scale test of each chapter.
+
+## The Brain Also Embeds
+
+*Plan (3–4 pages).* From the cognitive map of rats [@tolman1948cognitive] to place cells [@okeefe1971hippocampus] and grid cells [@hafting2005microstructure], and then to concepts navigated with the same grid code [@constantinescu2016organizing; @bellmund2018navigating; @behrens2018cognitive]: reasoning as a trajectory is a claim about brains before it was a claim about models. Semantic maps over the cortex [@huth2016natural], and nouns predicted from co-occurrence features [@mitchell2008predicting]. Language models predict brain responses [@schrimpf2021neural; @goldstein2022shared; @caucheteux2022brains], with the limits those papers state. The geometry of abstraction: parallel coding directions in hippocampus and prefrontal cortex [@bernardi2020geometry], the neural form of the analogy parallelogram. Mixed selectivity [@rigotti2013importance] and sparse coding [@olshausen1996emergence] as the biological precedents of superposition and dictionary learning. Population geometry: neural manifolds [@gallego2017neural; @chung2021neural] and a power-law spectrum of dimensions [@stringer2019high]. Comparing spaces by their similarity structure rather than their coordinates: second-order isomorphism [@shepard1970second; @edelman1998representation] and representational similarity analysis [@kriegeskorte2008representational]. Prediction as the organizing principle [@friston2010free].
+
+- Claim: the brain uses distributed, high-dimensional, low-intrinsic-dimension codes for meaning, and compares across individuals only up to similarity structure.
+- Precedent: grid codes (trajectories, Chapter 5), Bernardi's parallelism (analogy, Chapter 1), mixed selectivity (superposition, Chapter 4), neural manifolds (Chapter 2), second-order isomorphism (gauge freedom, Chapter 11), predictive processing (JEPA, Chapter 12).
+- Challenge: correlation between model and brain is not identity of mechanism; keep the claim at the level of geometry.
+- Unused: second-order isomorphism as the oldest statement of "a space is defined only up to an isometry".
+
+## The Dog Test in the Brain
+
+*Plan (3 pages).* The Prologue's test has been run on people. Concept cells answer to a photograph, the written name, and the spoken name of the same person [@quiroga2005invariant]. The hub-and-spoke model [@patterson2007where] and convergence zones [@damasio1989timelocked] are the neural versions of one hub with many modalities; semantic dementia, the loss of the hub, removes the concept from every modality at once [@hodges1992semantic]. Against amodal hubs: perceptual symbol systems [@barsalou1999perceptual] and dual coding [@paivio1986mental], which keep modality-specific content as part of meaning (the fur that is not in the bark). Cross-modal correspondences and synaesthesia [@spence2011crossmodal; @ramachandran2001synaesthesia]: the senses share structure beyond co-occurrence (bouba and kiki). Development: meaning is built from multimodal, embodied experience [@smith2005development], and a contrastive model trained on one child's head-camera recordings learns word–referent mappings [@vong2024grounded]. The grounding debate: symbol grounding [@harnad1990symbol], the Chinese room [@searle1980minds], form without meaning [@bender2020climbing], meaning is not in the head [@putnam1975meaning], conceptual spaces [@gardenfors2000conceptual]. Uexküll's *Umwelt* [@uexkull2010foray]: the dog lives in its own space of meanings, not ours.
+
+- Claim: a shared space across senses exists in the brain, and so do the costs of Chapter 12: modality-specific loss and a hub that can be damaged.
+- Precedent: concept cells (the dog test), hub-and-spoke (ImageBind), Vong et al. (CLIP on a child).
+- Challenge: Barsalou and Paivio (the modality gap may be a feature), Putnam and Bender–Koller (grounding needs the world, not more modalities).
+- Unused: the Umwelt as a reversal of the dog test (what is the dog's embedding of us?).
+- Hooks: Prologue, Chapter 12.
+
+## Life Makes Meaning
+
+*Plan (2 pages).* Biology had spaces before it had embeddings: protein sequence space, in which evolution walks between functional neighbours [@maynardsmith1970natural], theoretical morphospace [@raup1966geometric], and D'Arcy Thompson's coordinate transformations between the forms of related species [@thompson1917growth]. What information means in biology [@maynardsmith2000concept]. Meaning from use: signalling games, in which conventions and their information content emerge from repeated interaction [@skyrms2010signals]. Biosemiotics and the organism as a maker of meaning [@hoffmeyer1996signs; @maturana1980autopoiesis; @varela1991embodied]; icon, index, and symbol in the evolution of language [@deacon1997symbolic]; meaning as stable form in a dynamical system [@thom1975structural].
+
+- Claim: meaning in biology is functional (what a signal does for a living system), which is Weaver's level C, not B.
+- Precedent: protein space (protein language models), Thompson's transformations (diffeomorphisms between forms, Chapter 5), Skyrms (Shannon plus use yields meaning).
+- Unused: signalling games as a minimal model of how a shared space between two agents emerges; morphospace as an empty-volume argument (most of the space is unrealized, Chapter 2).
+
+## When Meaning Breaks
+
+*Plan (2 pages).* Psychiatry has long measured meaning by its failures. Association in insanity [@kent1910study; @jung1910association]; semantic hyperpriming in schizophrenic thought disorder [@spitzer1997cognitive]; incoherence measured with LSA [@elvevag2007quantifying], and embedding coherence that predicts the onset of psychosis [@bedi2015automated; @corcoran2018prediction]. Aberrant salience [@kapur2003psychosis] and a Bayesian account of hallucinations and delusions [@fletcher2009perceiving], with Freud's condensation and displacement [@freud1900traumdeutung] as a historical aside. Draw the analogy to model hallucination with care, and keep clinical claims to what the papers state.
+
+- Claim: embeddings are already a clinical instrument, which is evidence that the geometry measures something about human meaning; and the pathologies have analogues in the ledger (loosened associations as hubness, aberrant salience as miscalibrated similarity).
+- Challenge: these analogies are suggestive, not mechanistic.
+- Hooks: Chapter 1 (hubness), Chapter 3 (hallucination).
+
+## Literature as a Laboratory of Meaning
+
+*Plan (2 pages).* Writers ran the thought experiments first. Swift's engine in Lagado writes books by random combination of words, and its sages carry the things themselves instead of words [@swift1726gulliver]: Shannon's generator and the grounding problem in one chapter. Borges [@borges1962labyrinths]: the Library of Babel is the space of all strings, almost all of it meaningless (the empty volume of Chapter 2); Funes remembers everything and therefore cannot think, compression as the condition of generalization (low rank in Chapter 1). Humpty Dumpty's stipulated meanings [@carroll1871through] and alpha-equivalence. Calvino on literature as a combinatorial machine [@calvino1986uses]. Metaphor as interaction [@black1955metaphor] and as a mapping between domains [@lakoff1980metaphors], the literary form of transport between spaces. The hermeneutic circle, the part understood through the whole and the whole through the parts [@gadamer1960wahrheit], as the reading of contextual vectors. Distant reading [@moretti2005graphs].
+
+- Claim: literature anticipated both the power and the emptiness of combinatorial meaning.
+- Unused: Funes as the epilogue's image for the low-rank argument; conceptual metaphor as a cross-domain map (Chapter 11).
+- Hooks: Chapter 1 (Shannon's generator, low rank), Chapter 2, Chapter 4, Chapter 11.
+
+## The Mathematics of Meaning
+
+*Plan (2 pages).* The other mathematical tradition, truth-conditional and compositional: Tarski [@tarski1944semantic] and Montague [@montague1970universal], against which distributional semantics was defined. Graded truth [@zadeh1965fuzzy] and the logic of subspaces [@birkhoff1936logic]. Geometry and meaning as a single subject [@widdows2004geometry]. Klein's Erlangen programme [@klein1893comparative]: a geometry is what its symmetries leave invariant. For the geometry itself (curvature, geodesics, parallel transport, and the complex plane with its rotations and Möbius maps), cite general textbooks rather than primary sources [@needham2021visual; @needham1997visual]. Category theory: the Yoneda lemma says an object is determined by its relations to all others, Firth's slogan as a theorem [@maclane1971categories; @bradley2022enriched], and compositional distributional semantics as a functor from grammar to vector spaces [@coecke2010mathematical].
+
+- Claim: the relational thesis has an exact mathematical form (Yoneda), and the compositional tradition supplies what similarity lacks (Chapter 10).
+- Unused: Yoneda as the formal statement of "you shall know a word by the company it keeps".
+- Hooks: Chapter 5 (Erlangen), Chapter 8 (quantum logic), Chapter 10 (composition, LTN).
+
+## The Ledger of Limits, Revisited
+
+*Plan (2 pages).* A single table: each limit of the ledger of Chapter 1, the tradition outside computer science that met it first, and the verdict of the book (structural, contingent, or open), including the cost of a shared space across senses (modality gap, loss of what is specific to each sense).
+
+| Ledger entry | Chapter | Anticipated by |
+|:---|:---:|:---|
+| Negation and multi-hop queries | 3 | apoha, apophatic theology [@pseudodionysius1987complete] |
+| Hierarchies need curvature or dimensions | 5 | Wilkins, Collins–Quillian, Rosch |
+| Asymmetric relations | 6 | Tversky |
+| Multi-way interactions | 7 | (to find) |
+| Similarity is not a logic | 8 | Goodman, Murphy–Medin, Tarski |
+| Binding | 9 | Jakobson's combination axis, Barsalou |
+| Systematic composition | 10 | Montague, Gentner |
+| Spaces defined up to isometry | 11 | Quine, Shepard–Chipman, RSA |
+| Modality gap and modality-specific loss | 12 | Paivio, Barsalou, hub-and-spoke |
+
+: Draft mapping of the ledger to its precedents (to be completed when the chapters are written). {#tbl-ledger-precedents}
+
+## The Bitter Lesson and the Perfect Language
+
+*Plan (1–2 pages).* Which structures of the book were absorbed by scale, which survived because they are cheap, and which because the problem demands them, set against the long history of hand-built meaning (Wilkins, Osgood's chosen scales, feature norms) and of meaning learned from use (Harris, Skyrms, LSA). The perfect language failed as an engineering project and succeeded as a learned one; what remains hand-built is symmetry, which Klein and the brain's grid code suggest is structural.
+
+- Claim: the bitter lesson is the outcome of a four-century experiment, not a decade of benchmarks.
+- Hooks: scale tests of Chapters 3 to 12.
+
+## Open Frontiers
+
+*Plan (1–2 pages).* Interpretability, geometric bounds on reasoning, grounding and multimodal composition, and the questions the other disciplines pose that the book leaves open: asymmetric similarity at scale (Tversky), embodiment and action (Varela, Smith–Gasser), the clinical use of semantic geometry (Bedi, Corcoran), and representational alignment between brains and models (RSA).
+
+## The Dog Test, Revisited
+
+*Plan (1–2 pages).* Where the photograph, the word, the bark, and the gait end up, by the answers of Chapter 12; the concept cell and the hub as the human answer; the Umwelt as the reminder that the dog has a space of its own. Conclude that meaning is a relation, not a place: Saussure's differences, Yoneda's lemma, and second-order isomorphism agree that only the pattern of distances is meaningful, which is also why a space is defined only up to an isometry.
+
+## Final Geek Musings: Where Does Intuition Live in Latent Space?
+
+*Plan (1 page).* The other meaning of "meaning": the meaning of a life [@frankl1962man], and meaning as something people do together [@bruner1990acts], which is Weaver's level C and lies outside any embedding. Close with the apophatic tradition [@pseudodionysius1987complete]: what can be said only by saying what it is not, the limit of a geometry that knows things by their neighbours.
+
+{{< pagebreak >}}
+
+## Review Notes (to remove before publication) {.unnumbered}
+
+Findings for other chapters from this literature review:
+
+- Chapter 1 credits the distributional idea to Wittgenstein and Firth; @harris1954distributional (1954) predates Firth (1957) and should be cited.
+- Chapter 1 presents the analogy parallelogram through @mikolov2013efficient; @rumelhart1973model proposed the parallelogram model of analogy in a psychological space in 1973.
+- The term "semantic space" comes from @osgood1952nature, and MDS [@torgerson1952multidimensional; @shepard1962analysis] built such spaces from judged distances; worth one sentence in Chapter 1.
+- Word association norms [@kent1910study] precede @church1990word by eighty years.
+- The Prologue and Chapter 12 cite Harnad (1990) without a citekey; @harnad1990symbol is now in `references.bib`.
+- Chapter 11 (gauge freedom) can cite second-order isomorphism [@shepard1970second] and RSA [@kriegeskorte2008representational].
+- Chapter 12 (one hub) can cite the hub-and-spoke model [@patterson2007where], concept cells [@quiroga2005invariant], and the head-camera study [@vong2024grounded].
+- Chapter 6 (asymmetric relations) can cite @tversky1977features as the empirical case that similarity is not a metric.
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

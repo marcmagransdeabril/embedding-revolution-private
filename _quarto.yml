@@ -20,6 +20,7 @@ book:
   - part: 'Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology'
     chapters:
     - chapters/tangent_spaces_geodesics.qmd
+  - chapters/epilogue.qmd
   - chapters/solutions.qmd
 format:
   html:
