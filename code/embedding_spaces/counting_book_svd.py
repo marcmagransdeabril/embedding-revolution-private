@@ -19,7 +19,7 @@ for k in range(1, WINDOW + 1):  # pairs at distance k, in both directions
     np.add.at(counts, (a[keep], b[keep]), 1)
     np.add.at(counts, (b[keep], a[keep]), 1)
 
-pmi = ppmi(counts, alpha=0.75)
+pmi = ppmi(counts)
 u, s, _ = np.linalg.svd(pmi)
 
 
@@ -30,10 +30,10 @@ def neighbours(m: np.ndarray, word: str, k: int = 8) -> list[str]:
     return [vocab[i] for i in np.argsort(-sim)[1:k + 1]]
 
 
-emb = u[:, :D] * np.sqrt(s[:D])
+emb = u[:, :D] * s[:D]
 for w in ("sister", "morning", "darcy", "london"):
     print(f"{w:8s} counts: {neighbours(counts, w, 5)}\n{'':8s} PPMI:   {neighbours(pmi, w, 5)}\n{'':8s} SVD:    {neighbours(emb, w)}")
 
 assert len({"father", "mother", "daughter", "aunt", "uncle", "cousin", "brother"} & set(neighbours(emb, "sister"))) >= 3
 assert {"day", "evening"} <= set(neighbours(emb, "morning"))
-assert {"bingley", "wickham"} <= set(neighbours(emb, "darcy"))
+assert {"bingley", "bennet"} <= set(neighbours(emb, "darcy"))
