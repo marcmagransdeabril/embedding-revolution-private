@@ -187,21 +187,21 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Scale Test:* Does scale make the alignment between modalities easier, or does the modality gap, the loss of modality-specific information, and the failure of composition persist as the structure of the problem?
 * **Epilogue: An Algebra of Thought**
   * *Looking Back:* From Boole's discrete laws of thought to continuous vectors.
-  * *The Meaning of Meaning:* Ogden and Richards's triangle of symbol, thought, and referent, Frege's sense and reference, and the attempts of philosophy to cross Shannon's boundary from the other side (Bar-Hillel and Carnap, Dretske, Floridi).
-  * *The Perfect Language:* The religious and philosophical dream of a sign that reveals the thing, from gematria and Llull's wheels to Wilkins's *Real Character* and Borges's critique: the hand-written table of Chapter 1 at the scale of a civilization.
-  * *Meaning by Difference and by Company:* Saussure's differences, the Buddhist theory of meaning by exclusion (*apoha*), Harris's distributional hypothesis, holism and inferential role, and Jakobson's two axes of similarity and contiguity.
-  * *Measuring Meaning Before Computers:* Osgood's semantic space, multidimensional scaling, the parallelogram model of analogy (1973), Shepard's law of generalization, LSA as an answer to Plato's problem, and word association norms from psychiatry.
+  * *The Meaning of Meaning:* Ogden and Richards's triangle of symbol, thought, and referent, Frege's sense and reference, Locke's words as signs of ideas, and the attempts of philosophy and psychology to cross Shannon's boundary from the other side (Bar-Hillel and Carnap, Dretske, Floridi, and color naming as an information bottleneck).
+  * *The Perfect Language:* The religious and philosophical dream of a sign that reveals the thing, from gematria and Llull's wheels to Wilkins's *Real Character* and Borges's critique, and the cognitive-science reply that the form of a taxonomy can be learned: the hand-written table of Chapter 1 at the scale of a civilization.
+  * *Meaning by Difference and by Company:* Saussure's differences, the Buddhist theory of meaning by exclusion (*apoha*) and the grammarians' *sphota*, Harris's distributional hypothesis, a blind child who learns a verb from its company, holism and inferential role, and Jakobson's two axes of similarity and contiguity.
+  * *Measuring Meaning Before Computers:* Osgood's semantic space, multidimensional scaling, the parallelogram model of analogy (1973), Shepard's law of generalization, LSA as an answer to Plato's problem, word association norms from psychiatry, and sociology's use of embeddings as Osgood's instrument (cultural dimensions, and the stereotypes that embeddings inherit).
   * *Where Psychology Said No:* Tversky's asymmetric similarity, Goodman's strictures, theories versus similarity, and structure-mapping, each read as a line of the ledger.
   * *The Brain Also Embeds:* Cognitive maps and grid codes for concepts, semantic maps of the cortex, the geometry of abstraction, mixed selectivity, neural manifolds, and second-order isomorphism.
-  * *The Dog Test in the Brain:* Concept cells, the hub-and-spoke model and semantic dementia, perceptual symbols and dual coding against amodal hubs, cross-modal correspondences, and a model trained on one child's view of the world.
+  * *The Dog Test in the Brain:* Concept cells, the hub-and-spoke model and semantic dementia, perceptual symbols and dual coding against amodal hubs, cross-modal correspondences, Molyneux's question answered by patients who gained sight, what blind people know about how animals look, and a model trained on one child's view of the world.
   * *Life Makes Meaning:* Protein space, morphospace, D'Arcy Thompson's transformations, signalling games, and biosemiotics.
   * *When Meaning Breaks:* Association, coherence, and salience in psychiatry, and embeddings as a clinical instrument.
   * *Literature as a Laboratory of Meaning:* Swift's engine of Lagado, Borges's Library of Babel and Funes, metaphor as a map between domains, and the hermeneutic circle.
-  * *The Mathematics of Meaning:* Truth-conditional and compositional semantics, graded truth, the Erlangen programme, and the Yoneda lemma as Firth's slogan in the form of a theorem.
+  * *The Mathematics of Meaning:* Truth-conditional and compositional semantics, graded truth, the Erlangen programme with chords as points of a quotient space, and the Yoneda lemma as Firth's slogan in the form of a theorem.
   * *A Ledger of Limits, Revisited:* What vector representations give and what they cost, which limits were structural and which contingent, and which tradition met each one first, including the cost of a shared space across senses: the modality gap and the loss of what is specific to each modality.
   * *The Bitter Lesson and the Perfect Language:* Which structures of this book were absorbed by scale, which survived because they are cheap, and which because the problem demands them, set against four centuries of hand-built meaning.
-  * *Open Frontiers:* Interpretability, geometric bounds on reasoning, grounding and multimodal composition, and the open questions of each chapter.
-  * *The Dog Test, Revisited:* Where the photograph, the word, the bark, and the gait end up, and what the answer says about whether meaning is a place or a relation.
+  * *Open Frontiers:* Interpretability, geometric bounds on reasoning, grounding and multimodal composition, the open questions of each chapter, and the questions that other disciplines pose and the book leaves open.
+  * *The Dog Test, Revisited:* Where the photograph, the word, the bark, and the gait end up, the dog's own *Umwelt*, and what the answer says about whether meaning is a place or a relation.
   * *Final Geek Musings:* Where does human intuition live in the latent space?
 
 {{< pagebreak >}}
