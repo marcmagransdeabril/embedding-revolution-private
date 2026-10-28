@@ -1,6 +1,5 @@
 ---
 title: "Epilogue: An Algebra of Thought"
-subtitle: "What Others Knew About Meaning Before It Became a Vector"
 ---
 
 <!--

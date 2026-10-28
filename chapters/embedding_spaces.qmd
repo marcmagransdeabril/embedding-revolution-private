@@ -1,6 +1,5 @@
 ---
 title: "The Anatomy of Embedding and Latent Spaces"
-subtitle: "From Shannon's Bits to High-Dimensional Geometric Knowledge"
 ---
 
 In 1948, Claude Shannon defined information as the reduction of uncertainty, measured in bits [@shannon1948mathematical]. His entropy formula turned out to be identical in form to the one Boltzmann and Gibbs had used for thermodynamic systems in the late nineteenth and early twentieth centuries—a resemblance Shannon himself noted, though it was Edwin T. Jaynes who, in 1957, argued that statistical mechanics is itself a form of inference [@jaynes1957information]. But Shannon drew a deliberate boundary: "[t]hese semantic aspects of communication are irrelevant to the engineering problem." A bit is a unit of uncertainty, not of meaning.
