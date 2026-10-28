@@ -10,19 +10,21 @@ This chapter lays the foundation for the rest of the book. We start with why dis
 
 ## Shannon's Information Theory
 
-Shannon measured the information of a message by its surprise: a message with probability $p$ carries $-\log_2 p$ bits. Near-certain messages ($p \approx 1$) tell us almost nothing, while rare ones ($p \approx 0$) are highly informative. The *entropy* of a source is the average of this surprisal. For a binary source that emits a one with probability $p$ and a zero with probability $1-p$, it is
+Shannon measured the information of a message by its surprise: a message with probability $p$ carries $-\log_2 p$ bits of surprisal. Near-certain messages ($p \approx 1$) tell us almost nothing, while rare ones ($p \approx 0$) are highly informative. The *entropy* of a source is the average of this surprisal.
+
+For a binary source that emits a one with probability $p$ and a zero with probability $1-p$, the average surprisal or entropy is:
 
 $$
 H_b(p) = -p \log_2 p - (1-p)\log_2(1-p),
 $$
 
-which peaks at one bit when $p = 1/2$ and vanishes when the outcome is certain. For a stream of $n$ bits that are independent and identically distributed, entropies add:
+which peaks at one bit when $p = 1/2$ and vanishes when the outcome is certain (either $p = 0$ or $p = 1$). For a stream of $n$ bits that are independent and identically distributed, entropies add:
 
 $$
 H(X_1,\dots,X_n) = \sum_{i=1}^{n} H(X_i) = n\,H_b(p).
 $$
 
-Consider a faulty sensor that outputs a one with probability $p = 0.9$. Seeing a one is unsurprising, while seeing a zero is a rare event:
+Consider a faulty sensor that outputs a one with probability $p=0.99$ (see @tbl-binary-entropy). Seeing a one is unsurprising, while seeing a zero is a rare event. However, the average surprisal, or entropy, remains low. Even though zeros are highly informative individually, they occur so infrequently that the overall uncertainty of the source is small:
 
 | $p$ | Surprisal of a one | Surprisal of a zero | Entropy $H_b(p)$ |
 |:---:|:---:|:---:|:---:|
@@ -32,7 +34,11 @@ Consider a faulty sensor that outputs a one with probability $p = 0.9$. Seeing a
 
 : Surprisal of each outcome and entropy of a binary source. {#tbl-binary-entropy}
 
-For $p = 0.9$ the average is $H_b(0.9) = 0.9 \times 0.152 + 0.1 \times 3.322 \approx 0.47$ bits per symbol. The zeros are individually informative, but they are so rare that the stream as a whole is highly predictable. A fair coin cannot be compressed, because every flip costs a full bit. The sensor stream can: a log of 1000 symbols can, on average, be squeezed into about 470 bits, and no lossless scheme can do better.
+Entropy is more than a measure of uncertainty. Shannon proved in the same foundational paper that it is also the limit of lossless compression: a source that emits independent symbols with entropy $H$ bits per symbol can be encoded, on average, in about $H$ bits per symbol, and no code can do better. For the faulty sensor with $p=0.99$, a complete log of 10,000 readings occupies 10,000 bits, but the entropy of the whole log is only $10{,}000 \times 0.081 \approx 810$ bits, which tells us that, in principle, we could reduce the storage by a factor of around 12. The savings come from giving frequent outcomes short codewords and rare ones long codewords, so that the length of each codeword approaches its surprisal. Long runs of ones become almost free, and the occasional zero pays for its surprise. Huffman and arithmetic coding, the engines inside every compressor, are practical ways of approaching this limit.
+
+This gives entropy two readings that turn out to be the same: the average surprise of a source, and the minimum number of bits needed to describe it. This also connects compression with prediction. A good compressor is a good statistical model of its source, because the better we predict the next symbol, the shorter the code we can assign to it. We will see later in this chapter this identity again when cross-entropy becomes the training loss function of neural networks.
+
+Notice what the compressor needed to know about the sensor: its probabilities, and nothing else. It never asked what a one represents, whether a temperature, a heartbeat or a coin flip. Shannon's theory is complete at that level, and the next section examines why that is both its strength and its boundary.
 
 
 ::: {.questions}
