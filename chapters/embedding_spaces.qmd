@@ -2,11 +2,11 @@
 title: "The Anatomy of Embedding and Latent Spaces"
 ---
 
-In 1948, Claude Shannon defined information as the reduction of uncertainty, measured in bits [@shannon1948mathematical]. His entropy formula turned out to be identical in form to the one Boltzmann and Gibbs had used for thermodynamic systems in the late nineteenth and early twentieth centuries—a resemblance Shannon himself noted, though it was Edwin T. Jaynes who, in 1957, argued that statistical mechanics is itself a form of inference [@jaynes1957information]. But Shannon drew a deliberate boundary: "[t]hese semantic aspects of communication are irrelevant to the engineering problem." A bit is a unit of uncertainty, not of meaning.
+In 1948, Claude Shannon defined information as the reduction of uncertainty, measured in bits [@shannon1948mathematical]. But Shannon drew a deliberate boundary: "[t]hese semantic aspects of communication are irrelevant to the engineering problem." A bit is a unit of uncertainty, not of meaning. By conscious choice, he separated the syntactic from the semantic aspects of communication.
 
-The **Embedding Revolution** is the complement to Shannon's syntactic theory: it represents meaning itself—or at least its statistical shadow—as continuous coordinates on high-dimensional manifolds. Fittingly, it does so using Shannon's own tools: cross-entropy and mutual information are the objectives that shape these spaces.
+The **Embedding Revolution** complements Shannon's syntactic theory with a semantic one, developed over the last few decades as part of the deep learning revolution. Meaning, or at least its statistical shadow, can also be represented as continuous coordinates on high-dimensional manifolds. Fittingly, this is done with Shannon's own tools: cross-entropy and mutual information are the objectives that shape these spaces.
 
-This chapter lays the foundation for the rest of the book. We start with why discrete, orthogonal representations hit a geometric wall, then examine how latent manifolds are built and what their geometry looks like. We close with the places where a single vector strains: a ledger of limits, each stated as a cost rather than a failure, which the rest of the book examines.
+This chapter lays the foundation for the rest of the book. We start with why discrete, orthogonal representations hit a geometric wall, then examine how latent manifolds are built and what their geometry looks like, and close with the places where this vector representation suffers most: its limits, which the rest of the book examines.
 
 ## Shannon's Information Theory
 
