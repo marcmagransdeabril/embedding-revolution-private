@@ -48,6 +48,12 @@ Sections present, ordered, and labelled per the book's skeleton. Flag deviations
 ### 3. Grammar and usage
 - Fix grammar/typos without altering style; keep terminology, numbers, and decimal-separators consistent across text, math, and figures.
 - Flag unnatural phrasing (calques, wrong prepositions) and punctuation errors (parentheticals, dashes, ellipses, locale quotes); match dialogue/monologue to character voice and scene register.
+- **Colon overuse.** Flag prose where a colon is the default way to link a clause to its explanation ("X is Y: it does Z"), especially when several occur in one paragraph or the pattern recurs across the unit; it reads as mechanical. Suggest a comma with a participle ("It is a language model in embryo, absorbing some of the syntax…"), a conjunction ("because", "so", "which"), or a separate sentence. Count occurrences per section and report the density, not only single instances. Colons are correct, and not to be flagged, when they:
+  - introduce an enumeration or a list item ("three levels: A, B and C");
+  - introduce a formal definition, a quotation, or a displayed formula or example;
+  - belong to titles, captions, labels, ratios, times, citations or code;
+  - open a short, deliberate announcement where the payoff is the point ("The answer is simple: …"), used sparingly (at most once or twice per page).
+  Apply the fix only for clear-cut cases that need no change in meaning; list the rest as suggestions.
 - Suggest (don't apply) more engaging rewrites.
 
 ### 4. Cross-references
