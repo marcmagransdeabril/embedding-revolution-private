@@ -177,7 +177,7 @@ printed-page locators `[@key, p. N]` when the prose is written):
 
 Findings for other chapters from this literature review:
 
-- Chapter 1 credits the distributional idea to Wittgenstein and Firth; @harris1954distributional (1954) predates Firth (1957) and should be cited.
+- Chapter 1 now states the distributional idea ("a word can be known by the company it keeps") without names or citations. Its history, Harris (1954) before Firth (1957), belongs in "Meaning by Difference and by Company" above, which already plans it; Chapter 1 should not reintroduce the attribution.
 - Chapter 1 presents the analogy parallelogram through @mikolov2013efficient; @rumelhart1973model proposed the parallelogram model of analogy in a psychological space in 1973.
 - The term "semantic space" comes from @osgood1952nature, and MDS [@torgerson1952multidimensional; @shepard1962analysis] built such spaces from judged distances; worth one sentence in Chapter 1.
 - Word association norms [@kent1910study] precede @church1990word by eighty years.
