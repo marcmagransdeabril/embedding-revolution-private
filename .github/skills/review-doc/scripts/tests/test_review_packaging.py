@@ -95,3 +95,14 @@ def test_referenced_documents_validation_step():
     assert "bibliographic" in content_lower or "metadata" in content_lower, (
         "SKILL.md must specify bibliographic/metadata validation for references"
     )
+
+
+def test_style_section_guards_against_empty_erudition():
+    """§2 must flag unneeded or unexplained name-drops and ask the two dependency questions."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec2 = re.search(r"### 2\. Style(.*?)(?=### 3\.|\Z)", content, flags=re.DOTALL)
+    assert sec2 is not None, "Failed to locate §2 in review-doc/SKILL.md"
+    text = sec2.group(1)
+    assert "No empty erudition" in text
+    assert "does the next step of the argument depend on it" in text
+    assert "explained well enough" in text
