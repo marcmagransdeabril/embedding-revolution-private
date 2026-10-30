@@ -27,6 +27,13 @@ printed-page locators `[@key, p. N]` when the prose is written):
   - Garg 2018: embedding bias tracks census data over a century, p. 2-4.
   - Spence 2011: structural, statistical and semantic correspondences p. 17; bouba/kiki p. 4.
   - Tymoczko 2006: chords as points of an orbifold, a quotient space, p. 1, 3-4.
+  - Pereira 2000: aggregate bigram model, C = 16, newspaper text, ratio about 2 x 10^5, PDF p. 7.
+  - Kallini 2024: GPT-2 does not learn impossible languages as well as possible ones; quotes
+    Chomsky et al. 2023 "incapable of distinguishing the possible from the impossible", p. 1-2, 9.
+  - Warstadt 2023: children hear fewer than 100 million words by age 13, p. 1-2.
+  - Murty 2023: "structural grokking", generalization improves long after in-domain accuracy saturates, p. 1-2.
+  - McCoy 2020: only tree-based models show a robust hierarchical bias, p. 2.
+  - Hewitt 2019: squared L2 distance encodes parse-tree distance, squared norm encodes depth, p. 1.
 -->
 
 *Arc in one paragraph.* The book argued that meaning can be treated as position in a space shaped by company, and that each limit of a single vector is a cost, not an impossibility. Computer science arrived at that idea late. Philosophy, linguistics, psychology, neuroscience, sociology, biology, psychiatry, literature, theology, and mathematics had each reached a version of it before, and each had found, in its own vocabulary, most of the limits in the ledger of Chapter 1. The epilogue reads the book again through those traditions: first what they anticipated, then what they disputed, then what they hold that the book does not yet use. It ends where the Prologue began, with the dog, and with the answer that meaning is a relation rather than a place.
@@ -72,7 +79,7 @@ printed-page locators `[@key, p. N]` when the prose is written):
 - Claim: the semantic space is a psychological construct that computers learned to estimate, not a computer-science invention.
 - Precedent: the term "semantic space" (Osgood), the parallelogram (Rumelhart and Abrahamson, against @mikolov2013efficient), an exponential similarity kernel (Shepard, against the $\exp(\cos/\tau)$ of InfoNCE), the semantic differential as directions in an embedding space (Kozlowski et al., against the steering vectors of Chapter 1).
 - Challenge: Osgood's three dimensions are a summary, and Kozlowski et al. show that they lose most of the structure of the space; the biases that Caliskan and Garg measure are a cost of learning meaning from use.
-- Unused: Shepard's law as a psychological justification of the softmax kernel; the circumplex as a natural case for phase (Chapter 8).
+- Unused: Shepard's law as a psychological justification of the softmax kernel; the circumplex as a natural case for phase (Chapter 8); distinctive features in phonology [@jakobson1952preliminaries; @chomsky1968sound], phonemes as hand-built binary feature vectors, decades before word vectors.
 - Hooks: Chapter 1 (Geometry of Meaning, Learning by Contrast), Chapter 8.
 
 ## Where Psychology Said No
@@ -146,11 +153,19 @@ printed-page locators `[@key, p. N]` when the prose is written):
 | Multi-way interactions | 7 | (to find) |
 | Similarity is not a logic | 8 | Goodman, Murphy–Medin, Tarski |
 | Binding | 9 | Jakobson's combination axis, Barsalou |
-| Systematic composition | 10 | Montague, Gentner |
+| Systematic composition | 10 | Montague, Gentner, Chomsky (structure dependence, Merge) |
 | Spaces defined up to isometry | 11 | Quine, Shepard–Chipman, RSA |
 | Modality gap and modality-specific loss | 12 | Paivio, Barsalou, hub-and-spoke |
 
 : Draft mapping of the ledger to its precedents (to be completed when the chapters are written). {#tbl-ledger-precedents}
+
+## Chomsky Against Statistics
+
+*Plan (2 pages).* One debate, sixty years long, and the clearest case of the bitter lesson argued by its opponent. Chomsky's review of Skinner [@chomsky1959review] argued that language needs internal representations, which made the cognitive revolution and is, ironically, what probing finds inside language models. "Colorless green ideas sleep furiously" [@chomsky1957syntactic] said that grammaticality is not probability; Pereira answered with a class-based bigram model [@pereira2000formal]. The argument from the poverty of the stimulus [@chomsky1965aspects; @chomsky1980rules] and recursion as the core of the faculty of language [@hauser2002faculty] say what must be innate. Norvig's essay [@norvig2011chomsky] answered Chomsky's dismissal of statistical models in 2011 with the case for the "two cultures"; the 2023 op-ed [@chomsky2023false] said that language models cannot tell the possible from the impossible, Piantadosi said that they refute the generative programme [@piantadosi2023modern], and the impossible-languages experiments [@kallini2024mission] tested the op-ed's claim directly, and found it wrong for GPT-2. Underneath is prediction versus explanation, which is the interpretability frontier of the book. Berwick and Chomsky's thesis that language evolved as an instrument of thought, not of communication [@berwick2016why], is the strongest form of the claim that an algebra of thought needs more than company.
+
+- Claim: the debate is not settled by performance, because each side measures a different thing: E-language for the models, I-language for Chomsky [@chomsky1986knowledge].
+- Challenge: data efficiency, children learn from fewer than 100 million words [@warstadt2023findings]; the hierarchical generalization that sequential networks miss [@mccoy2020syntax] and transformers learn late [@murty2023grokking].
+- Hooks: Chapter 1 (the staircase), Chapter 4 (structural probe), Chapter 10 (poverty of the stimulus), Chapter 12 (I-language and grounding).
 
 ## The Bitter Lesson and the Perfect Language
 
