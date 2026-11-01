@@ -44,7 +44,7 @@ The reach of this paradigm is broad, and so are the questions it raises:
 - **Multimodal Meaning:** Text, images, sound, and motion projected into one shared metric space, so that a photograph, a word, and a sound of the same thing become neighbours (e.g., CLIP for images and text, ImageBind for six modalities).
 - **Biology & Chemistry:** Amino acid sequences and molecular structures represented as continuous vectors (e.g., protein language models).
 - **Knowledge Graphs & Logic:** Discrete entities and relational predicates transformed into continuous translational and rotational operators ($\mathbb{R}^D, \mathbb{C}^D$).
-- **Agentic Trajectories:** Goals, world states, and plans represented as vectors, and behaviour as trajectories of such vectors.
+- **Agentic Trajectories:** Goals, world states, and plans represented as vectors, and behaviour as trajectories of such vectors (e.g., world models that predict the next state in latent space and plan there).
 
 Each item is also a question: what does the vector keep, and what does it lose?
 
@@ -91,12 +91,13 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *The Orthogonal Catastrophe:* Why one-hot representations make every symbol equally far from every other ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
   * *Rice's Theorem:* Why exact meaning is out of reach even for programs, and why similarity must be graded.
   * *Counting, Predicting, Contrasting:* PPMI and SVD, Word2Vec and its hidden PMI matrix, and InfoNCE: three ways of turning Shannon's quantities into geometry, and a first appearance of the bitter lesson.
+  * *Predicting Embeddings:* A fourth objective, which predicts the embedding of a missing part from the embedding of its context (JEPA) rather than the part itself, needs no negatives, and must then avoid collapse (BYOL, 2020; VICReg, 2022).
   * *The Geometry of Meaning:* Cosine and norm on the sphere, $\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$, and LLM activation steering.
   * *Where a Single Vector Strains:* Anisotropy cones, hubness, and the ledger of limits that the rest of the book examines.
 * **Chapter 2: Why Vectors Work: The Blessing (and Curse) of Dimensionality**
   * *The High-Dimensional Trap:* Why volume concentrates in a thin shell and corners are empty.
   * *Concentration of Measure:* Why random vectors are nearly orthogonal and Euclidean distances concentrate, with hubness and anisotropy as consequences.
-  * *Room for Exponentially Many Directions:* Why a space that holds only $d$ orthogonal vectors still holds exponentially many nearly orthogonal ones, the resource that distributed representations, superposition, and hyperdimensional computing exploit.
+  * *Room for Exponentially Many Directions:* Why a space that holds only $d$ orthogonal vectors still holds exponentially many nearly orthogonal ones, the resource that distributed representations, superposition, and hyperdimensional computing exploit, and dimensional collapse, in which a trained space uses only a few of those directions (Chapter 1).
   * *The Johnson-Lindenstrauss Lemma:* The mathematical foundation preserving pairwise distances under random projections.
   * *The Manifold Hypothesis:* Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$).
   * *An Aside on Optimization:* Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, and what overparameterization changes. This concerns parameter space, not embedding space.
@@ -184,10 +185,11 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Two Routes to One Space:* Separate encoders aligned by a contrastive loss versus a single transformer over interleaved tokens (Chapter 4), with post-hoc alignment (Chapter 11) as a third, and what each route keeps and loses.
   * *What a Shared Space Loses:* A contrastive objective keeps what the views share and discards what is specific to one of them, and the InfoNCE estimate of mutual information cannot exceed $\log N$ for $N$ examples per batch. The fur texture of the dog is not in its bark.
   * *The Modality Gap:* Why embeddings of different modalities occupy separate cones even after contrastive training, its relation to the anisotropy of Chapter 1 and the hubness of Chapters 2 and 3, and what it means for the claim of a "single" space.
-  * *Motion and Time:* Events as trajectories in the shared space (Chapter 5), why dynamics are the weakest part of current multimodal spaces, and prediction in latent space instead of pixel space (JEPA).
+  * *Motion and Time:* Events as trajectories in the shared space (Chapter 5), and why dynamics are the weakest part of current multimodal spaces. The gait is the hardest of the dog's four signals.
+  * *Predicting in the Space, Not the Signal:* Joint-embedding predictive architectures (JEPA), which predict the embedding of a masked or future part of a signal from the embedding of its context, so that the views are context and target within one signal rather than two modalities. The fourth objective of Chapter 1, now applied where it was designed to matter: a generative model must spend capacity on every pixel, a latent predictor can ignore what it cannot predict. Told as a historical sequence: LeCun's position paper on autonomous machine intelligence (2022); I-JEPA for images (2023); V-JEPA for video (2024); and V-JEPA 2 (2025), whose action-conditioned predictor plans in latent space. A world model is a learned vector field on the embedding manifold, and planning is the search for a trajectory along it (Chapter 5), which is where the agentic trajectories of the Prologue live. The link to predictive processing in the brain is taken up in the Epilogue.
   * *Composition Across Senses:* Binding attributes to objects across modalities (Chapters 9 and 10), and the failures that remain.
   * *Do the Senses Converge?* The Platonic representation hypothesis: evidence for and against the claim that models trained on different modalities approach the same geometry, and what the dog test says about it.
-  * *Scale Test:* Does scale make the alignment between modalities easier, or does the modality gap, the loss of modality-specific information, and the failure of composition persist as the structure of the problem?
+  * *Scale Test:* Does scale make the alignment between modalities easier, or does the modality gap, the loss of modality-specific information, and the failure of composition persist as the structure of the problem? And does prediction in latent space scale as a general method, as its proponents argue against autoregressive generation, or is it a prior that scaled generative models will absorb?
 * **Epilogue: An Algebra of Thought**
   * *Looking Back:* From Boole's discrete laws of thought to continuous vectors.
   * *The Meaning of Meaning:* Ogden and Richards's triangle of symbol, thought, and referent, Frege's sense and reference, Locke's words as signs of ideas, and the attempts of philosophy and psychology to cross Shannon's boundary from the other side (Bar-Hillel and Carnap, Dretske, Floridi, and color naming as an information bottleneck).
