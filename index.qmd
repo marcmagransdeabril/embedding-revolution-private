@@ -90,7 +90,7 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Chomsky's Staircase:* Structure without meaning, and why every machine on the staircase can only ask whether two symbols are the same.
   * *The Orthogonal Catastrophe:* Why one-hot representations make every symbol equally far from every other ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
   * *Rice's Theorem:* Why exact meaning is out of reach even for programs, and why similarity must be graded.
-  * *Counting, Predicting, Contrasting:* PPMI and SVD, Word2Vec and its hidden PMI matrix, and InfoNCE: three ways of turning Shannon's quantities into geometry, and a first appearance of the bitter lesson.
+  * *Counting, Predicting, Contrasting:* PPMI and SVD, Word2Vec's softmax predictor and its hidden PMI matrix, and InfoNCE: three ways of turning Shannon's quantities into geometry, and a first appearance of the bitter lesson.
   * *Predicting Embeddings:* A fourth objective, which predicts the embedding of a missing part from the embedding of its context (JEPA) rather than the part itself, needs no negatives, and must then avoid collapse (BYOL, 2020; VICReg, 2022).
   * *The Geometry of Meaning:* Cosine and norm on the sphere, $\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$, and LLM activation steering.
   * *Where a Single Vector Strains:* Anisotropy cones, hubness, and the ledger of limits that the rest of the book examines.
