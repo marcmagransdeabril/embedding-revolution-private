@@ -152,13 +152,7 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
 
     The script `onehot_dfa.py` verifies `accepts(s) == (s.count("1") % 2 == 0)` on all strings of up to 10 symbols. In a deterministic automaton every column of every matrix has exactly one 1 and the rest zeros (a permutation matrix here, in general a 0/1 matrix), because each state moves to exactly one next state. In a probabilistic automaton each column holds the probabilities of the next state, so the entries are in $[0, 1]$ and every column sums to 1 (a column-stochastic matrix). For example, if a `1` flips the state with probability $0.9$, the matrix is $0.9\,T_1 + 0.1\,T_0$, and after reading `111` the state is $(0.244, 0.756)$. The one-hot vector is the special case of a state with all its probability on one entry.
 
-10. For one example, $p = \sigma(\langle \mathbf{w}, \mathbf{x} \rangle)$ and $\sigma'(t) = \sigma(t)(1-\sigma(t))$, so $\partial p / \partial \mathbf{w} = p(1-p)\,\mathbf{x}$ and, by the chain rule,
-
-    $$
-    \nabla_{\mathbf{w}} L = \left(-\frac{y}{p} + \frac{1-y}{1-p}\right) p(1-p)\,\mathbf{x} = (p - y)\,\mathbf{x}.
-    $$
-
-    Gradient descent therefore updates $\mathbf{w} \leftarrow \mathbf{w} - \eta\,(p - y)\,\mathbf{x}$: the weights move by a multiple of the input, in the direction that reduces the error $p - y$. If $\mathbf{x} = \mathbf{e}_i$ is one-hot, only $w_i$ changes, $w_i \leftarrow w_i - \eta\,(p - y)$, and every other weight stays where it was. Training on one word cannot alter what the model says about any other. The update is a single line of code, and the script `onehot_transfer.py` also checks the gradient against finite differences:
+10. The derivation is the example in the callout "How a model learns: gradient descent": $\nabla_{\mathbf{w}} L = (p - y)\,\mathbf{x}$, and the update is $\mathbf{w} \leftarrow \mathbf{w} - \eta\,(p - y)\,\mathbf{x}$. If $\mathbf{x} = \mathbf{e}_i$ is one-hot, only $w_i$ changes, $w_i \leftarrow w_i - \eta\,(p - y)$, and every other weight stays where it was. Training on one word cannot alter what the model says about any other. The update is a single line of code, and the script `onehot_transfer.py` also checks the gradient against finite differences:
 
     ```python
     import numpy as np
