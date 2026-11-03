@@ -440,11 +440,11 @@ Cross-entropy makes sense as a loss function for three reasons.
 
 *Its minimum is the right one.* No code can beat the entropy of the source, and the cross-entropy is never smaller than the conditional entropy $H(C \mid W)$, the bits per neighbour that the true distribution needs. The excess is the Kullback–Leibler divergence between $P(\cdot \mid w)$ and $Q(\cdot \mid w)$, averaged over words, that is, the bits wasted by believing the model where the text behaves otherwise, zero only if the two agree. The model cannot cheat: the probabilities of all the neighbours add up to one, and raising that of one neighbour lowers those of the others, so the cross-entropy is smallest only when $Q$ reproduces the true conditional probabilities (exercise 1). 
 
-*It can be descended.* For a single pair $(w,c)$, the derivative of $-\ln Q(c \mid w)$ with respect to the score of a neighbour $c'$ is $Q(c' \mid w) - 1$ if $c'$ is the neighbour that was observed and $Q(c' \mid w)$ otherwise: what the model predicted minus what happened. It follows in three steps. Write $x_k = \langle \mathbf{e}_w, \mathbf{v}_k \rangle$ for the score of neighbour $k$.
+*It can be descended.* For a single pair $(w,c)$, the derivative of $-\ln Q(c \mid w)$ with respect to the score of a neighbour $c'$ is $Q(c' \mid w) - 1$ if $c'$ is the neighbour that was observed and $Q(c' \mid w)$ otherwise: what the model predicted minus what happened. It follows in five steps. For one pair $(w,c)$ let $\ell = -\ln Q(c \mid w)$ be the loss, and write $x_{wk} = \langle \mathbf{e}_w, \mathbf{v}_k \rangle$ for the score of neighbour $k$.
 
 1. Taking the logarithm of the softmax turns the quotient into a difference:
 $$
--\ln Q(c \mid w) = -x_ {wc} + \ln \sum_{k \in V} e^{x_{wk}}.
+\ell = -x_{wc} + \ln \sum_{k \in V} e^{x_{wk}}.
 $$
 2. Differentiate each term with respect to $x_{wc'}$. The first term, $-x_{wc}$, gives $-1$ if $c' = c$ and $0$ otherwise, which we write $-\delta_{c'c}$. In the second, only the term $k = c'$ of the sum depends on $x_{wc'}$, and the chain rule gives
 $$
@@ -453,24 +453,25 @@ $$
 so the derivative of the logarithm of a sum of exponentials is the softmax itself.
 3. Adding both terms,
 $$
-\frac{\partial}{\partial x_{wc'}}\bigl(-\ln Q(c \mid w)\bigr) = Q(c' \mid w) - \delta_{c'c}.
+\frac{\partial \ell}{\partial x_{wc'}} = Q(c' \mid w) - \delta_{c'c}.
+$$
+4. The scores depend on the vectors through $x_{wk} = \sum_j (\mathbf{e}_w)_j (\mathbf{v}_k)_j$, which is linear in each vector, so $\partial x_{wk} / \partial \mathbf{e}_w = \mathbf{v}_k$ and $\partial x_{wk} / \partial \mathbf{v}_{c'} = \delta_{kc'}\,\mathbf{e}_w$: the vector $\mathbf{v}_{c'}$ takes part in the score of $c'$ and in no other. Since $\ell$ depends on the vectors only through the scores, the chain rule gives $\partial \ell / \partial \boldsymbol{\theta} = \sum_{k} (\partial \ell / \partial x_{wk})\,(\partial x_{wk} / \partial \boldsymbol{\theta})$ for any parameter vector $\boldsymbol{\theta}$. The vector $\mathbf{v}_{c'}$ affects a single score, so the sum collapses to the term $k = c'$. The vector $\mathbf{e}_w$ affects every score, so all the terms survive, and the delta keeps only $k = c$ in the second part:
+$$
+\frac{\partial \ell}{\partial \mathbf{v}_{c'}} = \bigl(Q(c' \mid w) - \delta_{c'c}\bigr)\,\mathbf{e}_w, \qquad
+\frac{\partial \ell}{\partial \mathbf{e}_w} = \sum_{k} \bigl(Q(k \mid w) - \delta_{kc}\bigr)\,\mathbf{v}_k = -\mathbf{v}_c + \sum_{k} Q(k \mid w)\,\mathbf{v}_k.
+$$
+5. A gradient descent step with learning rate $\eta$ moves every vector against its gradient:
+$$
+\mathbf{e}_w \leftarrow \mathbf{e}_w + \eta\Bigl(\mathbf{v}_c - \sum_{k} Q(k \mid w)\,\mathbf{v}_k\Bigr), \qquad
+\mathbf{v}_{c'} \leftarrow \mathbf{v}_{c'} - \eta\,\bigl(Q(c' \mid w) - \delta_{c'c}\bigr)\,\mathbf{e}_w \quad \text{for every } c' \in V.
 $$
 
 The derivatives with respect to all the scores add up to $1 - 1 = 0$, as they must, because adding a constant to every score leaves $Q$ unchanged (and properly normalized). Gradient descent then raises the score of the observed neighbour in proportion to the probability that the model failed to give it, and lowers the scores of the others in proportion to the probability that the model gave them.
 :::
 
-Given the cross-entropy as the loss function, we can update the embedding vectors by performing gradient descent on it, adjusting them to better predict the observed neighbours in the text. For one pair $(w, c)$ of the text, with $\ell = -\ln Q(c \mid w)$,
+Given the cross-entropy as the loss function, let's try to reproduce the previous section's results on the toy corpus of thriteen phrases describing a sky and a court with queens and kings.
 
-$$
-\frac{\partial \ell}{\partial \mathbf{e}_w} = -\mathbf{v}_c + \sum_{c'} Q(c' \mid w)\,\mathbf{v}_{c'}, \qquad
-\frac{\partial \ell}{\partial \mathbf{v}_{c'}} = \bigl(Q(c' \mid w) - \delta_{c'c}\bigr)\,\mathbf{e}_w,
-$$
-
-where $\delta_{c'c}$ is the Kronecker delta of the Orthogonal Catastrophe section, 1 if $c' = c$ and 0 otherwise. A step against the gradient moves $\mathbf{e}_w$ towards the context vector of the observed neighbour and away from the average context vector under the model's own prediction, so it moves less the better the model already predicts the neighbour; the context vectors move in the same way towards the words they accompany. Similarity spreads through these pulls. `dawn` is pulled towards $\mathbf{v}_{\text{breaks}}$ and `dusk` towards $\mathbf{v}_{\text{falls}}$, and those two context vectors are both pulled by `over`, so `dawn` and `dusk` are drawn in similar directions although they never share an informative neighbour, the second-order effect that the SVD found by merging patterns. The full gradient of the loss is a sum of such terms over every pair of the corpus, which is the matrix $\mathbf{C}$ again in another form. Stochastic gradient descent, as in the box of the Orthogonal Catastrophe section, uses instead the terms of one window, picked at random. Averaged over windows, it equals the full gradient up to a constant factor. This is where the approximation lies, not in the criterion but in following its gradient one window at a time. In exchange, no matrix is ever built, the memory is the $2|V|d$ numbers of the model, the cost of a step does not depend on the size of the corpus, and more text means more steps rather than a new factorization, which is the online algorithm we asked for. The step is not free, though. The denominator of $Q$ sums over the whole vocabulary, so every pair costs about $|V|d$ operations, and for a vocabulary of 100,000 words this sum, not the corpus, becomes the bottleneck.
-
-The toy corpus shows both sides of the derivation. It is small enough to compute the loss over all pairs at once, so we minimized it with a variant of gradient descent, with $d = 5$. Where the derivation fixes the answer, training finds it. The predictor gives `dawn` a probability of $1/2$ for each of its two neighbours, `breaks` and `the`, and the loss reaches 1.2828 nats per pair, the conditional entropy $H(C \mid W)$ of the corpus, so it compresses the text as well as the true distribution does. Where the derivation does not fix the answer, it depends on the run. In five runs from different random starting points, the log-probability of the unseen pair `dawn`–`king` ended between $-15$ and $-23$, and would keep falling with more training. The loss agreed to four decimal places, and `king` and `queen`, which share every neighbour, always had a cosine of 0.97 or 0.98, but the cosine of `dawn` and `dusk` ranged from 0.18 to 0.43. The loss also weighs the pairs differently from the SVD: it counts every occurrence, so frequent pairs are fitted precisely and rare ones loosely, while the SVD weighs every cell of the matrix equally. The same object does not mean the same vectors. This is a first glimpse of a freedom that Chapter 11 takes up. The coordinates of a learned space are not unique, so comparing two spaces is a problem of its own.
-
-This predictor, with each neighbour within a window predicted from the word alone, is the **skip-gram** model of word2vec. Mikolov and colleagues at Google trained it in 2013 on 1.6 billion words in less than a day [@mikolov2013efficient, p. 1], replacing the sum in the denominator by a cheaper approximation.
+TODO: show results equivalent tables of results that @tbl-svd and @tbl-patterns
 
 If counting and predicting reach the same object, why did prediction win? In 2015 Levy, Goldberg and Dagan took the design choices that came with word2vec and transferred them to PPMI and SVD [@levy2015improving]. Much of the gap closed. They observed "mostly local or insignificant performance differences between the methods, with no global advantage to any single approach" [@levy2015improving, p. 211]. What prediction bought was not a better geometry. It was an algorithm that uses computation in the way Sutton's bitter lesson describes: memory proportional to the vocabulary rather than to its square, a cost per step independent of the corpus, steps that run in parallel on many processors, and vectors that keep improving as more text is read. This is the first concrete form of the bitter lesson in this book, and it concerns the algorithm, not the shape of the model, which is the same low-rank factorization as before, as linear as an SVD.
 
