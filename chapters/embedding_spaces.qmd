@@ -433,9 +433,25 @@ Cross-entropy makes sense as a loss function for three reasons.
 
 *It is the likelihood.* The sum runs over the pairs of the text, each counted as often as it occurs, so $N\,H(P,Q)$ is minus the logarithm of the probability that the model assigns to the whole corpus, its **likelihood**. Asking the model to give a high probability to what the text shows is the natural test of a probabilistic model, and the logarithm only turns the product over millions of pairs into a sum. Minimizing the cross-entropy and maximizing the likelihood are the same criterion, the first read by an engineer counting bits and the second by a statistician fitting parameters.
 
-*Its minimum is the right one.* No code can beat the entropy of the source, and the cross-entropy is never smaller than the conditional entropy $H(C \mid W)$, the bits per neighbour that the true distribution needs. The excess is the Kullback–Leibler divergence between $P(\cdot \mid w)$ and $Q(\cdot \mid w)$, averaged over words, that is, the bits wasted by believing the model where the text behaves otherwise, zero only if the two agree. The model cannot cheat: the probabilities of all the neighbours add up to one, and raising that of one neighbour lowers those of the others, so the cross-entropy is smallest only when $Q$ reproduces the true conditional probabilities (exercise 1). Learning by prediction is learning to compress. The sensor log of the first section could be squeezed into about 470 bits per thousand symbols because a single number, $p = 0.9$, predicted it; here $2d$ numbers per word try to predict its company.
+*Its minimum is the right one.* No code can beat the entropy of the source, and the cross-entropy is never smaller than the conditional entropy $H(C \mid W)$, the bits per neighbour that the true distribution needs. The excess is the Kullback–Leibler divergence between $P(\cdot \mid w)$ and $Q(\cdot \mid w)$, averaged over words, that is, the bits wasted by believing the model where the text behaves otherwise, zero only if the two agree. The model cannot cheat: the probabilities of all the neighbours add up to one, and raising that of one neighbour lowers those of the others, so the cross-entropy is smallest only when $Q$ reproduces the true conditional probabilities (exercise 1). 
 
-*It can be descended.* For a single pair $(w,c)$, the derivative of $-\ln Q(c \mid w)$ with respect to the score of a neighbour $c'$ is $Q(c' \mid w) - 1$ if $c'$ is the neighbour that was observed and $Q(c' \mid w)$ otherwise: what the model predicted minus what happened. Gradient descent then raises the score of the observed neighbour in proportion to the probability that the model failed to give it, and lowers the scores of the others in proportion to the probability that the model gave them.
+*It can be descended.* For a single pair $(w,c)$, the derivative of $-\ln Q(c \mid w)$ with respect to the score of a neighbour $c'$ is $Q(c' \mid w) - 1$ if $c'$ is the neighbour that was observed and $Q(c' \mid w)$ otherwise: what the model predicted minus what happened. It follows in three steps. Write $x_k = \langle \mathbf{e}_w, \mathbf{v}_k \rangle$ for the score of neighbour $k$.
+
+1. Taking the logarithm of the softmax turns the quotient into a difference:
+$$
+-\ln Q(c \mid w) = -x_ {wc} + \ln \sum_{k \in V} e^{x_{wk}}.
+$$
+2. Differentiate each term with respect to $x_{wc'}$. The first term, $-x_{wc}$, gives $-1$ if $c' = c$ and $0$ otherwise, which we write $-\delta_{c'c}$. In the second, only the term $k = c'$ of the sum depends on $x_{wc'}$, and the chain rule gives
+$$
+\frac{\partial}{\partial x_{wc'}} \ln \sum_{k} e^{x_{wk}} = \frac{e^{x_{wc'}}}{\sum_{k} e^{x_{wk}}} = Q(c' \mid w),
+$$
+so the derivative of the logarithm of a sum of exponentials is the softmax itself.
+3. Adding both terms,
+$$
+\frac{\partial}{\partial x_{wc'}}\bigl(-\ln Q(c \mid w)\bigr) = Q(c' \mid w) - \delta_{c'c}.
+$$
+
+The derivatives with respect to all the scores add up to $1 - 1 = 0$, as they must, because adding a constant to every score leaves $Q$ unchanged (and properly normalized). Gradient descent then raises the score of the observed neighbour in proportion to the probability that the model failed to give it, and lowers the scores of the others in proportion to the probability that the model gave them.
 :::
 
 The cross-entropy is the criterion, as the reconstruction error was in From Counting to Geometry, and the same two questions follow: which vectors minimize it, and how to find them, here without building $\mathbf{C}$.
