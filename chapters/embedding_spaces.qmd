@@ -459,19 +459,7 @@ $$
 The derivatives with respect to all the scores add up to $1 - 1 = 0$, as they must, because adding a constant to every score leaves $Q$ unchanged (and properly normalized). Gradient descent then raises the score of the observed neighbour in proportion to the probability that the model failed to give it, and lowers the scores of the others in proportion to the probability that the model gave them.
 :::
 
-The cross-entropy is the criterion, as the reconstruction error was in From Counting to Geometry, and the same two questions follow: which vectors minimize it, and how to find them, here without building $\mathbf{C}$.
-
-Start with the first question, in the case in which the scores are free, with $d$ large enough that any matrix of scores can be written as $\mathbf{E}\mathbf{V}^\top$. The cross-entropy is then smallest when $Q(c \mid w) = P(c \mid w)$, and exercise 1 shows that this happens when the scores are
-
-$$
-x_{wc} = \langle \mathbf{e}_w, \mathbf{v}_c \rangle = \mathrm{PMI}(w,c) + \ln P(c) + a_w,
-$$
-
-where the PMI is measured in nats ($1$ bit $= \ln 2 \approx 0.69$ nats) and $a_w$ is a constant for each word. The optimum confirms the form that the argument only suggested: the PMI matrix of Counting Company is hidden in the optimum of the predictor, up to one term for each word and one for each neighbour. The predictor never builds it, but it learns it. Counting and predicting aim at the same object.
-
-With $d \ll |V|$, however, the scores are not free, and here the analogy with the previous section ends. There, the criterion was a squared error, and the truncated SVD gave the best rank-$d$ answer in closed form, the same patterns for every $d$ with one more added at each step. No such result exists for this loss. Minimized over $\mathbf{E}$ and $\mathbf{V}$ it is not even convex, and no formula gives its rank-$d$ solution. Gradient descent is therefore not an approximation of a known answer but the way of finding one. Two more features of the loss have no counterpart in the SVD. For a pair that never occurs, $C_{wc} = 0$, the softmax can give a probability that tends to zero but is never exactly zero, so the score keeps decreasing towards $-\infty$ and there is no minimum at all, only a direction. The PMI of an unseen pair is $-\infty$, and where PPMI replaced it by zero, "no evidence", the predictor treats absence as evidence of avoidance. And the loss depends on the vectors only through the scores $\mathbf{E}\mathbf{V}^\top$, which do not change if $\mathbf{E}$ is replaced by $\mathbf{E}\mathbf{A}$ and $\mathbf{V}$ by $\mathbf{V}\mathbf{A}^{-\top}$, for any invertible $d \times d$ matrix $\mathbf{A}$. A rotation preserves cosines, but a stretch along one axis does not, so the cosine of two word vectors is not fixed by the criterion. The previous section could choose $\mathbf{E} = \mathbf{U}_d\mathbf{\Sigma}_d$ because its aim was to compare the rows of $\mathbf{M}_d$; here nothing in the loss makes that choice, and the training procedure makes it instead.
-
-The gradient with respect to the vectors shows what a step of training does. For one pair $(w, c)$ of the text, with $\ell = -\ln Q(c \mid w)$,
+Given the cross-entropy as the loss function, we can update the embedding vectors by performing gradient descent on it, adjusting them to better predict the observed neighbours in the text. For one pair $(w, c)$ of the text, with $\ell = -\ln Q(c \mid w)$,
 
 $$
 \frac{\partial \ell}{\partial \mathbf{e}_w} = -\mathbf{v}_c + \sum_{c'} Q(c' \mid w)\,\mathbf{v}_{c'}, \qquad
