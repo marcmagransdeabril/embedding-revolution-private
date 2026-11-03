@@ -421,13 +421,15 @@ Whether the form of $Q(c \mid w)$ above is right is decided by the loss defined 
 The softmax predictor $Q(c \mid w)$ approximates the conditional probabilities $P(c \mid w)$ with two sets of $|V|$ vectors of dimension $d$, that is, $2|V|d$ numbers instead of the $|V|^2$ of a full table. The question now is how to find these vectors without building the matrix $\mathbf{C}$ by successive approximations that improve them a little with every window of text. This is a job for gradient descent, which needs a function to descend: small when $Q$ predicts the text well and large when it does not. Shannon's tools give the answer. Each time the text shows a word $w$ with a neighbour $c$, the model is charged the surprisal $-\log_2 Q(c \mid w)$, a little when it expected the neighbour and a lot when it thought it almost impossible, and the average charge over the whole text is the **cross-entropy** of $Q$ with respect to the text.
 
 ::: {.callout-note title="How a model learns: cross-entropy as a loss"}
-Averaged over all the pairs of the corpus, the surprisal that the model $Q$ assigns to what the text shows is
+Averaged over all the pairs of the corpus, the cross-entropy or the surprisal that the model $Q$ assigns to what the text shows is
 
 $$
 H(P, Q) = -\sum_{w,c} P(w,c) \log_2 Q(c \mid w),
 $$
 
-where $P(w,c)$ is the probability of the pair in the text, estimated by $C_{wc}/N$ as in Counting Company. It is the number of bits per pair that we would need to encode the text with a code built from the probabilities of $Q$. Training will use natural logarithms, so the losses reported below are in nats. It makes sense as a loss for three reasons.
+where $P(w,c)$ is the probability of the pair in the text, estimated by $C_{wc}/N$ as in Counting Company. It is the number of bits per pair that we would need to encode the text with a code built from the probabilities of $Q$. Training will use natural logarithms, so the losses reported below are in nats. 
+
+Cross-entropy makes sense as a loss function for three reasons.
 
 *It is the likelihood.* The sum runs over the pairs of the text, each counted as often as it occurs, so $N\,H(P,Q)$ is minus the logarithm of the probability that the model assigns to the whole corpus, its **likelihood**. Asking the model to give a high probability to what the text shows is the natural test of a probabilistic model, and the logarithm only turns the product over millions of pairs into a sum. Minimizing the cross-entropy and maximizing the likelihood are the same criterion, the first read by an engineer counting bits and the second by a statistician fitting parameters.
 
