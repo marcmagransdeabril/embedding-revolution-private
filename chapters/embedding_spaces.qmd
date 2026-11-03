@@ -469,9 +469,51 @@ $$
 The derivatives with respect to all the scores add up to $1 - 1 = 0$, as they must, because adding a constant to every score leaves $Q$ unchanged (and properly normalized). Gradient descent then raises the score of the observed neighbour in proportion to the probability that the model failed to give it, and lowers the scores of the others in proportion to the probability that the model gave them.
 :::
 
-Given the cross-entropy as the loss function, let's try to reproduce the previous section's results on the toy corpus of thriteen phrases describing a sky and a court with queens and kings.
+Given the cross-entropy as the loss function, let us try to reproduce the results of the previous section on the toy corpus of thirteen sentences describing a sky and a court with queens and kings. The corpus is small enough to compute the loss over all the pairs at once, so instead of sampling windows we minimized $-\sum_{w,c} C_{wc} \ln Q(c \mid w)$ with Adam, a variant of gradient descent, starting from small random vectors, for several values of $d$ and five random starting points each (exercise 3 gives the details). @tbl-learned-cosines is the learned counterpart of @tbl-svd: the cosines of the same five pairs of rows of $\mathbf{E}$, as the mean and the range over the five runs.
 
-TODO: show results equivalent tables of results that @tbl-svd and @tbl-patterns
+| | `dawn`–`dusk` | `king`–`queen` | `dawn`–`king` | `dawn`–`xqzv` | `breaks`–`falls` |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| $d=2$ | 0.82 [0.29, 1.00] | 1.00 [1.00, 1.00] | 0.14 [−0.20, 0.99] | 0.07 [−0.26, 1.00] | −0.08 [−0.65, 0.96] |
+| $d=4$ | 0.43 [0.31, 0.51] | 0.99 [0.97, 0.99] | 0.31 [−0.03, 0.53] | 0.34 [0.28, 0.37] | 0.56 [0.52, 0.62] |
+| $d=5$ | 0.33 [0.18, 0.43] | 0.98 [0.97, 0.98] | 0.24 [−0.18, 0.52] | 0.24 [0.02, 0.40] | 0.46 [0.27, 0.59] |
+| $d=6$ | 0.34 [0.24, 0.41] | 0.98 [0.98, 0.99] | 0.42 [0.37, 0.45] | 0.27 [0.02, 0.46] | 0.43 [0.37, 0.49] |
+| $d=8$ | 0.27 [0.22, 0.35] | 0.99 [0.98, 0.99] | 0.31 [0.23, 0.36] | 0.32 [0.21, 0.42] | 0.43 [0.39, 0.49] |
+| $d=12$ | 0.19 [0.11, 0.27] | 0.98 [0.98, 0.99] | 0.31 [0.26, 0.37] | 0.26 [0.19, 0.32] | 0.34 [0.25, 0.41] |
+
+: Cosine similarity of five pairs of words for the embeddings $\mathbf{E}$ learned by the softmax predictor: mean and [minimum, maximum] over five random starting points. {#tbl-learned-cosines}
+
+| $d$ | Loss per pair (nats) | $\ln Q(\texttt{king} \mid \texttt{dawn})$ |
+|:---:|:---:|:---:|
+| 2 | 1.3508 | −77.1 to −5.5 |
+| 4 | 1.2828 | −30.1 to −14.8 |
+| 5 | 1.2828 | −22.9 to −15.4 |
+| 6 | 1.2828 | −22.1 to −16.2 |
+| 8 | 1.2828 | −20.2 to −17.1 |
+| 12 | 1.2828 | −20.0 to −16.1 |
+
+: Final loss per pair (mean over the five runs) and range over the runs of the log-probability that the trained predictor gives to the unseen pair `dawn`–`king`. The conditional entropy $H(C \mid W)$ of the corpus is 1.2828 nats. {#tbl-learned-loss}
+
+@tbl-learned-patterns is the counterpart of @tbl-patterns: the rows of $\mathbf{E}$ for $d=5$ in one of the runs.
+
+| | 1 | 2 | 3 | 4 | 5 |
+|:---|:---:|:---:|:---:|:---:|:---:|
+| `dawn` | −3.70 | −1.24 | 0.48 | −1.98 | −1.58 |
+| `dusk` | 1.00 | −2.22 | −1.65 | −3.11 | −2.11 |
+| `breaks` | −3.61 | 1.50 | −0.15 | 2.80 | 1.54 |
+| `falls` | −0.01 | 2.47 | 3.91 | −0.23 | 3.67 |
+| `over` | −1.00 | −1.77 | 0.55 | −2.66 | −1.47 |
+| `king` | −0.74 | −2.91 | −2.73 | −1.12 | 1.55 |
+| `queen` | −1.25 | −3.04 | −2.19 | −1.12 | 1.78 |
+| `wears` | −1.58 | −3.13 | −2.00 | 1.30 | −2.51 |
+| `rules` | −1.02 | −2.80 | −2.57 | 1.16 | −2.63 |
+| `xqzv` | −1.89 | 1.81 | −2.99 | −2.93 | 0.69 |
+| `jwk` | −0.62 | 2.44 | −2.78 | −1.42 | −2.18 |
+
+: Coordinates of eleven words in the embedding matrix $\mathbf{E}$ learned with $d=5$ (one run). {#tbl-learned-patterns}
+
+Where the derivation fixes the answer, training finds it. From $d=4$ on, the loss reaches 1.2828 nats per pair in every run, the conditional entropy $H(C \mid W)$ of the corpus, so the predictor compresses the text as well as the true distribution does; with $d=2$ the scores cannot fit the corpus and the loss stays above it. For $d=5$ the predictor gives `dawn` a probability within 5% of the true $1/2$ for each of its two neighbours, `breaks` and `the`, in every run. And `king` and `queen`, which share every neighbour, have a cosine of 0.97 or more, as in the SVD.
+
+Where the derivation does not fix the answer, the result depends on the run. The pair `dawn`–`king` never occurs, so the softmax can give it a probability that tends to zero but is never exactly zero, and its score keeps decreasing with training, towards $-\infty$; the value in @tbl-learned-loss is where the training stopped, not a minimum. The cosines other than `king`–`queen` do not agree with the SVD either: `dawn` and `dusk` are almost identical there for $d=4$ and $d=5$ (1.00) and unrelated here (0.33 on average, from 0.18 to 0.43 for $d=5$), `dawn` and `king` have a cosine of 0.09 in the SVD and between $-0.18$ and 0.52 here, and `breaks` and `falls` have 1.00 and between 0.27 and 0.59. @tbl-learned-patterns shows why they cannot be compared coordinate by coordinate: the columns are not ordered by importance, no coordinate of `xqzv` or `jwk` is zero, and no column separates the sky from the court cleanly. The loss depends on the vectors only through the scores $\mathbf{E}\mathbf{V}^\top$, which do not change if $\mathbf{E}$ is replaced by $\mathbf{E}\mathbf{A}$ and $\mathbf{V}$ by $\mathbf{V}\mathbf{A}^{-\top}$ for any invertible matrix $\mathbf{A}$. With $\mathbf{A} = \mathrm{diag}(1, 2, 3, 4, 5)$ on one of the runs, the loss stays at 1.2828 but the cosine of `dawn` and `dusk` changes from 0.43 to 0.32. Counting and predicting reach the same object, the PMI matrix, but not the same vectors.
 
 If counting and predicting reach the same object, why did prediction win? What prediction bought was not a better geometry. It was an algorithm that uses computation in the way Sutton's bitter lesson describes: memory proportional to the vocabulary rather than to its square, a cost per step independent of the corpus, steps that run in parallel on many processors, and vectors that keep improving as more text is read. This is the first concrete form of the bitter lesson in this book, and it concerns the algorithm, not the shape of the model, which is the same low-rank linear factorization as before in the SVD.
 
