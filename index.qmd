@@ -56,7 +56,7 @@ This is the *symbol grounding problem* in geometric form (Harnad, 1990): words d
 
 ### The Geek's Compass: Navigating Thousands of Dimensions
 
-High-dimensional spaces do not behave like our 3D intuitive world. In 1,000 dimensions, nearly all the volume of a hypersphere concentrates in a thin outer shell, thinner as the dimension grows; random vectors are almost certainly close to orthogonal ($\langle \mathbf{u}, \mathbf{v} \rangle \approx 0$); and traditional Euclidean distance metrics lose discriminative power without careful geometric regularization. The same strangeness is a resource: there is room for exponentially many nearly orthogonal directions, which is what lets a distributed representation hold far more concepts than it has dimensions.
+High-dimensional spaces do not behave like our 3D intuitive world. In 1,000 dimensions, nearly all the volume of a ball concentrates in a thin outer shell, thinner as the dimension grows; random vectors are almost certainly close to orthogonal ($\langle \mathbf{u}, \mathbf{v} \rangle \approx 0$); and traditional Euclidean distance metrics lose discriminative power without careful geometric regularization. The same strangeness is a resource: there is room for exponentially many nearly orthogonal directions, which is what lets a distributed representation hold far more concepts than it has dimensions.
 
 Navigating this counter-intuitive landscape requires a toolkit that blends linear algebra, differential geometry, group theory, topology, and hyperdimensional algebras. This book is your compass for that journey.
 
@@ -87,8 +87,8 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
 ### **Part I: Vectors as Meaning: Why It Works and Where It Strains**
 * **Chapter 1: The Anatomy of Embedding and Latent Spaces**
   * *From Shannon to Geometry:* Quantifying uncertainty vs. reconstructing continuous semantics.
-  * *Chomsky's Staircase:* Structure without meaning, and why every machine on the staircase can only ask whether two symbols are the same.
-  * *The Orthogonal Catastrophe:* Why one-hot representations make every symbol equally far from every other ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
+  * *Chomsky's Staircase:* Structure without meaning: each step of the staircase adds memory for structure, and none adds meaning to the symbols, which stay atomic.
+  * *The Orthogonal Catastrophe:* Why every machine on the staircase can only ask whether two symbols are the same, and why one-hot representations therefore make every symbol equally far from every other ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
   * *Rice's Theorem:* Why exact meaning is out of reach even for programs, and why similarity must be graded.
   * *Counting, Predicting, Contrasting:* PPMI and SVD, Word2Vec's softmax predictor and its hidden PMI matrix, and InfoNCE: three ways of turning Shannon's quantities into geometry, and a first appearance of the bitter lesson.
   * *Predicting Embeddings:* A fourth objective, which predicts the embedding of a missing part from the embedding of its context (JEPA) rather than the part itself, needs no negatives, and must then avoid collapse (BYOL, 2020; VICReg, 2022).
@@ -96,8 +96,8 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Where a Single Vector Strains:* Anisotropy cones, hubness, and the ledger of limits that the rest of the book examines.
 * **Chapter 2: Why Vectors Work: The Blessing (and Curse) of Dimensionality**
   * *The High-Dimensional Trap:* Why volume concentrates in a thin shell and corners are empty.
-  * *Concentration of Measure:* Why random vectors are nearly orthogonal and Euclidean distances concentrate, with hubness and anisotropy as consequences.
-  * *Room for Exponentially Many Directions:* Why a space that holds only $d$ orthogonal vectors still holds exponentially many nearly orthogonal ones, the resource that distributed representations, superposition, and hyperdimensional computing exploit, and dimensional collapse, in which a trained space uses only a few of those directions (Chapter 1).
+  * *Concentration of Measure:* Why random vectors are nearly orthogonal and Euclidean distances concentrate, with hubness as a consequence. Anisotropy, by contrast, is a property of trained spaces (Chapter 1).
+  * *Room for Exponentially Many Directions:* Why a space that holds only $D$ orthogonal vectors still holds exponentially many nearly orthogonal ones, the resource that distributed representations, superposition, and hyperdimensional computing exploit, and dimensional collapse, in which a trained space uses only a few of those directions (Chapter 1).
   * *The Johnson-Lindenstrauss Lemma:* The mathematical foundation preserving pairwise distances under random projections.
   * *The Manifold Hypothesis:* Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$).
   * *An Aside on Optimization:* Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, and what overparameterization changes. This concerns parameter space, not embedding space.
@@ -217,9 +217,11 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
 Throughout this book, we adopt standard mathematical notation:
 
 * **Scalars**: Lowercase italic letters ($x, y, \alpha, \lambda, \tau$).
-* **Vectors**: Lowercase bold letters ($\mathbf{x}, \mathbf{z}, \mathbf{v}, \boldsymbol{\mu}$). Vectors are column vectors in Euclidean space $\mathbb{R}^D$ unless specified otherwise.
+* **Vectors**: Lowercase bold letters ($\mathbf{x}, \mathbf{z}, \mathbf{v}, \boldsymbol{\mu}$). Vectors are column vectors in Euclidean space $\mathbb{R}^D$ unless specified otherwise. A row of a matrix is written as a column vector when it is used alone: $\mathbf{e}_w$ is the $w$-th row of the embedding matrix $\mathbf{E}$.
 * **Matrices**: Uppercase bold letters ($\mathbf{W}, \mathbf{X}, \mathbf{\Sigma}, \mathbf{U}$).
-* **Manifolds & Sets**: Calligraphic letters ($\mathcal{M}, \mathcal{X}, \mathcal{S}, \mathbb{S}^{D-1}$).
+* **Manifolds & Sets**: Calligraphic letters ($\mathcal{M}, \mathcal{X}, \mathcal{S}, \mathbb{S}^{D-1}$). A vocabulary is $\mathcal{V}$, with $|\mathcal{V}|$ symbols.
+* **Dimensions**: $D$ is the dimension of the ambient space, of the data or of a space considered on its own (for a vocabulary, $D = |\mathcal{V}|$ for one-hot vectors). $d$ is the dimension of a learned or reduced representation (an embedding, a rank, a subspace), with $d \le D$, and $d_{\text{int}}$ is the intrinsic dimension of the data.
+* **Information**: $P$ and $Q$ are probability distributions, $H$ is entropy, $I$ is mutual information and $\mathrm{PMI}$ is pointwise mutual information. Logarithms are base 2 (bits), except where training uses $\ln$ (nats), which is stated.
 * **Inner Products**: $\langle \mathbf{u}, \mathbf{v} \rangle = \mathbf{u}^\top \mathbf{v} = \sum_{i=1}^D u_i v_i$.
 * **Norms**: Euclidean $L_2$ norm $\|\mathbf{x}\|_2 = \sqrt{\mathbf{x}^\top \mathbf{x}}$; $L_p$ norm $\|\mathbf{x}\|_p = (\sum_i |x_i|^p)^{1/p}$.
 * **Cosine Similarity**: $\cos(\theta) = \frac{\mathbf{u}^\top \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2}$. On the unit hypersphere $\mathbb{S}^{D-1}$, $\cos(\theta) = \mathbf{u}^\top \mathbf{v}$.
