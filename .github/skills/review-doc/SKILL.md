@@ -28,7 +28,17 @@ Also establish, from `AGENTS.md`, the style guide, or an already-finished chapte
 3. **Canonical chapter skeleton** — expected section structure.
 4. **Style guide** — audience, tone, language and locale.
 
-Read the full unit under review (not just isolated diff hunks) before commenting, so feedback accounts for surrounding context. Apply only uncontroversial fixes; ask before anything touching voice, structure, or claims. For a paragraph/section-level review, skip checks that don't apply at that granularity (e.g. whole-chapter structure, index terms) and note which ones were skipped and why.
+Read the full unit under review (not just isolated diff hunks) before commenting, so feedback accounts for surrounding context. For a paragraph/section-level review, skip checks that don't apply at that granularity (e.g. whole-chapter structure, index terms) and note which ones were skipped and why.
+
+### Change policy (minimal intervention)
+A review audits; it does not rewrite. The author's text is the default and must stay as written unless there is an objective reason to change it.
+- **Only these may be edited directly**, and only inside the unit and range under review: typos and misspellings; clear grammar errors with one obvious fix; broken or mistyped cross-reference/citation syntax; inconsistent spelling of a term, number format or decimal separator against the book's own convention; unambiguous markup errors. Everything else (wording, sentence structure, paragraph order, tone, emphasis, transitions, punctuation habits, examples, humour, claims) is **reported, never applied**.
+- **Style is judged against the book's style guide and its finished chapters, not against the reviewer's taste.** Raise a style finding only when the text deviates from an established convention or hurts comprehension, and cite the convention or the passage that shows it. "Could be more engaging", "I would phrase it differently" and equivalent preferences are not findings.
+- **Style findings are at most `suggestion`**, unless they break an explicit rule of the style guide (then `should-fix`). They never block, and they are never applied without the author's approval.
+- **Smallest possible change.** When a proposal is warranted, quote the exact span and offer the minimal edit that fixes the problem, keeping the author's words, rhythm and register. Do not reformat, reflow, re-wrap, re-number, or normalise untouched text, and do not mix unrelated edits into one change.
+- **Stay in range.** Do not touch or comment on text outside the selected unit/range (beyond the context and boundary reads this skill requires). Pre-existing issues found outside it go in a separate "out of scope" note, not in the findings.
+- **Be stable across passes.** Do not re-raise a finding the author has already declined or left unchanged after it was reported, and do not flip a previously accepted choice back and forth. A second pass on unchanged text must produce no new style findings; if it does, the first pass was incomplete or the new finding is preference.
+- **When in doubt, report instead of editing**, and ask before anything touching voice, structure, or claims.
 
 ### Metacognitive Calibration & Claim Isolation
 Evaluate empirical and logical claims strictly independent of prose length, rhetorical fluency, or formatting polish. Mentally isolate each atomic claim (point estimate, baseline comparison, or inference) from narrative framing before judging soundness. Treat superlative framing or high rhetorical confidence as an alert to verify underlying data and controls.
@@ -39,23 +49,23 @@ Evaluate empirical and logical claims strictly independent of prose length, rhet
 Sections present, ordered, and labelled per the book's skeleton. Flag deviations; never restructure silently.
 
 ### 2. Style
-- Tone, register, and difficulty consistent with the rest of the book.
+- Tone, register, and difficulty consistent with the rest of the book. Flag only real inconsistencies with the surrounding chapters or style guide; do not push the text toward a different voice.
 - No uninterrupted stretch of text longer than ~2 pages without a break.
-- Each section and subsection opens by linking to the previous one and closes with a bridge to the next. Read the last paragraph of the preceding section and check that the first sentence of the current one picks up from it: no dangling demonstratives ("That", "This", "These") whose antecedent sits in an earlier section, and no abrupt change of topic. When the link is missing, propose an opening sentence that restates what the previous section established. Check the closing bridge against the actual first lines of the next section, not against its title.
+- Sections should flow into each other. Flag a missing link only when the reader would actually be lost (see below); an opening or closing that already connects, in whatever form the author chose, is fine and is not to be made formulaic. Read the last paragraph of the preceding section and check that the first sentence of the current one picks up from it: no dangling demonstratives ("That", "This", "These") whose antecedent sits in an earlier section, and no abrupt change of topic. When the link is missing, propose an opening sentence that restates what the previous section established. Check the closing bridge against the actual first lines of the next section, not against its title.
 - The same logic applies between consecutive chapters: the first paragraph of a chapter must pick up from the last paragraph of the previous chapter (no dangling references to material the reader has not just seen), and the chapter's closing paragraph must set up the opening of the next one. Read both chapter boundaries (end of the previous chapter, start of the next one) whenever a chapter is reviewed, and check that any "next chapter" announcement matches what the next chapter actually opens with.
 - Preserve existing anecdotes, humour, and authorial voice.
 - **No empty erudition.** The book exists to help the reader grasp ideas, not to display the author's learning. Flag every name-drop, historical aside, quotation, philosophical or cross-disciplinary reference, and passing technical term that the argument does not need, or that is mentioned without being explained. For each one answer two questions: (a) does the next step of the argument depend on it? (b) is it explained well enough that a reader who has never met it learns something usable? If (a) is no, propose cutting it, or moving a one-line pointer to the further-reading section. If (a) is yes but (b) is no, propose a plain-language explanation in place of the bare name or term. Typical symptoms are a thinker, theorem, or venue appended to a sentence with no consequence for what follows, a quotation that is not unpacked, jargon dropped in passing, and a closing clause that points at a deeper topic without a purpose. Report these as should-fix and show the answers to (a) and (b); do not apply them silently, since they touch voice. This does not conflict with preserving anecdotes and humour, which are kept when they make an idea easier to remember or to follow.
 
 ### 3. Grammar and usage
-- Fix grammar/typos without altering style; keep terminology, numbers, and decimal-separators consistent across text, math, and figures.
+- Fix grammar/typos without altering style (see Change policy); keep terminology, numbers, and decimal-separators consistent across text, math, and figures.
 - Flag unnatural phrasing (calques, wrong prepositions) and punctuation errors (parentheticals, dashes, ellipses, locale quotes); match dialogue/monologue to character voice and scene register.
 - **Colon overuse.** Flag prose where a colon is the default way to link a clause to its explanation ("X is Y: it does Z"), especially when several occur in one paragraph or the pattern recurs across the unit; it reads as mechanical. Suggest a comma with a participle ("It is a language model in embryo, absorbing some of the syntax…"), a conjunction ("because", "so", "which"), or a separate sentence. Count occurrences per section and report the density, not only single instances. Colons are correct, and not to be flagged, when they:
   - introduce an enumeration or a list item ("three levels: A, B and C");
   - introduce a formal definition, a quotation, or a displayed formula or example;
   - belong to titles, captions, labels, ratios, times, citations or code;
   - open a short, deliberate announcement where the payoff is the point ("The answer is simple: …"), used sparingly (at most once or twice per page).
-  Apply the fix only for clear-cut cases that need no change in meaning; list the rest as suggestions.
-- Suggest (don't apply) more engaging rewrites.
+  Colon use is a stylistic habit, so report it as a `suggestion` with the density count and never apply it; flag it only when the pattern is frequent enough to read as mechanical, not for isolated instances.
+- Do not propose rewrites merely to make prose more engaging; that is taste, not a defect.
 
 ### 4. Cross-references
 - Every section/figure/table reference resolves to an existing target.
@@ -136,4 +146,4 @@ Group findings into the 4-tier hierarchy:
 3. **Tier 3: Epistemic Boundary / 'Too Hard' Box** — explicitly declare unverified external claims, closed datasets, proprietary APIs/models, unindexed proofs, or offline prior art, paired with recommended verification queries.
 4. **Tier 4: Minor Editorial, Typography & LaTeX Suggestions** — mechanical formatting and typo fixes.
 
-For each finding: file/line reference, severity (blocker / should-fix / suggestion), and proposed correction. List applied fixes separately from items awaiting author decision. For whole-book reviews, group by chapter first, then by tier, with a cross-chapter summary.
+For each finding: file/line reference, severity (blocker / should-fix / suggestion), and proposed correction (minimal, per the Change policy). List applied fixes (only those the Change policy allows) separately from items awaiting author decision, and keep style items in the latter with `suggestion` severity unless an explicit style-guide rule is broken. For whole-book reviews, group by chapter first, then by tier, with a cross-chapter summary.
