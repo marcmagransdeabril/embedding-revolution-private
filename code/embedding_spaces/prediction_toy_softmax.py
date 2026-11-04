@@ -13,6 +13,7 @@ import numpy as np
 from utils import TOY_CORPUS, cooccurrence, cosine, ppmi, truncated_svd
 
 DIMS, SEEDS, ITERATIONS, LEARNING_RATE = [2, 4, 5, 6, 8, 12], range(5), 1_000_000, 0.1
+LN2 = float(np.log(2))  # training uses natural logarithms (nats); the results are reported in bits = nats / ln 2
 SENTENCES = [line.split() for line in TOY_CORPUS]
 vocab, counts = cooccurrence(SENTENCES, window=1)
 index = {w: i for i, w in enumerate(vocab)}
@@ -65,7 +66,8 @@ def log_q(e: np.ndarray, v: np.ndarray, w: str, c: str) -> float:
 
 
 if __name__ == "__main__":
-    print(f"H(C|W) = {H_COND:.4f} nats per pair; {ITERATIONS:,} iterations of SGD, eta from {LEARNING_RATE} to 0\n")
+    print(f"H(C|W) = {H_COND / LN2:.4f} bits per pair ({H_COND:.4f} nats); {ITERATIONS:,} iterations of SGD, "
+          f"eta from {LEARNING_RATE} to 0\n")
     with ProcessPoolExecutor() as pool:
         trained = list(pool.map(train, [(seed, d) for d in DIMS for seed in SEEDS]))
     runs = {d: trained[i * len(SEEDS):(i + 1) * len(SEEDS)] for i, d in enumerate(DIMS)}  # d -> [(e, v)] per seed
@@ -73,14 +75,14 @@ if __name__ == "__main__":
     svd_row = {d: [cos(truncated_svd(ppmi(counts), d), a, b) for a, b in PAIRS] for d in DIMS}
     summary = {}
     print("cosines of the pairs of tbl-svd, mean [min, max] over the seeds; the SVD value in parentheses")
-    print(f"{'d':>3s} {'loss':>8s} {'ln Q(king|dawn)':>17s} " + " ".join(f"{a + '-' + b:>26s}" for a, b in PAIRS))
+    print(f"{'d':>3s} {'loss (bits)':>11s} {'log2 Q(king|dawn)':>19s} " + " ".join(f"{a + '-' + b:>26s}" for a, b in PAIRS))
     for d in DIMS:
         losses = [loss(e, v) for e, v in runs[d]]
         unseen = [log_q(e, v, "dawn", "king") for e, v in runs[d]]
         cosines = np.array([[cos(e, a, b) for a, b in PAIRS] for e, _ in runs[d]])
         summary[d] = (losses, cosines, unseen)
         cells = " ".join(f"{c.mean():6.2f} [{c.min():5.2f},{c.max():5.2f}] ({s:5.2f})" for c, s in zip(cosines.T, svd_row[d]))
-        print(f"{d:3d} {np.mean(losses):8.4f} {min(unseen):7.1f} to {max(unseen):6.1f} {cells}")
+        print(f"{d:3d} {np.mean(losses) / LN2:11.4f} {min(unseen) / LN2:9.1f} to {max(unseen) / LN2:6.1f} {cells}")
 
     # tbl-patterns, learned version: the coordinates of the words in E (d = 5, first seed).
     e5, v5 = runs[5][0]
@@ -96,7 +98,7 @@ if __name__ == "__main__":
     e, v = runs[5][-1]
     a = np.diag([1.0, 2.0, 3.0, 4.0, 5.0])
     e2, v2 = e @ a, v @ np.linalg.inv(a).T
-    print(f"\nafter E -> E A: loss/pair {loss(e2, v2):.4f} (before {loss(e, v):.4f}), "
+    print(f"\nafter E -> E A: loss/pair {loss(e2, v2) / LN2:.4f} bits (before {loss(e, v) / LN2:.4f}), "
           f"cos dawn-dusk {cos(e2, 'dawn', 'dusk'):.2f} (before {cos(e, 'dawn', 'dusk'):.2f}), "
           f"cos king-queen {cos(e2, 'king', 'queen'):.2f}")
     assert np.allclose(e @ v.T, e2 @ v2.T)
