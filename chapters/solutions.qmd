@@ -296,12 +296,9 @@ Solutions to the review questions (`::: {.questions}` blocks) of every chapter.
     $$
     \sum_c p_c \ln q_c - \sum_c p_c \ln p_c \le \sum_{c \,:\, p_c > 0} q_c - 1 \le 0,
     $$
-    which is the claim: the cross-entropy exceeds the entropy by the Kullback–Leibler divergence $\sum_c p_c \ln(p_c/q_c) \ge 0$. Equality needs $t = 1$ in every term, so $q_c = p_c$ wherever $p_c > 0$, and then the $q_c$ already add up to one, so $q_c = 0$ wherever $p_c = 0$. The softmax gives $q_c = e^{x_{wc}}/Z_w$, so $q_c = p_c$ holds exactly when $x_{wc} = \ln P(c \mid w) + a_w$ with $a_w = \ln Z_w$ arbitrary. Since $P(c \mid w) = P(w,c)/P(w) = e^{\mathrm{PMI}(w,c)}\,P(c)$,
-    $$
-    x_{wc} = \mathrm{PMI}(w,c) + \ln P(c) + a_w .
-    $$
-    Adding the same constant to all the scores of $w$ multiplies the numerator and the denominator of the softmax by the same factor, so the predictions, and the loss, cannot see it: only the differences between the scores of one word are fixed by the data. A pair that never occurs needs $q_c = 0$, which no finite score gives, so its score must go to $-\infty$: the loss has no minimum, only a direction.
-
+    which is the claim: the cross-entropy exceeds the entropy by the Kullback–Leibler divergence $\sum_c p_c \ln(p_c/q_c) \ge 0$. 
+    
+    
 21. The script `prediction_cross_entropy.py` does it for *Pride and Prejudice* ($|V| = 6{,}729$, 115,708 training words). The unigram model gives 9.11 bits per word and the add-one bigram 10.54: knowing the previous word makes the prediction *worse*. A third (33%) of the consecutive pairs of the test text never occurs in the training text, and add-one smoothing gives each of the 6,729 possible successors of a word a pseudo-count of 1, so for a word seen 50 times, the observed successors receive only $50/6{,}779$ of the probability mass and 99% is spread over words that never followed it. The table has too many cells for the data, and the smoothing that fills them has no idea which unseen pairs are plausible. Smaller pseudo-counts help (8.84 bits with 0.01), and mixing the unsmoothed bigram with the unigram helps more (7.99 bits). A predictor computed from vectors, $Q(c \mid w) \propto \exp\langle \mathbf{e}_w, \mathbf{v}_c\rangle$, fills the unseen cells differently: a pair never seen still gets a sensible score if $w$ resembles words that were seen before $c$, so the statistics of `dawn` inform those of `dusk`. This is the argument that motivated the neural language model of @bengio2003neural, which learns the word vectors and the predictor together.
 
 22. The script `prediction_toy_softmax.py` trains the predictor with plain stochastic gradient descent in `numpy`, for the six values of $d$ and five seeds: 1,000,000 iterations, each on one of the thirteen sentences drawn with repetition, with a step size that decreases linearly from 0.1 to 0 (it takes a few minutes). The final loss per pair and the mean over the five seeds of the cosines of the five pairs of @tbl-svd are:
