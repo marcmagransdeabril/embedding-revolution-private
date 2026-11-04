@@ -38,12 +38,13 @@ for name, q in (("unigram", unigram), ("bigram", bigram)):
     print(f"{name}: probability zero on {zero / n:.1%} of the test pairs, so its cross-entropy on the test text is infinite;"
           f" on the other {len(defined[name]) / n:.1%} it is {cross_entropy(q, defined[name]):.2f} bits/word")
 
-# Compare the two models on the pairs where the bigram is defined (all of them have a word seen in training).
+# Compare the two models on the pairs to which the bigram gives positive probability. The unigram is defined
+# on all of them too, since a pair seen in training has its second word seen in training.
 h_uni = cross_entropy(unigram, defined["bigram"])
 h_big = cross_entropy(bigram, defined["bigram"])
-print(f"on the pairs where the bigram is defined: unigram {h_uni:.2f}, bigram {h_big:.2f} bits/word")
+print(f"on the pairs with positive bigram probability: unigram {h_uni:.2f}, bigram {h_big:.2f} bits/word")
 
-# The bigram is sharper where it has seen the pair, but silent on a third of the text.
+# The bigram is sharper where it has seen the pair, but gives no estimate for a third of the test pairs.
 assert h_big < h_uni
 assert 0.25 < 1 - len(defined["bigram"]) / n < 0.45
 assert 0 < 1 - len(defined["unigram"]) / n < 0.05
