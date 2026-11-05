@@ -11,6 +11,7 @@ train, test = words[:cut], words[cut:]
 uni = Counter(train)
 big = Counter(zip(train, train[1:]))
 n_train = len(train)
+n_test = len(test)
 test_pairs = list(zip(test, test[1:]))
 
 
@@ -30,7 +31,7 @@ def cross_entropy(q, pairs) -> float:
 
 
 n = len(test_pairs)
-print(f"training words = {n_train}, test pairs = {n}")
+print(f"training words = {n_train}, test words = {n_test}, test pairs = {n}")
 defined = {}
 for name, q in (("unigram", unigram), ("bigram", bigram)):
     defined[name] = [p for p in test_pairs if q(*p) > 0]

@@ -94,16 +94,25 @@ if __name__ == "__main__":
         q = [np.exp(log_q(e, v, "dawn", c)) for e, v in runs[5]]
         print(f"Q({c} | dawn) at d = 5: min {min(q):.3f}, max {max(q):.3f} (true {P_COND[index['dawn'], index[c]]:.3f})")
 
-    # An invertible change of basis, E -> E A and V -> V A^{-T}, leaves every score and the loss unchanged.
-    e, v = runs[5][-1]
-    a = np.diag([1.0, 2.0, 3.0, 4.0, 5.0])
-    e2, v2 = e @ a, v @ np.linalg.inv(a).T
-    print(f"\nafter E -> E A: loss/pair {loss(e2, v2) / LN2:.4f} bits (before {loss(e, v) / LN2:.4f}), "
-          f"cos dawn-dusk {cos(e2, 'dawn', 'dusk'):.2f} (before {cos(e, 'dawn', 'dusk'):.2f}), "
-          f"cos king-queen {cos(e2, 'king', 'queen'):.2f}")
-    assert np.allclose(e @ v.T, e2 @ v2.T)
-    assert abs(loss(e2, v2) - loss(e, v)) < 1e-9
-    assert abs(cos(e2, "dawn", "dusk") - cos(e, "dawn", "dusk")) > 0.05
+    # Two runs with d = 5 reach the same loss but different vectors; the SVD has no such freedom.
+    (e_a, v_a), (e_b, v_b) = runs[5][0], runs[5][1]
+    print(f"\nd = 5, seed 0 against seed 1: loss/pair {loss(e_a, v_a) / LN2:.4f} and {loss(e_b, v_b) / LN2:.4f} bits")
+    print(f"{'':>14s} {'seed 0':>7s} {'seed 1':>7s}")
+    for a, b in PAIRS:
+        print(f"{a + '-' + b:>14s} {cos(e_a, a, b):7.2f} {cos(e_b, a, b):7.2f}")
+    same_word = {w: cosine(e_a[index[w]], e_b[index[w]]) for w in ("dawn", "dusk", "king", "queen")}
+    print("cosine between the vectors of the same word in the two runs: "
+          + ", ".join(f"{w} {c:.2f}" for w, c in same_word.items()))
+    # The loss fixes E V^T, not E: the two runs differ by a change of basis, which is close to a rotation (orthogonal
+    # Procrustes: the rotation R that brings E_a closest to E_b). A rotation keeps every cosine between words.
+    left, _, right = np.linalg.svd(e_a.T @ e_b)
+    rotation = left @ right
+    gap = np.linalg.norm(e_a - e_b) / np.linalg.norm(e_b)
+    gap_rotated = np.linalg.norm(e_a @ rotation - e_b) / np.linalg.norm(e_b)
+    print("\ncoordinates of E (d = 5), seed 0 then seed 1")
+    for w in ("dawn", "dusk", "king", "queen"):
+        print(f"{w:8s}" + "".join(f"{c:7.2f}" for c in e_a[index[w]]) + "   |" + "".join(f"{c:7.2f}" for c in e_b[index[w]]))
+    print(f"relative distance between E of the two runs: {gap:.2f}; after the best rotation: {gap_rotated:.2f}")
 
     # The loss gets close to H(C|W) once the predictor is rich enough, and not before.
     assert min(summary[2][0]) - H_COND > 0.03
@@ -119,3 +128,7 @@ if __name__ == "__main__":
     assert all(summary[d][1][:, 1].min() > 0.8 for d in DIMS)
     assert summary[5][1][:, 0].max() < 0.5
     assert summary[5][1][:, 2].max() - summary[5][1][:, 2].min() > 0.1
+    # Two runs with d = 5 reach the same loss, and the vectors of the same word in them are not similar.
+    assert abs(loss(e_a, v_a) - loss(e_b, v_b)) < 1e-2
+    assert max(same_word.values()) < 0.5
+    assert gap > 1 and gap_rotated < 0.1  # ...but they are the same up to a rotation
