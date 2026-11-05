@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import TwoSlopeNorm
 
-from prediction_toy_softmax import PAIRS, SEEDS, cos, counts, index, log_softmax, n, train, vocab  # noqa: F401
+from prediction_toy_softmax import SEEDS, counts, index, log_softmax, n, train, vocab
 from utils import ppmi
 
 D = 5
@@ -61,14 +61,6 @@ if __name__ == "__main__":
     a = M_svd
     print(f"SVD fills in pairs that never occur: dusk-breaks {a[index['dusk'], index['breaks']]:.2f}, "
           f"dawn-falls {a[index['dawn'], index['falls']]:.2f} (PPMI 0)")
-
-    # The matrix of scores does not depend on the change of basis E -> E A, V -> V A^{-T}; the cosines of E do.
-    e, v = runs[-1]
-    A = np.diag([1.0, 2.0, 3.0, 4.0, 5.0])
-    e2, v2 = e @ A, v @ np.linalg.inv(A).T
-    print(f"change of basis: largest change of the matrix {np.abs(learned_pmi(e2, v2) - learned[-1]).max():.1e} bits; "
-          f"cos dawn-dusk of E {cos(e, 'dawn', 'dusk'):.2f} -> {cos(e2, 'dawn', 'dusk'):.2f}")
-    assert np.allclose(learned_pmi(e2, v2), learned[-1])
 
     # The predictor reproduces the PPMI of the observed pairs in every run; the SVD does not.
     assert max(worst) < 0.2
