@@ -173,10 +173,11 @@ printed-page locators `[@key, p. N]` when the prose is written):
 
 - Claim: the bitter lesson is the outcome of a four-century experiment, not a decade of benchmarks.
 - Hooks: scale tests of Chapters 4 to 13.
+- Open case: reasoning in the space versus in text, the bitter lesson applied to computation. Is keeping the steps continuous a durable advantage, or a prior that scaled token-level reasoning absorbs (Chapters 5 and 13)?
 
 ## Open Frontiers
 
-*Plan (1–2 pages).* Interpretability, geometric bounds on reasoning, grounding and multimodal composition, and the questions the other disciplines pose that the book leaves open: asymmetric similarity at scale (Tversky), embodiment and action (Varela, Smith–Gasser), the clinical use of semantic geometry (Bedi, Corcoran), and representational alignment between brains and models (RSA).
+*Plan (1–2 pages).* Interpretability, geometric bounds on reasoning, whether reasoning can stay in the space or must keep passing through text (Chapters 5 and 13), grounding and multimodal composition, and the questions the other disciplines pose that the book leaves open: asymmetric similarity at scale (Tversky), embodiment and action (Varela, Smith–Gasser), the clinical use of semantic geometry (Bedi, Corcoran), and representational alignment between brains and models (RSA).
 
 ## The Dog Test, Revisited
 

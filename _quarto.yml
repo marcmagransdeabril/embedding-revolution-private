@@ -16,6 +16,8 @@ book:
   - index.qmd
   - part: 'Vectors as Meaning: Why It Works and Where It Strains'
     chapters:
+    - chapters/properties_of_meaning.qmd
+    - chapters/curse_of_dimensionality.qmd
     - chapters/embedding_spaces.qmd
   - part: 'Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology'
     chapters:

@@ -8,7 +8,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Symmetries, invariances, and equivariances.*
 
 ## Tangent Spaces and Geodesics
-*Parallel transport, Riemannian metrics, and semantic interpolation along curves.*
+*Parallel transport, Riemannian metrics, and semantic interpolation along curves. A static thing is a point and an event is a curve; a plan is a curve too, and so is an argument if reasoning can stay in the space (Chapter 5). The geometry of this section is the vocabulary for both, developed for planning in Chapter 13.*
 
 ## Lie Groups and Continuous Symmetries
 *$SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE).*
