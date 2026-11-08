@@ -18,7 +18,7 @@ Written in the personal, candid, and intellectually curious spirit of *Through t
 
 ## 📚 Book Architecture & Single Source of Truth
 
-The complete book roadmap, prologue, acknowledgments, disclaimers, mathematical conventions, and full chapter contents are maintained in **[index.qmd](index.qmd)** as the single source of truth.
+The prologue, acknowledgments, disclaimers, mathematical conventions, and the book's global argument (one paragraph per chapter, with its scale test and its hand-off to the next) are maintained in **[index.qmd](index.qmd)**. The section-level outline of each chapter lives in its own file under `chapters/`, which is a stub until the chapter is written.
 
 ---
 
