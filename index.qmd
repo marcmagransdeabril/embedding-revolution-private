@@ -82,10 +82,30 @@ I would like to express my deepest gratitude to the researchers, mathematicians,
 
 This book is organized into four interconnected parts. It starts from the question of what it means to give a symbol an interior, shows why vectors are a good answer, and then asks what a vector space can carry beyond similarity (symmetry, curvature, relations, topology, logic, and composition) and what each addition costs. Every chapter is built around a question that will outlast any model: a theorem, a counting argument, or a historical debate. The methods that explored it are told as history.
 
-Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, each stated as a cost rather than an impossibility, and later chapters take them up one by one. Chapters 3 to 12 close with a *scale test*: as computation and data grow, is this structure absorbed by learning, does it survive because it is cheap, or does it survive because the problem demands it? And a *running example*, the dog of the Prologue (a photograph, the word, a bark, a gait), asks in each part what the structure at hand does for a concept that arrives through several senses. Chapter 12 collects the answers.
+Three devices connect the chapters. Chapter 3 ends with a *ledger of limits*, each stated as a cost rather than an impossibility, and later chapters take them up one by one. Chapters 4 to 13 close with a *scale test*: as computation and data grow, is this structure absorbed by learning, does it survive because it is cheap, or does it survive because the problem demands it? And a *running example*, the dog of the Prologue (a photograph, the word, a bark, a gait), asks in each part what the structure at hand does for a concept that arrives through several senses. Chapter 13 collects the answers.
 
 ### **Part I: Vectors as Meaning: Why It Works and Where It Strains**
-* **Chapter 1: The Anatomy of Embedding and Latent Spaces**
+* **Chapter 1: The Properties of Meaning as Geometry**
+  * *A Catalog, Not a Theory:* Eight properties that meaning acquires once it becomes position in a space, in the plain language of distance and direction. Each is a short statement, a figure, and a pointer to the chapters that earn it.
+  * *Nearness Is Likeness:* Things that mean alike sit close together, and things that mean differently sit far apart.
+  * *Difference Is a Relation:* The step from one meaning to another is itself meaningful, and the same step can be taken from elsewhere.
+  * *A Direction Is a Meaning You Can Move Along:* Some directions carry a single quality, such as plural, past, or formal, and moving along them changes only that quality.
+  * *Meaning Can Be a Region:* A concept can be an area, a cone, or a subspace, and one concept can contain another.
+  * *Meaning Can Move: Paths:* A static thing is a point, and an event, a plan, or an argument is a path through the space.
+  * *Meanings Combine:* Two meanings can be added into a bundle or bound into a pair, and the result is again a position in the same space.
+  * *Many Senses, One Space:* A photograph, a word, a bark, and a gait of the same dog can land near each other, and far from a cat or a car.
+  * *What Is Real Is the Arrangement:* The coordinates mean nothing on their own; only the distances and directions between meanings carry information.
+* **Chapter 2: Why Vectors Work: The Blessing (and Curse) of Dimensionality**
+  * *The High-Dimensional Trap:* Why volume concentrates in a thin shell and corners are empty, and why a Gaussian, the usual distribution of a random embedding, also sits in a thin shell at a fixed radius.
+  * *The Statistical Curse: Why Learning Needs Structure:* Bellman's curse of dimensionality was about computation and learning, not geometry: the sample size needed for a given density grows exponentially with the dimension, so learning is possible only under assumptions about structure (low intrinsic dimension, symmetry, or abstraction into a few relevant variables).
+  * *Concentration of Measure:* Why random vectors are nearly orthogonal and Euclidean distances concentrate, so that the nearest and the farthest neighbour become almost equally far. Hubness is related to this but distinct from it, and anisotropy, by contrast, is a property of trained spaces (Chapter 3).
+  * *Room for Exponentially Many Directions:* Why a space that holds only $D$ orthogonal vectors still holds exponentially many nearly orthogonal ones (the "blessing of dimensionality"), the resource that distributed representations, superposition, and hyperdimensional computing exploit, and dimensional collapse, in which a trained space uses only a few of those directions (Chapter 3).
+  * *Separability: When More Dimensions Help:* Cover's counting argument: lifting data into more dimensions makes linear separation easier, which is why a linear probe can read a concept out of a trained space.
+  * *The Johnson-Lindenstrauss Lemma:* The mathematical foundation preserving pairwise distances under random projections, and the tool behind capacity bounds for vector symbolic architectures (Chapter 10).
+  * *Random Walks in Many Dimensions:* Pólya's theorem (a walker returns home with certainty in one or two dimensions, and not in three or more), the slow $\sqrt{n}$ exploration of high dimensions, and the reverse picture on data, where a walk on a neighbourhood graph (diffusion maps, Laplacian eigenmaps) reveals the shape of the data and leads to the manifold hypothesis.
+  * *The Manifold Hypothesis:* Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$), tested in Chapter 8 with persistent homology.
+  * *An Aside on Optimization:* Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, and what overparameterization changes. This concerns parameter space, not embedding space.
+* **Chapter 3: The Anatomy of Embedding and Latent Spaces**
   * *From Shannon to Geometry:* Quantifying uncertainty vs. reconstructing continuous semantics.
   * *Chomsky's Staircase:* Structure without meaning: each step of the staircase adds memory for structure, and none adds meaning to the symbols, which stay atomic.
   * *The Orthogonal Catastrophe:* Why every machine on the staircase can only ask whether two symbols are the same, and why one-hot representations therefore make every symbol equally far from every other ($\|\mathbf{e}_i - \mathbf{e}_j\| = \sqrt{2}$).
@@ -94,21 +114,14 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Predicting Embeddings:* A fourth objective, which predicts the embedding of a missing part from the embedding of its context (JEPA) rather than the part itself, needs no negatives, and must then avoid collapse (BYOL, 2020; VICReg, 2022).
   * *The Geometry of Meaning:* Cosine and norm on the sphere, $\mathbf{king} - \mathbf{man} + \mathbf{woman} \approx \mathbf{queen}$, and LLM activation steering.
   * *Where a Single Vector Strains:* Anisotropy cones, hubness, and the ledger of limits that the rest of the book examines.
-* **Chapter 2: Why Vectors Work: The Blessing (and Curse) of Dimensionality**
-  * *The High-Dimensional Trap:* Why volume concentrates in a thin shell and corners are empty.
-  * *Concentration of Measure:* Why random vectors are nearly orthogonal and Euclidean distances concentrate, with hubness as a consequence. Anisotropy, by contrast, is a property of trained spaces (Chapter 1).
-  * *Room for Exponentially Many Directions:* Why a space that holds only $D$ orthogonal vectors still holds exponentially many nearly orthogonal ones, the resource that distributed representations, superposition, and hyperdimensional computing exploit, and dimensional collapse, in which a trained space uses only a few of those directions (Chapter 1).
-  * *The Johnson-Lindenstrauss Lemma:* The mathematical foundation preserving pairwise distances under random projections.
-  * *The Manifold Hypothesis:* Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$).
-  * *An Aside on Optimization:* Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, and what overparameterization changes. This concerns parameter space, not embedding space.
-* **Chapter 3: Vector Databases, RAG, and the Limits of Single-Vector Retrieval**
+* **Chapter 4: Vector Databases, RAG, and the Limits of Single-Vector Retrieval**
   * *From Exact to Approximate Search:* Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.
   * *What a Fixed-Dimension Dot Product Can Express:* The structural limit: how many distinct rankings and subsets a query vector of dimension $d$ can realize, and what that means for negation, conjunction, and multi-hop queries.
   * *Retrieval-Augmented Generation:* Bridging parametric model memory with external latent storage, told as the answer of the 2020s.
   * *Hybrid Search & Multi-Vector Alignments:* Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item. The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of Chapter 12 are practical problems.
   * *Negation, Multi-Hop Reasoning, and Hallucination (a dated case study):* How retrieval systems behaved, what followed, and why the structural limit remains.
   * *Scale Test:* Scale forced approximation. Will long contexts and agentic search absorb retrieval, or does external memory survive on cost?
-* **Chapter 4: Contextual Vectors: Attention, Transformers, and Looking Inside**
+* **Chapter 5: Contextual Vectors: Attention, Transformers, and Looking Inside**
   * *From Word Vectors to Contextual Vectors:* Why the vector of a word must depend on its sentence, and what transformers compute.
   * *Attention as Similarity-Weighted Retrieval:* The dot-product machinery of Chapter 3 inside the model, and its link to associative memory.
   * *Tokenizing the Senses:* Image patches, spectrogram frames, and video tubelets turned into tokens, so that the same attention machinery reads every modality. This is one of two routes to a shared space, a single network over interleaved tokens, compared in Chapter 12 with separate encoders aligned by a contrastive loss.
@@ -119,7 +132,7 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Scale Test:* Here the geometry is learned rather than designed. Which of the structures of Chapters 5 to 11 do trained transformers discover on their own?
 
 ### **Part II: Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology**
-* **Chapter 5: Tangent Spaces, Geodesics, and Geometric Deep Learning**
+* **Chapter 6: Tangent Spaces, Geodesics, and Geometric Deep Learning**
   * *The Erlangen Programme for Deep Learning:* What is a representation invariant to? Symmetries, invariances, and equivariances.
   * *The Symmetries of Each Sense:* Images vary by translation and viewpoint, audio by time shift, pitch, and speaker, video by motion, and text by none of these. A shared semantic space can be seen as a quotient by the nuisance symmetries of each modality: the same dog from any angle, in any voice.
   * *Tangent Spaces & Geodesics:* Parallel transport, Riemannian metrics, and semantic interpolation along curves. A static thing is a point and an event is a curve, so a running dog is a trajectory whose tangent vector is its motion.
@@ -127,7 +140,7 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Hyperbolic Latent Spaces:* Why negative curvature suits trees (volume grows exponentially with radius), and the Poincaré ball and Lorentz hyperboloid models for embedding trees and hierarchical taxonomies with arbitrarily low distortion in few dimensions, against the dimension cost of doing the same in flat space.
   * *Gauge Equivariance:* When coordinate frames depend on local manifold position.
   * *Scale Test:* Sutton's essay itself keeps convolution and certain invariances. Which symmetries does scale absorb through data and augmentation, which survive because they are cheap, and is hyperbolic geometry worth its cost?
-* **Chapter 6: From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry**
+* **Chapter 7: From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry**
   * *Representing Graphs in Vector Spaces:* Graph Neural Networks (GNNs) and Message Passing architectures.
   * *What a Relation Can Be:* Symmetric, antisymmetric, inverse, and compositional relations, and the algebra each one needs.
   * *Knowledge Graph Embeddings, as a Historical Sequence:* Each model fixes a relation pattern that the previous one could not express.
@@ -136,7 +149,7 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
     * *Rotational Models (RotatE):* Relations as rotations in the complex plane ($\mathbb{C}^D$).
   * *Graph Databases vs. Vector Databases:* The convergence of discrete graph topology and continuous latent coordinates.
   * *Scale Test:* Do embeddings learned from data make explicit graph structure unnecessary, or do the graph and the vector converge?
-* **Chapter 7: Beyond Graphs: Topological Deep Learning**
+* **Chapter 8: Beyond Graphs: Topological Deep Learning**
   * *What Pairwise Structure Cannot Express:* Moving beyond pairwise edges to simplicial complexes, cell complexes, and Combinatorial Complexes (CCs).
   * *Topological Cochains & Boundary Operators:* Modeling multi-way interactions, flows, faces, and higher-order cavities.
   * *Hodge Theory & Topological Message Passing:* Decomposing flows into gradient, curl, and harmonic parts, and learning representations on manifolds with topological holes.
@@ -144,14 +157,14 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Scale Test:* Much of this machinery is young. Which parts earn their cost at scale, and which are mainly analysis tools?
 
 ### **Part III: The Algebra of Thought: Vectors as Symbols**
-* **Chapter 8: The Complex Plane and Quantum Logic: Wave-Nature in Latent Space**
+* **Chapter 9: The Complex Plane and Quantum Logic: Wave-Nature in Latent Space**
   * *Concepts as Subspaces:* The logic of subspaces (Birkhoff and von Neumann): negation as orthogonal complement, and why that logic is not distributive. A concept such as "dog" is better described as a subspace, with directions shared by all modalities and directions specific to each, than as a single point.
   * *Complex-Valued Neural Networks (CVNN):* Embedding data into $\mathbb{C}^D$ and hypercomplex quaternions $\mathbb{H}^D$.
   * *Phase vs. Amplitude:* Separating categorical identity from intensity, resolving phase singularities, and orthogonal decision boundaries.
   * *Quantum Decision Making in Vector Spaces:* Superposition, phase interference, and non-commutative models of cognition, a debated line of work.
   * *Quantum-Inspired Embeddings:* Replacing classical probability logits with probability amplitudes.
   * *Scale Test:* Do complex-valued or quantum-inspired models beat real-valued ones when parameter count and compute are matched?
-* **Chapter 9: Vector Symbolic Architectures and Hyperdimensional Computing**
+* **Chapter 10: Vector Symbolic Architectures and Hyperdimensional Computing**
   * *Near-Orthogonality as a Resource:* The payoff of Chapter 2, representing concepts directly in 10,000-dimensional hypervectors.
   * *Algebraic Operations on Thoughts:*
     * *Bundling ($+$):* Superposition and set representation. Bundling is commutative, like Chomsky's Merge (1995), the single operation of the Minimalist Program, which builds the unordered set $\{a, b\}$; in both, order and hierarchy must come from somewhere else, binding and permutation here and labelling there.
@@ -159,7 +172,7 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
     * *Permutation ($\Pi$):* Sequence ordering and hierarchical encoding.
   * *Associative Clean-Up Memories & Capacity Bounds:* Theoretical bounds on robust concept retrieval without weight retraining, and the relation to attention as associative memory.
   * *Scale Test:* Capacity grows with dimension, and dimension is cheap. When does a hyperdimensional encoding beat a learned one?
-* **Chapter 10: Neuro-Symbolic Integration and Emergent Compositionality**
+* **Chapter 11: Neuro-Symbolic Integration and Emergent Compositionality**
   * *The Systematicity Challenge:* Fodor and Pylyshyn's argument that thought is compositional, the connectionist replies, and the staircase of Chapter 1 revisited: which steps can a vector system climb? Cross-modal models give a concrete test: image-text models that retrieve a "dog" and a "man" but confuse "dog bites man" with "man bites dog".
   * *The Poverty of the Stimulus:* Chomsky's argument (1965, 1980) that children receive too little data to learn grammar unless much of it is innate, the bitter-lesson debate in the vocabulary of linguistics, with recursion as the core of the language faculty (Hauser, Chomsky, and Fitch, 2002). Told as a historical sequence on the standard example, structure-dependent question formation ("Is the man who is tall happy?"): sequential networks generalize linearly and only tree-structured ones hierarchically (2020); vanilla transformers learn the hierarchical rule long after in-domain accuracy saturates, "structural grokking" (2023); GPT-2 learns humanly impossible languages less easily than possible ones, against Chomsky's claim (2024); and the BabyLM challenge (2023) sets the budget at the fewer than 100 million words a child hears by age 13.
   * *Bridging Connectionism and Logic:* Differentiable reasoning over structured knowledge.
@@ -170,7 +183,7 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Scale Test:* Do networks acquire systematic composition from data and scale, or must it be built in?
 
 ### **Part IV: Alignment, Transport, and Synthesis**
-* **Chapter 11: Cross-Domain Transfer and Optimal Transport**
+* **Chapter 12: Cross-Domain Transfer and Optimal Transport**
   * *Gauge Freedom:* A trained space is determined only up to an isometry, the relabelling invariance of Chapter 1 seen from the other side, so comparing two spaces is a geometric problem.
   * *Aligning Two Spaces:* Canonical correlation analysis (Hotelling, 1936), orthogonal Procrustes, and Mikolov's 2013 linear map between the embedding spaces of two languages: the classical, linear forms of alignment, and the precursors of the contrastive alignment of Chapter 12.
   * *Optimal Transport & Wasserstein Distances:* Monge-Kantorovich formulations for transporting probability mass across latent manifolds.
@@ -178,7 +191,7 @@ Three devices connect the chapters. Chapter 1 ends with a *ledger of limits*, ea
   * *Zero-Shot Cross-Domain Transfer:* Transfer through aligned spaces, and the evidence for and against representational convergence across models.
   * *Principles and Parameters:* Chomsky's picture (1981) of languages as one shared core with a few switches, read geometrically: multilingual models encode grammatical relations in a subspace shared across languages, with directions specific to each (2020), the same shared-plus-specific structure as the concept subspaces of Chapter 8.
   * *Scale Test:* Does scale make independently trained spaces more alike, and if so, what is left for alignment to do?
-* **Chapter 12: Many Senses, One Space: Multimodal Embeddings**
+* **Chapter 13: Many Senses, One Space: Multimodal Embeddings**
   * *The Grounding Problem:* Firth's company is a company of words. Harnad's symbol grounding, Bender and Koller's argument that form alone does not yield meaning, and Gärdenfors's conceptual spaces, set against the dog test of the Prologue: what would a photograph, the word, a bark, and a gait have to share? Chomsky's distinction (1986) between I-language, the system in the speaker's head, and E-language, the corpus of what is said: a text model is trained on E-language only, and a multimodal one adds the senses but not the head.
   * *Meaning as What Views Share:* A working definition of the semantic content of a signal as the information shared by different views of the same cause, which is Shannon's mutual information between channels. Told as a historical sequence: CCA (1936), deep CCA and DeViSE (2013), natural pairs such as the frames and the audio track of a video (2017), and CLIP (2021) as InfoNCE across modalities, whose optimum relates to the pointwise mutual information between an image and its caption, the cross-modal counterpart of the word-context PMI of Chapter 1.
   * *One Hub, Many Modalities:* How binding every modality to images (ImageBind, 2023) aligns pairs that were never seen together, such as audio and text, and what that suggests about the shared structure of the senses.
