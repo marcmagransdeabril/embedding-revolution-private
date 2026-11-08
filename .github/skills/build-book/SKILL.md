@@ -130,14 +130,18 @@ Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 
 ### File Placement and Naming
 Place new chapters in `chapters/`:
-- `chapters/embedding_spaces.qmd` (Chapter 1)
+- `chapters/properties_of_meaning.qmd` (Chapter 1)
 - `chapters/curse_of_dimensionality.qmd` (Chapter 2)
-- `chapters/vector_databases.qmd` (Chapter 3)
-- `chapters/contextual_vectors.qmd` (Chapter 4)
-- `chapters/tangent_spaces_geodesics.qmd` (Chapter 5)
+- `chapters/embedding_spaces.qmd` (Chapter 3)
+- `chapters/vector_databases.qmd` (Chapter 4)
+- `chapters/contextual_vectors.qmd` (Chapter 5)
+- `chapters/tangent_spaces_geodesics.qmd` (Chapter 6)
 - ...
 
 Run `make sync-chapters` to automatically register newly added files into `_quarto.yml`.
+The file-to-chapter mapping lives in `MASTER_PARTS` in `scripts/sync_chapters.py`:
+a file goes to the first chapter whose pattern is a substring of its filename
+stem or its title, so keep patterns specific.
 
 ### Chapter Frontmatter & Structure
 Each chapter file should begin with YAML frontmatter:
