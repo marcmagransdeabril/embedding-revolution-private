@@ -1,0 +1,26 @@
+---
+title: "Why Vectors Work: The Blessing (and Curse) of Dimensionality"
+---
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
+
+## The High-Dimensional Trap
+*Why volume concentrates in a thin shell and corners are empty.*
+
+## Concentration of Measure
+*Why random vectors are nearly orthogonal and Euclidean distances concentrate, with hubness as a consequence, which forces the approximate search of Chapter 4. Anisotropy, by contrast, is a property of trained spaces (Chapter 3).*
+
+## Room for Exponentially Many Directions
+*Why a space that holds only $D$ orthogonal vectors still holds exponentially many nearly orthogonal ones, the resource that distributed representations, superposition (Chapter 5), and hyperdimensional computing (Chapter 10) exploit, and dimensional collapse, in which a trained space uses only a few of those directions (Chapter 3).*
+
+## The Johnson-Lindenstrauss Lemma
+*The mathematical foundation preserving pairwise distances under random projections.*
+
+## Random Walks in Many Dimensions
+*Pólya's theorem (1921): a random walk returns home with certainty in one or two dimensions and only with probability less than one in three or more, so in high dimensions a walker is almost surely lost. After $n$ steps it is about $\sqrt{n}$ from the start and nearly orthogonal to where it began, concentration of measure seen as a process. On data the picture reverses: a walk confined to a neighbourhood graph cannot get lost, and its diffusion reveals the shape of the data (diffusion maps, Laplacian eigenmaps), which leads to the manifold hypothesis. The same walk reappears as a slowly drifting context vector that explains why word embeddings recover co-occurrence statistics (Chapter 3), and as the walks over a graph that DeepWalk and node2vec turn into sentences (Chapter 7).*
+
+## The Manifold Hypothesis
+*Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$), a hypothesis that Chapter 8 tests with persistent homology.*
+
+## An Aside on Optimization
+*Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, and what overparameterization changes. This concerns parameter space, not embedding space.*
