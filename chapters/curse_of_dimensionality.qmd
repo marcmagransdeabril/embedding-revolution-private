@@ -5,22 +5,28 @@ title: "Why Vectors Work: The Blessing (and Curse) of Dimensionality"
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
 ## The High-Dimensional Trap
-*Why volume concentrates in a thin shell and corners are empty.*
+*Why volume concentrates in a thin shell and corners are empty, and why the probability mass of a Gaussian, the usual distribution of a random embedding, also sits in a thin shell at a fixed radius [@bishop2024deep].*
+
+## The Statistical Curse: Why Learning Needs Structure
+*Bellman's name for it [@bellman1961adaptive] was about computation and learning, not geometry. A neighbourhood that holds 1% of uniform data in ten dimensions spans 63% of every axis, most points lie closer to the boundary than to any other point, and the sample size needed for the same density grows exponentially, so 100 points in one dimension become $100^{10}$ in ten [@hastie2009elements]. Knowing only that a function is smooth (Lipschitz), learning it takes a number of samples exponential in the dimension [@bronstein2021geometric]. The ways out are assumptions about structure, and the book follows three: data of low intrinsic dimension (the Manifold Hypothesis, below), symmetry (Chapter 6), and abstraction into a few relevant variables [@bernardi2020geometry], which returns as composition (Chapters 10 and 11).*
 
 ## Concentration of Measure
-*Why random vectors are nearly orthogonal and Euclidean distances concentrate, with hubness as a consequence, which forces the approximate search of Chapter 4. Anisotropy, by contrast, is a property of trained spaces (Chapter 3).*
+*Why random vectors are nearly orthogonal and Euclidean distances concentrate [@ledoux2001concentration], so that the nearest and the farthest neighbour become almost equally far [@beyer1999nearest], which forces the approximate search of Chapter 4. Hubness, a few points that appear among the nearest neighbours of very many, is related to distance concentration but distinct from it [@radovanovic2010hubs], and it is a practical problem of shared embedding spaces [@rostami2021transfer] (Chapter 13). Anisotropy, by contrast, is a property of trained spaces (Chapter 3).*
 
 ## Room for Exponentially Many Directions
-*Why a space that holds only $D$ orthogonal vectors still holds exponentially many nearly orthogonal ones, the resource that distributed representations, superposition (Chapter 5), and hyperdimensional computing (Chapter 10) exploit, and dimensional collapse, in which a trained space uses only a few of those directions (Chapter 3).*
+*Why a space that holds only $D$ orthogonal vectors still holds exponentially many nearly orthogonal ones [@kleyko2023survey], the "blessing of dimensionality" [@donoho2000high; @gorban2018blessing], and the resource that distributed representations, superposition (Chapter 5), and hyperdimensional computing (Chapter 10) exploit, with explicit bounds on how much a vector of dimension $D$ can hold [@clarkson2023capacity]. Contrastive training spreads embeddings uniformly over the sphere to use that room [@wang2020understanding]; dimensional collapse, in which a trained space uses only a few of those directions, is the opposite (Chapter 3).*
+
+## Separability: When More Dimensions Help
+*Cover's counting argument [@cover1965geometrical]: in $d$ dimensions, about $2d$ randomly labelled points can be separated by a hyperplane, so lifting data into more dimensions makes linear separation easier [@bishop2024deep]. For classes that are manifolds rather than points, separability depends on their dimension and radius, the manifold capacity of neural population geometry [@chung2021neural]. This is why a linear probe can read a concept out of a trained space (Chapter 5).*
 
 ## The Johnson-Lindenstrauss Lemma
-*The mathematical foundation preserving pairwise distances under random projections.*
+*The mathematical foundation preserving pairwise distances under random projections [@johnson1984extensions], and the tool behind capacity bounds for vector symbolic architectures [@clarkson2023capacity] (Chapter 10).*
 
 ## Random Walks in Many Dimensions
-*Pólya's theorem (1921): a random walk returns home with certainty in one or two dimensions and only with probability less than one in three or more, so in high dimensions a walker is almost surely lost. After $n$ steps it is about $\sqrt{n}$ from the start and nearly orthogonal to where it began, concentration of measure seen as a process. On data the picture reverses: a walk confined to a neighbourhood graph cannot get lost, and its diffusion reveals the shape of the data (diffusion maps, Laplacian eigenmaps), which leads to the manifold hypothesis. The same walk reappears as a slowly drifting context vector that explains why word embeddings recover co-occurrence statistics (Chapter 3), and as the walks over a graph that DeepWalk and node2vec turn into sentences (Chapter 7).*
+*Pólya's theorem [@polya1921aufgabe]: a random walk returns home with certainty in one or two dimensions and only with probability less than one in three or more, so in high dimensions a walker is almost surely lost. After $n$ steps it is only about $\sqrt{n}$ from the start, which makes random walks slow explorers [@bishop2024deep], and its position is nearly orthogonal to its first step, concentration of measure seen as a process. On data the picture reverses: a walk confined to a neighbourhood graph cannot get lost, and its diffusion reveals the shape of the data [@coifman2006diffusion; @belkin2003laplacian], which leads to the manifold hypothesis. The same walk reappears as a slowly drifting discourse vector that explains why word embeddings recover co-occurrence statistics [@arora2016latent] (Chapter 3), and as the walks over a graph that DeepWalk and node2vec turn into sentences [@perozzi2014deepwalk; @grover2016node2vec] (Chapter 7).*
 
 ## The Manifold Hypothesis
-*Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$), a hypothesis that Chapter 8 tests with persistent homology.*
+*Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$): images of an object that can only shift and rotate lie on a three-dimensional manifold, whatever the number of pixels [@bishop2024deep]. Chapter 8 tests the hypothesis with persistent homology [@chung2021neural].*
 
 ## An Aside on Optimization
-*Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, and what overparameterization changes. This concerns parameter space, not embedding space.*
+*Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, their ratio to local minima growing exponentially with dimension [@dauphin2014identifying], and what overparameterization changes. This concerns parameter space, not embedding space.*

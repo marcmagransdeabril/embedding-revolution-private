@@ -10,11 +10,14 @@
 % Citekey convention: surnameYYYYfirstword, lowercase, no punctuation.
 % Disambiguate collisions with a trailing letter (e.g. levy2014neurala).
 %
-% Each entry carries two project-specific fields in addition to the
+% Each entry carries one project-specific field in addition to the
 % standard BibTeX fields:
 %   - file     — path to a local PDF copy in references/, or {} if none held.
-%   - keywords — chapter tags (ch01, ch02, ...) and section tags, used to
-%                generate per-chapter further-reading lists and coverage audits.
+%
+% The bibliography is deliberately independent of the book's structure: no
+% chapter or section numbers are stored here, so reordering chapters never
+% touches this file. Optional `keywords` hold subject tags only (psychology,
+% philosophy, ...). Which chapter cites what is derived from the text.
 
 @article{shannon1948mathematical,
   author   = {Shannon, Claude E.},
@@ -24,7 +27,6 @@
   volume   = {27},
   number   = {3},
   pages    = {379--423},
-  keywords = {ch01},
   file     = {1948_shannon_mathematical_theory_communication.pdf}
 }
 
@@ -36,7 +38,6 @@
   volume   = {30},
   number   = {1},
   pages    = {50--64},
-  keywords = {ch01},
   file     = {1951_shannon_prediction_entropy_printed_english.pdf}
 }
 
@@ -46,8 +47,8 @@
   school   = {Massachusetts Institute of Technology},
   year     = {1937},
   pdf_url  = {https://dspace.mit.edu/bitstream/handle/1721.1/11173/34541425-MIT.pdf},
-  keywords = {ch01},
-  file     = {}
+  note     = {Local copy is the published abstract of the thesis: Transactions of the American Institute of Electrical Engineers 57(12):713--723, 1938},
+  file     = {1938_shannon_symbolic_analysis_relay_switching_circuits.pdf}
 }
 
 @article{shannon1956bandwagon,
@@ -58,7 +59,6 @@
   volume   = {2},
   number   = {1},
   pages    = {3},
-  keywords = {ch01},
   file     = {1956_shannon_bandwagon.pdf}
 }
 
@@ -69,7 +69,6 @@
   publisher = {University of Illinois Press},
   address   = {Urbana},
   year      = {1949},
-  keywords  = {ch01},
   file      = {1949_weaver_recent_contributions_mathematical_theory_communication.pdf}
 }
 
@@ -82,7 +81,6 @@
   number   = {4},
   pages    = {620--630},
   doi      = {10.1103/PhysRev.106.620},
-  keywords = {ch01},
   file     = {1957_jaynes_information_theory_statistical_mechanics.pdf}
 }
 
@@ -94,7 +92,6 @@
   volume   = {2},
   number   = {3},
   pages    = {113--124},
-  keywords = {ch01},
   file     = {1956_chomsky_three_models_description_language.pdf}
 }
 
@@ -104,7 +101,6 @@
   booktitle = {Studies in Linguistic Analysis},
   year      = {1957},
   pages     = {1--32},
-  keywords  = {ch01,blueprint1},
   file      = {}
 }
 
@@ -114,7 +110,6 @@
   booktitle = {Proceedings of the Eighth Annual Conference of the Cognitive Science Society},
   year      = {1986},
   pages     = {1--12},
-  keywords  = {ch01},
   file      = {1986_hinton_learning_distributed_representations.pdf}
 }
 
@@ -125,7 +120,6 @@
   year     = {1984},
   volume   = {26},
   pages    = {189--206},
-  keywords = {ch01,ch03},
   file     = {1984_Extensions_of_Lipschitz_mappings_into_a.pdf}
 }
 
@@ -134,7 +128,6 @@
   title    = {Efficient Estimation of Word Representations in Vector Space},
   journal  = {arXiv preprint arXiv:1301.3781},
   year     = {2013},
-  keywords = {ch01,blueprint2},
   file     = {2013_mikolov_efficient_estimation_word_rep_1301.3781v3.pdf}
 }
 
@@ -145,7 +138,6 @@
   year      = {2014},
   pages     = {2177--2185},
   url       = {https://papers.nips.cc/paper/5477},
-  keywords  = {ch01,blueprint2},
   file      = {2014_levy_neural_word_embedding_implicit_matrix_factorization.pdf}
 }
 
@@ -155,7 +147,6 @@
   booktitle = {Proceedings of the 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
   year      = {2014},
   pages     = {1532--1543},
-  keywords  = {ch01,blueprint1},
   file      = {2014_pennington_glove_global_vectors.pdf}
 }
 
@@ -164,7 +155,6 @@
   title     = {Understanding Contrastive Representation Learning through Alignment and Uniformity on the Hypersphere},
   booktitle = {Proceedings of the 37th International Conference on Machine Learning (ICML)},
   year      = {2020},
-  keywords  = {ch01,blueprint3},
   file      = {2020_wang_alignment_uniformity_hypersphere.pdf}
 }
 
@@ -175,7 +165,6 @@
   year     = {2016},
   volume   = {4},
   pages    = {385--399},
-  keywords = {ch01,blueprint1},
   file     = {2016_arora_latent_variable_model_pmi_embeddings.pdf}
 }
 
@@ -187,7 +176,6 @@
   volume   = {74},
   number   = {2},
   pages    = {358--366},
-  keywords = {ch01},
   file     = {1953_rice_classes_recursively_enumerable_sets.pdf}
 }
 
@@ -200,7 +188,6 @@
   volume   = {42},
   number   = {1},
   pages    = {230--265},
-  keywords = {ch01},
   file     = {1936_turing_computable_numbers.pdf}
 }
 
@@ -213,7 +200,6 @@
   number   = {POPL},
   pages    = {40:1--40:29},
   doi      = {10.1145/3290353},
-  keywords = {ch01},
   file     = {2019_alon_code2vec_distributed_representations_code_1803.09473v5.pdf}
 }
 
@@ -226,7 +212,6 @@
   number   = {OOPSLA},
   pages    = {1--30},
   doi      = {10.1145/3428230},
-  keywords = {ch01},
   file     = {2020_yefet_adversarial_examples_models_of_code_1910.07517v5.pdf}
 }
 
@@ -235,7 +220,6 @@
   title     = {Dynamic Neural Program Embeddings for Program Repair},
   booktitle = {International Conference on Learning Representations (ICLR)},
   year      = {2018},
-  keywords  = {ch01},
   file      = {2018_wang_dynamic_neural_program_embeddings_repair_1711.07163v4.pdf}
 }
 
@@ -248,7 +232,6 @@
   number   = {4},
   pages    = {81:1--81:37},
   doi      = {10.1145/3212695},
-  keywords = {ch01},
   file     = {2018_allamanis_survey_ml_big_code_naturalness_1709.06182v2.pdf}
 }
 
@@ -257,7 +240,6 @@
   title    = {Evaluating Large Language Models Trained on Code},
   journal  = {arXiv preprint arXiv:2107.03374},
   year     = {2021},
-  keywords = {ch01},
   file     = {2021_chen_evaluating_llms_trained_on_code_2107.03374v2.pdf}
 }
 
@@ -269,7 +251,6 @@
   volume   = {16},
   number   = {1},
   pages    = {22--29},
-  keywords = {ch01},
   file     = {1990_church_word_association_norms.pdf}
 }
 
@@ -281,7 +262,6 @@
   volume   = {41},
   number   = {6},
   pages    = {391--407},
-  keywords = {ch01},
   file     = {1990_deerwester_indexing_latent_semantic_analysis.pdf}
 }
 
@@ -293,7 +273,6 @@
   volume   = {1},
   number   = {3},
   pages    = {211--218},
-  keywords = {ch01},
   file     = {1936_eckart_young_approximation_matrix_lower_rank.pdf}
 }
 
@@ -305,8 +284,7 @@
   address   = {New York},
   year      = {2009},
   doi       = {10.1007/978-0-387-84858-7},
-  keywords  = {ch01},
-  file      = {}
+  file      = {2013_elements_of_statistical_learning.pdf}
 }
 
 @article{levy2015improving,
@@ -316,7 +294,6 @@
   year     = {2015},
   volume   = {3},
   pages    = {211--225},
-  keywords = {ch01},
   file     = {2015_levy_improving_distributional_similarity.pdf}
 }
 
@@ -326,8 +303,7 @@
   year         = {2019},
   month        = mar,
   howpublished = {Blog post, \url{http://www.incompleteideas.net/IncIdeas/BitterLesson.html}},
-  keywords     = {ch01},
-  file         = {}
+  file         = {2019_sutton_bitter_lesson.pdf}
 }
 
 @book{boole1854investigation,
@@ -336,8 +312,7 @@
   publisher = {Walton and Maberly},
   address   = {London},
   year      = {1854},
-  keywords  = {ch01},
-  file      = {}
+  file      = {1854_boole_investigation_laws_thought.pdf}
 }
 
 % ------------------------------------------------------------------------------
@@ -355,8 +330,8 @@
   number   = {3},
   pages    = {209--230},
   doi      = {10.2307/2181485},
-  keywords = {epilogue,philosophy},
-  file     = {}
+  keywords = {philosophy},
+  file     = {1948_frege_sense_reference.pdf}
 }
 
 @article{quine1951two,
@@ -368,7 +343,7 @@
   number   = {1},
   pages    = {20--43},
   doi      = {10.2307/2181906},
-  keywords = {epilogue,philosophy},
+  keywords = {philosophy},
   file     = {}
 }
 
@@ -381,7 +356,7 @@
   number   = {3},
   pages    = {377--388},
   doi      = {10.2307/2182440},
-  keywords = {epilogue,philosophy},
+  keywords = {philosophy},
   file     = {}
 }
 
@@ -394,7 +369,7 @@
   number   = {14},
   pages    = {147--157},
   doi      = {10.1093/bjps/iv.14.147},
-  keywords = {epilogue,philosophy,ch01},
+  keywords = {philosophy},
   file     = {}
 }
 
@@ -407,7 +382,7 @@
   number   = {2},
   pages    = {351--370},
   doi      = {10.1111/j.1933-1592.2005.tb00531.x},
-  keywords = {epilogue,philosophy,ch01},
+  keywords = {philosophy},
   file     = {2005_floridi_semantic_information_meaningful_data.pdf}
 }
 
@@ -420,7 +395,7 @@
   number   = {3},
   pages    = {417--424},
   doi      = {10.1017/s0140525x00005756},
-  keywords = {epilogue,philosophy,ch12},
+  keywords = {philosophy},
   file     = {}
 }
 
@@ -434,7 +409,7 @@
   pages    = {335--346},
   doi      = {10.1016/0167-2789(90)90087-6},
   eprint   = {cs/9906002},
-  keywords = {epilogue,philosophy,ch12},
+  keywords = {philosophy},
   file     = {}
 }
 
@@ -446,7 +421,7 @@
   volume   = {10},
   pages    = {615--678},
   doi      = {10.1111/j.1475-4975.1987.tb00558.x},
-  keywords = {epilogue,philosophy},
+  keywords = {philosophy},
   file     = {}
 }
 
@@ -457,7 +432,7 @@
   year      = {2020},
   pages     = {5185--5198},
   doi       = {10.18653/v1/2020.acl-main.463},
-  keywords  = {epilogue,philosophy,ch12},
+  keywords  = {philosophy},
   file      = {2020_bender_climbing_nlu_meaning_form_understanding.pdf}
 }
 
@@ -470,7 +445,7 @@
   number   = {2-3},
   pages    = {146--162},
   doi      = {10.1080/00437956.1954.11659520},
-  keywords = {epilogue,linguistics,ch01},
+  keywords = {linguistics},
   file     = {}
 }
 
@@ -483,7 +458,7 @@
   number   = {3},
   pages    = {373--398},
   doi      = {10.1111/j.1755-2567.1970.tb00434.x},
-  keywords = {epilogue,mathematics,ch10},
+  keywords = {mathematics},
   file     = {}
 }
 
@@ -496,7 +471,7 @@
   number   = {3},
   pages    = {341--376},
   doi      = {10.2307/2102968},
-  keywords = {epilogue,mathematics,philosophy},
+  keywords = {mathematics,philosophy},
   file     = {}
 }
 
@@ -509,7 +484,7 @@
   number   = {1},
   pages    = {273--294},
   doi      = {10.1093/aristotelian/55.1.273},
-  keywords = {epilogue,literature},
+  keywords = {literature},
   file     = {}
 }
 
@@ -522,7 +497,7 @@
   number   = {5232},
   pages    = {563--564},
   doi      = {10.1038/225563a0},
-  keywords = {epilogue,biology},
+  keywords = {biology},
   file     = {}
 }
 
@@ -535,7 +510,7 @@
   number   = {2},
   pages    = {177--194},
   doi      = {10.1086/392768},
-  keywords = {epilogue,biology},
+  keywords = {biology},
   file     = {}
 }
 
@@ -548,7 +523,7 @@
   number   = {4},
   pages    = {189--208},
   doi      = {10.1037/h0061626},
-  keywords = {epilogue,neuroscience,psychology},
+  keywords = {neuroscience,psychology},
   file     = {}
 }
 
@@ -561,7 +536,7 @@
   number   = {1},
   pages    = {171--175},
   doi      = {10.1016/0006-8993(71)90358-1},
-  keywords = {epilogue,neuroscience},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -574,7 +549,7 @@
   number   = {7052},
   pages    = {801--806},
   doi      = {10.1038/nature03721},
-  keywords = {epilogue,neuroscience},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -587,7 +562,7 @@
   number   = {6292},
   pages    = {1464--1468},
   doi      = {10.1126/science.aaf0941},
-  keywords = {epilogue,neuroscience},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -600,7 +575,7 @@
   number   = {6415},
   pages    = {eaat6766},
   doi      = {10.1126/science.aat6766},
-  keywords = {epilogue,neuroscience},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -613,7 +588,7 @@
   number   = {2},
   pages    = {490--509},
   doi      = {10.1016/j.neuron.2018.10.002},
-  keywords = {epilogue,neuroscience},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -626,7 +601,7 @@
   number   = {7045},
   pages    = {1102--1107},
   doi      = {10.1038/nature03687},
-  keywords = {epilogue,neuroscience,ch12},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -639,7 +614,7 @@
   number   = {12},
   pages    = {976--987},
   doi      = {10.1038/nrn2277},
-  keywords = {epilogue,neuroscience,ch12},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -652,7 +627,7 @@
   number   = {1-2},
   pages    = {25--62},
   doi      = {10.1016/0010-0277(89)90005-x},
-  keywords = {epilogue,neuroscience,ch12},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -665,7 +640,7 @@
   number   = {4},
   pages    = {577--660},
   doi      = {10.1017/s0140525x99002149},
-  keywords = {epilogue,psychology,ch12},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -678,7 +653,7 @@
   number   = {5880},
   pages    = {1191--1195},
   doi      = {10.1126/science.1152876},
-  keywords = {epilogue,neuroscience,ch01},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -691,7 +666,7 @@
   number   = {7600},
   pages    = {453--458},
   doi      = {10.1038/nature17637},
-  keywords = {epilogue,neuroscience,ch01},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -701,7 +676,7 @@
   journal  = {Frontiers in Systems Neuroscience},
   year     = {2008},
   doi      = {10.3389/neuro.06.004.2008},
-  keywords = {epilogue,neuroscience,ch11},
+  keywords = {neuroscience},
   file     = {2008_kriegeskorte_representational_similarity_analysis_connecting_branches.pdf}
 }
 
@@ -714,7 +689,7 @@
   number   = {1},
   pages    = {1--17},
   doi      = {10.1016/0010-0285(70)90002-2},
-  keywords = {epilogue,psychology,ch11},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -727,7 +702,7 @@
   number   = {4},
   pages    = {449--467},
   doi      = {10.1017/s0140525x98001253},
-  keywords = {epilogue,neuroscience,ch11},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -740,7 +715,7 @@
   number   = {6583},
   pages    = {607--609},
   doi      = {10.1038/381607a0},
-  keywords = {epilogue,neuroscience,ch04},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -753,7 +728,7 @@
   number   = {7451},
   pages    = {585--590},
   doi      = {10.1038/nature12160},
-  keywords = {epilogue,neuroscience,ch04},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -766,7 +741,7 @@
   number   = {4},
   pages    = {954--967.e21},
   doi      = {10.1016/j.cell.2020.09.031},
-  keywords = {epilogue,neuroscience,ch01},
+  keywords = {neuroscience},
   file     = {2020_bernardi_geometry_abstraction_hippocampus_prefrontal_cortex.pdf}
 }
 
@@ -779,7 +754,7 @@
   number   = {7765},
   pages    = {361--365},
   doi      = {10.1038/s41586-019-1346-5},
-  keywords = {epilogue,neuroscience,ch02},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -792,7 +767,7 @@
   number   = {5},
   pages    = {978--984},
   doi      = {10.1016/j.neuron.2017.05.025},
-  keywords = {epilogue,neuroscience,ch02},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -804,7 +779,7 @@
   volume   = {70},
   pages    = {137--144},
   doi      = {10.1016/j.conb.2021.10.010},
-  keywords = {epilogue,neuroscience,ch02},
+  keywords = {neuroscience},
   file     = {2021_chung_neural_population_geometry_approach_understanding.pdf}
 }
 
@@ -817,7 +792,7 @@
   number   = {2},
   pages    = {127--138},
   doi      = {10.1038/nrn2787},
-  keywords = {epilogue,neuroscience},
+  keywords = {neuroscience},
   file     = {}
 }
 
@@ -830,7 +805,7 @@
   number   = {45},
   pages    = {e2105646118},
   doi      = {10.1073/pnas.2105646118},
-  keywords = {epilogue,neuroscience,ch04},
+  keywords = {neuroscience},
   file     = {2021_schrimpf_neural_architecture_language_integrative_modeling.pdf}
 }
 
@@ -843,7 +818,7 @@
   number   = {3},
   pages    = {369--380},
   doi      = {10.1038/s41593-022-01026-4},
-  keywords = {epilogue,neuroscience,ch04},
+  keywords = {neuroscience},
   file     = {2022_goldstein_shared_computational_principles_language_processing.pdf}
 }
 
@@ -856,7 +831,7 @@
   number   = {1},
   pages    = {134},
   doi      = {10.1038/s42003-022-03036-1},
-  keywords = {epilogue,neuroscience,ch04},
+  keywords = {neuroscience},
   file     = {2022_caucheteux_brains_algorithms_partially_converge_natural.pdf}
 }
 
@@ -869,7 +844,7 @@
   number   = {6},
   pages    = {1783--1806},
   doi      = {10.1093/brain/115.6.1783},
-  keywords = {epilogue,neurology,ch12},
+  keywords = {neurology},
   file     = {}
 }
 
@@ -882,7 +857,7 @@
   number   = {3},
   pages    = {197--237},
   doi      = {10.1037/h0055737},
-  keywords = {epilogue,psychology,ch01},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -895,7 +870,7 @@
   number   = {4},
   pages    = {401--419},
   doi      = {10.1007/bf02288916},
-  keywords = {epilogue,psychology,ch01},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -908,7 +883,7 @@
   number   = {2},
   pages    = {125--140},
   doi      = {10.1007/bf02289630},
-  keywords = {epilogue,psychology,ch01},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -921,7 +896,7 @@
   number   = {4820},
   pages    = {1317--1323},
   doi      = {10.1126/science.3629243},
-  keywords = {epilogue,psychology,ch02},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -934,7 +909,7 @@
   number   = {4},
   pages    = {327--352},
   doi      = {10.1037/0033-295x.84.4.327},
-  keywords = {epilogue,psychology,ch06},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -947,7 +922,7 @@
   number   = {1},
   pages    = {1--28},
   doi      = {10.1016/0010-0285(73)90023-6},
-  keywords = {epilogue,psychology,ch01},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -960,7 +935,7 @@
   number   = {2},
   pages    = {155--170},
   doi      = {10.1207/s15516709cog0702_3},
-  keywords = {epilogue,psychology,ch10},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -973,7 +948,7 @@
   number   = {2},
   pages    = {240--247},
   doi      = {10.1016/s0022-5371(69)80069-1},
-  keywords = {epilogue,psychology,ch05},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -986,7 +961,7 @@
   number   = {6},
   pages    = {407--428},
   doi      = {10.1037/0033-295x.82.6.407},
-  keywords = {epilogue,psychology,ch06},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -999,7 +974,7 @@
   number   = {3},
   pages    = {192--233},
   doi      = {10.1037/0096-3445.104.3.192},
-  keywords = {epilogue,psychology,ch05},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -1012,7 +987,7 @@
   number   = {3},
   pages    = {289--316},
   doi      = {10.1037/0033-295x.92.3.289},
-  keywords = {epilogue,psychology},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -1025,7 +1000,7 @@
   number   = {1},
   pages    = {39--57},
   doi      = {10.1037/0096-3445.115.1.39},
-  keywords = {epilogue,psychology},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -1038,7 +1013,7 @@
   number   = {2},
   pages    = {203--208},
   doi      = {10.3758/bf03204766},
-  keywords = {epilogue,psychology,ch01},
+  keywords = {psychology},
   file     = {1996_lund_producing_high_dimensional_semantic_spaces.pdf}
 }
 
@@ -1051,7 +1026,7 @@
   number   = {2},
   pages    = {211--240},
   doi      = {10.1037/0033-295x.104.2.211},
-  keywords = {epilogue,psychology,ch01},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -1064,7 +1039,7 @@
   number   = {2},
   pages    = {211--244},
   doi      = {10.1037/0033-295x.114.2.211},
-  keywords = {epilogue,psychology,ch02},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -1077,7 +1052,7 @@
   number   = {6},
   pages    = {1161--1178},
   doi      = {10.1037/h0077714},
-  keywords = {epilogue,psychology,ch08},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -1090,7 +1065,7 @@
   number   = {6334},
   pages    = {183--186},
   doi      = {10.1126/science.aal4230},
-  keywords = {epilogue,psychology,ch01},
+  keywords = {psychology},
   file     = {2017_caliskan_semantics_derived_automatically_language_corpora.pdf}
 }
 
@@ -1103,7 +1078,7 @@
   number   = {1-2},
   pages    = {13--29},
   doi      = {10.1162/1064546053278973},
-  keywords = {epilogue,psychology,ch12},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -1116,7 +1091,7 @@
   number   = {6682},
   pages    = {504--511},
   doi      = {10.1126/science.adi1374},
-  keywords = {epilogue,psychology,ch12},
+  keywords = {psychology},
   file     = {}
 }
 
@@ -1129,7 +1104,7 @@
   number   = {4},
   pages    = {971--995},
   doi      = {10.3758/s13414-010-0073-7},
-  keywords = {epilogue,psychology,ch12},
+  keywords = {psychology},
   file     = {2011_spence_crossmodal_correspondences_tutorial_review.pdf}
 }
 
@@ -1142,7 +1117,7 @@
   number   = {2},
   pages    = {219--269},
   doi      = {10.2307/1413002},
-  keywords = {epilogue,psychiatry,ch01},
+  keywords = {psychiatry},
   file     = {}
 }
 
@@ -1155,7 +1130,7 @@
   number   = {1},
   pages    = {37--96},
   doi      = {10.1176/ajp.67.1.37},
-  keywords = {epilogue,psychiatry,ch01},
+  keywords = {psychiatry},
   file     = {}
 }
 
@@ -1168,7 +1143,7 @@
   number   = {1},
   pages    = {29--50},
   doi      = {10.1093/schbul/23.1.29},
-  keywords = {epilogue,psychiatry},
+  keywords = {psychiatry},
   file     = {}
 }
 
@@ -1181,7 +1156,7 @@
   number   = {1},
   pages    = {13--23},
   doi      = {10.1176/appi.ajp.160.1.13},
-  keywords = {epilogue,psychiatry},
+  keywords = {psychiatry},
   file     = {}
 }
 
@@ -1194,7 +1169,7 @@
   number   = {1},
   pages    = {48--58},
   doi      = {10.1038/nrn2536},
-  keywords = {epilogue,psychiatry},
+  keywords = {psychiatry},
   file     = {2009_fletcher_perceiving_believing_bayesian_approach_explaining.pdf}
 }
 
@@ -1207,7 +1182,7 @@
   number   = {1-3},
   pages    = {304--316},
   doi      = {10.1016/j.schres.2007.03.001},
-  keywords = {epilogue,psychiatry},
+  keywords = {psychiatry},
   file     = {}
 }
 
@@ -1220,7 +1195,7 @@
   number   = {1},
   pages    = {15030},
   doi      = {10.1038/npjschz.2015.30},
-  keywords = {epilogue,psychiatry},
+  keywords = {psychiatry},
   file     = {2015_bedi_automated_analysis_free_speech_predicts.pdf}
 }
 
@@ -1233,7 +1208,7 @@
   number   = {1},
   pages    = {67--75},
   doi      = {10.1002/wps.20491},
-  keywords = {epilogue,psychiatry},
+  keywords = {psychiatry},
   file     = {}
 }
 
@@ -1246,7 +1221,7 @@
   number   = {10},
   pages    = {215--249},
   doi      = {10.1090/s0002-9904-1893-00147-x},
-  keywords = {epilogue,mathematics,ch05},
+  keywords = {mathematics},
   file     = {1893_klein_comparative_review_recent_researches_geometry.pdf}
 }
 
@@ -1259,7 +1234,7 @@
   number   = {4},
   pages    = {823--843},
   doi      = {10.2307/1968621},
-  keywords = {epilogue,mathematics,ch08},
+  keywords = {mathematics},
   file     = {}
 }
 
@@ -1272,7 +1247,7 @@
   number   = {3},
   pages    = {338--353},
   doi      = {10.1016/s0019-9958(65)90241-x},
-  keywords = {epilogue,mathematics,ch10},
+  keywords = {mathematics},
   file     = {}
 }
 
@@ -1285,7 +1260,7 @@
   number   = {2},
   pages    = {551--580},
   doi      = {10.1007/s44007-022-00021-2},
-  keywords = {epilogue,mathematics},
+  keywords = {mathematics},
   file     = {2022_bradley_enriched_category_theory_language_syntax.pdf}
 }
 
@@ -1297,7 +1272,7 @@
   volume   = {40},
   number   = {5},
   pages    = {1178--1190},
-  keywords = {epilogue,biology,ch05},
+  keywords = {biology},
   file     = {}
 }
 
@@ -1309,7 +1284,7 @@
   volume   = {8},
   number   = {12},
   pages    = {3--34},
-  keywords = {epilogue,psychology,neurology,ch12},
+  keywords = {psychology,neurology},
   file     = {}
 }
 
@@ -1323,7 +1298,7 @@
   eprint        = {1003.4394},
   archiveprefix = {arXiv},
   url           = {https://arxiv.org/abs/1003.4394},
-  keywords      = {epilogue,mathematics,ch10},
+  keywords      = {mathematics},
   file          = {2010_coecke_mathematical_foundations_compositional_distributional_model.pdf}
 }
 
@@ -1334,7 +1309,7 @@
   address   = {Lausanne and Paris},
   year      = {1916},
   url       = {https://openlibrary.org/works/OL2139804W},
-  keywords  = {epilogue,linguistics,ch01},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -1345,7 +1320,7 @@
   address   = {London},
   year      = {1923},
   url       = {https://openlibrary.org/works/OL3027014W},
-  keywords  = {epilogue,philosophy,literature},
+  keywords  = {philosophy,literature},
   file      = {}
 }
 
@@ -1357,7 +1332,7 @@
   year      = {1953},
   note      = {Translated by G. E. M. Anscombe},
   url       = {https://openlibrary.org/works/OL20944636W},
-  keywords  = {epilogue,philosophy,ch01},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1368,7 +1343,7 @@
   address   = {Cambridge, MA},
   year      = {1960},
   url       = {https://openlibrary.org/works/OL2910272W},
-  keywords  = {epilogue,philosophy,ch11},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1384,7 +1359,7 @@
   address   = {Minneapolis},
   year      = {1975},
   url       = {https://openlibrary.org/works/OL18160694W},
-  keywords  = {epilogue,philosophy,ch12},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1397,7 +1372,7 @@
   address   = {Indianapolis},
   year      = {1972},
   url       = {https://openlibrary.org/works/OL4810076W},
-  keywords  = {epilogue,philosophy},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1408,7 +1383,7 @@
   address   = {Cambridge, MA},
   year      = {1981},
   url       = {https://openlibrary.org/works/OL29352113W},
-  keywords  = {epilogue,philosophy,ch01},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1419,7 +1394,7 @@
   address   = {Chicago},
   year      = {1980},
   url       = {https://openlibrary.org/works/OL1952983W},
-  keywords  = {epilogue,linguistics,literature},
+  keywords  = {linguistics,literature},
   file      = {}
 }
 
@@ -1430,7 +1405,7 @@
   address   = {Cambridge, MA},
   year      = {2000},
   url       = {https://openlibrary.org/works/OL490943W},
-  keywords  = {epilogue,philosophy,ch12},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1441,7 +1416,7 @@
   address   = {Stanford, CA},
   year      = {2004},
   url       = {https://openlibrary.org/works/OL8924703W},
-  keywords  = {epilogue,mathematics,ch08},
+  keywords  = {mathematics},
   file      = {}
 }
 
@@ -1452,7 +1427,7 @@
   address   = {Cambridge, MA},
   year      = {1994},
   url       = {https://openlibrary.org/works/OL8223892W},
-  keywords  = {epilogue,philosophy},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1463,7 +1438,7 @@
   address   = {T{\"u}bingen},
   year      = {1960},
   url       = {https://openlibrary.org/works/OL81342W},
-  keywords  = {epilogue,philosophy,religion,ch04},
+  keywords  = {philosophy,religion},
   file      = {}
 }
 
@@ -1474,7 +1449,7 @@
   address   = {New York},
   year      = {1997},
   url       = {https://openlibrary.org/works/OL8063068W},
-  keywords  = {epilogue,biology,philosophy},
+  keywords  = {biology,philosophy},
   file      = {}
 }
 
@@ -1487,7 +1462,7 @@
   year      = {1997},
   note      = {Includes the \emph{Cratylus} and the \emph{Meno}},
   url       = {https://openlibrary.org/works/OL379970W},
-  keywords  = {epilogue,philosophy},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1499,7 +1474,7 @@
   year      = {1995},
   note      = {Translated by James Fentress},
   url       = {https://openlibrary.org/works/OL14853058W},
-  keywords  = {epilogue,religion,philosophy},
+  keywords  = {religion,philosophy},
   file      = {}
 }
 
@@ -1510,7 +1485,7 @@
   address   = {Jerusalem},
   year      = {1941},
   url       = {https://openlibrary.org/works/OL1264883W},
-  keywords  = {epilogue,religion},
+  keywords  = {religion},
   file      = {}
 }
 
@@ -1521,7 +1496,7 @@
   address   = {New York},
   year      = {2011},
   url       = {https://openlibrary.org/works/OL16212242W},
-  keywords  = {epilogue,religion,philosophy,ch01},
+  keywords  = {religion,philosophy},
   file      = {}
 }
 
@@ -1533,7 +1508,7 @@
   year      = {1987},
   note      = {Translated by Colm Luibheid. Includes \emph{The Mystical Theology}},
   url       = {https://openlibrary.org/works/OL2467506W},
-  keywords  = {epilogue,religion,ch08},
+  keywords  = {religion},
   file      = {}
 }
 
@@ -1544,7 +1519,7 @@
   address   = {Leiden},
   year      = {2007},
   url       = {https://openlibrary.org/works/OL4205552W},
-  keywords  = {epilogue,religion,mathematics},
+  keywords  = {religion,mathematics},
   file      = {}
 }
 
@@ -1555,7 +1530,7 @@
   address   = {London},
   year      = {1668},
   url       = {https://openlibrary.org/works/OL2414986W},
-  keywords  = {epilogue,religion,philosophy,ch05},
+  keywords  = {religion,philosophy},
   file      = {}
 }
 
@@ -1567,7 +1542,7 @@
   year      = {2010},
   note      = {Translated by Joseph D. O'Neil. Originally published in 1934 and 1940},
   url       = {https://openlibrary.org/works/OL36845477W},
-  keywords  = {epilogue,biology,ch12},
+  keywords  = {biology},
   file      = {}
 }
 
@@ -1578,7 +1553,7 @@
   address   = {Cambridge},
   year      = {1917},
   url       = {https://openlibrary.org/works/OL1549602W},
-  keywords  = {epilogue,biology,mathematics,ch05},
+  keywords  = {biology,mathematics},
   file      = {}
 }
 
@@ -1589,7 +1564,7 @@
   address   = {Dordrecht},
   year      = {1980},
   url       = {https://openlibrary.org/works/OL1418959W},
-  keywords  = {epilogue,biology},
+  keywords  = {biology},
   file      = {}
 }
 
@@ -1600,7 +1575,7 @@
   address   = {Cambridge, MA},
   year      = {1991},
   url       = {https://openlibrary.org/works/OL15207300W},
-  keywords  = {epilogue,biology,religion,ch12},
+  keywords  = {biology,religion},
   file      = {}
 }
 
@@ -1611,7 +1586,7 @@
   address   = {Bloomington},
   year      = {1996},
   url       = {https://openlibrary.org/works/OL3261764W},
-  keywords  = {epilogue,biology},
+  keywords  = {biology},
   file      = {}
 }
 
@@ -1622,7 +1597,7 @@
   address   = {Oxford},
   year      = {2010},
   url       = {https://openlibrary.org/works/OL20464461W},
-  keywords  = {epilogue,biology,philosophy,ch01},
+  keywords  = {biology,philosophy},
   file      = {}
 }
 
@@ -1633,7 +1608,7 @@
   address   = {Urbana},
   year      = {1957},
   url       = {https://openlibrary.org/works/OL1408930W},
-  keywords  = {epilogue,psychology,ch01},
+  keywords  = {psychology},
   file      = {1957_osgood_the_measurement_of_meaning.pdf}
 }
 
@@ -1644,7 +1619,7 @@
   address   = {New York},
   year      = {1986},
   url       = {https://openlibrary.org/works/OL3779347W},
-  keywords  = {epilogue,psychology,ch12},
+  keywords  = {psychology},
   file      = {}
 }
 
@@ -1655,7 +1630,7 @@
   address   = {Cambridge, MA},
   year      = {1990},
   url       = {https://openlibrary.org/works/OL2976729W},
-  keywords  = {epilogue,psychology},
+  keywords  = {psychology},
   file      = {}
 }
 
@@ -1667,7 +1642,7 @@
   year      = {1962},
   note      = {Revised edition of \emph{From Death-Camp to Existentialism} (1959); first published in German in 1946},
   url       = {https://openlibrary.org/works/OL31263386W},
-  keywords  = {epilogue,psychiatry},
+  keywords  = {psychiatry},
   file      = {}
 }
 
@@ -1678,7 +1653,7 @@
   address   = {Leipzig and Vienna},
   year      = {1900},
   url       = {https://openlibrary.org/works/OL1069300W},
-  keywords  = {epilogue,psychiatry},
+  keywords  = {psychiatry},
   file      = {}
 }
 
@@ -1691,7 +1666,7 @@
   year      = {1962},
   note      = {Includes \emph{The Library of Babel}, \emph{Funes the Memorious} and \emph{Tl{\"o}n, Uqbar, Orbis Tertius}},
   url       = {https://openlibrary.org/works/OL110959W},
-  keywords  = {epilogue,literature},
+  keywords  = {literature},
   file      = {}
 }
 
@@ -1703,7 +1678,7 @@
   year      = {1964},
   note      = {Translated by Ruth L. C. Simms. Includes \emph{The Analytical Language of John Wilkins}},
   url       = {https://openlibrary.org/works/OL43040408W},
-  keywords  = {epilogue,literature,ch05},
+  keywords  = {literature},
   file      = {}
 }
 
@@ -1714,7 +1689,7 @@
   address   = {London},
   year      = {1726},
   url       = {https://openlibrary.org/works/OL20600W},
-  keywords  = {epilogue,literature,ch12},
+  keywords  = {literature},
   file      = {}
 }
 
@@ -1725,7 +1700,7 @@
   address   = {London},
   year      = {1871},
   url       = {https://openlibrary.org/works/OL151406W},
-  keywords  = {epilogue,literature,ch01},
+  keywords  = {literature},
   file      = {}
 }
 
@@ -1737,7 +1712,7 @@
   year      = {1956},
   note      = {Part II: Two Aspects of Language and Two Types of Aphasic Disturbances},
   url       = {https://openlibrary.org/works/OL1426595W},
-  keywords  = {epilogue,literature,linguistics,neurology,ch01},
+  keywords  = {literature,linguistics,neurology},
   file      = {}
 }
 
@@ -1749,7 +1724,7 @@
   year      = {1986},
   note      = {Includes \emph{Cybernetics and Ghosts} (1967)},
   url       = {https://openlibrary.org/works/OL15320W},
-  keywords  = {epilogue,literature},
+  keywords  = {literature},
   file      = {}
 }
 
@@ -1760,7 +1735,7 @@
   address   = {London},
   year      = {2005},
   url       = {https://openlibrary.org/works/OL27065402W},
-  keywords  = {epilogue,literature},
+  keywords  = {literature},
   file      = {}
 }
 
@@ -1771,7 +1746,7 @@
   address   = {New York},
   year      = {1971},
   url       = {https://openlibrary.org/works/OL17854085W},
-  keywords  = {epilogue,mathematics},
+  keywords  = {mathematics},
   file      = {}
 }
 
@@ -1782,7 +1757,7 @@
   address   = {Reading, MA},
   year      = {1975},
   url       = {https://openlibrary.org/works/OL21225018W},
-  keywords  = {epilogue,mathematics,biology},
+  keywords  = {mathematics,biology},
   file      = {}
 }
 
@@ -1793,7 +1768,7 @@
   address   = {Bloomington},
   year      = {1984},
   url       = {https://openlibrary.org/works/OL14853000W},
-  keywords  = {epilogue,philosophy,ch05},
+  keywords  = {philosophy},
   file      = {}
 }
 
@@ -1811,7 +1786,7 @@
   year      = {1694},
   note      = {First edition 1690. Molyneux's problem is added in Book II, Chapter IX, Section 8 of this edition. Local copy: Project Gutenberg eBook 10615 in two files, vol1 (Books I--II) and vol2 (Books III--IV, 1694_locke_An_Essay_Concerning_Humane_Understanding_vol2.pdf)},
   url       = {https://openlibrary.org/works/OL880054W},
-  keywords  = {epilogue,philosophy,ch12},
+  keywords  = {philosophy},
   file      = {1694_locke_An_Essay_Concerning_Humane_Understanding_vol1.pdf}
 }
 
@@ -1824,7 +1799,7 @@
   number   = {5},
   pages    = {551--553},
   doi      = {10.1038/nn.2795},
-  keywords = {epilogue,neuroscience,ch12},
+  keywords = {neuroscience},
   file     = {2011_held_The_newly_sighted_fail_to_match_seen_with_felt.pdf}
 }
 
@@ -1835,7 +1810,7 @@
   address   = {Cambridge, MA},
   year      = {1985},
   url       = {https://openlibrary.org/works/OL5034360W},
-  keywords  = {epilogue,psychology,ch12},
+  keywords  = {psychology},
   file      = {1985_landau_Language_and_Experience_ Evidence_from_the_Blind_Child.pdf}
 }
 
@@ -1848,7 +1823,7 @@
   number   = {23},
   pages    = {11213--11222},
   doi      = {10.1073/pnas.1900952116},
-  keywords = {epilogue,psychology,neuroscience,ch12},
+  keywords = {psychology,neuroscience},
   file     = {2019_kim_knowledge_of_animal_appearance_among_sighted_and_blind_adults_pnas.1900952116.pdf}
 }
 
@@ -1863,7 +1838,7 @@
   year      = {1990},
   isbn      = {0-19-562515-3},
   url       = {https://openlibrary.org/works/OL2675111W},
-  keywords  = {epilogue,religion,philosophy,linguistics,ch04},
+  keywords  = {religion,philosophy,linguistics},
   file      = {1990_matilal_The Word and the World.pdf}
 }
 
@@ -1876,7 +1851,7 @@
   number   = {31},
   pages    = {7937--7942},
   doi      = {10.1073/pnas.1800521115},
-  keywords = {epilogue,linguistics,psychology,ch01},
+  keywords = {linguistics,psychology},
   file     = {2018_zaslavsky_efficient_compression_in_color_naming_and_its_evolution.pdf}
 }
 
@@ -1889,7 +1864,7 @@
   number   = {31},
   pages    = {10687--10692},
   doi      = {10.1073/pnas.0802631105},
-  keywords = {epilogue,psychology,ch05},
+  keywords = {psychology},
   file     = {2008_Kemp_discovery_of_structural_form.pdf}
 }
 
@@ -1903,7 +1878,7 @@
   pages    = {905--949},
   doi      = {10.1177/0003122419877135},
   eprint   = {1803.09288},
-  keywords = {epilogue,sociology,ch01},
+  keywords = {sociology},
   file     = {2019_kozlowski_geometry_od_culture_1803.09288v1.pdf}
 }
 
@@ -1917,7 +1892,7 @@
   pages    = {E3635--E3644},
   doi      = {10.1073/pnas.1720347115},
   eprint   = {1711.08412},
-  keywords = {epilogue,sociology,ch01},
+  keywords = {sociology},
   file     = {2018_garg_word_embeddings_quantify_100_years_of_gender_and_ethnic_stereotypes_1711.08412v1.pdf}
 }
 
@@ -1930,7 +1905,7 @@
   number   = {5783},
   pages    = {72--74},
   doi      = {10.1126/science.1126287},
-  keywords = {epilogue,mathematics,music,ch05},
+  keywords = {mathematics,music},
   file     = {2006_tymoczko_the_geometry_musical_chords.pdf}
 }
 
@@ -1947,7 +1922,7 @@
   isbn      = {0-19-853446-9},
   note      = {Local copy: paperback edition with corrections (first published in paperback 1998), reprinted 2000 with corrections},
   url       = {https://openlibrary.org/works/OL2882085W},
-  keywords  = {mathematics,ch05,ch06,ch08,epilogue},
+  keywords  = {mathematics},
   file      = {1997_Needham_Visual Complex Analysis.pdf}
 }
 
@@ -1959,7 +1934,7 @@
   year      = {2021},
   isbn      = {978-0-691-20370-6},
   url       = {https://openlibrary.org/works/OL25464362W},
-  keywords  = {mathematics,ch05,ch07,ch11,epilogue},
+  keywords  = {mathematics},
   file      = {2023_needham_Visual Differential Geometry and Forms .pdf}
 }
 
@@ -1970,7 +1945,6 @@
   year     = {2003},
   volume   = {3},
   pages    = {1137--1155},
-  keywords = {ch01},
   file     = {}
 }
 
@@ -1980,7 +1954,6 @@
   booktitle = {Advances in Neural Information Processing Systems 26},
   year      = {2013},
   pages     = {3111--3119},
-  keywords  = {ch01},
   file      = {}
 }
 
@@ -1989,7 +1962,6 @@
   title     = {Representation Learning with Contrastive Predictive Coding},
   journal   = {arXiv preprint arXiv:1807.03748},
   year      = {2018},
-  keywords  = {ch01},
   file      = {}
 }
 
@@ -1999,7 +1971,6 @@
   booktitle = {Proceedings of the Thirteenth International Conference on Artificial Intelligence and Statistics (AISTATS)},
   year      = {2010},
   pages     = {297--304},
-  keywords  = {ch01},
   file      = {}
 }
 
@@ -2014,7 +1985,7 @@
   publisher = {Mouton},
   address   = {The Hague},
   year      = {1957},
-  keywords  = {epilogue,linguistics},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -2026,7 +1997,7 @@
   volume   = {35},
   number   = {1},
   pages    = {26--58},
-  keywords = {epilogue,linguistics,psychology},
+  keywords = {linguistics,psychology},
   file     = {}
 }
 
@@ -2039,7 +2010,6 @@
   address   = {Amsterdam},
   year      = {1963},
   pages     = {118--161},
-  keywords  = {ch04},
   file      = {}
 }
 
@@ -2053,7 +2023,6 @@
   address   = {New York},
   year      = {1963},
   pages     = {419--491},
-  keywords  = {ch04},
   file      = {}
 }
 
@@ -2063,7 +2032,7 @@
   publisher = {MIT Press},
   address   = {Cambridge, MA},
   year      = {1965},
-  keywords  = {ch04,ch10,epilogue,linguistics},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -2073,7 +2042,7 @@
   publisher = {Harper \& Row},
   address   = {New York},
   year      = {1968},
-  keywords  = {epilogue,linguistics},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -2084,7 +2053,7 @@
   type        = {Technical Report},
   number      = {13},
   year        = {1952},
-  keywords    = {epilogue,linguistics},
+  keywords    = {linguistics},
   file        = {}
 }
 
@@ -2094,7 +2063,7 @@
   publisher = {Columbia University Press},
   address   = {New York},
   year      = {1980},
-  keywords  = {ch10,epilogue,linguistics},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -2104,7 +2073,7 @@
   publisher = {Foris},
   address   = {Dordrecht},
   year      = {1981},
-  keywords  = {ch10,ch11,epilogue,linguistics},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -2114,7 +2083,7 @@
   publisher = {Praeger},
   address   = {New York},
   year      = {1986},
-  keywords  = {ch12,epilogue,linguistics},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -2124,7 +2093,7 @@
   publisher = {MIT Press},
   address   = {Cambridge, MA},
   year      = {1995},
-  keywords  = {ch09,ch10,epilogue,linguistics},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -2137,7 +2106,7 @@
   number   = {5598},
   pages    = {1569--1579},
   doi      = {10.1126/science.298.5598.1569},
-  keywords = {ch10,epilogue,linguistics},
+  keywords = {linguistics},
   file     = {}
 }
 
@@ -2147,7 +2116,7 @@
   publisher = {MIT Press},
   address   = {Cambridge, MA},
   year      = {2016},
-  keywords  = {epilogue,linguistics},
+  keywords  = {linguistics},
   file      = {}
 }
 
@@ -2161,7 +2130,6 @@
   pages    = {1239--1253},
   doi      = {10.1098/rsta.2000.0583},
   pdf_url  = {https://people.cs.umass.edu/~brenocon/inlp2016/readings/pereira2000info.pdf},
-  keywords = {epilogue},
   file     = {2000_pereira_formal_grammar_information_theory_together.pdf}
 }
 
@@ -2171,7 +2139,6 @@
   year         = {2011},
   howpublished = {Essay},
   url          = {https://norvig.com/chomsky.html},
-  keywords     = {epilogue},
   file         = {}
 }
 
@@ -2182,7 +2149,6 @@
   year     = {2023},
   month    = mar,
   note     = {Opinion, 8 March 2023},
-  keywords = {epilogue},
   file     = {}
 }
 
@@ -2193,7 +2159,6 @@
   howpublished = {LingBuzz preprint lingbuzz/007180},
   url          = {https://lingbuzz.net/lingbuzz/007180},
   pdf_url      = {https://lingbuzz.net/lingbuzz/007180/current.pdf},
-  keywords     = {epilogue},
   file         = {2023_piantadosi_modern_language_models_refute_chomsky.pdf}
 }
 
@@ -2203,7 +2168,6 @@
   booktitle = {Proceedings of the 2018 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies (NAACL-HLT)},
   year      = {2018},
   pages     = {1195--1205},
-  keywords  = {ch04},
   file      = {2018_gulordava_colorless_green_recurrent_networks_dream.pdf}
 }
 
@@ -2214,7 +2178,6 @@
   year     = {2016},
   volume   = {4},
   pages    = {521--535},
-  keywords = {ch04},
   file     = {2016_linzen_assessing_ability_lstms_learn_syntax.pdf}
 }
 
@@ -2224,7 +2187,6 @@
   booktitle = {Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing (EMNLP)},
   year      = {2018},
   pages     = {1192--1202},
-  keywords  = {ch04,ch10},
   file      = {2018_marvin_targeted_syntactic_evaluation_language_models.pdf}
 }
 
@@ -2235,7 +2197,6 @@
   year      = {2019},
   pages     = {4129--4138},
   pdf_url   = {https://aclanthology.org/N19-1419.pdf},
-  keywords  = {ch04,ch05},
   file      = {2019_hewitt_structural_probe_finding_syntax_word.pdf}
 }
 
@@ -2244,7 +2205,6 @@
   title     = {Finding Universal Grammatical Relations in Multilingual {BERT}},
   booktitle = {Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics (ACL)},
   year      = {2020},
-  keywords  = {ch11},
   file      = {2020_chi_finding_universal_grammatical_relations_multilingual.pdf}
 }
 
@@ -2255,7 +2215,6 @@
   year     = {2020},
   volume   = {8},
   pages    = {156--171},
-  keywords = {ch04},
   file     = {2020_hahn_theoretical_limitations_self_attention_neural.pdf}
 }
 
@@ -2264,7 +2223,6 @@
   title     = {Self-Attention Networks Can Process Bounded Hierarchical Languages},
   booktitle = {Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing (ACL-IJCNLP)},
   year      = {2021},
-  keywords  = {ch04},
   file      = {2021_yao_self_attention_networks_can_process.pdf}
 }
 
@@ -2275,7 +2233,6 @@
   year     = {2020},
   volume   = {8},
   pages    = {125--140},
-  keywords = {ch10},
   file     = {2020_mccoy_does_syntax_need_grow_trees.pdf}
 }
 
@@ -2284,7 +2241,6 @@
   title     = {Grokking of Hierarchical Structure in Vanilla Transformers},
   booktitle = {Proceedings of the 61st Annual Meeting of the Association for Computational Linguistics (ACL)},
   year      = {2023},
-  keywords  = {ch10},
   file      = {2023_murty_grokking_hierarchical_structure_vanilla_transformers.pdf}
 }
 
@@ -2293,7 +2249,6 @@
   title     = {Mission: Impossible Language Models},
   booktitle = {Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (ACL)},
   year      = {2024},
-  keywords  = {ch10,epilogue},
   file      = {2024_kallini_mission_impossible_language_models.pdf}
 }
 
@@ -2302,7 +2257,6 @@
   title     = {Findings of the {BabyLM} Challenge: Sample-Efficient Pretraining on Developmentally Plausible Corpora},
   booktitle = {Proceedings of the BabyLM Challenge at the 27th Conference on Computational Natural Language Learning},
   year      = {2023},
-  keywords  = {ch10,epilogue},
   file      = {2023_warstadt_findings_babylm_challenge_sample_efficient.pdf}
 }
 
@@ -2310,24 +2264,21 @@
   author    = {Grill, Jean-Bastien and Strub, Florian and Altch{\'e}, Florent and Tallec, Corentin and Richemond, Pierre H. and Buchatskaya, Elena and Doersch, Carl and Avila Pires, Bernardo and Guo, Zhaohan Daniel and Gheshlaghi Azar, Mohammad and Piot, Bilal and Kavukcuoglu, Koray and Munos, R{\'e}mi and Valko, Michal},
   title     = {Bootstrap Your Own Latent: A New Approach to Self-Supervised Learning},
   booktitle = {Advances in Neural Information Processing Systems 33 (NeurIPS)},
-  year      = {2020},
-  keywords  = {ch01}
+  year      = {2020}
 }
 
 @inproceedings{bardes2022vicreg,
   author    = {Bardes, Adrien and Ponce, Jean and LeCun, Yann},
   title     = {{VICReg}: Variance-Invariance-Covariance Regularization for Self-Supervised Learning},
   booktitle = {International Conference on Learning Representations (ICLR)},
-  year      = {2022},
-  keywords  = {ch01}
+  year      = {2022}
 }
 
 @inproceedings{baevski2022data2vec,
   author    = {Baevski, Alexei and Hsu, Wei-Ning and Xu, Qiantong and Babu, Arun and Gu, Jiatao and Auli, Michael},
   title     = {data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language},
   booktitle = {Proceedings of the 39th International Conference on Machine Learning (ICML)},
-  year      = {2022},
-  keywords  = {ch01}
+  year      = {2022}
 }
 
 @misc{lecun2022path,
@@ -2335,30 +2286,228 @@
   title        = {A Path Towards Autonomous Machine Intelligence},
   year         = {2022},
   howpublished = {OpenReview preprint, version 0.9.2},
-  url          = {https://openreview.net/forum?id=BZ5a1r-kVsf},
-  keywords     = {ch01,ch12}
+  url          = {https://openreview.net/forum?id=BZ5a1r-kVsf}
 }
 
 @inproceedings{assran2023selfsupervised,
   author    = {Assran, Mahmoud and Duval, Quentin and Misra, Ishan and Bojanowski, Piotr and Vincent, Pascal and Rabbat, Michael and LeCun, Yann and Ballas, Nicolas},
   title     = {Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture},
   booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year      = {2023},
-  keywords  = {ch12}
+  year      = {2023}
 }
 
 @article{bardes2024revisiting,
   author   = {Bardes, Adrien and Garrido, Quentin and Ponce, Jean and Chen, Xinlei and Rabbat, Michael and LeCun, Yann and Assran, Mahmoud and Ballas, Nicolas},
   title    = {Revisiting Feature Prediction for Learning Visual Representations from Video},
   journal  = {arXiv preprint arXiv:2404.08471},
-  year     = {2024},
-  keywords = {ch12}
+  year     = {2024}
 }
 
 @article{assran2025vjepa2,
   author   = {Assran, Mido and Bardes, Adrien and Fan, David and Garrido, Quentin and Howes, Russell and Komeili, Mojtaba and Muckley, Matthew and Rizvi, Ammar and Roberts, Claire and Sinha, Koustuv and others},
   title    = {{V-JEPA} 2: Self-Supervised Video Models Enable Understanding, Prediction and Planning},
   journal  = {arXiv preprint arXiv:2506.09985},
-  year     = {2025},
-  keywords = {ch12}
+  year     = {2025}
+}
+
+% ---- Chapter 2: Why Vectors Work (curse and blessing of dimensionality) ----
+
+@book{bishop2024deep,
+  author    = {Bishop, Christopher M. and Bishop, Hugh},
+  title     = {Deep Learning: Foundations and Concepts},
+  publisher = {Springer},
+  address   = {Cham},
+  year      = {2024},
+  doi       = {10.1007/978-3-031-45468-4},
+  file      = {2023_bishop_deep_learning.pdf}
+}
+
+@article{bronstein2021geometric,
+  author   = {Bronstein, Michael M. and Bruna, Joan and Cohen, Taco and Veli{\v{c}}kovi{\'c}, Petar},
+  title    = {Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges},
+  journal  = {arXiv preprint arXiv:2104.13478},
+  year     = {2021},
+  eprint   = {2104.13478},
+  file     = {2021_geometrical_deep_learning_2104.13478v2.pdf}
+}
+
+@article{kleyko2023survey,
+  author   = {Kleyko, Denis and Rachkovskij, Dmitri A. and Osipov, Evgeny and Rahimi, Abbas},
+  title    = {A Survey on Hyperdimensional Computing aka Vector Symbolic Architectures, Part {I}: Models and Data Transformations},
+  journal  = {ACM Computing Surveys},
+  year     = {2023},
+  volume   = {55},
+  number   = {6},
+  pages    = {1--40},
+  doi      = {10.1145/3538531},
+  eprint   = {2111.06077},
+  file     = {2023_Kleyco_survey_vector_symbolic_architectures_2111.06077v2.pdf}
+}
+
+@article{clarkson2023capacity,
+  author   = {Clarkson, Kenneth L. and Ubaru, Shashanka and Yang, Elizabeth},
+  title    = {Capacity Analysis of Vector Symbolic Architectures},
+  journal  = {arXiv preprint arXiv:2301.10352},
+  year     = {2023},
+  eprint   = {2301.10352},
+  file     = {2023_capacity_analysis_vector_symbolic_architectures_2301.10352v2.pdf}
+}
+
+@book{rostami2021transfer,
+  author    = {Rostami, Mohammad},
+  title     = {Transfer Learning Through Embedding Spaces},
+  publisher = {CRC Press},
+  address   = {Boca Raton, FL},
+  year      = {2021},
+  doi       = {10.1201/9781003146032},
+  file      = {2021_rostami_Transfer Learning Through Embedding.pdf}
+}
+
+@book{bellman1961adaptive,
+  author    = {Bellman, Richard},
+  title     = {Adaptive Control Processes: A Guided Tour},
+  publisher = {Princeton University Press},
+  address   = {Princeton, NJ},
+  year      = {1961},
+  file      = {1961_bellman_adaptive_control_processes.pdf}
+}
+
+@book{ledoux2001concentration,
+  author    = {Ledoux, Michel},
+  title     = {The Concentration of Measure Phenomenon},
+  series    = {Mathematical Surveys and Monographs},
+  volume    = {89},
+  publisher = {American Mathematical Society},
+  address   = {Providence, RI},
+  year      = {2001},
+  doi       = {10.1090/surv/089},
+  file      = {}
+}
+
+@article{gorban2018blessing,
+  author   = {Gorban, Alexander N. and Tyukin, Ivan Y.},
+  title    = {Blessing of Dimensionality: Mathematical Foundations of the Statistical Physics of Data},
+  journal  = {Philosophical Transactions of the Royal Society A},
+  year     = {2018},
+  volume   = {376},
+  number   = {2118},
+  pages    = {20170237},
+  doi      = {10.1098/rsta.2017.0237},
+  eprint   = {1801.03421},
+  file     = {2018_gorban_blessing_dimensionality_mathematical_foundations_statistical.pdf}
+}
+
+@inproceedings{beyer1999nearest,
+  author    = {Beyer, Kevin and Goldstein, Jonathan and Ramakrishnan, Raghu and Shaft, Uri},
+  title     = {When Is ``Nearest Neighbor'' Meaningful?},
+  booktitle = {Database Theory -- ICDT'99},
+  series    = {Lecture Notes in Computer Science},
+  volume    = {1540},
+  pages     = {217--235},
+  publisher = {Springer},
+  year      = {1999},
+  doi       = {10.1007/3-540-49257-7_15},
+  note      = {Local copy is the earlier version: University of Wisconsin--Madison, Computer Sciences Technical Report 1377, June 1998 (scanned, no text layer)},
+  pdf_url   = {https://minds.wisconsin.edu/bitstream/handle/1793/60174/TR1377.pdf},
+  file      = {1999_beyer_when_nearest_neighbor_meaningful.pdf}
+}
+
+@article{radovanovic2010hubs,
+  author   = {Radovanovi{\'c}, Milo{\v{s}} and Nanopoulos, Alexandros and Ivanovi{\'c}, Mirjana},
+  title    = {Hubs in Space: Popular Nearest Neighbors in High-Dimensional Data},
+  journal  = {Journal of Machine Learning Research},
+  year     = {2010},
+  volume   = {11},
+  pages    = {2487--2531},
+  pdf_url  = {https://jmlr.org/papers/volume11/radovanovic10a/radovanovic10a.pdf},
+  file     = {2010_radovanovic_hubs_space_popular_nearest_neighbors.pdf}
+}
+
+@article{cover1965geometrical,
+  author   = {Cover, Thomas M.},
+  title    = {Geometrical and Statistical Properties of Systems of Linear Inequalities with Applications in Pattern Recognition},
+  journal  = {IEEE Transactions on Electronic Computers},
+  year     = {1965},
+  volume   = {EC-14},
+  number   = {3},
+  pages    = {326--334},
+  doi      = {10.1109/PGEC.1965.264137},
+  pdf_url  = {https://isl.stanford.edu/~cover/papers/paper2.pdf},
+  file     = {1965_cover_geometrical_statistical_properties_systems_linear.pdf}
+}
+
+@article{polya1921aufgabe,
+  author   = {P{\'o}lya, Georg},
+  title    = {{\"U}ber eine {A}ufgabe der {W}ahrscheinlichkeitsrechnung betreffend die {I}rrfahrt im {S}tra{\ss}ennetz},
+  journal  = {Mathematische Annalen},
+  year     = {1921},
+  volume   = {84},
+  number   = {1--2},
+  pages    = {149--160},
+  doi      = {10.1007/BF01458701},
+  file     = {}
+}
+
+@article{coifman2006diffusion,
+  author   = {Coifman, Ronald R. and Lafon, St{\'e}phane},
+  title    = {Diffusion Maps},
+  journal  = {Applied and Computational Harmonic Analysis},
+  year     = {2006},
+  volume   = {21},
+  number   = {1},
+  pages    = {5--30},
+  doi      = {10.1016/j.acha.2006.04.006},
+  file     = {2006_coifman_diffusion_maps.pdf}
+}
+
+@article{belkin2003laplacian,
+  author   = {Belkin, Mikhail and Niyogi, Partha},
+  title    = {Laplacian Eigenmaps for Dimensionality Reduction and Data Representation},
+  journal  = {Neural Computation},
+  year     = {2003},
+  volume   = {15},
+  number   = {6},
+  pages    = {1373--1396},
+  doi      = {10.1162/089976603321780317},
+  file     = {2003_belkin_laplacian_eigenmaps_dimensionality_reduction.pdf}
+}
+
+@inproceedings{perozzi2014deepwalk,
+  author    = {Perozzi, Bryan and Al-Rfou, Rami and Skiena, Steven},
+  title     = {{DeepWalk}: Online Learning of Social Representations},
+  booktitle = {Proceedings of the 20th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
+  pages     = {701--710},
+  year      = {2014},
+  doi       = {10.1145/2623330.2623732},
+  eprint    = {1403.6652},
+  file      = {2014_perozzi_deepwalk_online_learning_social_representations.pdf}
+}
+
+@inproceedings{grover2016node2vec,
+  author    = {Grover, Aditya and Leskovec, Jure},
+  title     = {node2vec: Scalable Feature Learning for Networks},
+  booktitle = {Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining},
+  pages     = {855--864},
+  year      = {2016},
+  doi       = {10.1145/2939672.2939754},
+  eprint    = {1607.00653},
+  file      = {2016_grover_node2vec_scalable_feature_learning_networks.pdf}
+}
+
+@inproceedings{dauphin2014identifying,
+  author    = {Dauphin, Yann N. and Pascanu, Razvan and Gulcehre, Caglar and Cho, Kyunghyun and Ganguli, Surya and Bengio, Yoshua},
+  title     = {Identifying and Attacking the Saddle Point Problem in High-Dimensional Non-Convex Optimization},
+  booktitle = {Advances in Neural Information Processing Systems},
+  volume    = {27},
+  year      = {2014},
+  eprint    = {1406.2572},
+  file      = {2014_dauphin_identifying_attacking_saddle_point_problem.pdf}
+}
+
+@misc{donoho2000high,
+  author       = {Donoho, David L.},
+  title        = {High-Dimensional Data Analysis: The Curses and Blessings of Dimensionality},
+  howpublished = {Lecture, AMS Conference on Mathematical Challenges of the 21st Century, Los Angeles},
+  year         = {2000},
+  file         = {2000_donoho_high_dimensional_data_analysis_curses_blessings.pdf}
 }
