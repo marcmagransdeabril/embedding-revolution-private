@@ -18,29 +18,30 @@ import sync_chapters
 
 
 def test_match_existing_chapter():
-    """Verify that embedding_spaces.qmd pattern matches Chapter 1 in Part I."""
+    """Verify that embedding_spaces.qmd (Anatomy) matches Chapter 3 in Part I."""
     emb_file = REPO_ROOT / "chapters" / "embedding_spaces.qmd"
     match = sync_chapters.match_chapter_to_outline(emb_file)
     assert match is not None
     part_idx, ch_idx = match
     assert part_idx == 0  # Part I
-    assert ch_idx == 0    # Chapter 1
+    assert ch_idx == 2    # Chapter 3
 
 
 def test_match_future_chapter_patterns():
     """Verify pattern matching for future chapter filenames."""
     test_cases = [
-        ("embedding_spaces.qmd", 0, 0),       # Part I, Ch 1
+        ("properties_of_meaning.qmd", 0, 0),   # Part I, Ch 1
         ("curse_of_dimensionality.qmd", 0, 1), # Part I, Ch 2
-        ("vector_databases.qmd", 0, 2),       # Part I, Ch 3
-        ("contextual_vectors.qmd", 0, 3),     # Part I, Ch 4
-        ("tangent_spaces.qmd", 1, 0),         # Part II, Ch 5
-        ("graph_embeddings.qmd", 1, 1),       # Part II, Ch 6
-        ("topological_deep_learning.qmd", 1, 2), # Part II, Ch 7
-        ("complex_plane.qmd", 2, 0),          # Part III, Ch 8
-        ("vsa_hyperdimensional.qmd", 2, 1),   # Part III, Ch 9
-        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 10
-        ("optimal_transport.qmd", 3, 0),      # Part IV, Ch 11
+        ("embedding_spaces.qmd", 0, 2),        # Part I, Ch 3
+        ("vector_databases.qmd", 0, 3),        # Part I, Ch 4
+        ("contextual_vectors.qmd", 0, 4),      # Part I, Ch 5
+        ("tangent_spaces.qmd", 1, 0),          # Part II, Ch 6
+        ("graph_embeddings.qmd", 1, 1),        # Part II, Ch 7
+        ("topological_deep_learning.qmd", 1, 2), # Part II, Ch 8
+        ("complex_plane.qmd", 2, 0),           # Part III, Ch 9
+        ("vsa_hyperdimensional.qmd", 2, 1),    # Part III, Ch 10
+        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 11
+        ("optimal_transport.qmd", 3, 0),       # Part IV, Ch 12
     ]
 
     for filename, expected_part, expected_ch in test_cases:
@@ -56,6 +57,21 @@ def test_discover_and_build_chapters_list():
     assert isinstance(chapters_struct, list)
     assert len(chapters_struct) >= 1
     assert chapters_struct[0] == "index.qmd"
+
+
+def test_chapters_follow_outline_order_within_each_part():
+    """Files inside each Part appear in MASTER_PARTS order (Part I: Properties,
+    Dimensionality, Anatomy, ...), whichever of them currently exist."""
+    chapters_struct = sync_chapters.discover_and_build_chapters_list()
+    parts = [e for e in chapters_struct if isinstance(e, dict) and e["part"] != "Additional Chapters"]
+    assert parts, "expected at least one populated Part"
+    for entry in parts:
+        indices = [
+            sync_chapters.match_chapter_to_outline(REPO_ROOT / path)[1]
+            for path in entry["chapters"]
+        ]
+        assert indices == sorted(indices), f"{entry['part']}: out of order {entry['chapters']}"
+        assert len(indices) == len(set(indices)), f"{entry['part']}: two files mapped to one chapter"
 
 
 def test_sync_quarto_yml_dry_run():
