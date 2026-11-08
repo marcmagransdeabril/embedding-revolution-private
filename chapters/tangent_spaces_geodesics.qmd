@@ -2,19 +2,25 @@
 title: "Tangent Spaces, Geodesics, and Geometric Deep Learning"
 ---
 
-This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that earlier chapters can already cross-reference its sections.
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
 ## The Erlangen Programme for Deep Learning
-*Symmetries, invariances, and equivariances.*
+*What is a representation invariant to? Symmetries, invariances, and equivariances.*
+
+## The Symmetries of Each Sense
+*Images vary by translation and viewpoint, audio by time shift, pitch, and speaker, video by motion, and text by none of these. A shared semantic space can be seen as a quotient by the nuisance symmetries of each modality: the same dog from any angle, in any voice.*
 
 ## Tangent Spaces and Geodesics
-*Parallel transport, Riemannian metrics, and semantic interpolation along curves. A static thing is a point and an event is a curve; a plan is a curve too, and so is an argument if reasoning can stay in the space (Chapter 5). The geometry of this section is the vocabulary for both, developed for planning in Chapter 13.*
+*Parallel transport, Riemannian metrics, and semantic interpolation along curves. A static thing is a point and an event is a curve, so a running dog is a trajectory whose tangent vector is its motion; a plan is a curve too, and so is an argument if reasoning can stay in the space (Chapter 5). The geometry of this section is the vocabulary for both, developed for planning in Chapter 13.*
 
 ## Lie Groups and Continuous Symmetries
-*$SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE).*
+*$SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE), a structure that was adopted at scale.*
 
 ## Hyperbolic Latent Spaces {#sec-hyperbolic-spaces}
-*Poincaré ball and Lorentz hyperboloid models for embedding trees and hierarchical taxonomies with low distortion.*
+*Why negative curvature suits trees (volume grows exponentially with radius), and the Poincaré ball and Lorentz hyperboloid models for embedding trees and hierarchical taxonomies with arbitrarily low distortion in few dimensions, against the dimension cost of doing the same in flat space.*
 
 ## Gauge Equivariance
 *When coordinate frames depend on local manifold position.*
+
+## Scale Test
+*Sutton's essay itself keeps convolution and certain invariances. Which symmetries does scale absorb through data and augmentation, which survive because they are cheap, and is hyperbolic geometry worth its cost?*

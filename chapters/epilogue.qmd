@@ -1,6 +1,4 @@
----
-title: "Epilogue: An Algebra of Thought"
----
+# Epilogue: An Algebra of Thought {.unnumbered}
 
 <!--
 SKETCH FOR REVIEW. Only the argumental arc and the references of each section

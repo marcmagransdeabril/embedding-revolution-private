@@ -1,0 +1,32 @@
+---
+title: "Contextual Vectors: Attention, Transformers, and Looking Inside"
+---
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
+
+## From Word Vectors to Contextual Vectors
+*Why the vector of a word must depend on its sentence, and what transformers compute.*
+
+## Attention as Similarity-Weighted Retrieval
+*The dot-product machinery of Chapter 4 inside the model, and its link to associative memory.*
+
+## Tokenizing the Senses
+*Image patches, spectrogram frames, and video tubelets turned into tokens, so that the same attention machinery reads every modality. This is one of two routes to a shared space, a single network over interleaved tokens, compared in Chapter 13 with separate encoders aligned by a contrastive loss.*
+
+## Features as Directions
+*The linear representation and superposition hypotheses, stated as claims together with the experiments that test them (probing and steering). Results are told as dated history.*
+
+## Is the Tree in the Geometry?
+*Chomsky's phrase-structure trees, looked for inside trained models: subject-verb agreement across intervening clauses (2016), agreement in nonsense sentences, "colorless green" networks (2018), and the structural probe (2019), which finds parse-tree distance as squared distance in a linear subspace of BERT and tree depth as a squared norm. Against it, the theoretical limits of self-attention on unbounded bracket nesting and the positive result for bounded depth. Brackets are the right test because of the Chomsky–Schützenberger theorem (1963): every context-free language is built from balanced brackets (a Dyck language) and a regular language. Bounded depth is Chomsky's competence versus performance (1963–1965): people also parse only a few levels of centre-embedding, and a network with finite precision and context is, strictly, a large finite automaton.*
+
+## Sparse Autoencoders and Dictionary Learning
+*Recovering more features than dimensions, which uses the near-orthogonality of Chapter 2.*
+
+## Reasoning in Text or in the Space
+*Chain of thought as a path through the model's space that is rounded to a token at every step, which puts reasoning on Shannon's boundary (Chapter 3); pause tokens (2023) as extra computation that is not quite language; and the latent alternatives that keep the steps in the space, continuous chain of thought (Coconut, 2024) and recurrent-depth models (2025). Planning in latent space is taken up in Chapter 13.*
+
+## Do Different Models Share a Geometry?
+*Claims of representational convergence across models, as a bridge to Chapters 12 and 13, which take up alignment between spaces and across modalities.*
+
+## Scale Test
+*Here the geometry is learned rather than designed. Which of the structures of Chapters 6 to 12 do trained transformers discover on their own?*

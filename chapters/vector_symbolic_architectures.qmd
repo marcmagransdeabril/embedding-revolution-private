@@ -1,0 +1,25 @@
+---
+title: "Vector Symbolic Architectures and Hyperdimensional Computing"
+---
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
+
+## Near-Orthogonality as a Resource
+*The payoff of Chapter 2, representing concepts directly in 10,000-dimensional hypervectors.*
+
+## Algebraic Operations on Thoughts
+
+### Bundling ($+$)
+*Superposition and set representation. Bundling is commutative, like Chomsky's Merge (1995), the single operation of the Minimalist Program, which builds the unordered set $\{a, b\}$; in both, order and hierarchy must come from somewhere else, binding and permutation here and labelling there.*
+
+### Binding ($\odot$ / $\circledast$)
+*Role-filler pairing and circular convolution. Modality is a natural role: a multimodal percept is the bundle of bindings of a modality with its content, so that a photograph, a bark, and a gait can be superposed in one hypervector and still be told apart.*
+
+### Permutation ($\Pi$)
+*Sequence ordering and hierarchical encoding.*
+
+## Associative Clean-Up Memories & Capacity Bounds
+*Theoretical bounds on robust concept retrieval without weight retraining, and the relation to attention as associative memory.*
+
+## Scale Test
+*Capacity grows with dimension, and dimension is cheap. When does a hyperdimensional encoding beat a learned one?*

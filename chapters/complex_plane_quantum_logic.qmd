@@ -1,0 +1,23 @@
+---
+title: "The Complex Plane and Quantum Logic: Wave-Nature in Latent Space"
+---
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
+
+## Concepts as Subspaces
+*The logic of subspaces (Birkhoff and von Neumann): negation as orthogonal complement, and why that logic is not distributive. A concept such as "dog" is better described as a subspace, with directions shared by all modalities and directions specific to each, than as a single point.*
+
+## Complex-Valued Neural Networks (CVNN)
+*Embedding data into $\mathbb{C}^D$ and hypercomplex quaternions $\mathbb{H}^D$.*
+
+## Phase vs. Amplitude
+*Separating categorical identity from intensity, resolving phase singularities, and orthogonal decision boundaries.*
+
+## Quantum Decision Making in Vector Spaces
+*Superposition, phase interference, and non-commutative models of cognition, a debated line of work.*
+
+## Quantum-Inspired Embeddings
+*Replacing classical probability logits with probability amplitudes.*
+
+## Scale Test
+*Do complex-valued or quantum-inspired models beat real-valued ones when parameter count and compute are matched?*

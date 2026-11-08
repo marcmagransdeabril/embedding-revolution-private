@@ -1,0 +1,23 @@
+---
+title: "Vector Databases, RAG, and the Limits of Single-Vector Retrieval"
+---
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
+
+## From Exact to Approximate Search
+*Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*
+
+## What a Fixed-Dimension Dot Product Can Express
+*The structural limit: how many distinct rankings and subsets a query vector of dimension $d$ can realize, and what that means for negation, conjunction, and multi-hop queries.*
+
+## Retrieval-Augmented Generation
+*Bridging parametric model memory with external latent storage, told as the answer of the 2020s.*
+
+## Hybrid Search & Multi-Vector Alignments
+*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item. The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of Chapter 13 are practical problems.*
+
+## Negation, Multi-Hop Reasoning, and Hallucination (a dated case study)
+*How retrieval systems behaved, what followed, and why the structural limit remains.*
+
+## Scale Test
+*Scale forced approximation. Will long contexts and agentic search absorb retrieval, or does external memory survive on cost?*

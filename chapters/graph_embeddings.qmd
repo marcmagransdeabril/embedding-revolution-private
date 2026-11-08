@@ -1,0 +1,28 @@
+---
+title: "From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry"
+---
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
+
+## Representing Graphs in Vector Spaces
+*Graph Neural Networks (GNNs) and Message Passing architectures.*
+
+## What a Relation Can Be
+*Symmetric, antisymmetric, inverse, and compositional relations, and the algebra each one needs.*
+
+## Knowledge Graph Embeddings, as a Historical Sequence
+*Each model fixes a relation pattern that the previous one could not express.*
+
+### Translational Models (TransE)
+*Relations as spatial translations ($\mathbf{h} + \mathbf{r} \approx \mathbf{t}$).*
+
+### Bilinear & Multiplicative Models (DistMult, ComplEx)
+
+### Rotational Models (RotatE)
+*Relations as rotations in the complex plane ($\mathbb{C}^D$).*
+
+## Graph Databases vs. Vector Databases
+*The convergence of discrete graph topology and continuous latent coordinates.*
+
+## Scale Test
+*Do embeddings learned from data make explicit graph structure unnecessary, or do the graph and the vector converge?*

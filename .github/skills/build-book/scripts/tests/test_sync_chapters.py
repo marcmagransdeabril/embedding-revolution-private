@@ -42,6 +42,7 @@ def test_match_future_chapter_patterns():
         ("vsa_hyperdimensional.qmd", 2, 1),    # Part III, Ch 10
         ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 11
         ("optimal_transport.qmd", 3, 0),       # Part IV, Ch 12
+        ("multimodal_embeddings.qmd", 3, 1),   # Part IV, Ch 13
     ]
 
     for filename, expected_part, expected_ch in test_cases:

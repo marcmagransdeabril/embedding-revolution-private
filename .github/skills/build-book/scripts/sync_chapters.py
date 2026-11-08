@@ -102,6 +102,11 @@ MASTER_PARTS = [
                 "title": "Cross-Domain Transfer and Optimal Transport",
                 "patterns": ["cross_domain", "optimal_transport", "12_", "wasserstein", "chapter12"],
             },
+            {
+                "num": 13,
+                "title": "Many Senses, One Space: Multimodal Embeddings",
+                "patterns": ["multimodal", "many_senses", "13_", "chapter13"],
+            },
         ],
     },
 ]

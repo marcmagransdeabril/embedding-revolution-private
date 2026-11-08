@@ -1,0 +1,29 @@
+---
+title: "Neuro-Symbolic Integration and Emergent Compositionality"
+---
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
+
+## The Systematicity Challenge
+*Fodor and Pylyshyn's argument that thought is compositional, the connectionist replies, and the staircase of Chapter 3 revisited: which steps can a vector system climb? Cross-modal models give a concrete test: image-text models that retrieve a "dog" and a "man" but confuse "dog bites man" with "man bites dog".*
+
+## The Poverty of the Stimulus
+*Chomsky's argument (1965, 1980) that children receive too little data to learn grammar unless much of it is innate, the bitter-lesson debate in the vocabulary of linguistics, with recursion as the core of the language faculty (Hauser, Chomsky, and Fitch, 2002). Told as a historical sequence on the standard example, structure-dependent question formation ("Is the man who is tall happy?"): sequential networks generalize linearly and only tree-structured ones hierarchically (2020); vanilla transformers learn the hierarchical rule long after in-domain accuracy saturates, "structural grokking" (2023); GPT-2 learns humanly impossible languages less easily than possible ones, against Chomsky's claim (2024); and the BabyLM challenge (2023) sets the budget at the fewer than 100 million words a child hears by age 13.*
+
+## Bridging Connectionism and Logic
+*Differentiable reasoning over structured knowledge.*
+
+## Logic Tensor Networks (LTN)
+*Translating first-order logic into continuous real-valued constraints via fuzzy logic t-norms.*
+
+## Smolensky's Tensor Product Representations (TPR)
+*The foundational algebra for binding variable roles to continuous fillers.*
+
+## Emergent Symbolic Structure
+*How trained networks come to show compositional role-filler structure, with the DISCOVER framework as one recent instance.*
+
+## Neural Theorem Proving
+*Searching discrete proof trees along continuous latent trajectories.*
+
+## Scale Test
+*Do networks acquire systematic composition from data and scale, or must it be built in?*
