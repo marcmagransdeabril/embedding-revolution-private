@@ -16,6 +16,14 @@ from typing import Any
 
 import yaml
 
+from sync_solutions import (
+    _ANSWERS_OPEN_RE,
+    _QUESTIONS_OPEN_RE,
+    SOLUTIONS_FILENAME,
+    find_div_blocks,
+    render_solutions,
+)
+
 REPO_ROOT = Path(__file__).resolve().parents[4]
 CHAPTERS_DIR = REPO_ROOT / "chapters"
 INDEX_QMD = REPO_ROOT / "index.qmd"
@@ -24,10 +32,6 @@ REFERENCES_DIR = REPO_ROOT / "references"
 
 
 _UNNUMBERED_H1_RE = re.compile(r"^# .*\{[^}]*(?:\.unnumbered|-)[^}]*\}\s*$")
-_LIST_ITEM_RE = re.compile(r"^\d+\.\s")
-_QUESTIONS_OPEN_RE = re.compile(r"^:::\s*\{\.questions\}\s*$")
-_SOLUTION_OPEN_RE = re.compile(r"^:::\s*\{\.answers(\s[^}]*)?\}\s*$")
-_REF_RE = re.compile(r'ref="([^"]+)"')
 
 
 class ValidationIssue:
@@ -419,73 +423,74 @@ def validate_bibliography_corpus(cited_keys: set[str]) -> list[ValidationIssue]:
     return issues
 
 
-def _div_item_counts(text: str, open_re: re.Pattern[str]) -> list[tuple[int, str, int]]:
-    """Return (line, attrs, n_items) for every fenced div matching `open_re`.
-
-    `n_items` counts top-level ordered-list items (`1.`, `2.`, ...) in the div.
-    Lines inside fenced code blocks are ignored.
-    """
-    blocks: list[tuple[int, str, int]] = []
-    in_fence = False
-    current: list[Any] | None = None
-    for lineno, raw in enumerate(text.splitlines(), start=1):
-        line = raw.strip()
-        if line.startswith("```"):
-            in_fence = not in_fence
-            continue
-        if in_fence:
-            continue
-        if current is None:
-            m = open_re.match(line)
-            if m:
-                current = [lineno, m.group(1) if m.groups() and m.group(1) else "", 0]
-        elif line == ":::":
-            blocks.append((current[0], current[1], current[2]))
-            current = None
-        elif _LIST_ITEM_RE.match(raw):
-            current[2] += 1
-    return blocks
-
-
 def validate_questions_and_solutions(chapter_files: list[Path]) -> list[ValidationIssue]:
-    """Check that every chapter's review questions have matching solutions.
+    """Check that every review-questions block has its solutions next to it.
 
-    Questions live in `::: {.questions}` blocks inside chapter files; solutions
-    live in `::: {.answers ref="<chapter-file-stem>"}` blocks (normally all in
-    chapters/solutions.qmd). Per chapter, the number of solution items must
-    equal the number of questions, and every `ref` must name a chapter.
+    Authoring rule: each `::: {.questions}` block in a chapter is followed
+    immediately (only blank lines in between) by a `::: {.answers}` block with
+    the same number of items. The back-matter `solutions.qmd` is generated from
+    those blocks by sync_solutions.py, so it must be current, and `ref=` is only
+    legal inside it.
     """
     issues: list[ValidationIssue] = []
-    questions: dict[str, int] = {}
-    solutions: dict[str, int] = {}
-    solution_sites: dict[str, tuple[Path, int]] = {}
-    stems = {p.stem for p in chapter_files}
+    chapters = [p for p in chapter_files if p.name != SOLUTIONS_FILENAME]
 
-    for path in chapter_files:
+    for path in chapters:
         text = path.read_text(encoding="utf-8")
-        n_questions = sum(n for _, _, n in _div_item_counts(text, _QUESTIONS_OPEN_RE))
-        if n_questions:
-            questions[path.stem] = questions.get(path.stem, 0) + n_questions
-        for lineno, attrs, n in _div_item_counts(text, _SOLUTION_OPEN_RE):
-            ref_match = _REF_RE.search(attrs)
-            if not ref_match:
-                issues.append(ValidationIssue(path, lineno, "ERROR", '.answers block needs ref="<chapter-file-stem>"'))
-                continue
-            ref = ref_match.group(1)
-            if ref not in stems:
-                issues.append(ValidationIssue(path, lineno, "ERROR", f'.answers ref="{ref}" does not match any chapters/*.qmd file'))
-                continue
-            solutions[ref] = solutions.get(ref, 0) + n
-            solution_sites.setdefault(ref, (path, lineno))
+        lines = text.splitlines()
+        questions = find_div_blocks(text, _QUESTIONS_OPEN_RE)
+        answers = find_div_blocks(text, _ANSWERS_OPEN_RE)
 
-    for stem in sorted(set(questions) | set(solutions)):
-        q, s = questions.get(stem, 0), solutions.get(stem, 0)
-        if q != s:
-            path, lineno = solution_sites.get(stem, (CHAPTERS_DIR / f"{stem}.qmd", 1))
+        for block in answers:
+            if block.ref is not None:
+                issues.append(ValidationIssue(
+                    path, block.start, "ERROR",
+                    ".answers ref=... is only for the generated solutions.qmd; "
+                    "chapters use a plain `::: {.answers}` block after the questions",
+                ))
+        answers = [b for b in answers if b.ref is None]
+
+        by_start = {b.start: b for b in answers}
+        paired: set[int] = set()
+        for q in questions:
+            nxt = next((b for b in answers if b.start > q.end), None)
+            gap = lines[q.end:nxt.start - 1] if nxt else []
+            if nxt is None or any(ln.strip() for ln in gap) or nxt.start in paired:
+                issues.append(ValidationIssue(
+                    path, q.start, "ERROR",
+                    "Review questions block is not followed immediately by a `::: {.answers}` block",
+                ))
+                continue
+            paired.add(nxt.start)
+            if q.n_items != nxt.n_items:
+                issues.append(ValidationIssue(
+                    path, nxt.start, "ERROR",
+                    f"Review questions block (line {q.start}) has {q.n_items} question(s) "
+                    f"but its answers block has {nxt.n_items} solution(s)",
+                ))
+        for start, block in by_start.items():
+            if start not in paired:
+                issues.append(ValidationIssue(
+                    path, start, "ERROR",
+                    "`::: {.answers}` block does not directly follow a `::: {.questions}` block",
+                ))
+
+    # The back-matter file is generated: it must match what the chapters say.
+    expected = render_solutions(chapters)
+    solutions_path = next((p for p in chapter_files if p.name == SOLUTIONS_FILENAME), None)
+    has_answers = "::: {.answers" in expected
+    if solutions_path is None:
+        if has_answers:
             issues.append(ValidationIssue(
-                path, lineno, "ERROR",
-                f"Chapter '{stem}' has {q} review question(s) but {s} solution(s)",
+                CHAPTERS_DIR / SOLUTIONS_FILENAME, 1, "ERROR",
+                "Chapters contain solutions but solutions.qmd is missing; run `make sync-solutions`",
             ))
+    elif solutions_path.read_text(encoding="utf-8") != expected:
+        issues.append(ValidationIssue(
+            solutions_path, 1, "ERROR",
+            "solutions.qmd is out of date with the chapters' answers blocks; "
+            "run `make sync-solutions` (never edit it by hand)",
+        ))
     return issues
 
 

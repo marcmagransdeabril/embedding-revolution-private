@@ -5,7 +5,8 @@
 -- filters/custom-envs.lua so both books share the same markup and numbering.
 --
 -- Markup
---   In a chapter, at the end of a section:
+--   In a chapter, at the end of a section, the questions are followed
+--   immediately by their solutions:
 --
 --       ::: {.questions}
 --       1. First question.
@@ -13,8 +14,18 @@
 --       2. Second question.
 --       :::
 --
---   In chapters/solutions.qmd, ONE block per chapter, referencing the chapter
---   file stem (chapters/embedding_spaces.qmd -> ref="embedding_spaces"):
+--       ::: {.answers}
+--       1. First solution.
+--
+--       2. Second solution.
+--       :::
+--
+--   The colocated `.answers` blocks (no `ref` attribute) are only authoring
+--   source: this filter removes them from the chapter. The script
+--   .github/skills/build-book/scripts/sync_solutions.py (`make sync-solutions`)
+--   gathers them, in book order, into the GENERATED chapters/solutions.qmd,
+--   with ONE block per chapter that references the chapter file stem
+--   (chapters/embedding_spaces.qmd -> ref="embedding_spaces"):
 --
 --       ::: {.answers ref="embedding_spaces"}
 --       1. First solution.
@@ -277,8 +288,13 @@ end
 
 local function handle_solution(el)
   local stem = el.attributes["ref"]
-  if not stem or not chapter_num[stem] then
-    error("[book-questions] .answers block has missing or unknown ref=\""
+  if not stem then
+    -- Colocated authoring block inside a chapter: solutions are printed only
+    -- in the generated solutions.qmd, so drop it here.
+    return {}
+  end
+  if not chapter_num[stem] then
+    error("[book-questions] .answers block has unknown ref=\""
       .. tostring(stem) .. "\" (expected a numbered chapter file stem)")
   end
   local chap_n = chapter_num[stem]
@@ -328,7 +344,7 @@ end
 local function Div(el)
   if el.classes:includes("questions") then return handle_questions(el) end
   if el.classes:includes("answers") then
-    -- Only authored blocks carry this class (generated items use `answer`).
+    -- Authored blocks carry this class (generated items use `answer`).
     return handle_solution(el)
   end
   return nil

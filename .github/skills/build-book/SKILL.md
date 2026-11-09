@@ -58,6 +58,7 @@ make epub
 make validate           # Audit chapter markdown, math, code syntax, and citations
 make validate-citations # Audit only @citekey citations against references.bib
 make sync-chapters      # Auto-discover chapters/*.qmd and update _quarto.yml
+make sync-solutions     # Regenerate chapters/solutions.qmd from the answers blocks in each chapter
 
 # Live editing preview server
 make preview
@@ -103,7 +104,15 @@ Scans `chapters/*.qmd`, maps files to the canonical Parts I–IV + Epilogue stru
 .venv/bin/python .github/skills/build-book/scripts/sync_chapters.py --verbose
 ```
 
-### 3. `validate_book.py` — Pre-flight Quality Auditor
+### 3. `sync_solutions.py` — Solutions Generator
+Collects the `::: {.answers}` blocks written inside each chapter (right after the matching `::: {.questions}` block) and generates the back-matter file `chapters/solutions.qmd` in book order. The Makefile runs it before every render; `--check` only reports whether the file is current:
+
+```bash
+.venv/bin/python .github/skills/build-book/scripts/sync_solutions.py          # regenerate
+.venv/bin/python .github/skills/build-book/scripts/sync_solutions.py --check  # exit 1 if stale
+```
+
+### 4. `validate_book.py` — Pre-flight Quality Auditor
 Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 
 ```bash
@@ -123,6 +132,7 @@ Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 4. **Display Math**: Balanced `$$` delimiters and valid LaTeX math environments.
 5. **Section Breaks**: `{{< pagebreak >}}` used instead of `---` horizontal rules between parts/chapters/special sections.
 6. **Citations**: Every `@citekey` resolves against `references.bib`; no orphan bib entries; `file =` paths exist under `references/`; no legacy hand-numbered `## References` lists (gated by `--citations`/`--no-citations`, default on).
+7. **Review questions and solutions**: every `::: {.questions}` block is followed immediately by a `::: {.answers}` block with the same number of items, and the generated `chapters/solutions.qmd` is up to date.
 
 ---
 
@@ -220,6 +230,7 @@ All citations resolve against the single repository-root `references.bib`, decla
     └── scripts/
         ├── build_book.py        # Master build driver
         ├── sync_chapters.py     # Dynamic chapter discovery
+        ├── sync_solutions.py    # Generates chapters/solutions.qmd from the chapters' answers blocks
         └── validate_book.py     # Markdown/math/code/citation auditor
 ```
 
@@ -227,7 +238,23 @@ All citations resolve against the single repository-root `references.bib`, decla
 
 ## Review Questions & Solutions
 
-Same markup and numbering as the little-book. Put 2–3 questions at the end of each section as an ordered list inside `::: {.questions}`; they are numbered `<chapter>.<n>` automatically (cumulative per chapter). Write the answers in `chapters/solutions.qmd` (listed last in the book, unnumbered), one `::: {.answers ref="<chapter-file-stem>"}` block per chapter, same order as the questions. `filters/book-questions.lua` adds the numbers, the per-chapter headings in the solutions, and the links between each question and its solution (HTML, EPUB, PDF). `make validate` fails if a chapter's question and solution counts differ or a `ref` is unknown.
+Same markup and numbering as the little-book. Put 2–3 questions at the end of each section as an ordered list inside `::: {.questions}`, and write the solutions **right below them**, in the same chapter file, as an ordered list inside a plain `::: {.answers}` block (same number of items, same order, only blank lines between the two blocks):
+
+```markdown
+::: {.questions}
+1. First question.
+
+2. Second question.
+:::
+
+::: {.answers}
+1. First solution.
+
+2. Second solution.
+:::
+```
+
+Questions are numbered `<chapter>.<n>` automatically (cumulative per chapter). The colocated `.answers` blocks are authoring source only: `filters/book-questions.lua` removes them from the chapter, so the reader never sees them inline. `sync_solutions.py` (`make sync-solutions`, run automatically before every render) gathers them in book order into `chapters/solutions.qmd` (listed last in the book, unnumbered) with one `::: {.answers ref="<chapter-file-stem>"}` block per chapter. **`chapters/solutions.qmd` is generated: never edit it by hand.** The filter then adds the per-chapter headings in the solutions and the links between each question and its solution (HTML, EPUB, PDF). `make validate` fails if a questions block lacks its answers block, the item counts differ, `ref=` is used outside the generated file, or `solutions.qmd` is stale.
 
 ---
 

@@ -244,38 +244,93 @@ def test_validate_frontmatter_allows_unnumbered_back_matter():
     assert validate_book.validate_frontmatter(Path("solutions.qmd"), text) == []
 
 
-def _write_chapters(tmp_path, chapter_text, solutions_text):
-    ch = tmp_path / "ch1.qmd"
+def _write_chapter(tmp_path, chapter_text, name="ch1.qmd"):
+    """Write a chapter plus the solutions.qmd generated from it; return both."""
+    import sync_solutions
+
+    ch = tmp_path / name
     ch.write_text(chapter_text, encoding="utf-8")
     sol = tmp_path / "solutions.qmd"
-    sol.write_text(solutions_text, encoding="utf-8")
+    sol.write_text(sync_solutions.render_solutions([ch]), encoding="utf-8")
     return [ch, sol]
 
 
+_FM = "---\ntitle: T\n---\n\n"
+
+
 def test_validate_questions_and_solutions_consistent(tmp_path):
-    files = _write_chapters(
+    files = _write_chapter(
         tmp_path,
-        "---\ntitle: T\n---\n\n::: {.questions}\n1. Q one\n\n2. Q two\n:::\n",
-        '# Solutions {.unnumbered}\n\n::: {.answers ref="ch1"}\n1. A one\n\n2. A two\n:::\n',
+        _FM + "::: {.questions}\n1. Q one\n\n2. Q two\n:::\n\n::: {.answers}\n1. A one\n\n2. A two\n:::\n",
+    )
+    assert validate_book.validate_questions_and_solutions(files) == []
+
+
+def test_validate_questions_and_solutions_two_sections(tmp_path):
+    files = _write_chapter(
+        tmp_path,
+        _FM
+        + "::: {.questions}\n1. Q one\n:::\n\n::: {.answers}\n1. A one\n:::\n\n"
+        + "## Next\n\nText.\n\n"
+        + "::: {.questions}\n1. Q two\n:::\n\n::: {.answers}\n1. A two\n:::\n",
     )
     assert validate_book.validate_questions_and_solutions(files) == []
 
 
 def test_validate_questions_and_solutions_count_mismatch(tmp_path):
-    files = _write_chapters(
+    files = _write_chapter(
         tmp_path,
-        "---\ntitle: T\n---\n\n::: {.questions}\n1. Q one\n\n2. Q two\n:::\n",
-        '# Solutions {.unnumbered}\n\n::: {.answers ref="ch1"}\n1. A one\n:::\n',
+        _FM + "::: {.questions}\n1. Q one\n\n2. Q two\n:::\n\n::: {.answers}\n1. A one\n:::\n",
     )
     issues = validate_book.validate_questions_and_solutions(files)
-    assert len(issues) == 1 and "2 review question(s) but 1 solution(s)" in issues[0].message
+    assert len(issues) == 1 and "2 question(s) but its answers block has 1 solution(s)" in issues[0].message
 
 
-def test_validate_questions_and_solutions_unknown_ref(tmp_path):
-    files = _write_chapters(
+def test_validate_questions_without_answers_block(tmp_path):
+    files = _write_chapter(tmp_path, _FM + "::: {.questions}\n1. Q one\n:::\n\nMore text.\n")
+    issues = validate_book.validate_questions_and_solutions(files)
+    assert any("not followed immediately" in i.message for i in issues)
+
+
+def test_validate_answers_must_directly_follow_questions(tmp_path):
+    files = _write_chapter(
         tmp_path,
-        "---\ntitle: T\n---\n\nNo questions here.\n",
-        '# Solutions {.unnumbered}\n\n::: {.answers ref="nope"}\n1. A\n:::\n',
+        _FM + "::: {.questions}\n1. Q one\n:::\n\nSome text in between.\n\n::: {.answers}\n1. A one\n:::\n",
     )
     issues = validate_book.validate_questions_and_solutions(files)
-    assert any("does not match any chapters" in i.message for i in issues)
+    assert any("not followed immediately" in i.message for i in issues)
+    assert any("does not directly follow" in i.message for i in issues)
+
+
+def test_validate_orphan_answers_block(tmp_path):
+    files = _write_chapter(tmp_path, _FM + "::: {.answers}\n1. A one\n:::\n")
+    issues = validate_book.validate_questions_and_solutions(files)
+    assert any("does not directly follow" in i.message for i in issues)
+
+
+def test_validate_ref_only_allowed_in_generated_solutions(tmp_path):
+    files = _write_chapter(
+        tmp_path,
+        _FM + '::: {.questions}\n1. Q\n:::\n\n::: {.answers ref="ch1"}\n1. A\n:::\n',
+    )
+    issues = validate_book.validate_questions_and_solutions(files)
+    assert any("only for the generated solutions.qmd" in i.message for i in issues)
+
+
+def test_validate_stale_solutions_file(tmp_path):
+    files = _write_chapter(
+        tmp_path,
+        _FM + "::: {.questions}\n1. Q one\n:::\n\n::: {.answers}\n1. A one\n:::\n",
+    )
+    files[1].write_text("# Solutions {.unnumbered}\n\nhand edited\n", encoding="utf-8")
+    issues = validate_book.validate_questions_and_solutions(files)
+    assert len(issues) == 1 and "out of date" in issues[0].message
+
+
+def test_validate_missing_solutions_file(tmp_path):
+    files = _write_chapter(
+        tmp_path,
+        _FM + "::: {.questions}\n1. Q one\n:::\n\n::: {.answers}\n1. A one\n:::\n",
+    )
+    issues = validate_book.validate_questions_and_solutions(files[:1])
+    assert len(issues) == 1 and "solutions.qmd is missing" in issues[0].message

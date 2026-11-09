@@ -144,6 +144,13 @@ def build_book(
         if not sync_quarto_yml(dry_run=dry_run, verbose=verbose):
             return False
 
+    # Step 1b: Regenerate chapters/solutions.qmd from the colocated answers blocks
+    if sync:
+        from sync_solutions import sync_solutions
+        print("Generating solutions.qmd from the chapters' answers blocks...")
+        if not sync_solutions(dry_run=dry_run):
+            return False
+
     # Step 2: Validate
     if validate:
         from validate_book import validate_all
