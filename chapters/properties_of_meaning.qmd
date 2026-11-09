@@ -2,7 +2,7 @@
 title: "The Properties of Meaning as Geometry"
 ---
 
-This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that later chapters can already cross-reference its sections. It is a catalog: each section states one property that meaning acquires once it becomes position in a space, in the plain language of distance and direction, and points forward to the chapters that earn it.
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that later chapters can already cross-reference its sections. It is a catalog: each section states one property that meaning acquires once it becomes position in a space, in the plain language of distance and direction, and points forward to the chapters that earn it. Each section also carries a first-pass line of sources, to be pruned when the chapter is written.
 
 ## Nearness Is Likeness {#sec-prop-nearness}
 *Things that mean alike sit close together, and things that mean differently sit far apart.*
@@ -11,12 +11,16 @@ Figure (planned): a small map in which "dog", "puppy", and "wolf" cluster, while
 
 Earned in Chapter 3 (where the distances come from), Chapter 2 (why distance still works in many dimensions), and Chapter 4 (search by nearness).
 
+Sources (first pass). The distributional idea that likeness of meaning shows as likeness of company [@harris1954distributional; @firth1957synopsis]; the first vector spaces built from counts [@deerwester1990indexing; @lund1996producing]; generalization that falls off with distance in a psychological space [@shepard1987toward]; meanings as points in a space of quality dimensions [@gardenfors2000conceptual]. A caveat: human similarity judgements are not always symmetric or metric [@tversky1977features].
+
 ## Difference Is a Relation {#sec-prop-difference}
 *The step from one meaning to another is itself meaningful, and the same step can be taken from elsewhere.*
 
 Figure (planned): the analogy parallelogram, with the step from "man" to "woman" repeated from "king" to "queen".
 
 Earned in Chapter 3 (analogy), Chapter 7 (relations as translations and rotations), and Chapter 12 (aligning two spaces by their steps rather than their points).
+
+Sources (first pass). The offset between word vectors encodes relations such as plural or gender [@mikolov2013linguistic; @mikolov2013efficient; @pennington2014glove]; analogy as a mapping of relations, in cognitive science [@rumelhart1973model; @gentner1983structure]; relations as translations of the space [@bordes2013translating].
 
 ## A Direction Is a Meaning You Can Move Along {#sec-prop-direction}
 *Some directions carry a single quality, such as plural, past, or formal, and moving along them changes only that quality.*
@@ -25,6 +29,8 @@ Figure (planned): a sentence nudged along one direction, changing tone while kee
 
 Earned in Chapter 3 (directions as concepts, steering), Chapter 5 (features as directions), and Chapter 2 (why there is room for so many directions).
 
+Sources (first pass). Constant offsets between word vectors [@mikolov2013linguistic]; directions that also carry social bias [@caliskan2017semantics; @garg2018word]; the linear representation hypothesis for large language models [@park2024linear]; more features than dimensions, stored as nearly orthogonal directions in superposition [@elhage2022toy].
+
 ## Meaning Can Be a Region {#sec-prop-region}
 *A concept is not always a point: it can be an area, a cone, or a subspace, and one concept can contain another.*
 
@@ -32,12 +38,16 @@ Figure (planned): "dog" as a region inside "animal", with the individual dogs as
 
 Earned in Chapter 6 (hierarchies in curved space) and Chapter 9 (concepts as subspaces).
 
+Sources (first pass). Concepts as convex regions of a conceptual space [@gardenfors2000conceptual]; words as Gaussian densities instead of points [@vilnis2015word]; hierarchies embedded in hyperbolic space [@nickel2017poincare]; a parse tree recovered from distances under a linear map [@hewitt2019structural]; concepts as subspaces with a logic of their own [@widdows2004geometry; @birkhoff1936logic].
+
 ## Meaning Can Move: Paths {#sec-prop-paths}
 *A static thing is a point, and an event, a plan, or an argument is a path through the space.*
 
 Figure (planned): a running dog drawn as a curve, each frame a point along it.
 
 Earned in Chapter 6 (geodesics and trajectories) and Chapter 13 (motion, time, and planning in the space).
+
+Sources (first pass). Cognitive maps and the navigation of conceptual space [@tolman1948cognitive; @behrens2018cognitive]; the chain of thought as intermediate steps written in text [@wei2022chain]; reasoning carried out in a continuous latent space instead of tokens [@hao2024training]; the boundary between bits and meaning [@shannon1948mathematical; @weaver1949recent].
 
 Note on reasoning. A model's chain of thought is such a path, but one that keeps collapsing back to words: at every step the position in the space is rounded to a token and then read back in. It sits on Shannon's boundary, the reasoning version of the split between bits and meaning (Chapter 3, "Shannon's Boundary Problem"). Whether reasoning can stay in the space instead of passing through text is an open question, developed in Chapter 5, Chapter 13, and the Epilogue.
 
@@ -48,6 +58,8 @@ Figure (planned): "red" and "ball" combined into "red ball", and the failure cas
 
 Earned in Chapter 10 (bundling and binding) and Chapter 11 (composition and systematicity).
 
+Sources (first pass). Binding and bundling of vectors by circular convolution [@plate1995holographic], by random high-dimensional vectors [@kanerva2009hyperdimensional], and by tensor products [@smolensky1990tensor], surveyed in [@kleyko2023survey]; why composition is the crux, as a question of systematicity [@fodor1988connectionism]; addition and multiplication as composition in distributional models [@mitchell2010composition; @coecke2010mathematical].
+
 ## Many Senses, One Space {#sec-prop-senses}
 *A photograph, a word, a bark, and a gait of the same dog can land near each other, and far from a cat or a car.*
 
@@ -55,9 +67,46 @@ Figure (planned): the four signals of the dog test of the Prologue, converging o
 
 Earned in Chapter 13 (multimodal embeddings) and Chapter 12 (aligning separate spaces).
 
+Sources (first pass). The grounding problem [@harnad1990symbol]; the old question whether touch and sight yield one concept [@locke1694essay; @held2011newly]; single neurons that respond to one person across photographs and name [@quiroga2005invariant]; crossmodal correspondences and synaesthesia [@spence2011crossmodal; @ramachandran2001synaesthesia]; images and text trained into one space by contrastive learning [@radford2021learning]; the claim that separate models converge on a shared representation [@huh2024platonic].
+
 ## What Is Real Is the Arrangement {#sec-prop-arrangement}
-*The coordinates mean nothing on their own; only the distances and directions between meanings carry information, so the whole space can be turned without changing what it says.*
+*The coordinates mean nothing on their own; only the relations between meanings, their distances and the angles between their directions, carry information.*
 
-Figure (planned): the same map rotated, with every distance and every analogy preserved.
+Figure (planned): a table of pairwise distances among a handful of words, with no coordinates anywhere, from which the map can still be redrawn.
 
-Earned in Chapter 3 (invariance to relabelling), Chapter 8 (the shape of a representation), and Chapter 12 (comparing two spaces up to a rotation).
+Earned in Chapter 3 (invariance to relabelling), Chapter 8 (the shape of a representation), and Chapter 12 (comparing two spaces by their relations).
+
+Sources (first pass). Meaning as a system of differences [@saussure1916cours]; representation as a pattern of similarities [@edelman1998representation; @kriegeskorte2008representational]; communicating across latent spaces through relative positions [@moschella2023relative].
+
+## Meaning Survives Symmetries {#sec-prop-invariance}
+*The space can be turned, and in some cases stretched, without changing what it says; what it says is exactly what survives these transformations.*
+
+Figure (planned): the same map before and after a rotation, with every distance and every analogy preserved, next to a shear that breaks them.
+
+The symmetries, each to be stated with the group that defines it and the quantity it preserves:
+
+- Rotation and reflection (the orthogonal group): preserve all distances, dot products, and angles. Distances are invariant; directions are equivariant, since they turn with the space, and only the angles between them are invariant.
+- Uniform scaling: preserves angles and cosine similarity, but not distances or dot products. Whether it is a symmetry depends on which similarity the model was trained with.
+- Translation (a shift of the origin): preserves distances and differences, so analogy offsets survive; it does not preserve dot products or cosine similarity unless the space is centred.
+- Invertible linear maps: preserve the span of a representation and linear readability, but not distances. This is the coarser notion used when comparing representations.
+- Permutation of the dimensions: a special case of rotation, which is why no single coordinate has an identity.
+
+The invariance is of the pair (space, readout). A classifier or the next layer fixes a basis, so turning the space is harmless only if the readout is turned with it.
+
+Where the symmetry comes from. The symmetry belongs to the objective, not to convergence. If the loss depends on the embeddings only through inner products or cosines, replacing every vector by its rotation leaves the loss unchanged at every point of the landscape, so the minimisers form an orbit and a trained model is one arbitrary point on it. Whether separate runs land on the same orbit is a different question, and the symmetry does not answer it. The size of the group depends on the objective. A model that scores a pair by a dot product between two sets of vectors, such as the input and output vectors of a word model, is unchanged by any invertible linear map applied to one set and its inverse transpose to the other, which is the non-uniqueness of a matrix factorisation [@levy2014neural]. Cosine similarity, by normalising, reduces the group to rotations and reflections. What picks one representative inside the orbit is the optimiser and its regularisation: gradient descent on a factorised model has an implicit bias, towards low-norm or low-rank solutions, that depends on initialisation and step size [@gunasekar2017implicit; @arora2019implicit]. In this sense the invariance is partly a by-product of how the spaces are found. What is not a by-product is that the information is relational: a set of vectors is fixed up to rotation and reflection by its pairwise inner products, so rotation invariance and "only relations carry information" are the same statement. If the training signal is itself relational, such as which words co-occur or which pairs are similar, the data single out no coordinate system, and the rotation freedom is the redundancy left over from describing a relational structure with coordinates.
+
+What breaks the symmetry. Anything that depends on coordinates singles out the axes and gives them meaning. Elementwise nonlinearities create a privileged basis [@elhage2022toy]. Training that makes the first coordinates carry a usable embedding on their own, as in Matryoshka representations, gives the axes an order [@kusupati2022matryoshka]. In trained transformers a few dimensions of the hidden state take unusually large values, which dominate cosine similarity and Euclidean distance [@kovaleva2021bert; @timkey2021rogue] and break low-precision quantization [@dettmers2022llmint8]; that the optimiser is responsible for them is a common view that this chapter does not establish. Features stored in superposition are a statement about which directions matter, and trained spaces are often anisotropic, so the symmetry group of the data is smaller than the group of the geometry [@razzhigaev2023shape].
+
+Global and local. Everything above applies one transformation to the whole space. A local symmetry lets the transformation vary from point to point. This is the gauge idea: on a curved space, the choice of an orthonormal frame at each point is arbitrary, and only frame-independent quantities (distances, angles, curvature) are meaningful. Three forms appear in the literature, with different standing:
+
+- Non-rigid maps between spaces. Two spaces trained on the same data may differ by an isometry of the underlying manifold rather than a single global rotation, and a representation built from the pullback metric is invariant to it. Relative representations already allow other similarity functions for invariance to deformations of bounded distortion.
+- Transport of a relation. An analogy repeats a step from one place to another, which needs a rule for carrying a vector between points. In flat space this is vector addition; on a curved space it is parallel transport, and going round a loop returns the vector rotated (holonomy). Hyperbolic word embeddings solve analogies this way.
+- Invariance of the map, not of the space. Embeddings trained with augmentations are locally flat along nuisance directions of the input, and which directions differs by region.
+
+The literature supports the pieces: gauge equivariance is developed for data on manifolds, and the pullback metric and parallel transport for latent spaces. No source found treats an embedding space as having a local gauge symmetry of its own; stating it so would be this book's synthesis, to be marked as such.
+
+Local non-uniformity also limits the global story: anisotropy and intrinsic dimension vary across layers and, by region, within a space.
+
+Earned in Chapter 3 (invariance to relabelling), Chapter 6 (curved space, geodesics, and parallel transport), Chapter 8 (the shape of a representation, and which symmetries a training objective leaves intact), and Chapter 12 (aligning two spaces up to a rotation, and comparing them independently of one).
+
+Sources (first pass). Geometry as what survives a group of transformations [@klein1893comparative; @bronstein2021geometric, section 4.5 on gauges and bundles]; comparing representations independently of rotation or invertible linear maps [@kornblith2019similarity]; communicating across latent spaces through relative positions, invariant to isometries and rescalings [@moschella2023relative]; the same models related by an isometry of the underlying manifold, through the pullback metric [@yu2025relative; @arvanitidis2018latent]; an exact rotation symmetry of the residual stream of a transformer, used to compress and quantize [@ashkboos2024slicegpt; @ashkboos2024quarot]; features as nearly orthogonal directions in superposition [@elhage2022toy]; the claim that separate models converge on a shared representation, up to such a map [@huh2024platonic]. Local forms: gauge equivariance on manifolds [@cohen2019gauge; @weiler2021coordinate]; parallel transport and holonomy [@needham2021visual]; analogy by parallel transport in hyperbolic space [@tifrea2019poincare; @nickel2017poincare]; invariance to augmentations and its cost [@bardes2022vicreg; @ericsson2021invariance]; variation of anisotropy and intrinsic dimension [@razzhigaev2023shape]. Origin and breaking of the symmetry: factorisation non-uniqueness [@levy2014neural]; implicit bias of gradient descent in matrix factorisation [@gunasekar2017implicit; @arora2019implicit]; privileged bases [@elhage2022toy]; nested embeddings [@kusupati2022matryoshka]; outlier and rogue dimensions [@kovaleva2021bert; @timkey2021rogue; @dettmers2022llmint8]. To add: a classical reference for a configuration being fixed up to rotation by its inner products.
