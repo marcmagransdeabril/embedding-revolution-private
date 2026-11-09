@@ -1,6 +1,6 @@
 ---
 name: review-doc
-description: "Review book content — from a single paragraph up to the whole book — for structure, style, grammar, cross-references, citations, referenced documents validation, factual accuracy, question/solution completeness, code consistency, and translation sync. Use when: reviewing, auditing, or proofreading text, or checking consistency between language versions."
+description: "Review book content — a portion of text, a chapter, a git-incremental change set, or the whole book — for structure, style, grammar, cross-references, citations, referenced documents validation, factual accuracy, question/solution completeness, code consistency, translation sync, and chapter-to-chapter continuity and the book's thematic contract. Always starts by clarifying the scope (unit and range). Use when: reviewing, auditing, or proofreading text, reviewing what changed since a commit/date, or checking consistency between language versions."
 ---
 
 # Book Review
@@ -9,32 +9,48 @@ Book-agnostic review procedure, scalable from a paragraph to the whole book.
 
 ## Setup
 
-Two independent choices define what gets reviewed. **If either is ambiguous from the user's request, ask before proceeding** — do not guess.
+### Step 0: clarify the scope (always first)
+
+Before reading or judging anything, fix the scope of the review. Two independent choices define it. **If either is ambiguous from the user's request, ask before proceeding** — do not guess, and do not default to a full-book review. A request such as "review the book" or "review chapter 3" does not fix the range: ask for it.
 
 1. **Unit** — the content boundary:
-   - **Paragraph / section** — the specific passage the user points to (or the surrounding section if they only point at a line).
+   - **Portion of text** — a passage the user designates: a paragraph, a heading and its subsections, or a line range (`file:start-end`). If they only point at a line, take the surrounding section.
    - **Chapter** — one chapter file (plus its code/tests/translation counterparts).
+   - **Several chapters** — an explicit list or range of chapters, including a hand-off pair (end of chapter N plus start of chapter N+1).
    - **Whole book** — every chapter.
 2. **Range** — how much of that unit to check:
-   - **Latest saved changes** — uncommitted working-tree edits: `git diff -- <paths>` (add `--staged` too if anything is staged). Review only the changed hunks plus surrounding context.
-   - **Last commit(s)** — `git log -1` or `git diff HEAD~<n>..HEAD -- <paths>`; ask how many commits if not stated. Review only the changed hunks plus surrounding context.
-   - **Since a given date/commit/tag** — `git diff <ref>..HEAD -- <paths>`. Review only the changed hunks plus surrounding context.
+   - **Incremental, latest saved changes** — uncommitted working-tree edits: `git diff -- <paths>` (add `--staged` too if anything is staged). Review only the changed hunks plus surrounding context.
+   - **Incremental, last commit(s)** — `git log -1` or `git diff HEAD~<n>..HEAD -- <paths>`; ask how many commits if not stated.
+   - **Incremental, since a given date/commit/tag/branch** — `git diff <ref>..HEAD -- <paths>`; for a date, resolve it first with `git rev-list -1 --before=<date> HEAD`.
    - **Full** — the entire current content of the unit, ignoring history.
 
-For any range narrower than "full", still read enough surrounding context to judge flow, and still run the full build/test step (§14) — changes can break things non-locally even when the diff is small.
+Incremental ranges and a portion-of-text unit can be combined (e.g. "the changes since `main` inside the Shannon section").
+
+**Confirm the scope in one short block before starting**, and proceed once it is unambiguous: unit, range (with the exact git command and base ref, or the line range), the files and hunks it resolves to, and which checks will be skipped as not applicable. If the diff is empty, say so and stop. If the user's reply to a scope question is "just do it", state the scope you chose and why, then proceed.
+
+For any range narrower than "full", still read enough surrounding context to judge flow, and still run the full build/test step (§14) — changes can break things non-locally even when the diff is small. Widen the scope only for the boundary reads described in §2 and §15, and label anything outside the selected scope as out of scope.
+
+**Incremental reviews and hand-offs.** A changed hunk can break a link to its neighbours without the neighbours changing. When a hunk touches the first or last paragraph of a section or chapter, or a "next chapter" announcement, also read the neighbouring paragraph on the other side of that boundary and check the link (§2, §15). When a hunk renumbers, renames, or moves a section or chapter, grep the rest of the book for references to the old name or number and report stale ones as out of scope for edits but in scope for the report.
 
 Also establish, from `AGENTS.md`, the style guide, or an already-finished chapter:
 
 3. **Canonical chapter skeleton** — expected section structure.
 4. **Style guide** — audience, tone, language and locale.
+5. **Book-level contract** — the book's own statement of what every chapter must do and how chapters hand off to each other (for this book, the global argument in `index.qmd`: one paragraph per chapter with its scale test and its "Next:" hand-off). If none exists, skip §15.
 
 Read the full unit under review (not just isolated diff hunks) before commenting, so feedback accounts for surrounding context. For a paragraph/section-level review, skip checks that don't apply at that granularity (e.g. whole-chapter structure, index terms) and note which ones were skipped and why.
 
 ### Change policy (minimal intervention)
 A review audits; it does not rewrite. The author's text is the default and must stay as written unless there is an objective reason to change it.
-- **Only these may be edited directly**, and only inside the unit and range under review: typos and misspellings; clear grammar errors with one obvious fix; broken or mistyped cross-reference/citation syntax; inconsistent spelling of a term, number format or decimal separator against the book's own convention; unambiguous markup errors. Everything else (wording, sentence structure, paragraph order, tone, emphasis, transitions, punctuation habits, examples, humour, claims) is **reported, never applied**.
+- **Order of work: fix first, then report.** Pass 1 applies the fixes in the first list below, in this order of priority: syntax, grammar, non-idiomatic usage, correctness. Pass 2 reports everything else. Do not start pass 2 items before pass 1 is done and listed.
+- **Apply directly** (only inside the unit and range under review), always as the smallest edit that keeps the author's words:
+  - **Syntax**: broken or mistyped cross-reference/citation syntax, unbalanced markup, math, divs or code fences, unambiguous markup errors.
+  - **Grammar**: typos and misspellings; agreement, tense, article, preposition and punctuation errors with one obvious fix; inconsistent spelling of a term, number format or decimal separator against the book's own convention.
+  - **Non-idiomatic usage**: calques and wrong collocations or prepositions where one natural form exists; and colon misuse (see §3), fixed by swapping the punctuation only.
+  - **Correctness**: a factual or technical error (date, name, attribution, number, formula, notation) whose corrected value is verified against a source in `references/` or another cited source. Cite the source in the applied-fix entry. If the correct value is not verifiable, or the fix would change what the author argues, report it instead.
+- **Never apply stylistic changes**: wording, sentence structure, paragraph order, tone, register, emphasis, transitions, rhythm, examples, humour, claims, and how much to cite or explain. These are reported as `suggestion` at most, and never edited without the author's approval, even when the author asks for the review to be "thorough".
 - **Style is judged against the book's style guide and its finished chapters, not against the reviewer's taste.** Raise a style finding only when the text deviates from an established convention or hurts comprehension, and cite the convention or the passage that shows it. "Could be more engaging", "I would phrase it differently" and equivalent preferences are not findings.
-- **Style findings are at most `suggestion`**, unless they break an explicit rule of the style guide (then `should-fix`). They never block, and they are never applied without the author's approval.
+- **Style findings are at most `suggestion`**, unless they break an explicit rule of the style guide (then `should-fix`). They never block.
 - **Smallest possible change.** When a proposal is warranted, quote the exact span and offer the minimal edit that fixes the problem, keeping the author's words, rhythm and register. Do not reformat, reflow, re-wrap, re-number, or normalise untouched text, and do not mix unrelated edits into one change.
 - **Stay in range.** Do not touch or comment on text outside the selected unit/range (beyond the context and boundary reads this skill requires). Pre-existing issues found outside it go in a separate "out of scope" note, not in the findings.
 - **Be stable across passes.** Do not re-raise a finding the author has already declined or left unchanged after it was reported, and do not flip a previously accepted choice back and forth. A second pass on unchanged text must produce no new style findings; if it does, the first pass was incomplete or the new finding is preference.
@@ -58,13 +74,13 @@ Sections present, ordered, and labelled per the book's skeleton. Flag deviations
 
 ### 3. Grammar and usage
 - Fix grammar/typos without altering style (see Change policy); keep terminology, numbers, and decimal-separators consistent across text, math, and figures.
-- Flag unnatural phrasing (calques, wrong prepositions) and punctuation errors (parentheticals, dashes, ellipses, locale quotes); match dialogue/monologue to character voice and scene register.
-- **Colon overuse.** Flag prose where a colon is the default way to link a clause to its explanation ("X is Y: it does Z"), especially when several occur in one paragraph or the pattern recurs across the unit; it reads as mechanical. Suggest a comma with a participle ("It is a language model in embryo, absorbing some of the syntax…"), a conjunction ("because", "so", "which"), or a separate sentence. Count occurrences per section and report the density, not only single instances. Colons are correct, and not to be flagged, when they:
+- Flag unnatural phrasing (calques, wrong prepositions) and punctuation errors (parentheticals, dashes, ellipses, locale quotes); fix those with one natural form, report the rest; match dialogue/monologue to character voice and scene register.
+- **Colon misuse.** The colon is a punctuation mark with a few jobs, not the default joint between a clause and its explanation ("X is Y: it does Z"). Treat that pattern as non-idiomatic usage. Count colons per section and fix the pattern where it recurs, and also single instances that are plainly wrong (a colon splitting a verb from its object, or after a preposition or "such as"). Fix by swapping the punctuation only: a period, a comma, a semicolon or a dash already used in the book, keeping the author's words. If the fix needs a new word ("because", "so", "which") or a recast clause, that is a rewrite: report it with the proposed text and do not apply it. Report the density per section either way. Colons are correct, and left alone, when they:
   - introduce an enumeration or a list item ("three levels: A, B and C");
   - introduce a formal definition, a quotation, or a displayed formula or example;
   - belong to titles, captions, labels, ratios, times, citations or code;
-  - open a short, deliberate announcement where the payoff is the point ("The answer is simple: …"), used sparingly (at most once or twice per page).
-  Colon use is a stylistic habit, so report it as a `suggestion` with the density count and never apply it; flag it only when the pattern is frequent enough to read as mechanical, not for isolated instances.
+  - open a short, deliberate announcement where the payoff is the point ("The answer is simple: …"), at most once or twice per page.
+  Text the reviewer writes (proposed edits, report, applied-fix notes) follows the same rule: no colon-as-joint.
 - Do not propose rewrites merely to make prose more engaging; that is taste, not a defect.
 
 ### 4. Cross-references
@@ -99,7 +115,7 @@ Every image path exists; every generated diagram has its source file; captions a
 - Verify dates, attributions, mathematical and algorithmic properties, quantitative claims, and API/version statements against sources.
 - Invoke the `ground-truth-review` skill when auditing factual, mathematical, or empirical assertions against `references/`.
 - Both **Contradicted** and **Not found** findings from ground-truth review are classified as **`blocker`** severity in the review output.
-- Report factual errors with the corrected value and source; never fix them silently.
+- Report factual errors with the corrected value and source. Apply the correction when the Change policy allows it (verified against a source, no change to the author's argument) and list it as an applied fix with the source; otherwise report it. Never fix silently.
 - For human, expert, or automated rating/evaluation studies, audit whether: (1) presentation order is counterbalanced across conditions (mitigating position/sequence bias), (2) evaluations are length- or volume-normalized to control for superficial verbosity/size bias, (3) scoring criteria are evaluated independently to prevent halo effects, and (4) evaluator/observer allegiance bias is mitigated via blinding or cross-condition masking.
 - For search, screening, and multi-candidate generation tasks (convex payoffs), audit whether top-tail reach (k-max, top-decile yield, best-of-N outcomes) is evaluated or masked by central averages. Audit whether severe downside risks (p95/p99 tail latency, toxicity, catastrophic failure modes) are concealed by aggregate averages.
 - Audit researcher degrees of freedom: (1) verify comparison baselines and controls received equal optimization/resource parity (compute, energy/GPU-hours, sample size, human-annotation labor, dosage, or monetary cost) rather than being tested in uncalibrated or handicapped configurations, (2) check whether custom post-hoc metrics replace pre-specified standard endpoints without validation, and (3) confirm reported gains reflect full distributions across independent replicates/seeds rather than cherry-picked runs on a Pareto frontier.
@@ -138,7 +154,27 @@ If another language version exists:
 ### 14. Build and test
 Run exactly what CI runs (CI workflow / `Makefile`): full render plus test suite. Review incomplete until both pass cleanly.
 
+### 15. Book-level contract and hand-offs
+Applies when the book declares a contract (Setup item 5) and the scope touches a chapter boundary, a chapter opening or closing, or the contract text itself. This is an editorial judgement about prose, never satisfied by inserting boilerplate; report a gap only when the passage does not do the job in whatever form the author chose.
+
+**Job A — continuity (all chapters).**
+- The declared hand-off ("Next:" line, or equivalent) of chapter N matches what chapter N+1 actually opens with, and chapter N+1's opening picks up from chapter N's close.
+- Within a chapter, each section's first sentences pick up the previous section's last ones (same test as §2).
+- Recurring threads (the running example, the ledger of limits, the reasoning-in-the-space thread) stay coherent across hand-offs: nothing is dropped, redefined, or contradicted.
+- Stubs are checked against the contract text, not for prose quality: the stub's sections and the global argument must say the same thing. When both exist for one chapter, report any divergence and name which file is the source of truth.
+
+**Job B — thematic contract (the chapters the contract names; for this book, Chapters 3 to 13).**
+- The opening states the bet this chapter's structure makes against the bitter lesson; the closing gives the verdict (absorbed by scale, cheap, or demanded by the problem) and it follows from the chapter's own argument.
+- The opening and closing name the properties of meaning as geometry that the chapter develops, tied back to the Chapter 1 catalog by its `@sec-prop-*` anchors. Every anchor referenced exists. If the catalog anchors are not yet frozen, report Job B as blocked on that, not as a failure of the chapter.
+- Chapters outside the contract's range (for this book, 1 and 2) are audited for Job A only.
+
+**Incremental scope.** Run Job A on every boundary the diff touches. Run Job B on a chapter only if the diff touches its opening, its closing, its scale test, or the contract text; otherwise list Job B as skipped and why.
+
+**Mechanical hints (optional).** `grep` for `@sec-prop-` and for "bitter lesson" in the first and last section of each contracted chapter. A miss is a hint to read the passage, not a finding by itself.
+
 ## Output
+
+**Report first, edit on approval.** A review run produces a report; apart from the fixes the Change policy lists under "Apply directly" (syntax, grammar, non-idiomatic usage, correctness), which are applied first and listed in the report, no prose is changed until the author approves specific items, after which each approved item lands as a separate minimal diff. Begin the report with the confirmed scope block from Setup.
 
 Group findings into the 4-tier hierarchy:
 1. **Tier 1: Fatal Blockers (Methodological, Mathematical & Factual Contradictions)** — must include explicit contrastive evidence `[Claim: ...] vs [Ground-Truth Evidence: ...]`.

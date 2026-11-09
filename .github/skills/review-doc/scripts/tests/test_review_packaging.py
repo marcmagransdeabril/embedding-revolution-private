@@ -46,6 +46,7 @@ def test_required_sections_present():
         "### 12. Index",
         "### 13. Translation parity",
         "### 14. Build and test",
+        "### 15. Book-level contract and hand-offs",
         "## Output",
     ]
     
@@ -106,3 +107,52 @@ def test_style_section_guards_against_empty_erudition():
     assert "No empty erudition" in text
     assert "does the next step of the argument depend on it" in text
     assert "explained well enough" in text
+
+
+def test_scope_is_clarified_first_and_supports_incremental_and_portion():
+    """Setup must start with a scope-clarification step covering git-incremental ranges and text portions."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    setup = re.search(r"## Setup(.*?)(?=## Checks)", content, flags=re.DOTALL)
+    assert setup is not None, "Failed to locate Setup in review-doc/SKILL.md"
+    text = setup.group(1)
+    assert text.lstrip().startswith("### Step 0"), "Scope clarification must be the first step of Setup"
+    assert "ask before proceeding" in text
+    for needle in ("git diff", "git log", "<ref>..HEAD", "line range", "Portion of text"):
+        assert needle in text, f"Setup must cover: {needle}"
+    assert "Confirm the scope" in text, "Setup must require echoing the scope before reviewing"
+
+
+def test_book_contract_section_covers_continuity_and_thematic_contract():
+    """§15 must define Job A (continuity), Job B (thematic contract), incremental scoping, and report-first output."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec15 = re.search(r"### 15\. Book-level contract and hand-offs(.*?)(?=## Output)", content, flags=re.DOTALL)
+    assert sec15 is not None, "Failed to locate §15 in review-doc/SKILL.md"
+    text = sec15.group(1)
+    assert "Job A" in text and "Job B" in text
+    assert "bitter lesson" in text and "@sec-prop-" in text
+    assert "Incremental scope" in text
+    out = content.split("## Output", 1)[1]
+    assert "Report first" in out
+
+
+def test_change_policy_applies_only_non_stylistic_fixes_in_priority_order():
+    """Change policy: apply syntax, grammar, idiom, correctness (in that order); never apply style."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    policy = re.search(r"### Change policy(.*?)(?=### Metacognitive)", content, flags=re.DOTALL)
+    assert policy is not None, "Failed to locate Change policy"
+    text = policy.group(1)
+    assert "Order of work" in text
+    order = [text.index(k) for k in ("**Syntax**", "**Grammar**", "**Non-idiomatic usage**", "**Correctness**")]
+    assert order == sorted(order), "Apply-directly categories must be listed in priority order"
+    assert "Never apply stylistic changes" in text
+
+
+def test_colon_misuse_is_a_usage_fix_not_a_style_suggestion():
+    """§3 must treat colon-as-joint as non-idiomatic usage fixed by punctuation swap only."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec3 = re.search(r"### 3\. Grammar and usage(.*?)(?=### 4\.)", content, flags=re.DOTALL)
+    assert sec3 is not None, "Failed to locate §3"
+    text = sec3.group(1)
+    assert "Colon misuse" in text
+    assert "swapping the punctuation only" in text
+    assert "never apply it" not in text
