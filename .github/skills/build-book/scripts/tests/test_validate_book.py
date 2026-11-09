@@ -164,6 +164,12 @@ def test_parse_bibliography_orphan_and_missing_fields(tmp_path):
         "}\n"
         "@article{missing_fields_entry,\n"
         "  title = {Only Title}\n"
+        "}\n"
+        "@book{edited_volume_entry,\n"
+        "  editor = {Doe, Jane},\n"
+        "  title = {An Edited Volume},\n"
+        "  year = {2011},\n"
+        "  file = {}\n"
         "}\n",
         encoding="utf-8",
     )
@@ -177,6 +183,7 @@ def test_parse_bibliography_orphan_and_missing_fields(tmp_path):
     messages = [i.message for i in issues]
     assert any("orphan_entry" in m and "not cited" in m for m in messages)
     assert any("missing_fields_entry" in m and "missing required field" in m for m in messages)
+    assert not any("edited_volume_entry" in m and "missing required field" in m for m in messages)
     assert not any("cited_entry" in m and "not cited" in m for m in messages)
 
 

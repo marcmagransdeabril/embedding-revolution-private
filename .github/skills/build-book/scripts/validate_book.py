@@ -389,7 +389,10 @@ def validate_bibliography_corpus(cited_keys: set[str]) -> list[ValidationIssue]:
             )
 
         # 3. Missing required fields -> WARNING.
+        # An edited volume legitimately has an editor instead of an author.
         missing = [f for f in ("author", "title", "year") if not fields.get(f)]
+        if "author" in missing and fields.get("editor"):
+            missing.remove("author")
         if missing:
             issues.append(
                 ValidationIssue(
