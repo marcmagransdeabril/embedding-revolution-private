@@ -20,4 +20,4 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *How retrieval systems behaved, what followed, and why the structural limit remains.*
 
 ## Scale Test
-*Scale forced approximation. Will long contexts and agentic search absorb retrieval, or does external memory survive on cost?*
+*Scale forced approximation. Will long contexts and agentic search absorb retrieval, or does external memory survive on cost? The same trade appears in reasoning (Chapter 5): search can be paid once in training and amortized into the weights, or paid at every query. Parametric memory is the amortized side, retrieval and agentic search the per-query side, and which wins depends on the difficulty of the question and the compute available [@snell2024scaling; @jones2021scaling].*

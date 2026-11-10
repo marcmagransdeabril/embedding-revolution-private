@@ -44,7 +44,7 @@ The reach of this paradigm is broad, and so are the questions it raises:
 - **Multimodal Meaning:** Text, images, sound, and motion projected into one shared metric space, so that a photograph, a word, and a sound of the same thing become neighbours (e.g., CLIP for images and text in 2021, ImageBind for six modalities in 2023).
 - **Biology & Chemistry:** Amino acid sequences and molecular structures represented as continuous vectors (e.g., protein language models).
 - **Knowledge Graphs & Logic:** Discrete entities and relational predicates transformed into continuous translational and rotational operators ($\mathbb{R}^D, \mathbb{C}^D$).
-- **Action, Planning and Reasoning:** Goals, world states, and plans represented as vectors, and behaviour as trajectories of such vectors (e.g., world models that predict the next state in latent space and plan there). Reasoning can follow such a trajectory too, or keep leaving the space to write each step down in words, as a chain of thought does.
+- **Action, Planning and Reasoning:** Goals, world states, and plans represented as vectors, and behaviour as trajectories of such vectors (e.g., world models that predict the next state in latent space and plan there). Reasoning can follow such a trajectory too, or keep leaving the space to write each step down in words, as a chain of thought does. Either way it is a draw from a distribution of paths, not a geodesic to the answer: training raises the probability that a path ends in a correct one, and no single path is guaranteed to.
 
 Each item is also a question: what does the vector keep, and what does it lose?
 

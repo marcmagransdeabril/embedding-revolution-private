@@ -11,7 +11,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Images vary by translation and viewpoint, audio by time shift, pitch, and speaker, video by motion, and text by none of these. A shared semantic space can be seen as a quotient by the nuisance symmetries of each modality: the same dog from any angle, in any voice.*
 
 ## Tangent Spaces and Geodesics
-*Parallel transport, Riemannian metrics, and semantic interpolation along curves. A static thing is a point and an event is a curve, so a running dog is a trajectory whose tangent vector is its motion; a plan is a curve too, and so is an argument if reasoning can stay in the space (Chapter 5). The geometry of this section is the vocabulary for both, developed for planning in Chapter 13.*
+*Parallel transport, Riemannian metrics, and semantic interpolation along curves. A static thing is a point and an event is a curve, so a running dog is a trajectory whose tangent vector is its motion; a plan is a curve too, and so is an argument if reasoning can stay in the space (Chapter 5), though a sampled argument is one draw from a distribution of curves, not a geodesic, since nothing guarantees that a single path converges on the answer. The geometry of this section is the vocabulary for both, developed for planning in Chapter 13.*
 
 ## Lie Groups and Continuous Symmetries
 *$SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE), a structure that was adopted at scale.*
