@@ -108,9 +108,9 @@
       "from_2023": 0
     },
     "chapters/embedding_spaces.qmd (definitive part)": {
-      "cites": 15,
-      "median_year": 1956,
-      "before_1980": 9,
+      "cites": 20,
+      "median_year": 1970,
+      "before_1980": 10,
       "from_2020": 0,
       "from_2023": 0
     }
@@ -174,53 +174,35 @@
     }
   },
   "relative_wording": [
-    "index.qmd:77",
-    "chapters/embedding_spaces.qmd:7",
-    "chapters/embedding_spaces.qmd:59",
-    "chapters/embedding_spaces.qmd:908"
+    "index.qmd:79",
+    "chapters/embedding_spaces.qmd:8",
+    "chapters/embedding_spaces.qmd:60",
+    "chapters/embedding_spaces.qmd:909"
   ],
   "fashion_titles": [
-    "index.qmd:94: * **Chapter 4: Vector Databases, RAG, and the Limits of Single-Vector Retrieval.** Distanc",
-    "index.qmd:95: * **Chapter 5: Contextual Vectors: Attention, Transformers, and Looking Inside.** A word's",
-    "index.qmd:103: * **Chapter 8: Beyond Graphs: Topological Deep Learning.** Simplicial and cell complexes, ",
-    "index.qmd:109: * **Chapter 9: The Complex Plane and Quantum Logic: Wave-Nature in Latent Space.** Concept",
+    "index.qmd:100: * **Chapter 4: Vector Databases, RAG, and the Limits of Single-Vector Retrieval.** *(idea)",
+    "index.qmd:101: * **Chapter 5: Contextual Vectors: Attention, Transformers, and Looking Inside.** *(idea)*",
+    "index.qmd:109: * **Chapter 8: Beyond Graphs: Topological Deep Learning.** *(idea)* Simplicial and cell co",
+    "index.qmd:115: * **Chapter 9: The Complex Plane and Quantum Logic: Wave-Nature in Latent Space.** *(idea)",
     "chapters/complex_plane_quantum_logic.qmd:2: title: \"The Complex Plane and Quantum Logic: Wave-Nature in Latent Space\"",
-    "chapters/complex_plane_quantum_logic.qmd:16: ## Quantum Decision Making in Vector Spaces",
-    "chapters/complex_plane_quantum_logic.qmd:19: ## Quantum-Inspired Embeddings",
+    "chapters/complex_plane_quantum_logic.qmd:17: ## Quantum Decision Making in Vector Spaces",
+    "chapters/complex_plane_quantum_logic.qmd:20: ## Quantum-Inspired Embeddings",
     "chapters/contextual_vectors.qmd:2: title: \"Contextual Vectors: Attention, Transformers, and Looking Inside\"",
-    "chapters/graph_embeddings.qmd:24: ## Graph Databases vs. Vector Databases",
-    "chapters/neurosymbolic_integration.qmd:25: ## Neural Theorem Proving",
+    "chapters/graph_embeddings.qmd:25: ## Graph Databases vs. Vector Databases",
+    "chapters/neurosymbolic_integration.qmd:26: ## Neural Theorem Proving",
     "chapters/topological_deep_learning.qmd:2: title: \"Beyond Graphs: Topological Deep Learning\"",
     "chapters/vector_databases.qmd:2: title: \"Vector Databases, RAG, and the Limits of Single-Vector Retrieval\"",
-    "chapters/vector_databases.qmd:13: ## Retrieval-Augmented Generation"
+    "chapters/vector_databases.qmd:14: ## Retrieval-Augmented Generation"
   ],
-  "tree": {
-    "by_commitment": {
-      "settled": 3,
-      "provisional": 12,
-      "exploratory": 15,
-      "parked": 0,
-      "dropped": 2
+  "status": {
+    "chapters": {
+      "definitive": 2,
+      "provisional": 1,
+      "idea": 11
     },
-    "gates": {
-      "pending": 8,
-      "decided": 0,
-      "deferred": 0,
-      "recurring": 1
-    },
-    "decisions_due": 0
-  },
-  "ledger": {
-    "entries": 18,
-    "by_status": {
-      "open": 16,
-      "leaning": 1,
-      "supported": 1,
-      "contested": 0,
-      "revised": 0,
-      "dropped": 0
-    },
-    "lint_errors": 0,
-    "lint_warnings": 3
+    "provisional_sections": 4,
+    "idea_sections": 0,
+    "open_questions": 5,
+    "problems": 0
   }
 }

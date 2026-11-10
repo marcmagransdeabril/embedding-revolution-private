@@ -1,0 +1,33 @@
+---
+title: "Ideas outside the book"
+---
+
+This file is not part of the book (it is not listed in `_quarto.yml`). It keeps what the book explored and left, with the reason, so the same idea is not explored twice, and the durability actions that are still open. Ideas that are still alive stay in the chapters, tagged `provisional` or `idea`.
+
+## Dropped ideas
+
+For each idea: when it was dropped, what was learned, and what would bring it back.
+
+### "State of the art" callouts for perishable detail
+- **Dropped:** 2026-11-10.
+- **Why:** callouts are for details outside the argument. Dating the claim in its own sentence does the job.
+- **Reopen if:** perishable details start piling up inside the argument text.
+
+### Reproducibility infrastructure as a separate work item
+- **Dropped:** 2026-11-10.
+- **Why:** the Makefile already re-runs the scripts that changed.
+- **Reopen if:** a result in the book cannot be regenerated from the repository.
+
+## Open durability actions
+
+From the Lindy review of 2026-11-10 (`tmp/lindy_review.md`, which is gitignored). A review (`review-doc` §18) proposes new ones and checks whether the "done" ones really are.
+
+- **Open.** Decide the titles of Chapters 4, 5, 8 and 9 so that they name the question, not the fashion word (RAG, Transformers, Topological Deep Learning, Quantum).
+- **Open.** One home per fast-moving claim. The Prologue and Chapter 1 ask the question and point to Chapter 5 (reasoning in space or in text) and Chapter 13 (JEPA, convergence).
+- **Open.** Date every reading that closes a scale test ("on the evidence gathered up to 2026").
+- **Open.** Chapter 1 first-pass sources: prefer older primaries, date each post-2022 item, move the outlier-dimension and quantization details out.
+- **Open.** Date the Goldbach bound in the Rice answer, and replace "over the last few decades" in the Chapter 3 introduction with a date anchor.
+- **Open.** State N and status of small-study results in the clause that uses them (Held 2011, Vong 2024, clinical studies).
+- **Open.** Expert read-through of the Epilogue (Indian philosophy of language, psychiatry, the Chomsky debate) before publication.
+- **Open.** Back up `references/` and `tmp/` outside the working machine (both are gitignored).
+- **Done.** Pin the Pride and Prejudice corpus (SHA-256 check in `utils.load_book`).

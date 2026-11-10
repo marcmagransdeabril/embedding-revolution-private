@@ -1,5 +1,7 @@
 ---
 title: "Why Vectors Work: The Blessing (and Curse) of Dimensionality"
+status: provisional
+open: "Does it stand alone? Chapter 3 already covers near-orthogonality. Options are to keep it, to merge it into Chapter 3, to split it (the curse before Chapter 4, the blessing before Chapter 10), or to reduce it to the promise in Chapter 1. Decide when Chapter 3 is complete, by counting which later chapters rely on a result proved here."
 ---
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.

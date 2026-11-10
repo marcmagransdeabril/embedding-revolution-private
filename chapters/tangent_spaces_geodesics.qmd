@@ -1,5 +1,6 @@
 ---
 title: "Tangent Spaces, Geodesics, and Geometric Deep Learning"
+status: idea
 ---
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.

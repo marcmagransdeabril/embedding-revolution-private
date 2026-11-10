@@ -1,5 +1,7 @@
 ---
 title: "The Properties of Meaning as Geometry"
+status: definitive
+open: "The list of properties is open. It grows and changes as the field does, and some members are known to experts the author has not met. Add, merge or drop one when a chapter needs it or an expert points to it. A property earns its place by being tested by a chapter and sourced by someone other than the author."
 ---
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that later chapters can already cross-reference its sections. It is a catalog: each section states one property that meaning acquires once it becomes position in a space, in the plain language of distance and direction, and points forward to the chapters that earn it. Each section also carries a first-pass line of sources, to be pruned when the chapter is written.

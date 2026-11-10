@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Mechanical support for review-doc §17 (inquiry integrity) and §18 (durability).
+"""Mechanical support for review-doc: status of the book's parts and durability proxies.
 
 Subcommands
-  lint      check inquiry/ledger.yml (readings, idea tree, decision gates) against its rules and references.bib
-  metrics   print durability proxies (source age, perishable terms, time-relative wording, titles)
-  snapshot  write the current metrics to inquiry/durability.json
+  status    table of chapter statuses (definitive | provisional | idea), open questions, consistency problems
+  metrics   durability proxies (source age, perishable terms, time-relative wording, titles) as JSON
+  snapshot  write the current metrics to notes/durability.json
   diff      compare the current metrics with that snapshot
 
+Status annotations live in the text itself:
+  chapters   front matter `status:` (or a class on the H1 for files without front matter) and optional `open:`
+  sections   a heading class, `## Title {.provisional}` or `{.idea}`; no class means the chapter's status
+  roadmap    a tag `*(status)*` after each chapter title in index.qmd; `<!-- OPEN: ... -->` comments
 The script measures; it never judges. Every number is a hint for the reviewer to read the passage.
 """
 from __future__ import annotations
@@ -25,21 +29,8 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(REPO_ROOT / ".github" / "skills" / "build-book" / "scripts"))
 from validate_book import extract_citekeys, parse_bibliography  # noqa: E402
 
-LEDGER = REPO_ROOT / "inquiry" / "ledger.yml"
-SNAPSHOT = REPO_ROOT / "inquiry" / "durability.json"
-
-LEVELS = ("book", "chapter", "section")
-STATUSES = ("open", "leaning", "supported", "contested", "revised", "dropped")
-CONFIDENCE = ("none", "low", "medium", "high")
-KINDS = ("theorem", "historical", "replicated", "own-experiment", "single-study", "position", "interpretive")
-# Evidence kinds that can carry a reading on their own, by the highest confidence they allow.
-SOLID = {"theorem", "historical", "replicated", "own-experiment"}
-STALE_DAYS = 180
-# Idea tree: how much the author stands behind a node's EXISTENCE, and how far its content got.
-KINDS_NODE = ("book", "part", "chapter", "section", "idea")
-COMMITMENT = ("settled", "provisional", "exploratory", "parked", "dropped")
-CONTENT = ("none", "stub", "outline", "draft", "written")
-GATE_STATUS = ("pending", "decided", "deferred", "recurring")
+SNAPSHOT = REPO_ROOT / "notes" / "durability.json"
+STATUSES = ("definitive", "provisional", "idea")
 
 # Perishable terms: how many files one change in the field would force us to edit.
 PERISHABLE = {
@@ -69,177 +60,131 @@ FASHION = re.compile(
 )
 TITLE_LINE = re.compile(r"^(?:#{1,3} .*|title: .*|\* \*\*Chapter \d+:.*)$")
 
-
-# ---------------------------------------------------------------- ledger lint
-
-def load_ledger(path: Path = LEDGER) -> dict:
-    return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-
-
-def lint_ledger(ledger: dict, bib_keys: set[str], root: Path, today: dt.date) -> list[tuple[str, str, str]]:
-    """Return (severity, entry id, message) triples. Severity is 'error' or 'warn'."""
-    out: list[tuple[str, str, str]] = []
-    entries = ledger.get("questions") or []
-    by_id: dict[str, dict] = {}
-    for e in entries:
-        eid = str(e.get("id", "?"))
-        if eid in by_id:
-            out.append(("error", eid, "duplicate id"))
-        by_id[eid] = e
-    log_ids = {str(item.get("id")) for item in ledger.get("log") or []}
-
-    for eid, e in by_id.items():
-        status, conf, level = e.get("status"), e.get("confidence", "none"), e.get("level")
-        if level not in LEVELS:
-            out.append(("error", eid, f"level must be one of {LEVELS}"))
-        if status not in STATUSES:
-            out.append(("error", eid, f"status must be one of {STATUSES}"))
-        if conf not in CONFIDENCE:
-            out.append(("error", eid, f"confidence must be one of {CONFIDENCE}"))
-        if not e.get("question"):
-            out.append(("error", eid, "missing question"))
-
-        ev = e.get("evidence") or {}
-        pro, con = ev.get("for") or [], ev.get("against") or []
-        for item in pro + con:
-            kind, src = item.get("kind"), str(item.get("src", ""))
-            if kind not in KINDS:
-                out.append(("error", eid, f"evidence kind '{kind}' not in {KINDS}"))
-            if src and not (src in bib_keys or (root / src).exists()):
-                out.append(("error", eid, f"evidence src '{src}' is neither a citekey nor an existing path"))
-            if not src:
-                out.append(("error", eid, "evidence item without src"))
-
-        if e.get("open_set"):
-            if not e.get("members"):
-                out.append(("warn", eid, "open_set question with no members listed"))
-            if not e.get("last_search"):
-                out.append(("warn", eid, "open_set question with no 'last_search' date for new members"))
-            elif isinstance(e["last_search"], dt.date) and (today - e["last_search"]).days > STALE_DAYS:
-                out.append(("warn", eid, f"no search for new members for {(today - e['last_search']).days} days"))
-            if status in ("supported",):
-                out.append(("error", eid, "an open set cannot be 'supported' as complete; keep it 'leaning' or 'open'"))
-        for child in e.get("depends_on") or []:
-            if str(child) not in by_id:
-                out.append(("error", eid, f"depends_on '{child}' does not exist"))
-
-        committed = status in ("leaning", "supported", "contested")
-        if committed and not (pro or con):
-            out.append(("error", eid, f"status '{status}' without any evidence"))
-        if committed and not e.get("falsifier"):
-            out.append(("error", eid, f"status '{status}' without a falsifier"))
-        if committed and not e.get("reading"):
-            out.append(("error", eid, f"status '{status}' without a reading"))
-        if status in ("revised", "dropped") and eid not in log_ids:
-            out.append(("error", eid, f"status '{status}' needs an entry in log"))
-
-        # Confidence is capped by the kind of evidence (see SKILL.md §17).
-        if conf in ("medium", "high"):
-            solid = [i for i in pro if i.get("kind") in SOLID]
-            if not solid:
-                out.append(("error", eid, f"confidence '{conf}' needs at least one solid evidence kind {sorted(SOLID)}"))
-            elif conf == "high" and len(solid) < 2 and not any(i.get("kind") == "theorem" for i in solid):
-                out.append(("error", eid, "confidence 'high' needs a theorem or two solid sources"))
-        if conf == "high" and con and not e.get("answered_against"):
-            out.append(("error", eid, "confidence 'high' with evidence against and no 'answered_against' note"))
-
-        # Roll-up: a reading is no more confident than the load-bearing readings under it.
-        kids = [by_id[str(c)] for c in e.get("depends_on") or [] if str(c) in by_id]
-        if kids and conf in CONFIDENCE:
-            weakest = min(CONFIDENCE.index(k.get("confidence", "none")) for k in kids if k.get("confidence", "none") in CONFIDENCE)
-            if CONFIDENCE.index(conf) > weakest:
-                out.append(("warn", eid, f"confidence '{conf}' exceeds its weakest dependency ('{CONFIDENCE[weakest]}')"))
-
-        if committed and not con and not e.get("searched_against"):
-            out.append(("warn", eid, "one-sided: no evidence against and no date when counter-evidence was searched"))
-        checked = e.get("checked")
-        if status != "open":
-            if not checked:
-                out.append(("warn", eid, "no 'checked' date"))
-            elif isinstance(checked, dt.date) and (today - checked).days > STALE_DAYS:
-                out.append(("warn", eid, f"not checked for {(today - checked).days} days"))
-    return out
+_FRONT = re.compile(r"^---\r?\n(.*?)\r?\n---\r?\n?", re.DOTALL)
+_HEADING = re.compile(r"^(#{1,6}) (.*?)(?:\s*\{([^}]*)\})?\s*$")
+_OPEN_COMMENT = re.compile(r"<!--\s*OPEN:(.*?)-->", re.DOTALL)
+_INDEX_TAG = re.compile(r"^\* \*\*(Chapter \d+|Epilogue): .*?\.\*\*\s*\*\((\w+)\)\*", re.MULTILINE)
 
 
-def lint_tree(ledger: dict, root: Path) -> list[tuple[str, str, str]]:
-    """Lint the idea tree and its decision gates. Severities: error, warn, info (a decision is due)."""
-    out: list[tuple[str, str, str]] = []
-    nodes = {str(n.get("id")): n for n in ledger.get("tree") or []}
-    gates = {str(g.get("id")): g for g in ledger.get("gates") or []}
-    questions = {str(q.get("id")): q for q in ledger.get("questions") or []}
+# --------------------------------------------------------------------- status
 
-    for nid, n in nodes.items():
-        if n.get("kind") not in KINDS_NODE:
-            out.append(("error", nid, f"kind must be one of {KINDS_NODE}"))
-        if n.get("commitment") not in COMMITMENT:
-            out.append(("error", nid, f"commitment must be one of {COMMITMENT}"))
-        if n.get("content", "none") not in CONTENT:
-            out.append(("error", nid, f"content must be one of {CONTENT}"))
-        parent = n.get("parent")
-        if parent is not None and str(parent) not in nodes:
-            out.append(("error", nid, f"parent '{parent}' does not exist"))
-        seen, cur = {nid}, parent
-        while cur is not None and str(cur) in nodes:
-            if str(cur) in seen:
-                out.append(("error", nid, "cycle in parent chain"))
+def front_matter(text: str) -> dict:
+    m = _FRONT.match(text)
+    if not m:
+        return {}
+    try:
+        fm = yaml.safe_load(m.group(1))
+    except yaml.YAMLError:
+        return {}
+    return fm if isinstance(fm, dict) else {}
+
+
+def _classes(attrs: str | None) -> list[str]:
+    return re.findall(r"\.([\w-]+)", attrs or "")
+
+
+def chapter_status(text: str) -> str | None:
+    """`status:` in the front matter, else a status class on the first H1, else None."""
+    st = front_matter(text).get("status")
+    if st:
+        return str(st)
+    for line in text.splitlines():
+        m = _HEADING.match(line)
+        if m and len(m.group(1)) == 1:
+            found = [c for c in _classes(m.group(3)) if c in STATUSES]
+            return found[0] if found else None
+    return None
+
+
+def sections(text: str) -> list[dict]:
+    """Headings with their own status class (if any) and the line range they cover."""
+    lines = text.splitlines()
+    heads = []
+    in_code = False
+    for i, line in enumerate(lines):
+        if line.startswith("```"):
+            in_code = not in_code
+        m = None if in_code else _HEADING.match(line)
+        if m:
+            cls = [c for c in _classes(m.group(3)) if c in STATUSES]
+            heads.append({"line": i + 1, "level": len(m.group(1)), "title": m.group(2).strip(), "status": cls[0] if cls else None})
+    for k, h in enumerate(heads):
+        end = len(lines)
+        for nxt in heads[k + 1:]:
+            if nxt["level"] <= h["level"]:
+                end = nxt["line"] - 1
                 break
-            seen.add(str(cur))
-            cur = nodes[str(cur)].get("parent")
-        if n.get("commitment") == "dropped" and not n.get("why"):
-            out.append(("error", nid, "dropped without 'why' (record what was learned, so it is not explored twice)"))
-        if n.get("commitment") == "parked" and not n.get("reopen_if"):
-            out.append(("warn", nid, "parked without 'reopen_if'"))
-        g = n.get("gate")
-        if g is not None and str(g) not in gates:
-            out.append(("error", nid, f"gate '{g}' does not exist"))
-        if n.get("commitment") in ("exploratory", "parked") and g is None and n.get("kind") != "idea":
-            out.append(("warn", nid, f"{n['commitment']} node with no gate: nothing says when it will be decided"))
-        if g is not None and str(g) in gates and gates[str(g)].get("status") == "decided" and n.get("commitment") == "exploratory":
-            out.append(("warn", nid, f"gate '{g}' is decided but the node is still exploratory"))
-        if n.get("file") and not (root / n["file"]).exists():
-            out.append(("error", nid, f"file '{n['file']}' does not exist"))
-        if n.get("question") and str(n["question"]) not in questions:
-            out.append(("error", nid, f"question '{n['question']}' does not exist"))
-        if parent is not None and str(parent) in nodes and nodes[str(parent)].get("commitment") == "dropped" \
-                and n.get("commitment") != "dropped":
-            out.append(("warn", nid, "parent is dropped but this node is not"))
+        h["end"] = end
+    return heads
 
-    for qid, q in questions.items():
-        for m in q.get("members") or []:
-            if str(m) not in nodes:
-                out.append(("error", qid, f"member '{m}' is not a node in the tree"))
 
-    chapter_files = {str(p.relative_to(root)) for p in (root / "chapters").glob("*.qmd") if p.name != "solutions.qmd"}
-    for f in sorted(chapter_files - {n.get("file") for n in nodes.values()}):
-        out.append(("warn", f, "chapter file has no node in the tree (structure changed without a tree entry)"))
+def open_notes(text: str) -> list[str]:
+    notes = [" ".join(m.strip().split()) for m in _OPEN_COMMENT.findall(text)]
+    fm_open = front_matter(text).get("open")
+    return ([str(fm_open)] if fm_open else []) + notes
 
-    for gid, g in gates.items():
-        opts = {str(o.get("id")) for o in g.get("options") or []}
-        if g.get("status") not in GATE_STATUS:
-            out.append(("error", gid, f"status must be one of {GATE_STATUS}"))
-        if len(opts) < 2:
-            out.append(("error", gid, "a gate needs at least two options"))
-        for ref in g.get("decides") or []:
-            if str(ref) not in nodes and str(ref) not in questions:
-                out.append(("error", gid, f"decides '{ref}' which is neither a node nor a question"))
-        needed = [str(q) for q in g.get("evidence_needed") or []]
-        for q in needed:
-            if q not in questions:
-                out.append(("error", gid, f"evidence_needed '{q}' does not exist"))
-        if g.get("status") == "recurring":
-            seen = g.get("last_reviewed")
-            if not seen:
-                out.append(("warn", gid, "recurring gate with no 'last_reviewed' date"))
-            elif isinstance(seen, dt.date) and (dt.date.today() - seen).days > STALE_DAYS:
-                out.append(("warn", gid, f"recurring gate not reviewed for {(dt.date.today() - seen).days} days"))
-        if g.get("status") == "decided":
-            if str(g.get("decision")) not in opts:
-                out.append(("error", gid, "decided but 'decision' is not one of the options"))
-            if not g.get("decided_on") or not g.get("because"):
-                out.append(("error", gid, "decided without 'decided_on' and 'because'"))
-        elif g.get("status") != "recurring" and needed and all(q in questions and questions[q].get("status") != "open" for q in needed):
-            out.append(("info", gid, "decision due: every question it waits for now has a reading"))
-    return out
+
+def definitive_text(text: str) -> str:
+    """The text without the sections tagged provisional or idea; front matter dropped."""
+    lines = _FRONT.sub("", text, count=1).splitlines() if _FRONT.match(text) else text.splitlines()
+    offset = len(text.splitlines()) - len(lines)
+    drop: set[int] = set()
+    for h in sections(text):
+        if h["status"] in ("provisional", "idea"):
+            drop.update(range(h["line"] - offset - 1, h["end"] - offset))
+    return "\n".join(l for i, l in enumerate(lines) if i not in drop)
+
+
+def book_order(root: Path) -> list[str]:
+    """Chapter files in book order, from _quarto.yml (index and solutions excluded)."""
+    cfg = yaml.safe_load((root / "_quarto.yml").read_text(encoding="utf-8")) or {}
+    out: list[str] = []
+
+    def walk(items):
+        for it in items:
+            if isinstance(it, str):
+                out.append(it)
+            elif isinstance(it, dict):
+                walk(it.get("chapters") or [])
+
+    walk(cfg.get("book", {}).get("chapters") or [])
+    return [f for f in out if f not in ("index.qmd", "chapters/solutions.qmd")]
+
+
+def index_tags(index_text: str) -> dict[str, str]:
+    return {m.group(1): m.group(2) for m in _INDEX_TAG.finditer(index_text)}
+
+
+def status_report(root: Path = REPO_ROOT) -> tuple[list[dict], list[tuple[str, str, str]]]:
+    """Rows (one per chapter) and (severity, where, message) problems."""
+    rows, problems = [], []
+    order = book_order(root)
+    tags = index_tags((root / "index.qmd").read_text(encoding="utf-8"))
+    numbered = [f for f in order if not f.endswith("epilogue.qmd")]
+    expected_keys = {f: (f"Chapter {i}" if i else None) for i, f in enumerate(numbered, 1)}
+    for f in order:
+        text = (root / f).read_text(encoding="utf-8")
+        st = chapter_status(text)
+        secs = sections(text)
+        key = "Epilogue" if f.endswith("epilogue.qmd") else expected_keys.get(f)
+        rows.append({
+            "file": f, "status": st,
+            "provisional_sections": sum(h["status"] == "provisional" and h["level"] > 1 for h in secs),
+            "idea_sections": sum(h["status"] == "idea" and h["level"] > 1 for h in secs),
+            "open": len(open_notes(text)), "index_tag": tags.get(key),
+        })
+        if st is None:
+            problems.append(("warn", f, "no status (front matter `status:` or a class on the H1)"))
+        elif st not in STATUSES:
+            problems.append(("error", f, f"status '{st}' is not one of {STATUSES}"))
+        if tags.get(key) is None:
+            problems.append(("warn", f, f"no status tag for '{key}' in the roadmap of index.qmd"))
+        elif st and tags[key] != st:
+            problems.append(("error", f, f"roadmap tag '{tags[key]}' differs from the chapter status '{st}'"))
+        for h in secs:
+            if h["status"] and h["status"] == st and h["level"] > 1:
+                problems.append(("warn", f"{f}:{h['line']}", f"section tag '{h['status']}' repeats the chapter status"))
+    return rows, problems
 
 
 # -------------------------------------------------------------------- metrics
@@ -272,35 +217,24 @@ def perishable_counts(texts: dict[str, str]) -> dict[str, dict]:
 
 
 def relative_wording(texts: dict[str, str]) -> list[str]:
-    hits = []
-    for f, t in texts.items():
-        for i, line in enumerate(t.splitlines(), 1):
-            if RELATIVE_TIME.search(line):
-                hits.append(f"{f}:{i}")
-    return hits
+    return [f"{f}:{i}" for f, t in texts.items() for i, line in enumerate(t.splitlines(), 1) if RELATIVE_TIME.search(line)]
 
 
 def fashion_titles(texts: dict[str, str]) -> list[str]:
-    hits = []
-    for f, t in texts.items():
-        for i, line in enumerate(t.splitlines(), 1):
-            if TITLE_LINE.match(line) and FASHION.search(line):
-                hits.append(f"{f}:{i}: {line.strip()[:90]}")
-    return hits
+    return [f"{f}:{i}: {line.strip()[:90]}" for f, t in texts.items()
+            for i, line in enumerate(t.splitlines(), 1) if TITLE_LINE.match(line) and FASHION.search(line)]
 
 
 def collect(root: Path = REPO_ROOT) -> dict:
     bib = parse_bibliography(root / "references.bib")
     paths = [root / "index.qmd"] + sorted(p for p in (root / "chapters").glob("*.qmd") if p.name != "solutions.qmd")
     texts = {str(p.relative_to(root)): p.read_text(encoding="utf-8") for p in paths if p.exists()}
-    ledger_path = root / "inquiry" / "ledger.yml"
-    ledger = load_ledger(ledger_path) if ledger_path.exists() else {}
-    entries = ledger.get("questions") or []
     files = {f: file_metrics(t, bib) for f, t in texts.items()}
-    # Files that are partly scratchpad: ledger key `definitive: {file: "## First scratchpad heading"}`.
-    for f, heading in (ledger.get("definitive") or {}).items():
-        if f in texts and heading in texts[f]:
-            files[f"{f} (definitive part)"] = file_metrics(texts[f].split(heading, 1)[0], bib)
+    # Settled part of a definitive chapter that also holds provisional sections, reported separately.
+    for f, t in texts.items():
+        if chapter_status(t) == "definitive" and any(h["status"] for h in sections(t)):
+            files[f"{f} (definitive part)"] = file_metrics(definitive_text(t), bib)
+    rows, problems = status_report(root)
     return {
         "date": dt.date.today().isoformat(),
         "bib_entries": len(bib),
@@ -308,30 +242,14 @@ def collect(root: Path = REPO_ROOT) -> dict:
         "perishable": perishable_counts(texts),
         "relative_wording": relative_wording(texts),
         "fashion_titles": fashion_titles(texts),
-        "tree": {
-            "by_commitment": {c: sum(n.get("commitment") == c for n in ledger.get("tree") or []) for c in COMMITMENT},
-            "gates": {g: sum(x.get("status") == g for x in ledger.get("gates") or []) for g in GATE_STATUS},
-            "decisions_due": 0,
-        },
-        "ledger": {
-            "entries": len(entries),
-            "by_status": {s: sum(e.get("status") == s for e in entries) for s in STATUSES},
-            "lint_errors": 0,
-            "lint_warnings": 0,
+        "status": {
+            "chapters": {s: sum(r["status"] == s for r in rows) for s in STATUSES},
+            "provisional_sections": sum(r["provisional_sections"] for r in rows),
+            "idea_sections": sum(r["idea_sections"] for r in rows),
+            "open_questions": sum(r["open"] for r in rows) + len(open_notes(texts["index.qmd"])),
+            "problems": len(problems),
         },
     }
-
-
-def with_lint(metrics: dict, root: Path = REPO_ROOT) -> dict:
-    ledger_path = root / "inquiry" / "ledger.yml"
-    if ledger_path.exists():
-        bib = set(parse_bibliography(root / "references.bib"))
-        issues = lint_ledger(load_ledger(ledger_path), bib, root, dt.date.today())
-        issues += lint_tree(load_ledger(ledger_path), root)
-        metrics["tree"]["decisions_due"] = sum(s == "info" for s, _, _ in issues)
-        metrics["ledger"]["lint_errors"] = sum(s == "error" for s, _, _ in issues)
-        metrics["ledger"]["lint_warnings"] = sum(s == "warn" for s, _, _ in issues)
-    return metrics
 
 
 def diff_metrics(old: dict, new: dict) -> list[str]:
@@ -352,10 +270,8 @@ def diff_metrics(old: dict, new: dict) -> list[str]:
         gone, added = set(old[key]) - set(new[key]), set(new[key]) - set(old[key])
         if added or gone:
             lines.append(f"{key}: +{len(added)} new, -{len(gone)} resolved")
-    if old.get("tree") != new.get("tree"):
-        lines.append(f"tree: {old.get('tree')} -> {new.get('tree')}")
-    if old["ledger"] != new["ledger"]:
-        lines.append(f"ledger: {old['ledger']} -> {new['ledger']}")
+    if old.get("status") != new.get("status"):
+        lines.append(f"status: {old.get('status')} -> {new.get('status')}")
     return lines
 
 
@@ -363,23 +279,27 @@ def diff_metrics(old: dict, new: dict) -> list[str]:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["lint", "metrics", "snapshot", "diff"])
+    ap.add_argument("command", choices=["status", "metrics", "snapshot", "diff"])
     args = ap.parse_args(argv)
 
-    if args.command == "lint":
-        if not LEDGER.exists():
-            print(f"No ledger at {LEDGER.relative_to(REPO_ROOT)}; nothing to lint.")
-            return 0
-        ledger = load_ledger()
-        issues = lint_ledger(ledger, set(parse_bibliography(REPO_ROOT / "references.bib")), REPO_ROOT, dt.date.today())
-        issues += lint_tree(ledger, REPO_ROOT)
-        for sev, eid, msg in issues:
-            print(f"{sev.upper():5} {eid}: {msg}")
-        print(f"{sum(s == 'error' for s, _, _ in issues)} error(s), {sum(s == 'warn' for s, _, _ in issues)} warning(s), "
-              f"{sum(s == 'info' for s, _, _ in issues)} decision(s) due")
-        return 1 if any(s == "error" for s, _, _ in issues) else 0
+    if args.command == "status":
+        rows, problems = status_report()
+        for r in rows:
+            extra = []
+            if r["provisional_sections"]:
+                extra.append(f"{r['provisional_sections']} provisional section(s)")
+            if r["idea_sections"]:
+                extra.append(f"{r['idea_sections']} idea section(s)")
+            if r["open"]:
+                extra.append(f"{r['open']} open question(s)")
+            print(f"{(r['status'] or '?'):12} {r['file']}" + (f"  [{', '.join(extra)}]" if extra else ""))
+        n_index = len(open_notes((REPO_ROOT / "index.qmd").read_text(encoding="utf-8")))
+        print(f"{'':12} index.qmd  [{n_index} open question(s)]")
+        for sev, where, msg in problems:
+            print(f"{sev.upper():5} {where}: {msg}")
+        return 1 if any(s == "error" for s, _, _ in problems) else 0
 
-    metrics = with_lint(collect())
+    metrics = collect()
     if args.command == "metrics":
         print(json.dumps(metrics, indent=2, ensure_ascii=False))
     elif args.command == "snapshot":

@@ -14,7 +14,7 @@ CODE_HELPERS := $(wildcard code/*/utils.py)
 CODE_SCRIPTS := $(filter-out $(CODE_HELPERS),$(wildcard code/*/*.py))
 CODE_STAMPS  := $(CODE_SCRIPTS:code/%.py=.code-tests/%.ok)
 
-.PHONY: help all book pdf html epub sync-chapters sync-solutions test-code validate validate-citations validate-inquiry durability check preview clean
+.PHONY: help all book pdf html epub sync-chapters sync-solutions test-code validate validate-citations status durability check preview clean
 
 # Default target
 all: book
@@ -32,7 +32,7 @@ help:
 	@echo " make sync-solutions    - Regenerate chapters/solutions.qmd from the answers blocks in each chapter"
 	@echo " make validate          - Validate chapter markdown, math, and cross-references"
 	@echo " make validate-citations- Validate @citekey citations against references.bib"
-	@echo " make validate-inquiry - Lint inquiry/ledger.yml (readings, evidence, falsifiers, roll-up)"
+	@echo " make status            - Chapter statuses (definitive, provisional, idea), open questions, tag consistency"
 	@echo " make durability        - Durability metrics and their change since the last snapshot"
 	@echo " make preview           - Start Quarto live preview server"
 	@echo " make clean             - Clean build artifacts (_book, _freeze, .quarto)"
@@ -66,10 +66,9 @@ validate-citations:
 	@echo "==> Validating @citekey citations against references.bib..."
 	@$(EXPORT_PATH) $(VENV_PYTHON) .github/skills/build-book/scripts/validate_book.py --citations
 
-# inquiry/ledger.yml holds the book's questions, current readings and evidence (review-doc §17).
-validate-inquiry:
-	@echo "==> Linting inquiry/ledger.yml..."
-	@$(VENV_PYTHON) .github/skills/review-doc/scripts/durability_metrics.py lint
+# Status annotations live in the chapters and in the roadmap of index.qmd (see review-doc §17).
+status:
+	@$(VENV_PYTHON) .github/skills/review-doc/scripts/durability_metrics.py status
 
 # Proxies for review-doc §18. Run `... snapshot` after a review to record a new baseline.
 durability:

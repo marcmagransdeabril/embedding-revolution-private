@@ -1,4 +1,6 @@
-# Epilogue: An Algebra of Thought {.unnumbered}
+# Epilogue: An Algebra of Thought {.unnumbered .idea}
+
+<!-- OPEN: where it goes. Its sections are of two kinds. Some supply concepts the chapters could use (The Meaning of Meaning, The Perfect Language, Meaning by Difference and by Company, Measuring Meaning Before Computers, Where Psychology Said No). Others re-read results the chapters produce (A Ledger of Limits Revisited, The Bitter Lesson and the Perfect Language, The Dog Test Revisited, Open Frontiers). Options: keep it last; split it (concept sections before or between the parts, re-readings last); weave each tradition into the chapter where it bears; or publish it apart. Test per section: does a chapter use its vocabulary or sources (prior), or does it depend on a result a chapter produced (posterior)? Decide after Parts I and II. -->
 
 <!--
 SKETCH FOR REVIEW. Only the argumental arc and the references of each section

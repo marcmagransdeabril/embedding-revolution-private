@@ -162,25 +162,26 @@ def test_colon_misuse_is_a_usage_fix_not_a_style_suggestion():
 
 
 def test_inquiry_integrity_is_outcome_neutral_and_evidence_ranked():
-    """§17 must keep the book exploratory: evidence outranks plan, no preferred conclusion, all levels covered."""
+    """§17 must keep the book exploratory: evidence outranks plan, no preferred conclusion, status-driven depth."""
     content = SKILL_MD.read_text(encoding="utf-8")
     sec = re.search(r"### 17\. Inquiry integrity(.*?)(?=### 18\.)", content, flags=re.DOTALL)
     assert sec is not None, "Failed to locate §17"
     text = sec.group(1)
-    for needle in ("Outcome-neutral", "evidence, then ledger, then plan text", "Roll-up", "Roll-down",
-                   "Evidence arrival", "Balance", "Calibration of prose", "Falsifiability",
-                   "Direction of travel", "make validate-inquiry"):
+    for needle in ("Outcome-neutral", "evidence, then written chapters, then plan text", "Roll-up", "Roll-down",
+                   "Evidence arrival", "Balance", "Calibration", "Falsifiability", "Direction of travel",
+                   "Depth follows status", "notes/ideas.qmd", "decision due", "do not choose",
+                   "Open sets", "never report a missing member as incompleteness"):
         assert needle in text, f"§17 must cover: {needle}"
-    assert "section" in text and "chapter" in text and "book" in text
+    assert "ledger" not in text.lower(), "§17 must not depend on a separate ledger file"
 
 
-def test_durability_section_is_rolling_and_tied_to_metrics_and_ledger():
+def test_durability_section_is_rolling_and_tied_to_metrics():
     """§18 must give continuous feedback: deltas against a snapshot, tracked actions, never a blocker."""
     content = SKILL_MD.read_text(encoding="utf-8")
     sec = re.search(r"### 18\. Durability(.*?)(?=## Output)", content, flags=re.DOTALL)
     assert sec is not None, "Failed to locate §18"
     text = sec.group(1)
-    for needle in ("Rolling feedback", "durability_actions", "inquiry/durability.json", "never `blocker`", "One home"):
+    for needle in ("Rolling feedback", "notes/durability.json", "notes/ideas.qmd", "never `blocker`", "One home"):
         assert needle in text, f"§18 must cover: {needle}"
 
 
@@ -195,11 +196,3 @@ def test_contract_fixes_form_not_conclusions():
     content = SKILL_MD.read_text(encoding="utf-8")
     assert "fixes form, not conclusions" in content
     assert "valid close" in content
-
-
-def test_tree_gates_and_open_sets_are_covered():
-    content = SKILL_MD.read_text(encoding="utf-8")
-    sec = re.search(r"### 17\. Inquiry integrity(.*?)(?=### 18\.)", content, flags=re.DOTALL).group(1)
-    for needle in ("Idea tree and gates", "Depth follows commitment", "decision due", "Do not choose",
-                   "Open sets", "Never report a missing member as incompleteness"):
-        assert needle in sec, f"§17 must cover: {needle}"
