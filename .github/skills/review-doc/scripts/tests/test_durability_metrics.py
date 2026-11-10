@@ -119,3 +119,53 @@ def test_diff_reports_only_changes():
     out = dm.diff_metrics(base, new)
     assert any("median year 1950 -> 2020" in line for line in out)
     assert any("relative_wording: +1 new" in line for line in out)
+
+
+def tree_lint(ledger, root=Path("/nonexistent")):
+    ledger.setdefault("chapters_checked", True)
+    return dm.lint_tree(ledger, root)
+
+
+def test_repo_tree_has_no_errors():
+    ledger = dm.load_ledger(dm.LEDGER)
+    assert [i for i in dm.lint_tree(ledger, dm.REPO_ROOT) if i[0] == "error"] == []
+
+
+def test_dropped_node_needs_why_and_exploratory_needs_gate():
+    ledger = {"tree": [
+        {"id": "A", "parent": None, "kind": "idea", "commitment": "dropped"},
+        {"id": "B", "parent": None, "kind": "chapter", "commitment": "exploratory"}]}
+    out = tree_lint(ledger)
+    assert ("error", "A", "dropped without 'why' (record what was learned, so it is not explored twice)") in out
+    assert any(i[1] == "B" and "no gate" in i[2] for i in out)
+
+
+def test_gate_decided_needs_option_and_reason_and_due_is_reported():
+    base = {"tree": [], "questions": [{"id": "Q", "status": "leaning"}]}
+    opts = [{"id": "a"}, {"id": "b"}]
+    pending = {**base, "gates": [{"id": "G", "status": "pending", "options": opts, "evidence_needed": ["Q"]}]}
+    assert ("info", "G", "decision due: every question it waits for now has a reading") in tree_lint(pending)
+    bad = {**base, "gates": [{"id": "G", "status": "decided", "options": opts, "decision": "z"}]}
+    msgs = [m for _, _, m in tree_lint(bad)]
+    assert any("not one of the options" in m for m in msgs) and any("without 'decided_on'" in m for m in msgs)
+
+
+def test_recurring_gate_is_never_due():
+    base = {"tree": [], "questions": [{"id": "Q", "status": "leaning"}]}
+    g = {"id": "G", "status": "recurring", "options": [{"id": "a"}, {"id": "b"}], "evidence_needed": ["Q"],
+         "last_reviewed": dt.date.today()}
+    assert not [i for i in tree_lint({**base, "gates": [g]}) if i[0] in ("info", "error")]
+
+
+def test_open_set_is_never_complete_and_needs_a_search_date():
+    q = entry(id="S", open_set=True, members=["n"], status="supported", reading="r", falsifier="f", confidence="low",
+              evidence={"for": [{"src": "rice1953classes", "kind": "interpretive"}], "against": []})
+    issues = lint(q)
+    assert any("open set cannot be 'supported'" in m for m in messages(issues, "error"))
+    assert any("no 'last_search'" in m for m in messages(issues, "warn"))
+
+
+def test_chapter_file_without_node_is_reported(tmp_path):
+    (tmp_path / "chapters").mkdir()
+    (tmp_path / "chapters" / "x.qmd").write_text("x")
+    assert any("no node in the tree" in m for _, _, m in dm.lint_tree({"tree": []}, tmp_path))

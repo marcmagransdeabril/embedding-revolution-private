@@ -38,10 +38,10 @@
       "from_2023": 3
     },
     "chapters/embedding_spaces.qmd": {
-      "cites": 31,
-      "median_year": 2013,
+      "cites": 27,
+      "median_year": 2009,
       "before_1980": 10,
-      "from_2020": 7,
+      "from_2020": 5,
       "from_2023": 0
     },
     "chapters/epilogue.qmd": {
@@ -149,8 +149,8 @@
       "files": 1
     },
     "CLIP/ImageBind": {
-      "occurrences": 7,
-      "files": 4
+      "occurrences": 6,
+      "files": 3
     },
     "agents": {
       "occurrences": 5,
@@ -177,7 +177,7 @@
     "index.qmd:77",
     "chapters/embedding_spaces.qmd:7",
     "chapters/embedding_spaces.qmd:59",
-    "chapters/embedding_spaces.qmd:932"
+    "chapters/embedding_spaces.qmd:908"
   ],
   "fashion_titles": [
     "index.qmd:94: * **Chapter 4: Vector Databases, RAG, and the Limits of Single-Vector Retrieval.** Distanc",
@@ -194,17 +194,33 @@
     "chapters/vector_databases.qmd:2: title: \"Vector Databases, RAG, and the Limits of Single-Vector Retrieval\"",
     "chapters/vector_databases.qmd:13: ## Retrieval-Augmented Generation"
   ],
+  "tree": {
+    "by_commitment": {
+      "settled": 3,
+      "provisional": 12,
+      "exploratory": 15,
+      "parked": 0,
+      "dropped": 2
+    },
+    "gates": {
+      "pending": 8,
+      "decided": 0,
+      "deferred": 0,
+      "recurring": 1
+    },
+    "decisions_due": 0
+  },
   "ledger": {
-    "entries": 15,
+    "entries": 18,
     "by_status": {
-      "open": 14,
-      "leaning": 0,
+      "open": 16,
+      "leaning": 1,
       "supported": 1,
       "contested": 0,
       "revised": 0,
       "dropped": 0
     },
     "lint_errors": 0,
-    "lint_warnings": 1
+    "lint_warnings": 3
   }
 }

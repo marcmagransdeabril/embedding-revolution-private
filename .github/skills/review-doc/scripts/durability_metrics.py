@@ -2,7 +2,7 @@
 """Mechanical support for review-doc §17 (inquiry integrity) and §18 (durability).
 
 Subcommands
-  lint      check inquiry/ledger.yml against its own rules and references.bib
+  lint      check inquiry/ledger.yml (readings, idea tree, decision gates) against its rules and references.bib
   metrics   print durability proxies (source age, perishable terms, time-relative wording, titles)
   snapshot  write the current metrics to inquiry/durability.json
   diff      compare the current metrics with that snapshot
@@ -35,6 +35,11 @@ KINDS = ("theorem", "historical", "replicated", "own-experiment", "single-study"
 # Evidence kinds that can carry a reading on their own, by the highest confidence they allow.
 SOLID = {"theorem", "historical", "replicated", "own-experiment"}
 STALE_DAYS = 180
+# Idea tree: how much the author stands behind a node's EXISTENCE, and how far its content got.
+KINDS_NODE = ("book", "part", "chapter", "section", "idea")
+COMMITMENT = ("settled", "provisional", "exploratory", "parked", "dropped")
+CONTENT = ("none", "stub", "outline", "draft", "written")
+GATE_STATUS = ("pending", "decided", "deferred", "recurring")
 
 # Perishable terms: how many files one change in the field would force us to edit.
 PERISHABLE = {
@@ -105,6 +110,15 @@ def lint_ledger(ledger: dict, bib_keys: set[str], root: Path, today: dt.date) ->
             if not src:
                 out.append(("error", eid, "evidence item without src"))
 
+        if e.get("open_set"):
+            if not e.get("members"):
+                out.append(("warn", eid, "open_set question with no members listed"))
+            if not e.get("last_search"):
+                out.append(("warn", eid, "open_set question with no 'last_search' date for new members"))
+            elif isinstance(e["last_search"], dt.date) and (today - e["last_search"]).days > STALE_DAYS:
+                out.append(("warn", eid, f"no search for new members for {(today - e['last_search']).days} days"))
+            if status in ("supported",):
+                out.append(("error", eid, "an open set cannot be 'supported' as complete; keep it 'leaning' or 'open'"))
         for child in e.get("depends_on") or []:
             if str(child) not in by_id:
                 out.append(("error", eid, f"depends_on '{child}' does not exist"))
@@ -144,6 +158,87 @@ def lint_ledger(ledger: dict, bib_keys: set[str], root: Path, today: dt.date) ->
                 out.append(("warn", eid, "no 'checked' date"))
             elif isinstance(checked, dt.date) and (today - checked).days > STALE_DAYS:
                 out.append(("warn", eid, f"not checked for {(today - checked).days} days"))
+    return out
+
+
+def lint_tree(ledger: dict, root: Path) -> list[tuple[str, str, str]]:
+    """Lint the idea tree and its decision gates. Severities: error, warn, info (a decision is due)."""
+    out: list[tuple[str, str, str]] = []
+    nodes = {str(n.get("id")): n for n in ledger.get("tree") or []}
+    gates = {str(g.get("id")): g for g in ledger.get("gates") or []}
+    questions = {str(q.get("id")): q for q in ledger.get("questions") or []}
+
+    for nid, n in nodes.items():
+        if n.get("kind") not in KINDS_NODE:
+            out.append(("error", nid, f"kind must be one of {KINDS_NODE}"))
+        if n.get("commitment") not in COMMITMENT:
+            out.append(("error", nid, f"commitment must be one of {COMMITMENT}"))
+        if n.get("content", "none") not in CONTENT:
+            out.append(("error", nid, f"content must be one of {CONTENT}"))
+        parent = n.get("parent")
+        if parent is not None and str(parent) not in nodes:
+            out.append(("error", nid, f"parent '{parent}' does not exist"))
+        seen, cur = {nid}, parent
+        while cur is not None and str(cur) in nodes:
+            if str(cur) in seen:
+                out.append(("error", nid, "cycle in parent chain"))
+                break
+            seen.add(str(cur))
+            cur = nodes[str(cur)].get("parent")
+        if n.get("commitment") == "dropped" and not n.get("why"):
+            out.append(("error", nid, "dropped without 'why' (record what was learned, so it is not explored twice)"))
+        if n.get("commitment") == "parked" and not n.get("reopen_if"):
+            out.append(("warn", nid, "parked without 'reopen_if'"))
+        g = n.get("gate")
+        if g is not None and str(g) not in gates:
+            out.append(("error", nid, f"gate '{g}' does not exist"))
+        if n.get("commitment") in ("exploratory", "parked") and g is None and n.get("kind") != "idea":
+            out.append(("warn", nid, f"{n['commitment']} node with no gate: nothing says when it will be decided"))
+        if g is not None and str(g) in gates and gates[str(g)].get("status") == "decided" and n.get("commitment") == "exploratory":
+            out.append(("warn", nid, f"gate '{g}' is decided but the node is still exploratory"))
+        if n.get("file") and not (root / n["file"]).exists():
+            out.append(("error", nid, f"file '{n['file']}' does not exist"))
+        if n.get("question") and str(n["question"]) not in questions:
+            out.append(("error", nid, f"question '{n['question']}' does not exist"))
+        if parent is not None and str(parent) in nodes and nodes[str(parent)].get("commitment") == "dropped" \
+                and n.get("commitment") != "dropped":
+            out.append(("warn", nid, "parent is dropped but this node is not"))
+
+    for qid, q in questions.items():
+        for m in q.get("members") or []:
+            if str(m) not in nodes:
+                out.append(("error", qid, f"member '{m}' is not a node in the tree"))
+
+    chapter_files = {str(p.relative_to(root)) for p in (root / "chapters").glob("*.qmd") if p.name != "solutions.qmd"}
+    for f in sorted(chapter_files - {n.get("file") for n in nodes.values()}):
+        out.append(("warn", f, "chapter file has no node in the tree (structure changed without a tree entry)"))
+
+    for gid, g in gates.items():
+        opts = {str(o.get("id")) for o in g.get("options") or []}
+        if g.get("status") not in GATE_STATUS:
+            out.append(("error", gid, f"status must be one of {GATE_STATUS}"))
+        if len(opts) < 2:
+            out.append(("error", gid, "a gate needs at least two options"))
+        for ref in g.get("decides") or []:
+            if str(ref) not in nodes and str(ref) not in questions:
+                out.append(("error", gid, f"decides '{ref}' which is neither a node nor a question"))
+        needed = [str(q) for q in g.get("evidence_needed") or []]
+        for q in needed:
+            if q not in questions:
+                out.append(("error", gid, f"evidence_needed '{q}' does not exist"))
+        if g.get("status") == "recurring":
+            seen = g.get("last_reviewed")
+            if not seen:
+                out.append(("warn", gid, "recurring gate with no 'last_reviewed' date"))
+            elif isinstance(seen, dt.date) and (dt.date.today() - seen).days > STALE_DAYS:
+                out.append(("warn", gid, f"recurring gate not reviewed for {(dt.date.today() - seen).days} days"))
+        if g.get("status") == "decided":
+            if str(g.get("decision")) not in opts:
+                out.append(("error", gid, "decided but 'decision' is not one of the options"))
+            if not g.get("decided_on") or not g.get("because"):
+                out.append(("error", gid, "decided without 'decided_on' and 'because'"))
+        elif g.get("status") != "recurring" and needed and all(q in questions and questions[q].get("status") != "open" for q in needed):
+            out.append(("info", gid, "decision due: every question it waits for now has a reading"))
     return out
 
 
@@ -213,6 +308,11 @@ def collect(root: Path = REPO_ROOT) -> dict:
         "perishable": perishable_counts(texts),
         "relative_wording": relative_wording(texts),
         "fashion_titles": fashion_titles(texts),
+        "tree": {
+            "by_commitment": {c: sum(n.get("commitment") == c for n in ledger.get("tree") or []) for c in COMMITMENT},
+            "gates": {g: sum(x.get("status") == g for x in ledger.get("gates") or []) for g in GATE_STATUS},
+            "decisions_due": 0,
+        },
         "ledger": {
             "entries": len(entries),
             "by_status": {s: sum(e.get("status") == s for e in entries) for s in STATUSES},
@@ -227,6 +327,8 @@ def with_lint(metrics: dict, root: Path = REPO_ROOT) -> dict:
     if ledger_path.exists():
         bib = set(parse_bibliography(root / "references.bib"))
         issues = lint_ledger(load_ledger(ledger_path), bib, root, dt.date.today())
+        issues += lint_tree(load_ledger(ledger_path), root)
+        metrics["tree"]["decisions_due"] = sum(s == "info" for s, _, _ in issues)
         metrics["ledger"]["lint_errors"] = sum(s == "error" for s, _, _ in issues)
         metrics["ledger"]["lint_warnings"] = sum(s == "warn" for s, _, _ in issues)
     return metrics
@@ -250,6 +352,8 @@ def diff_metrics(old: dict, new: dict) -> list[str]:
         gone, added = set(old[key]) - set(new[key]), set(new[key]) - set(old[key])
         if added or gone:
             lines.append(f"{key}: +{len(added)} new, -{len(gone)} resolved")
+    if old.get("tree") != new.get("tree"):
+        lines.append(f"tree: {old.get('tree')} -> {new.get('tree')}")
     if old["ledger"] != new["ledger"]:
         lines.append(f"ledger: {old['ledger']} -> {new['ledger']}")
     return lines
@@ -266,10 +370,13 @@ def main(argv: list[str] | None = None) -> int:
         if not LEDGER.exists():
             print(f"No ledger at {LEDGER.relative_to(REPO_ROOT)}; nothing to lint.")
             return 0
-        issues = lint_ledger(load_ledger(), set(parse_bibliography(REPO_ROOT / "references.bib")), REPO_ROOT, dt.date.today())
+        ledger = load_ledger()
+        issues = lint_ledger(ledger, set(parse_bibliography(REPO_ROOT / "references.bib")), REPO_ROOT, dt.date.today())
+        issues += lint_tree(ledger, REPO_ROOT)
         for sev, eid, msg in issues:
             print(f"{sev.upper():5} {eid}: {msg}")
-        print(f"{sum(s == 'error' for s, _, _ in issues)} error(s), {sum(s == 'warn' for s, _, _ in issues)} warning(s)")
+        print(f"{sum(s == 'error' for s, _, _ in issues)} error(s), {sum(s == 'warn' for s, _, _ in issues)} warning(s), "
+              f"{sum(s == 'info' for s, _, _ in issues)} decision(s) due")
         return 1 if any(s == "error" for s, _, _ in issues) else 0
 
     metrics = with_lint(collect())

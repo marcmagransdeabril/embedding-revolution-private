@@ -195,3 +195,11 @@ def test_contract_fixes_form_not_conclusions():
     content = SKILL_MD.read_text(encoding="utf-8")
     assert "fixes form, not conclusions" in content
     assert "valid close" in content
+
+
+def test_tree_gates_and_open_sets_are_covered():
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec = re.search(r"### 17\. Inquiry integrity(.*?)(?=### 18\.)", content, flags=re.DOTALL).group(1)
+    for needle in ("Idea tree and gates", "Depth follows commitment", "decision due", "Do not choose",
+                   "Open sets", "Never report a missing member as incompleteness"):
+        assert needle in sec, f"§17 must cover: {needle}"
