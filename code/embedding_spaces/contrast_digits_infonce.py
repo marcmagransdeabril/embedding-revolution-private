@@ -23,6 +23,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.datasets import load_digits
+from sklearn.neighbors import KNeighborsClassifier
 
 BATCHES, SEEDS, STEPS = [2, 8, 32, 128], range(5), 2000
 PREDICTOR_BATCH = 128  # the predictor has no negatives, so the batch size only sets how many images it sees per step
@@ -30,9 +31,11 @@ DIM, HIDDEN, TAU, NOISE, LEARNING_RATE, TAIL = 16, 128, 0.2, 0.15, 1e-3, 200  # 
 LN2 = float(np.log(2))  # training uses natural logarithms (nats); the results are reported in bits = nats / ln 2
 FIGURES = Path("../../figures/embedding_spaces")
 
-images = load_digits().data.reshape(-1, 8, 8) / 16.0
+digits = load_digits()
+images = digits.data.reshape(-1, 8, 8) / 16.0
 order = np.random.default_rng(0).permutation(len(images))
 train, test = images[order[:1200]], images[order[1200:]]
+labels_train, labels_test = digits.target[order[:1200]], digits.target[order[1200:]]  # only used for the 5-NN reference
 
 
 def augment(x: np.ndarray, rng: np.random.Generator) -> np.ndarray:
@@ -152,12 +155,22 @@ def cosines(a: np.ndarray, b: np.ndarray):
     return np.diag(c), c[~np.eye(len(c), dtype=bool)]
 
 
+def heldout_loss(params: dict, batch: int, seed: int, batches: int = 100) -> float:
+    """InfoNCE loss (nats) on batches of held-out images with fresh augmentations, so the bound does not rely on training images."""
+    rng = np.random.default_rng(1000 + seed)
+    return float(np.mean([infonce(params, augment(x, rng), augment(x, rng))[0]
+                          for x in (test[rng.choice(len(test), batch, replace=False)] for _ in range(batches))]))
+
+
 def run(job):
     kind, batch, seed = job
     params, loss = train_encoder(kind, batch, seed)
     ea, eb = (forward(params, view)[1][2] for view in (VIEW_A, VIEW_B))  # z, before the normalization
+    z = np.concatenate([ea, eb])
     return dict(kind=kind, batch=batch, seed=seed, loss=loss / LN2 if kind == "infonce" else loss,
+                heldout=heldout_loss(params, batch, seed) / LN2 if kind == "infonce" else None,
                 retrieval=retrieval(ea, eb), alignment=alignment(ea, eb), uniformity=uniformity(ea),
+                offset=float(np.linalg.norm(z.mean(0)) / np.linalg.norm(z, axis=1).mean()),  # length of the mean vector / mean length
                 views=(ea, eb) if seed == 0 else None)
 
 
@@ -175,6 +188,8 @@ if __name__ == "__main__":
     _, _, vt = np.linalg.svd(train.reshape(len(train), 64) - mean_train, full_matrices=False)
     pca = lambda x: (x - mean_train) @ vt[:DIM].T
     print(f"train images = {len(train)}, held-out images = {len(test)}, chance = {1 / len(test):.2%}")
+    knn = KNeighborsClassifier(5).fit(train.reshape(len(train), 64), labels_train).score(test.reshape(len(test), 64), labels_test)
+    print(f"reference: 5-nearest-neighbour digit accuracy on the raw pixels = {knn:.1%} (labels are not used anywhere else)")
 
     jobs = [("infonce", n, s) for n in BATCHES for s in SEEDS] + [("predict", PREDICTOR_BATCH, s) for s in SEEDS]
     with ProcessPoolExecutor() as pool:
@@ -187,19 +202,24 @@ if __name__ == "__main__":
     groups = {"predict the other view": [r for r in results if r["kind"] == "predict"]}
     groups |= {f"InfoNCE, N = {n}": [r for r in results if r["kind"] == "infonce" and r["batch"] == n] for n in BATCHES}
     for name, rs in groups.items():
-        rows[name] = {k: [r[k] for r in rs] for k in ("retrieval", "alignment", "uniformity")}
+        rows[name] = {k: [r[k] for r in rs] for k in ("retrieval", "alignment", "uniformity", "offset")}
 
-    print(f"\n{'':24} {'loss (bits)':>18} {'bound (bits)':>18} {'retrieval':>20} {'alignment':>10} {'uniformity':>11}"
+    print(f"\n{'':24} {'loss (bits)':>18} {'bound (bits)':>18} {'retrieval':>20} {'alignment':>10} {'uniformity':>11} {'offset':>7}"
           f"   (mean [min, max] over {len(SEEDS)} seeds)")
     for name, r in rows.items():
-        cells = ["", ""]
+        cells, note = ["", ""], None
         if name.startswith("InfoNCE"):
             n = int(name.split("= ")[1])
             loss = np.array([x["loss"] for x in groups[name]])
             assert loss.min() >= 0 and (np.log2(n) - loss).max() <= np.log2(n)  # the bound can never exceed log2 N
             cells = [fmt(loss, ".2f"), fmt(np.log2(n) - loss, ".2f")]
+            held = np.array([x["heldout"] for x in groups[name]])
+            note = (f"{'':24} bound on held-out images: {np.log2(n) - held.mean():.2f} bits "
+                    f"(differs from the training bound by {abs(held.mean() - loss.mean()):.2f})")
         print(f"{name:24} {cells[0]:>18} {cells[1]:>18} {fmt(r['retrieval'], '.1%'):>20} "
-              f"{np.mean(r['alignment']):>10.2f} {np.mean(r['uniformity']):>11.2f}")
+              f"{np.mean(r['alignment']):>10.2f} {np.mean(r['uniformity']):>11.2f} {(f"{np.mean(r['offset']):.2f}" if 'offset' in r else ''):>7}")
+        if note:
+            print(note)
     # With the largest batch, every seed beats the raw pixels (the claim of the section).
     assert min(rows[f"InfoNCE, N = {BATCHES[-1]}"]["retrieval"]) > raw
 
