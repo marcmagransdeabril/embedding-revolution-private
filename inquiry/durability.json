@@ -1,0 +1,210 @@
+{
+  "date": "2026-11-10",
+  "bib_entries": 292,
+  "files": {
+    "index.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/complex_plane_quantum_logic.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/contextual_vectors.qmd": {
+      "cites": 33,
+      "median_year": 2023,
+      "before_1980": 3,
+      "from_2020": 24,
+      "from_2023": 17
+    },
+    "chapters/cross_domain_transfer.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/curse_of_dimensionality.qmd": {
+      "cites": 24,
+      "median_year": 2015,
+      "before_1980": 2,
+      "from_2020": 8,
+      "from_2023": 3
+    },
+    "chapters/embedding_spaces.qmd": {
+      "cites": 31,
+      "median_year": 2013,
+      "before_1980": 10,
+      "from_2020": 7,
+      "from_2023": 0
+    },
+    "chapters/epilogue.qmd": {
+      "cites": 158,
+      "median_year": 1991,
+      "before_1980": 56,
+      "from_2020": 20,
+      "from_2023": 9
+    },
+    "chapters/graph_embeddings.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/multimodal_embeddings.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/neurosymbolic_integration.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/properties_of_meaning.qmd": {
+      "cites": 68,
+      "median_year": 2014,
+      "before_1980": 11,
+      "from_2020": 21,
+      "from_2023": 9
+    },
+    "chapters/tangent_spaces_geodesics.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/topological_deep_learning.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/vector_databases.qmd": {
+      "cites": 3,
+      "median_year": 2021,
+      "before_1980": 0,
+      "from_2020": 3,
+      "from_2023": 1
+    },
+    "chapters/vector_symbolic_architectures.qmd": {
+      "cites": 0,
+      "median_year": null,
+      "before_1980": 0,
+      "from_2020": 0,
+      "from_2023": 0
+    },
+    "chapters/embedding_spaces.qmd (definitive part)": {
+      "cites": 15,
+      "median_year": 1956,
+      "before_1980": 9,
+      "from_2020": 0,
+      "from_2023": 0
+    }
+  },
+  "perishable": {
+    "LLM/GPT/BERT": {
+      "occurrences": 14,
+      "files": 5
+    },
+    "JEPA/world model": {
+      "occurrences": 13,
+      "files": 4
+    },
+    "Platonic/convergence": {
+      "occurrences": 6,
+      "files": 6
+    },
+    "Transformer": {
+      "occurrences": 2,
+      "files": 2
+    },
+    "linear representation/steering": {
+      "occurrences": 8,
+      "files": 4
+    },
+    "chain of thought": {
+      "occurrences": 6,
+      "files": 3
+    },
+    "latent reasoning": {
+      "occurrences": 2,
+      "files": 1
+    },
+    "BYOL/VICReg/data2vec": {
+      "occurrences": 4,
+      "files": 1
+    },
+    "CLIP/ImageBind": {
+      "occurrences": 7,
+      "files": 4
+    },
+    "agents": {
+      "occurrences": 5,
+      "files": 4
+    },
+    "ANN products": {
+      "occurrences": 3,
+      "files": 1
+    },
+    "RAG": {
+      "occurrences": 3,
+      "files": 2
+    },
+    "RoPE": {
+      "occurrences": 2,
+      "files": 2
+    },
+    "sparse autoencoders": {
+      "occurrences": 0,
+      "files": 0
+    }
+  },
+  "relative_wording": [
+    "index.qmd:77",
+    "chapters/embedding_spaces.qmd:7",
+    "chapters/embedding_spaces.qmd:59",
+    "chapters/embedding_spaces.qmd:932"
+  ],
+  "fashion_titles": [
+    "index.qmd:94: * **Chapter 4: Vector Databases, RAG, and the Limits of Single-Vector Retrieval.** Distanc",
+    "index.qmd:95: * **Chapter 5: Contextual Vectors: Attention, Transformers, and Looking Inside.** A word's",
+    "index.qmd:103: * **Chapter 8: Beyond Graphs: Topological Deep Learning.** Simplicial and cell complexes, ",
+    "index.qmd:109: * **Chapter 9: The Complex Plane and Quantum Logic: Wave-Nature in Latent Space.** Concept",
+    "chapters/complex_plane_quantum_logic.qmd:2: title: \"The Complex Plane and Quantum Logic: Wave-Nature in Latent Space\"",
+    "chapters/complex_plane_quantum_logic.qmd:16: ## Quantum Decision Making in Vector Spaces",
+    "chapters/complex_plane_quantum_logic.qmd:19: ## Quantum-Inspired Embeddings",
+    "chapters/contextual_vectors.qmd:2: title: \"Contextual Vectors: Attention, Transformers, and Looking Inside\"",
+    "chapters/graph_embeddings.qmd:24: ## Graph Databases vs. Vector Databases",
+    "chapters/neurosymbolic_integration.qmd:25: ## Neural Theorem Proving",
+    "chapters/topological_deep_learning.qmd:2: title: \"Beyond Graphs: Topological Deep Learning\"",
+    "chapters/vector_databases.qmd:2: title: \"Vector Databases, RAG, and the Limits of Single-Vector Retrieval\"",
+    "chapters/vector_databases.qmd:13: ## Retrieval-Augmented Generation"
+  ],
+  "ledger": {
+    "entries": 15,
+    "by_status": {
+      "open": 14,
+      "leaning": 0,
+      "supported": 1,
+      "contested": 0,
+      "revised": 0,
+      "dropped": 0
+    },
+    "lint_errors": 0,
+    "lint_warnings": 1
+  }
+}

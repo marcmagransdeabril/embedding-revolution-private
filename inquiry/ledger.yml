@@ -1,0 +1,285 @@
+# Inquiry ledger of The Embedding Revolution
+#
+# The book is an exploration. Its chapters are built around QUESTIONS, which are stable.
+# Everything the book currently believes about them is a READING, which is revisable and dated.
+# This file is the only place that holds readings together with the evidence behind them.
+# The prose (Prologue, roadmap, stubs, "Next:" lines) states plans and hypotheses; when it and
+# this ledger disagree about substance, the ledger and the evidence outrank the plan.
+#
+# Who edits it: the author. The review-doc skill (§17) proposes entries and changes as a diff
+# and applies them only on approval. `make validate-inquiry` lints the file.
+#
+# Entry fields
+#   id               B* book, C<n>.* chapter, S<n>.* section (any unique string)
+#   level            book | chapter | section
+#   question         the question, stated so that either outcome is a result
+#   where            files or anchors where the question or its reading is stated in the text
+#   reading          current best answer in one sentence; null = no commitment yet
+#   status           open       asked; any reading is an untested hypothesis
+#                    leaning    some evidence, not enough to rely on
+#                    supported  evidence carries it, with its caveats
+#                    contested  credible evidence on both sides
+#                    revised    the reading changed (needs a log entry)
+#                    dropped    no longer asked (needs a log entry)
+#   confidence       none | low | medium | high, capped by the kind of evidence:
+#                    medium needs one solid source (theorem, historical, replicated, own-experiment);
+#                    high needs a theorem or two solid sources, and an 'answered_against' note if
+#                    any evidence against exists. single-study, position, interpretive: low at most.
+#   evidence         for / against lists of {src, loc, kind, note}
+#                    src = citekey in references.bib, or a repo path (code/..., data)
+#                    kind = theorem | historical | replicated | own-experiment | single-study |
+#                           position | interpretive
+#   falsifier        the observation that would change the reading (required once not 'open')
+#   depends_on       ids of readings this one rolls up; confidence cannot exceed the weakest
+#   searched_against date counter-evidence was last actively searched for, or null
+#   checked          date the entry was last compared with the evidence
+#
+# The log records changes of direction: what moved, and because of which evidence.
+# A surprise is a good entry. A reading that moved without a log entry is a finding.
+
+schema: 1
+
+# Files that are partly scratchpad. Text before the heading is definitive; the rest is plan.
+# Durability metrics are reported for the definitive part separately. Update as chapters are written.
+definitive:
+  chapters/embedding_spaces.qmd: "## Learning by Contrast"
+
+questions:
+  # ---- Book level (questions stated in index.qmd; readings are the working hypotheses there)
+  - id: B1
+    level: book
+    question: >
+      Is representing meaning as vectors a good approach: why does it work, what can it
+      express, where does it strain, and what does each proposed extension buy and cost?
+    where: [index.qmd#the-thesis-of-this-book]
+    reading: "Working hypothesis (Prologue): representing meaning as vectors is a good approach."
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: >
+      A task class where the best vector-based method loses to a non-vector method at matched
+      compute and the gap persists as compute grows; or a structural limit (Chapter 4) that
+      binds in practice and is not removed by scale.
+    depends_on: [C3.rice, C4.scale, C5.scale, C6.scale, C7.scale, C8.scale, C9.scale,
+                 C10.scale, C11.scale, C12.scale, C13.scale]
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: B2
+    level: book
+    question: >
+      For each structure added to a vector space (symmetry, curvature, relations, topology,
+      logic, composition), does scale make it unnecessary, does it survive because it is cheap,
+      or because the problem demands it? (the bitter lesson test)
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: [C4.scale, C5.scale, C6.scale, C7.scale, C8.scale, C9.scale, C10.scale,
+                 C11.scale, C12.scale, C13.scale]
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: B3
+    level: book
+    question: >
+      Dog test: are a photograph, a word, a bark and a gait placed in one space one meaning seen
+      through four channels, or four meanings that happen to be close?
+    where: [index.qmd#the-dog-test]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: [C13.scale]
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: B4
+    level: book
+    question: >
+      Can reasoning stay in the space instead of passing through text, and if it can, is a path
+      in the space any more reliable than a chain written in words?
+    where: [index.qmd#why-everything-is-becoming-a-vector, chapters/properties_of_meaning.qmd#sec-prop-paths]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  # ---- Chapter 3, written part: one entry as a worked example of a filled reading
+  - id: C3.rice
+    level: chapter
+    question: Can exact meaning be computed, or must similarity of meaning be graded?
+    where: [chapters/embedding_spaces.qmd#rices-theorem-why-exact-meaning-is-out-of-reach]
+    reading: >
+      No program decides non-trivial properties of what another program means, so a system
+      that handles meaning at scale has to settle for graded, approximate similarity.
+    status: supported
+    confidence: medium
+    evidence:
+      for:
+        - {src: rice1953classes, kind: theorem, note: "the theorem covers programs; the step to natural-language meaning is the book's inference"}
+        - {src: code/embedding_spaces/rice_semidecider.py, kind: own-experiment}
+      against: []
+    falsifier: >
+      A formalization of meaning for which an exact, total, decidable test exists and covers
+      the uses the book cares about (so the reduction to program semantics fails).
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  # ---- Chapters 4 to 13: the scale tests of the roadmap, as questions with no preset answer
+  - id: C4.scale
+    level: chapter
+    question: Will long contexts and agentic search absorb vector retrieval, or does external memory survive on cost?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C5.scale
+    level: chapter
+    question: Which structures of Chapters 6 to 12 do transformers find without being told?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C6.scale
+    level: chapter
+    question: Which symmetries does data absorb, which survive because they are cheap, and is hyperbolic geometry worth its cost?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C7.scale
+    level: chapter
+    question: Do embeddings learned from data make explicit graph structure unnecessary, or do graph and vector converge?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C8.scale
+    level: chapter
+    question: Which parts of topological machinery earn their cost at scale, and which are mainly analysis tools?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C9.scale
+    level: chapter
+    question: Do complex-valued or quantum-inspired models beat real-valued ones at matched compute?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C10.scale
+    level: chapter
+    question: Capacity grows with dimension and dimension is cheap, so when does a hyperdimensional encoding beat a learned one?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C11.scale
+    level: chapter
+    question: Do networks acquire systematic composition from data and scale, or must it be built in?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C12.scale
+    level: chapter
+    question: Does scale make independently trained spaces more alike, and what is then left for alignment to do?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+  - id: C13.scale
+    level: chapter
+    question: Does scale close the modality gap, and does prediction in latent space scale as a general method?
+    where: [index.qmd#book-architecture-master-roadmap]
+    reading: null
+    status: open
+    confidence: none
+    evidence: {for: [], against: []}
+    falsifier: null
+    depends_on: []
+    searched_against: null
+    checked: 2026-11-10
+
+log:
+  - date: 2026-11-10
+    id: B1
+    change: Ledger created. Roadmap scale tests and the Prologue's questions entered as open questions; only C3.rice carries a reading.
+    because: The book is an exploration, so plans are tracked as hypotheses and readings are tied to evidence.
+
+durability_actions:
+  # Rolling list kept by review-doc §18. status: open | done | declined. Source of the first list:
+  # tmp/lindy_review.md (2026-11-10), section "Actions".
+  - {id: D1, status: open, action: "Decide titles of Chapters 4, 5, 8, 9 so they name the question, not the fashion word (RAG, Transformers, Topological Deep Learning, Quantum)"}
+  - {id: D2, status: open, action: "One home per fast-moving claim: Prologue and Chapter 1 ask the question and point to Chapter 5 (reasoning in space or text), 13 (JEPA, convergence)"}
+  - {id: D3, status: open, action: "Date every reading that closes a scale test (clause such as 'on the evidence gathered up to 2026'); the ledger's 'checked' field is the source"}
+  - {id: D4, status: open, action: "Chapter 1 first-pass sources: prefer older primaries, date each post-2022 item, move outlier-dimension and quantization details out"}
+  - {id: D5, status: open, action: "Date the Goldbach bound in the Rice answer; replace 'over the last few decades' in the Chapter 3 introduction with a date anchor"}
+  - {id: D6, status: done, action: "Pin the Pride and Prejudice corpus (SHA-256 check in utils.load_book)"}
+  - {id: D7, status: open, action: "State N and status of small-study results in the clause that uses them (Held 2011, Vong 2024, clinical studies)"}
+  - {id: D8, status: open, action: "Expert read-through of the Epilogue (Indian philosophy of language, psychiatry, Chomsky debate) before publication"}
+  - {id: D9, status: open, action: "Back up references/ and tmp/ outside the working machine (both are gitignored)"}

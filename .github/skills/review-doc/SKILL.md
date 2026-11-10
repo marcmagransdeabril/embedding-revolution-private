@@ -1,6 +1,6 @@
 ---
 name: review-doc
-description: "Review book content — a portion of text, a chapter, a git-incremental change set, or the whole book — for structure, style, grammar, cross-references, citations, referenced documents validation, factual accuracy, question/solution completeness, code consistency, notation, translation sync, and chapter-to-chapter continuity and the book's thematic contract. Always starts by clarifying the scope (unit and range). Use when: reviewing, auditing, or proofreading text, reviewing what changed since a commit/date, or checking consistency between language versions."
+description: "Review book content — a portion of text, a chapter, a git-incremental change set, or the whole book — for structure, style, grammar, cross-references, citations, referenced documents validation, factual accuracy, question/solution completeness, code consistency, notation, translation sync, and chapter-to-chapter continuity, the book's thematic contract, the consistency of its working readings (book, chapter, section) with the evidence gathered so far, and rolling durability (Lindy) feedback. Always starts by clarifying the scope (unit and range). Use when: reviewing, auditing, or proofreading text, reviewing what changed since a commit/date, checking whether the book's direction still fits the accumulated evidence, or checking consistency between language versions."
 ---
 
 # Book Review
@@ -36,8 +36,9 @@ Also establish, from `AGENTS.md`, the style guide, or an already-finished chapte
 
 3. **Canonical chapter skeleton** — expected section structure.
 4. **Style guide** — audience, tone, language and locale.
-5. **Book-level contract** — the book's own statement of what every chapter must do and how chapters hand off to each other (for this book, the global argument in `index.qmd`: one paragraph per chapter with its scale test and its "Next:" hand-off). If none exists, skip §15.
+5. **Book-level contract** — the book's own statement of what every chapter must do and how chapters hand off to each other (for this book, the roadmap in `index.qmd`: one paragraph per chapter with its scale test and its "Next:" hand-off). If none exists, skip §15. **The contract fixes form, not conclusions.** This book is an exploration with no thesis to defend: the roadmap is a plan, i.e. a set of hypotheses about where the evidence will lead, and it may be wrong. See §17.
 6. **Notation summary** — the book's own list of symbol and typeface conventions (for this book, "Mathematical Notation & Conventions" in `index.qmd`). If none exists, skip §16.
+7. **Inquiry ledger and durability snapshot** — `inquiry/ledger.yml` (questions, current readings, evidence, falsifiers, durability actions) and `inquiry/durability.json` (last metrics). Run `make validate-inquiry` and `make durability` once at the start. If the ledger is missing, say so and build provisional entries from the text (§17).
 
 Read the full unit under review (not just isolated diff hunks) before commenting, so feedback accounts for surrounding context. For a paragraph/section-level review, skip checks that don't apply at that granularity (e.g. whole-chapter structure, index terms) and note which ones were skipped and why.
 
@@ -162,10 +163,11 @@ Applies when the book declares a contract (Setup item 5) and the scope touches a
 - The declared hand-off ("Next:" line, or equivalent) of chapter N matches what chapter N+1 actually opens with, and chapter N+1's opening picks up from chapter N's close.
 - Within a chapter, each section's first sentences pick up the previous section's last ones (same test as §2).
 - Recurring threads (the running example, the ledger of limits, the reasoning-in-the-space thread) stay coherent across hand-offs: nothing is dropped, redefined, or contradicted.
-- Stubs are checked against the contract text, not for prose quality: the stub's sections and the global argument must say the same thing. When both exist for one chapter, report any divergence and name which file is the source of truth.
+- Stubs are checked against the contract text, not for prose quality: the stub's sections and the roadmap must say the same thing. When both exist for one chapter, report any divergence and name which file is the source of truth for structure. For substance (what is claimed, what the scale test found) the order is evidence, then ledger, then plan text (§17); a stub that disagrees with the roadmap because the evidence moved is a roadmap to update, not a stub to fix.
+- "Next:" lines must match what the next chapter opens with, but a hand-off is a question that arose, not a step in a fixed argument. Never ask for a link that the evidence does not support.
 
 **Job B — thematic contract (the chapters the contract names; for this book, Chapters 3 to 13).**
-- The opening states the bet this chapter's structure makes against the bitter lesson; the closing gives the verdict (absorbed by scale, cheap, or demanded by the problem) and it follows from the chapter's own argument.
+- The opening states the bet this chapter's structure makes against the bitter lesson; the closing gives the chapter's current reading (absorbed by scale, cheap, demanded by the problem, or undecided, with what would decide it), dated and with its evidence class, and it follows from the chapter's own evidence. "Undecided" is a valid close; do not ask for a verdict the evidence does not reach.
 - The opening and closing name the properties of meaning as geometry that the chapter develops, tied back to the Chapter 1 catalog by its `@sec-prop-*` anchors. Every anchor referenced exists. If the catalog anchors are not yet frozen, report Job B as blocked on that, not as a failure of the chapter.
 - Chapters outside the contract's range (for this book, 1 and 2) are audited for Job A only.
 
@@ -182,6 +184,43 @@ Applies to any unit with mathematical symbols, units, or code and figure labels 
 - **Mirrors**: identifiers in inline code, scripts, figure axes and legends use the symbols of the prose.
 A mismatch with one obvious fix inside the unit is applied directly (Change policy, syntax); a rename that touches another section or chapter is reported with the exact before and after.
 
+### 17. Inquiry integrity (the book is an exploration)
+The book has no thesis to defend. **Questions are stable; readings are revisable.** A reading is the current best answer to a question, held at a stated confidence, on stated evidence, until something would change it. They live in `inquiry/ledger.yml`; the prose (Prologue, roadmap, stubs, openings and closings) states them.
+
+**Ground rules.**
+- **Outcome-neutral.** Never judge whether the book reaches a particular conclusion, supports a thesis, or follows its plan. Judge only whether reading, evidence, confidence and prose agree. Either outcome of a test (a structure absorbed by scale, or demanded by the problem) is an equal result, and "undecided" is a valid state. Do not ask for a conclusion, a verdict, or a tidier arc.
+- **Authority for substance: evidence, then ledger, then plan text.** Departing from the plan is not a defect. A plan that lags the evidence is a finding against the plan (stale roadmap, stub, "Next:" line).
+- **Report, do not rewrite.** Proposed ledger entries and hedges are given as diffs and land only on approval (Change policy).
+
+**Procedure.** Resolve the unit to ledger entries (by `where` and by content). A load-bearing claim in scope with no entry gets a drafted one (question, reading, status, evidence found in the text), reported for approval. Then:
+1. **Roll-up.** Section → chapter → book. A reading is no more confident than the weakest load-bearing reading under it, unless independent lines converge (say why). Flag a parent reading with nothing under it, and evidence in a section that no parent reading takes into account (a question may be emerging; propose it).
+2. **Roll-down.** Openings, roadmap paragraphs, hand-offs and the Prologue must not state as settled what the sections below found open, caveated or contradicted. A section's caveat that the opening still ignores is `should-fix`.
+3. **Evidence arrival** (essential in incremental ranges). For every new or changed citation, number, script or figure in the range, name the entries it bears on and whether it supports, weakens or is neutral. Evidence that bears on an entry and moved nothing is a finding; so is a status or confidence that moved without evidence.
+4. **Balance.** For each committed reading (`leaning`, `supported`, `contested`): are there `against` items, and when was counter-evidence last searched for? If never, report it under the epistemic-boundary tier with the strongest opposing source or experiment you can name and two or three concrete search queries. Check that opposing evidence is represented fairly. Check the kind mix: a single-study, position or interpretive source is never the only support for a step, and small-N results carry N and status in the same sentence. Own experiments are held to the resource parity and protocol checks of §8.
+5. **Calibration of prose.** Compare modal strength with ledger confidence: "shows", "proves", plain "is" need `high`; "suggests", "points to" fit `low` to `medium`. Prose stronger than the ledger is `should-fix` (propose the minimal hedge). Also check scope: a result on a toy corpus or one model family stated as a property of language or of vectors in general.
+6. **Falsifiability.** Every committed reading names an observation that would change it, which is observable and not satisfied by construction. A reading no result could move is flagged.
+7. **Direction of travel.** Compare with history (`git log -p -- inquiry/ledger.yml`, or `git diff <ref>` for the range). List readings that moved and questions added, dropped, reworded or reordered, each with its log entry and the evidence behind it. A move with no log entry gets a request for one (the move itself is not a defect; a surprise is a good entry). Watch for these patterns: every new source confirming; confidence rising with no new solid evidence; a question quietly reworded so that the answer fits; a plan item kept alive after the evidence turned against it.
+8. **Ripeness and staleness.** Open questions whose evidence is now enough to state a reading; questions with much evidence gathered and no reading; entries not checked in more than 180 days; scale-test closings without a date.
+
+`make validate-inquiry` covers the mechanical part (ids, citekeys and paths, falsifier present, confidence capped by evidence kind, roll-up, staleness, one-sidedness). Its warnings are prompts for items 1 to 8, not findings by themselves.
+
+### 18. Durability (Lindy), rolling
+How long a claim, source or framing stays true and useful. Distinct from §17: that asks how well supported a reading is now; this asks how long it will stay so. A claim that is long-lived but weakly supported is a candidate for exploration; a short-lived one held with high confidence needs a date. Durability findings are `suggestion` or `should-fix`, never `blocker`, and a perishable item is not wrong, only misplaced if it is undated or repeated. Baseline and rationale: `tmp/lindy_review.md` (2026-11-10).
+
+**Shelf life by claim type.** Theorem or derivation, primary historical fact: indefinite, main text. Conceptual frame from an old tradition, replicated regularity: decades, with the scope in which it holds. Single-study or small-N result: uncertain, N and caveat in the same sentence. System or method description (CLIP, HNSW, RoPE, a specific model): 1 to 10 years, dated history in past tense. Position paper, forecast, contested hypothesis: attributed, with the test that decides it. The author's own synthesis: marked as such.
+
+**Checks on the unit.**
+1. Each perishable item sits in a sentence that dates it; limits are marked structural (theorem, counting argument) or contingent (how systems behaved at a date); no exercise's lesson depends on how good a current model is.
+2. **Gradient.** Syntheses and endings must not rest on younger evidence than the middle. Use the per-file median year and the 2023+ count from the metrics.
+3. **Titles.** Chapter and section titles name the question, not a fashion word (`fashion_titles` in the metrics). Titles are cross-referenced, so rename early.
+4. **Organising bet.** A section organised around named methods ages with them; one organised around the durable question that they answered does not.
+5. **One home per fast-moving claim.** Other places ask the question and point (`perishable` blast radius in the metrics). Reasoning in space or in text, JEPA, representation convergence, linear representation each have one home chapter.
+6. **Contested hypotheses** (linear representation, Platonic convergence, sparse-autoencoder features) are attributed, with the test and what it found, never stated as findings.
+7. **Credibility outside the author's field** (traditions read through translations and secondary works, clinical claims): specialist sources, "resembles" where the link is interpretive, "anticipated" only for a documented line of influence or an exact correspondence, and a domain read-through before publication.
+8. Undated records and relative wording (`relative_wording` in the metrics); code dependencies limited to slow-drifting libraries; data pinned; gitignored `references/` and `tmp/` backed up.
+
+**Rolling feedback.** Every review ends with a durability block: (i) metric changes since `inquiry/durability.json`, stated as improved or worsened with the numbers; (ii) the status of `durability_actions` in the ledger, checking in the text whether "done" ones really are; (iii) up to three next actions ranked by low cost and high effect, as proposed new `durability_actions` entries. After the author approves the review, `durability_metrics.py snapshot` records the new baseline.
+
 ## Output
 
 **Report first, edit on approval.** A review run produces a report; apart from the fixes the Change policy lists under "Apply directly" (syntax, grammar, non-idiomatic usage, correctness), which are applied first and listed in the report, no prose is changed until the author approves specific items, after which each approved item lands as a separate minimal diff. Begin the report with the confirmed scope block from Setup.
@@ -193,3 +232,9 @@ Group findings into the 4-tier hierarchy:
 4. **Tier 4: Minor Editorial, Typography & LaTeX Suggestions** — mechanical formatting and typo fixes.
 
 For each finding: file/line reference, severity (blocker / should-fix / suggestion), and proposed correction (minimal, per the Change policy). List applied fixes (only those the Change policy allows) separately from items awaiting author decision, and keep style items in the latter with `suggestion` severity unless an explicit style-guide rule is broken. For whole-book reviews, group by chapter first, then by tier, with a cross-chapter summary.
+
+**Where §17 and §18 findings go.** A text claim that the evidence contradicts is Tier 1 (`[Claim: ...] vs [Ground-Truth Evidence: ...]`). Prose more confident than the ledger, a broken roll-up, evidence that moved nothing, an unfalsifiable reading, and durability gaps are Tier 2. Counter-evidence never searched for is Tier 3, with the queries. Unlogged moves and stale plan text are reported as requests to the author, not as defects of the text.
+
+**Close every report with two blocks.**
+1. **Direction report**, by level (book, chapter, section): entries touched; proposed ledger diff (status, confidence, new `against` items, log entries); readings that are ripe or stale; new questions the evidence suggests; plan text that now lags the evidence; the next evidence that would move the most (an experiment, a source, a counter-example to look for). State plainly when the direction still fits the evidence. It is not a finding that nothing moved.
+2. **Durability block** (§18).

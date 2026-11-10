@@ -48,6 +48,8 @@ def test_required_sections_present():
         "### 14. Build and test",
         "### 15. Book-level contract and hand-offs",
         "### 16. Notation",
+        "### 17. Inquiry integrity",
+        "### 18. Durability",
         "## Output",
     ]
     
@@ -157,3 +159,39 @@ def test_colon_misuse_is_a_usage_fix_not_a_style_suggestion():
     assert "Colon misuse" in text
     assert "swapping the punctuation only" in text
     assert "never apply it" not in text
+
+
+def test_inquiry_integrity_is_outcome_neutral_and_evidence_ranked():
+    """§17 must keep the book exploratory: evidence outranks plan, no preferred conclusion, all levels covered."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec = re.search(r"### 17\. Inquiry integrity(.*?)(?=### 18\.)", content, flags=re.DOTALL)
+    assert sec is not None, "Failed to locate §17"
+    text = sec.group(1)
+    for needle in ("Outcome-neutral", "evidence, then ledger, then plan text", "Roll-up", "Roll-down",
+                   "Evidence arrival", "Balance", "Calibration of prose", "Falsifiability",
+                   "Direction of travel", "make validate-inquiry"):
+        assert needle in text, f"§17 must cover: {needle}"
+    assert "section" in text and "chapter" in text and "book" in text
+
+
+def test_durability_section_is_rolling_and_tied_to_metrics_and_ledger():
+    """§18 must give continuous feedback: deltas against a snapshot, tracked actions, never a blocker."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec = re.search(r"### 18\. Durability(.*?)(?=## Output)", content, flags=re.DOTALL)
+    assert sec is not None, "Failed to locate §18"
+    text = sec.group(1)
+    for needle in ("Rolling feedback", "durability_actions", "inquiry/durability.json", "never `blocker`", "One home"):
+        assert needle in text, f"§18 must cover: {needle}"
+
+
+def test_output_closes_with_direction_report_and_durability_block():
+    content = SKILL_MD.read_text(encoding="utf-8")
+    out = content.split("## Output", 1)[1]
+    assert "Direction report" in out and "Durability block" in out
+
+
+def test_contract_fixes_form_not_conclusions():
+    """The roadmap is a plan; the contract text must not make a preset conclusion the standard."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    assert "fixes form, not conclusions" in content
+    assert "valid close" in content

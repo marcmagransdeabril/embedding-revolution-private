@@ -18,7 +18,9 @@ Written in the personal, candid, and intellectually curious spirit of *Through t
 
 ## 📚 Book Architecture & Single Source of Truth
 
-The prologue, acknowledgments, disclaimers, mathematical conventions, and the book's global argument (one paragraph per chapter, with its scale test and its hand-off to the next) are maintained in **[index.qmd](index.qmd)**. The section-level outline of each chapter lives in its own file under `chapters/`, which is a stub until the chapter is written.
+The prologue, acknowledgments, disclaimers, mathematical conventions, and the book's roadmap (one paragraph per chapter, with its scale test and its hand-off to the next) are maintained in **[index.qmd](index.qmd)**. The section-level outline of each chapter lives in its own file under `chapters/`, which is a stub until the chapter is written.
+
+The book is an exploration, so the roadmap is a plan and not a thesis. What the book currently believes, how well the evidence supports it and what would change it are tracked in **[inquiry/ledger.yml](inquiry/ledger.yml)** (`make validate-inquiry`); durability metrics are tracked in `inquiry/durability.json` (`make durability`). The `review-doc` skill checks both (§17, §18).
 
 ---
 
