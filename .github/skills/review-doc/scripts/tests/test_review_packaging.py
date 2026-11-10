@@ -26,7 +26,7 @@ def test_yaml_frontmatter_and_format_validation():
 
 
 def test_required_sections_present():
-    """Verify that all core sections (§1 to §14, Setup, Checks, Output) exist in SKILL.md."""
+    """Verify that all core sections (§1 to §16, Setup, Checks, Output) exist in SKILL.md."""
     content = SKILL_MD.read_text(encoding="utf-8")
     
     required_sections = [
@@ -47,6 +47,7 @@ def test_required_sections_present():
         "### 13. Translation parity",
         "### 14. Build and test",
         "### 15. Book-level contract and hand-offs",
+        "### 16. Notation",
         "## Output",
     ]
     

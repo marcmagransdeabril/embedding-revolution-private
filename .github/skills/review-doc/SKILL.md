@@ -1,6 +1,6 @@
 ---
 name: review-doc
-description: "Review book content — a portion of text, a chapter, a git-incremental change set, or the whole book — for structure, style, grammar, cross-references, citations, referenced documents validation, factual accuracy, question/solution completeness, code consistency, translation sync, and chapter-to-chapter continuity and the book's thematic contract. Always starts by clarifying the scope (unit and range). Use when: reviewing, auditing, or proofreading text, reviewing what changed since a commit/date, or checking consistency between language versions."
+description: "Review book content — a portion of text, a chapter, a git-incremental change set, or the whole book — for structure, style, grammar, cross-references, citations, referenced documents validation, factual accuracy, question/solution completeness, code consistency, notation, translation sync, and chapter-to-chapter continuity and the book's thematic contract. Always starts by clarifying the scope (unit and range). Use when: reviewing, auditing, or proofreading text, reviewing what changed since a commit/date, or checking consistency between language versions."
 ---
 
 # Book Review
@@ -37,6 +37,7 @@ Also establish, from `AGENTS.md`, the style guide, or an already-finished chapte
 3. **Canonical chapter skeleton** — expected section structure.
 4. **Style guide** — audience, tone, language and locale.
 5. **Book-level contract** — the book's own statement of what every chapter must do and how chapters hand off to each other (for this book, the global argument in `index.qmd`: one paragraph per chapter with its scale test and its "Next:" hand-off). If none exists, skip §15.
+6. **Notation summary** — the book's own list of symbol and typeface conventions (for this book, "Mathematical Notation & Conventions" in `index.qmd`). If none exists, skip §16.
 
 Read the full unit under review (not just isolated diff hunks) before commenting, so feedback accounts for surrounding context. For a paragraph/section-level review, skip checks that don't apply at that granularity (e.g. whole-chapter structure, index terms) and note which ones were skipped and why.
 
@@ -171,6 +172,15 @@ Applies when the book declares a contract (Setup item 5) and the scope touches a
 **Incremental scope.** Run Job A on every boundary the diff touches. Run Job B on a chapter only if the diff touches its opening, its closing, its scale test, or the contract text; otherwise list Job B as skipped and why.
 
 **Mechanical hints (optional).** `grep` for `@sec-prop-` and for "bitter lesson" in the first and last section of each contracted chapter. A miss is a hint to read the passage, not a finding by itself.
+
+### 16. Notation
+Applies to any unit with mathematical symbols, units, or code and figure labels that mirror them. Compare it with the notation summary (Setup item 6):
+- **Typeface by kind**: the summary assigns scalars, vectors, matrices, and sets or manifolds their own typefaces; a letter used in the wrong typeface, or a typeface borrowed for another purpose (a calligraphic letter for a loss), is a mismatch.
+- **Fixed conventions**: dimension letters, information symbols, logarithm base (and where training uses another base, that it is stated), inner product, norm and cosine forms, encoder and modality symbols.
+- **Collisions**: for each symbol first used in the unit, grep the chapter, its neighbours and the stubs for other meanings (the same letter for two quantities is a finding even when the summary is silent).
+- **Undefined symbols**: defined at first use and not in conflict with the summary; when a symbol recurs across chapters, propose adding it to the summary rather than renaming it in the text.
+- **Mirrors**: identifiers in inline code, scripts, figure axes and legends use the symbols of the prose.
+A mismatch with one obvious fix inside the unit is applied directly (Change policy, syntax); a rename that touches another section or chapter is reported with the exact before and after.
 
 ## Output
 

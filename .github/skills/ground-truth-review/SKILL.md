@@ -19,7 +19,7 @@ Invoke this skill whenever:
 
 All indexing, search, and page-rendering tools execute using the repository Python virtual environment (`.venv`):
 - **Python Executable**: Use `.venv/bin/python` for CLI invocations (or activate with `source .venv/bin/activate`).
-- **Dependencies**: Built on lightweight PyMuPDF (`pymupdf`) and SQLite FTS5 with Porter stemming. No background daemons, GPU/VLM models, or external services are needed.
+- **Dependencies**: Built on lightweight PyMuPDF (`pymupdf`) and SQLite FTS5 with Porter stemming. No background daemons, GPU/VLM models, or external services are needed. The optional `tesseract` binary (with the `eng` language data) lets the index builder read scanned pages; install it with `sudo apt install tesseract-ocr tesseract-ocr-eng`, or unpack the `.deb` packages into `~/.local` when there is no root access.
 
 ## Design Principles
 
@@ -49,6 +49,7 @@ Verify that `references/.ground-index/index.sqlite` exists and is up to date. If
   ```bash
   .venv/bin/python .github/skills/ground-truth-review/scripts/build_index.py
   ```
+- **Scanned and unreadable pages are OCRed automatically.** A page with no text layer (a scan), or whose text layer is unreadable (a broken font encoding shows up as mostly control characters), is rendered at 300 DPI and read with Tesseract, in parallel across pages. The PDF itself is never modified. The recognised text is stored in the index with `source = "tesseract"` (visible in `ground_check.py` hits and in the builder's `sources` summary), and the builder warns how many pages were OCRed. OCR text is noisy, especially on mathematics, so treat such hits as pointers and confirm them with `--render-page` (Step 4). Without `tesseract` on `PATH` the pages are indexed as empty and the builder says so; install it and re-run `build_index.py --force <pdf>` to fill them in. Options: `--no-ocr` skips OCR, `--ocr-lang eng+fra` selects other languages (their `.traineddata` must be installed). A PDF indexed before `tesseract` was available is not re-read unless forced: `build_index.py --force "references/<file>.pdf"`.
 - This builder both **adds** newly-present PDFs (skipping already-indexed ones unless `--force`) and **prunes** any indexed document whose source PDF is no longer in `references/` (pass `--no-prune` to skip the prune step, or `--dry-run` to preview adds/prunes with no DB changes — pruned-but-not-yet-removed entries are reported with status `would_prune`).
 
 ### Step 1.5: Citation-Scoped Retrieval (when the claim carries a citation)

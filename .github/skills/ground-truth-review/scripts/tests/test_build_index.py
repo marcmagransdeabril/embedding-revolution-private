@@ -400,3 +400,83 @@ def test_error_handling(tmp_path: Path):
     # 3. Target resolution error
     with pytest.raises(FileNotFoundError):
         resolve_pdf_targets(["non_existent_doc"], ref_dir)
+
+
+# ---------------------------------------------------------------------------
+# OCR of pages without a readable text layer
+# ---------------------------------------------------------------------------
+
+import shutil
+
+import build_index as bi
+
+
+def make_image_only_pdf(path: Path, text: str) -> Path:
+    """A one-page PDF whose only content is a picture of `text` (no text layer)."""
+    src = pymupdf.open()
+    page = src.new_page()
+    page.insert_textbox(pymupdf.Rect(40, 40, 555, 400), text, fontsize=28)
+    png = page.get_pixmap(dpi=150).tobytes("png")
+    src.close()
+    doc = pymupdf.open()
+    page = doc.new_page()
+    page.insert_image(page.rect, stream=png)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    doc.save(str(path))
+    doc.close()
+    return path
+
+
+def test_is_garbled_detects_control_characters():
+    assert bi.is_garbled("\x00\x02\x01\x04\x03\x05\x01\x04\x06\x08\x07\n\t\x08\x0b\r\x0c\x0f\x0e\x05\x10\x02\x11\x13\x12" * 3 + "abc def")
+    assert not bi.is_garbled("A perfectly ordinary sentence about circular convolution and binding.")
+    assert not bi.is_garbled("short")  # too short to judge
+
+
+def test_page_needs_ocr():
+    assert bi.page_needs_ocr("")
+    assert bi.page_needs_ocr("  \n \x00 ")
+    assert not bi.page_needs_ocr("Some real text on the page.")
+
+
+def test_ocr_used_for_image_only_pages_with_stub(tmp_path: Path, monkeypatch):
+    """Without needing a Tesseract install: the OCR hook is stubbed and its text lands in the index."""
+    pdf = make_image_only_pdf(tmp_path / "scan.pdf", "holographic reduced representation")
+    monkeypatch.setattr(bi, "find_tesseract", lambda: "/fake/tesseract")
+    monkeypatch.setattr(bi, "ocr_png", lambda png, tess, lang="eng": "Holographic reduced representation from OCR")
+    data = extract_pdf_data(pdf)
+    assert data["sources"].get("tesseract") == 1
+    assert data["empty_pages"] == []
+    assert data["pages"][0][3] == "tesseract"
+    assert "Holographic" in data["pages"][0][2]
+    assert any("Tesseract OCR" in w for w in data["warnings"])
+
+
+def test_no_ocr_flag_leaves_image_pages_empty(tmp_path: Path, monkeypatch):
+    pdf = make_image_only_pdf(tmp_path / "scan.pdf", "holographic reduced representation")
+    monkeypatch.setattr(bi, "find_tesseract", lambda: "/fake/tesseract")
+    called = []
+    monkeypatch.setattr(bi, "ocr_png", lambda *a, **k: called.append(1) or "x")
+    data = extract_pdf_data(pdf, ocr=False)
+    assert data["empty_pages"] == [1]
+    assert not called
+
+
+def test_missing_tesseract_warns_and_indexes_empty(tmp_path: Path, monkeypatch):
+    pdf = make_image_only_pdf(tmp_path / "scan.pdf", "holographic reduced representation")
+    monkeypatch.setattr(bi, "find_tesseract", lambda: None)
+    data = extract_pdf_data(pdf)
+    assert data["empty_pages"] == [1]
+    assert any("tesseract is not installed" in w for w in data["warnings"])
+
+
+@pytest.mark.skipif(shutil.which("tesseract") is None, reason="tesseract is not installed")
+def test_real_tesseract_reads_an_image_only_pdf(tmp_path: Path):
+    pdf = make_image_only_pdf(tmp_path / "scan.pdf", "holographic reduced representation")
+    db_path = tmp_path / "idx" / "index.sqlite"
+    summaries = index_documents([pdf], db_path=db_path, force=True)
+    assert summaries[0]["sources"].get("tesseract") == 1
+    con = sqlite3.connect(str(db_path))
+    hits = con.execute("SELECT page_no FROM pages_fts WHERE pages_fts MATCH 'holographic'").fetchall()
+    con.close()
+    assert hits == [(1,)]
