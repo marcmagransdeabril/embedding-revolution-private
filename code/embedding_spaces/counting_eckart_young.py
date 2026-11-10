@@ -20,7 +20,7 @@ for d in range(1, 9):
     assert best_random > error
     emb = u[:, :d] * s[:d]
     print(f"{d:2d} {error:7.2f} {np.sqrt(np.sum(s[d:] ** 2)):27.2f} {best_random:20.2f} "
-          f"{cosine(emb[index['dawn']], emb[index['dusk']]):15.2f}")
+          f"{cosine(emb[index['dawn']], emb[index['dusk']]):15.3f}")
 
 # The approximation is exact when d reaches the rank of the matrix.
 rank = int(np.sum(s > 1e-10))

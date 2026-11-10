@@ -11,13 +11,13 @@ PAIRS = [("dawn", "dusk"), ("king", "queen"), ("dawn", "king"), ("dawn", "xqzv")
 DIMS = [2, 4, 5, 6, 8, 12]
 # Rows of tbl-svd (PPMI, then SVD with each d), in the order of PAIRS.
 TBL_SVD = {
-    "PPMI": [0.04, 0.98, 0.05, 0.00, 0.33],
-    2: [1.00, 1.00, 0.59, 0.00, 1.00],
-    4: [1.00, 1.00, 0.09, 0.00, 1.00],
-    5: [1.00, 1.00, 0.09, 0.00, 1.00],
-    6: [0.48, 1.00, 0.09, 0.00, 0.68],
-    8: [0.04, 1.00, 0.03, 0.00, 0.33],
-    12: [0.04, 0.98, 0.05, 0.00, 0.33],
+    "PPMI": [0.041, 0.980, 0.045, 0.000, 0.331],
+    2: [0.999, 1.000, 0.585, 0.000, 1.000],
+    4: [0.997, 1.000, 0.090, 0.000, 0.999],
+    5: [0.997, 1.000, 0.090, 0.000, 0.999],
+    6: [0.478, 1.000, 0.094, 0.000, 0.681],
+    8: [0.041, 1.000, 0.034, 0.000, 0.326],
+    12: [0.041, 0.980, 0.045, 0.000, 0.331],
 }
 
 # tbl-svd: cosine of five pairs for the PPMI matrix and for the embeddings with increasing d.
@@ -25,12 +25,12 @@ print(f"{'':10s}" + "".join(f"{a + '-' + b:>14s}" for a, b in PAIRS))
 rows = {"PPMI": [cosine(pmi[index[a]], pmi[index[b]]) for a, b in PAIRS]}
 for d in DIMS:
     e = truncated_svd(pmi, d)
-    # For d <= 4 the vector of `xqzv` is zero (up to rounding errors of 1e-16): the cosine is undefined, and we report 0.
+    # For d <= 4 the vector of `xqzv` is zero (up to rounding errors of 1e-16): the cosine is undefined, and we store 0 here and the table shows a dash.
     rows[d] = [0.0 if min(np.linalg.norm(e[index[a]]), np.linalg.norm(e[index[b]])) < 1e-8
                else cosine(e[index[a]], e[index[b]]) for a, b in PAIRS]
 for name, row in rows.items():
-    print(f"{str(name):10s}" + "".join(f"{c:14.2f}" for c in row))
-    assert np.allclose(row, TBL_SVD[name], atol=0.005), (name, row)
+    print(f"{str(name):10s}" + "".join(f"{c:14.3f}" for c in row))
+    assert np.allclose(row, TBL_SVD[name], atol=0.00051), (name, row)
 
 # `breaks` and `falls` share only the neighbour `over`: similar in the embeddings, not in the PPMI matrix.
 assert rows["PPMI"][4] < 0.4 and rows[5][4] > 0.99
