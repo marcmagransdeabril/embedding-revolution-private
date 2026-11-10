@@ -25,9 +25,9 @@ In doing so, Shannon deliberately set aside the question of *meaning*:
 
 > *"These semantic aspects of communication are irrelevant to the engineering problem."* — Claude Shannon (1948)
 
-Today, modern artificial intelligence has arrived at the reciprocal breakthrough: **the Embedding Revolution**. 
+More than seven decades later, artificial intelligence has arrived at the reciprocal breakthrough: **the Embedding Revolution**. 
 
-Beneath transformer attention mechanisms, diffusion models, and generative chatbots lies a profound shift: language, images, molecules, robot trajectories, and relational graphs have all been mapped, with remarkable success, to points in continuous, high-dimensional spaces. Once embedded, similarity becomes an inner product, and analogies often become offsets between vectors.
+Beneath the architectures of the last decade (attention, diffusion, generative chatbots) lies a profound shift: language, images, molecules, robot trajectories, and relational graphs have all been mapped, with remarkable success, to points in continuous, high-dimensional spaces. Once embedded, similarity becomes an inner product, and analogies often become offsets between vectors.
 
 ### The Thesis of This Book
 
@@ -41,10 +41,10 @@ The reach of this paradigm is broad, and so are the questions it raises:
 
 - **Natural Language:** Tokens, sentences, and documents mapped to continuous semantic coordinates.
 - **Perception (Vision, Audio, Video):** Pixels, audio waveforms, and video frames, each encoded into vectors by encoders built for the symmetries of that signal.
-- **Multimodal Meaning:** Text, images, sound, and motion projected into one shared metric space, so that a photograph, a word, and a sound of the same thing become neighbours (e.g., CLIP for images and text, ImageBind for six modalities).
+- **Multimodal Meaning:** Text, images, sound, and motion projected into one shared metric space, so that a photograph, a word, and a sound of the same thing become neighbours (e.g., CLIP for images and text in 2021, ImageBind for six modalities in 2023).
 - **Biology & Chemistry:** Amino acid sequences and molecular structures represented as continuous vectors (e.g., protein language models).
 - **Knowledge Graphs & Logic:** Discrete entities and relational predicates transformed into continuous translational and rotational operators ($\mathbb{R}^D, \mathbb{C}^D$).
-- **Agentic Trajectories and Reasoning:** Goals, world states, and plans represented as vectors, and behaviour as trajectories of such vectors (e.g., world models that predict the next state in latent space and plan there). Reasoning can follow such a trajectory too, or keep leaving the space to write each step down in words, as a chain of thought does.
+- **Action, Planning and Reasoning:** Goals, world states, and plans represented as vectors, and behaviour as trajectories of such vectors (e.g., world models that predict the next state in latent space and plan there). Reasoning can follow such a trajectory too, or keep leaving the space to write each step down in words, as a chain of thought does.
 
 Each item is also a question: what does the vector keep, and what does it lose?
 
@@ -64,7 +64,7 @@ Navigating this counter-intuitive landscape requires a toolkit that blends linea
 
 ## Disclaimer {.unnumbered}
 
-The mathematics presented in this book, and the historical arguments that connect it, are meant to last: Shannon's entropy, Rice's theorem, and concentration of measure will not change with the next model release. Descriptions of specific systems, software libraries, API interfaces, model sizes, and benchmark numbers, by contrast, are a snapshot of the state of artificial intelligence, geometric deep learning, and neurosymbolic computing as of 2026. They are written as dated history wherever possible, and snapshots that are likely to change are marked in callouts titled "State of the art" with a year and month. 
+The mathematics presented in this book, and the historical arguments that connect it, are meant to last: Shannon's entropy, Rice's theorem, and concentration of measure will not change with the next model release. Descriptions of specific systems, software libraries, API interfaces, model sizes, and benchmark numbers, by contrast, are a snapshot of the state of artificial intelligence, geometric deep learning, and neurosymbolic computing as of 2026. They are written as dated history wherever possible, so that they remain true as a record of what was done even when they are no longer current.
 
 All code examples, mathematical proofs, and architectural blueprints are provided for educational and research purposes. While derivations are presented with rigorous mathematical grounding, simplified toy implementations are designed for conceptual clarity rather than production deployment. The author and publisher assume no liability for errors, omissions, or damages resulting from the use of the information contained herein.
 

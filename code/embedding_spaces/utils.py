@@ -1,24 +1,28 @@
-"""Shared helpers for the solution scripts: cached Project Gutenberg download, Shannon entropy and a toy vocabulary."""
-import tempfile
-import urllib.request
+"""Shared helpers for the solution scripts: the pinned Project Gutenberg text, Shannon entropy and a toy vocabulary."""
+import hashlib
+import zipfile
 from collections import Counter
 from math import log2
 from pathlib import Path
 
 import numpy as np
 
-URL = "https://www.gutenberg.org/cache/epub/1342/pg1342.txt"
-PATH = Path(tempfile.gettempdir()) / "embedding_revolution" / "pride_and_prejudice.txt"
+# The numbers in the book (entropies, word counts, nearest neighbours) are computed on this exact text, so it is
+# kept in the repository instead of being downloaded. Source: https://www.gutenberg.org/cache/epub/1342/pg1342.txt,
+# retrieved 2026-11-10 (identical to the copy used since 2026-11-05). Public domain, with the Project Gutenberg
+# header and licence left intact.
+BOOK_ZIP = Path(__file__).parent / "data" / "pride_and_prejudice.zip"
+BOOK_NAME = "pg1342.txt"
+BOOK_SHA256 = "3f6bb9d6f78e0293b56acd4714dd68cb7d6d1d293402031ce9d5a216bcaf9d75"
 
 
 def load_book() -> str:
-    """Lowercased book body (Gutenberg header and licence removed). Downloaded only if not cached in the temp dir."""
-    if not PATH.exists():
-        PATH.parent.mkdir(parents=True, exist_ok=True)
-        part = PATH.with_suffix(".part")
-        urllib.request.urlretrieve(URL, part)
-        part.replace(PATH)  # atomic: an interrupted download never leaves a truncated book
-    raw = PATH.read_text(encoding="utf-8-sig")
+    """Lowercased book body (Gutenberg header and licence removed), read from the pinned zip."""
+    with zipfile.ZipFile(BOOK_ZIP) as z:
+        data = z.read(BOOK_NAME)
+    if hashlib.sha256(data).hexdigest() != BOOK_SHA256:
+        raise ValueError(f"{BOOK_ZIP} does not contain the pinned text (sha256 mismatch)")
+    raw = data.decode("utf-8-sig")
     body = raw.split("*** START OF", 1)[1].split("***", 1)[1].split("*** END OF", 1)[0]
     return body.lower()
 
