@@ -3,6 +3,11 @@
 
 Extracts per-page text and embedded PDF bookmarks (TOC) into an indexed SQLite
 store (FTS5 + Porter stemming).
+
+Pages with no text layer (scans) or an unreadable one (garbled font encodings)
+are read with Tesseract OCR when the `tesseract` binary is on PATH. The PDF is
+never modified: the OCR text is stored in the index with source "tesseract".
+Pass --no-ocr to skip this step.
 """
 from __future__ import annotations
 
@@ -10,9 +15,12 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sqlite3
+import subprocess
 import sys
 import unicodedata
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
@@ -70,6 +78,49 @@ def sanitize_text(text: str) -> str:
     # Collapse 3+ newlines to 2 newlines
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
+
+
+OCR_DPI = 300
+OCR_LANG = "eng"
+OCR_TIMEOUT_S = 180
+# Share of control characters (other than whitespace) above which a page's text layer is
+# treated as unreadable. Measured on the reference corpus: correct pages stay below 0.07,
+# a PDF with a broken font encoding sits above 0.11.
+GARBLED_CONTROL_RATIO = 0.08
+
+
+def find_tesseract() -> str | None:
+    """Path of the `tesseract` binary, or None when it is not installed."""
+    return shutil.which("tesseract")
+
+
+def is_garbled(raw_text: str) -> bool:
+    """True when extracted text is mostly control characters (broken font encoding)."""
+    compact = re.sub(r"\s", "", raw_text)
+    if len(compact) < 30:
+        return False
+    control = sum(1 for c in raw_text if ord(c) < 32 and c not in "\t\n\r")
+    return control / len(compact) > GARBLED_CONTROL_RATIO
+
+
+def page_needs_ocr(raw_text: str) -> bool:
+    """A page needs OCR when it has no text at all or when its text layer is unreadable."""
+    return not sanitize_text(raw_text) or is_garbled(raw_text)
+
+
+def ocr_png(png: bytes, tesseract: str, lang: str = OCR_LANG) -> str:
+    """Run Tesseract on one PNG image passed through stdin; return the recognised text."""
+    env = dict(os.environ, OMP_THREAD_LIMIT="1")  # one thread per process, parallelism is across pages
+    proc = subprocess.run(
+        [tesseract, "stdin", "stdout", "-l", lang],
+        input=png,
+        capture_output=True,
+        timeout=OCR_TIMEOUT_S,
+        env=env,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.decode("utf-8", "replace").strip() or f"tesseract exit {proc.returncode}")
+    return proc.stdout.decode("utf-8", "replace")
 
 
 def extract_and_normalize_toc(doc: pymupdf.Document, doc_stem: str) -> tuple[list[tuple[str, str, int, int]], list[str]]:
@@ -145,8 +196,12 @@ def init_db(db_path: Path) -> sqlite3.Connection:
         return con
 
 
-def extract_pdf_data(pdf_path: Path) -> dict[str, Any]:
-    """Extract pages, text, and TOC for a PDF file."""
+def extract_pdf_data(pdf_path: Path, ocr: bool = True, ocr_lang: str = OCR_LANG) -> dict[str, Any]:
+    """Extract pages, text, and TOC for a PDF file.
+
+    Pages without a readable text layer are OCRed with Tesseract when `ocr` is true and the
+    binary is available; otherwise they are indexed as empty and a warning says why.
+    """
     doc_stem = pdf_path.stem
     warnings: list[str] = []
 
@@ -192,21 +247,64 @@ def extract_pdf_data(pdf_path: Path) -> dict[str, Any]:
     source_counts = {"pymupdf": 0}
     source = "pymupdf"
 
+    # Pass 1: text layer, and the list of pages that need OCR.
+    texts: list[str] = []
+    ocr_pages: list[int] = []  # 0-based indices
+    for i in range(page_count):
+        try:
+            raw_text = doc[i].get_text()
+            if page_needs_ocr(raw_text):
+                ocr_pages.append(i)
+                # Never index an unreadable text layer; blank pages stay blank.
+                text = ""
+            else:
+                text = sanitize_text(raw_text)
+        except Exception as e:
+            warnings.append(f"Error extracting text from page {i + 1}: {e}")
+            text = ""
+        texts.append(text)
+
+    # Pass 2: OCR. Rendering stays in this thread (PyMuPDF is not thread-safe); Tesseract
+    # processes run in parallel.
+    ocr_done: set[int] = set()
+    tesseract = find_tesseract() if (ocr and ocr_pages) else None
+    if ocr_pages and tesseract:
+        workers = min(os.cpu_count() or 2, 8)
+        failures = 0
+        with ThreadPoolExecutor(max_workers=workers) as pool:
+            futures = {}
+            for i in ocr_pages:
+                try:
+                    png = doc[i].get_pixmap(dpi=OCR_DPI, colorspace=pymupdf.csGRAY).tobytes("png")
+                except Exception as e:
+                    warnings.append(f"Could not render page {i + 1} for OCR: {e}")
+                    failures += 1
+                    continue
+                futures[i] = pool.submit(ocr_png, png, tesseract, ocr_lang)
+            for i, fut in futures.items():
+                try:
+                    ocr_text = sanitize_text(fut.result())
+                except Exception as e:
+                    warnings.append(f"OCR failed on page {i + 1}: {e}")
+                    continue
+                if ocr_text:
+                    texts[i] = ocr_text
+                    ocr_done.add(i)
+        if ocr_done:
+            warnings.append(f"{len(ocr_done)} page(s) read with Tesseract OCR (text layer missing or unreadable)")
+    elif ocr_pages and ocr:
+        warnings.append(
+            f"{len(ocr_pages)} page(s) have no readable text layer and tesseract is not installed, "
+            "so they are indexed as empty (install tesseract and run build_index.py --force <pdf>)"
+        )
+
     for i in range(page_count):
         page_no = i + 1
-        try:
-            page = doc[i]
-            raw_text = page.get_text()
-            text = sanitize_text(raw_text)
-        except Exception as e:
-            warnings.append(f"Error extracting text from page {page_no}: {e}")
-            text = ""
-
-        if not text:
+        page_source = "tesseract" if i in ocr_done else source
+        if not texts[i]:
             empty_pages.append(page_no)
-
-        source_counts[source] = source_counts.get(source, 0) + 1
-        pages_rows.append((doc_stem, page_no, text, source))
+        source_counts[page_source] = source_counts.get(page_source, 0) + 1
+        pages_rows.append((doc_stem, page_no, texts[i], page_source))
 
     doc.close()
 
@@ -322,6 +420,8 @@ def index_documents(
     dry_run: bool = False,
     references_dir: Path | None = None,
     prune: bool = True,
+    ocr: bool = True,
+    ocr_lang: str = OCR_LANG,
 ) -> list[dict[str, Any]]:
     """Build or audit index for specified PDF files."""
     summaries = []
@@ -355,7 +455,7 @@ def index_documents(
                 })
                 continue
 
-        data = extract_pdf_data(pdf_path)
+        data = extract_pdf_data(pdf_path, ocr=ocr, ocr_lang=ocr_lang)
 
         if data["status"] == "ok" and not dry_run and con is not None:
             save_doc_to_db(con, doc_stem, data["pages"], data["toc"])
@@ -403,6 +503,8 @@ def main() -> None:
         action="store_true",
         help="skip removing indexed documents whose source PDF no longer exists in references-dir",
     )
+    ap.add_argument("--no-ocr", action="store_true", help="do not OCR pages that have no readable text layer")
+    ap.add_argument("--ocr-lang", default=OCR_LANG, help="Tesseract language(s) for OCR, e.g. eng or eng+fra (default: eng)")
     args = ap.parse_args()
 
     db_path = args.db_path or (args.references_dir / ".ground-index" / "index.sqlite")
@@ -420,6 +522,8 @@ def main() -> None:
         dry_run=args.dry_run,
         references_dir=args.references_dir,
         prune=not args.no_prune,
+        ocr=not args.no_ocr,
+        ocr_lang=args.ocr_lang,
     )
 
     print(json.dumps(summaries, indent=2))

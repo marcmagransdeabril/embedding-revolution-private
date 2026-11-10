@@ -15,11 +15,11 @@ for a, b in PAIRS:
     cos[a, b] = [cosine(m[index[a]], m[index[b]]) for m in reps.values()]
     print(f"{a + '-' + b:14s}" + "".join(f"{c:9.2f}" for c in cos[a, b]))
 
-# The rows of the two words of the first pair, and the total number of pairs N.
+# The rows of the two words of the first pair, and the total number of pairs |D|.
 for w in ("dawn", "dusk"):
     print(w, {vocab[j]: int(counts[index[w], j]) for j in np.nonzero(counts[index[w]])[0]})
 n = counts.sum()
-print("N =", int(n), " PMI(dawn, breaks) =", round(float(np.log2(counts[index["dawn"], index["breaks"]] / n
+print("|D| =", int(n), " PMI(dawn, breaks) =", round(float(np.log2(counts[index["dawn"], index["breaks"]] / n
       / (counts[index["dawn"]].sum() / n * counts[index["breaks"]].sum() / n))), 2),
       " PMI(dawn, the) =", round(float(np.log2(counts[index["dawn"], index["the"]] / n
       / (counts[index["dawn"]].sum() / n * counts[index["the"]].sum() / n))), 2))

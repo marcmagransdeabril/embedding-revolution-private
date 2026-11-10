@@ -231,7 +231,7 @@ if __name__ == "__main__":
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6.4, 2.6))
     ax1.plot([0, 7.5], [0, 7.5], "--", color="gray", linewidth=0.8, label=r"cap $\log_2 N$")
     ax1.errorbar(logs, bound.mean(1), [bound.mean(1) - bound.min(1), bound.max(1) - bound.mean(1)], marker="o", markersize=3,
-                 linewidth=1, color="C3", label=r"bound $\log_2 N - \mathcal{L}$")
+                 linewidth=1, color="C3", label=r"bound $\log_2 N - \ell_N$")
     ax1.set(xlabel=r"$\log_2 N$ (bits)", ylabel="bits", title="(a) the bound under its cap")
     ax1.legend(fontsize=6)
     ax2.errorbar(BATCHES, found.mean(1), [found.mean(1) - found.min(1), found.max(1) - found.mean(1)], marker="o", markersize=3,

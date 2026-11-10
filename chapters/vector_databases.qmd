@@ -8,7 +8,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*
 
 ## What a Fixed-Dimension Dot Product Can Express
-*The structural limit: how many distinct rankings and subsets a query vector of dimension $d$ can realize, and what that means for negation, conjunction, and multi-hop queries.*
+*Where the dot product comes from: a dual encoder trained with the contrastive loss of Chapter 3, in which a question and the passage that answers it are a positive pair and the other passages of the batch are the negatives [@karpukhin2020dense, pp. 6771–6772]. The structural limit: how many distinct rankings and subsets a query vector of dimension $d$ can realize, and what that means for negation, conjunction, and multi-hop queries.*
 
 ## Retrieval-Augmented Generation
 *Bridging parametric model memory with external latent storage, told as the answer of the 2020s.*

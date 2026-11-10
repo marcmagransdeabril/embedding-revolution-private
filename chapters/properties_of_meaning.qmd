@@ -11,7 +11,7 @@ Figure (planned): a small map in which "dog", "puppy", and "wolf" cluster, while
 
 Earned in Chapter 3 (where the distances come from), Chapter 2 (why distance still works in many dimensions), and Chapter 4 (search by nearness).
 
-Sources (first pass). The distributional idea that likeness of meaning shows as likeness of company [@harris1954distributional; @firth1957synopsis]; the first vector spaces built from counts [@deerwester1990indexing; @lund1996producing]; generalization that falls off with distance in a psychological space [@shepard1987toward]; meanings as points in a space of quality dimensions [@gardenfors2000conceptual]. A caveat: human similarity judgements are not always symmetric or metric [@tversky1977features].
+Sources (first pass). The distributional idea that likeness of meaning shows as likeness of company [@harris1954distributional; @firth1957synopsis]; the first vector spaces built from counts [@deerwester1990indexing; @lund1996producing]; generalization that falls off with distance in a psychological space [@shepard1987toward]; meanings as points in a space of quality dimensions [@gardenfors2000conceptual]. Two caveats: human similarity judgements are not always symmetric or metric [@tversky1977features], and in some trained spaces all vectors share a large common direction, so that raw nearness is relative to the space (Chapter 3).
 
 ## Difference Is a Relation {#sec-prop-difference}
 *The step from one meaning to another is itself meaningful, and the same step can be taken from elsewhere.*
