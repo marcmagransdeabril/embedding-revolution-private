@@ -7,7 +7,7 @@ In 1948, Claude Shannon defined information as the reduction of uncertainty, mea
 
 The *Embedding Revolution* complements Shannon's syntactic theory with a semantic one, developed since the 1990s as part of the deep learning revolution. Meaning, or at least its statistical shadow, can also be represented as continuous coordinates on high-dimensional manifolds. Fittingly, this is done with Shannon's own tools, since cross-entropy and mutual information are the objectives that shape these spaces.
 
-Chapter 1 listed what meaning looks like as geometry, and Chapter 2 showed why high-dimensional vectors have room for it and what are the dangers adn opportunities ahead. This chapter builds such vectors. We start with what Shannon and Chomsky left out, symbols with no interior, and with Rice's theorem, which puts exact meaning out of reach even for programs. We then build vectors that carry graded meaning in four ways, by counting, predicting, contrasting and predicting embeddings, look at the geometry they share, and close with the limits of a single vector, which the rest of the book examines.
+Chapter 1 listed what meaning looks like as geometry, and Chapter 2 showed why high-dimensional vectors have room for it and what are the dangers and opportunities ahead. This chapter builds such vectors. We start with what Shannon and Chomsky left out, symbols with no interior, and with Rice's theorem, which puts exact meaning out of reach even for programs. We then build vectors that carry graded meaning in four ways, by counting, predicting, contrasting and predicting embeddings, look at the geometry they share, and close with the limits of a single vector, which the rest of the book examines.
 
 ## Shannon's Information Theory
 
