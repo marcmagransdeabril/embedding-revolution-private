@@ -33,6 +33,11 @@ REFERENCES_DIR = REPO_ROOT / "references"
 
 _UNNUMBERED_H1_RE = re.compile(r"^# .*\{[^}]*(?:\.unnumbered|-)[^}]*\}\s*$")
 
+# Chapter references are written @sec-ch-<stem>, or [-@sec-ch-<stem>] inside "Chapters A to B", so that Quarto and
+# filters/book-chapter-refs.lua number them from the order of _quarto.yml. Turn the lint on once the book is converted.
+LINT_LITERAL_CHAPTERS = False
+_LITERAL_CHAPTER_RE = re.compile(r"\bChapters? \d+")
+
 
 class ValidationIssue:
     def __init__(self, file: Path, line: int, severity: str, message: str) -> None:
@@ -44,6 +49,36 @@ class ValidationIssue:
     def __str__(self) -> str:
         rel = self.file.relative_to(REPO_ROOT) if self.file.is_relative_to(REPO_ROOT) else self.file
         return f"[{self.severity}] {rel}:{self.line}: {self.message}"
+
+
+def _first_h1(body: str) -> str | None:
+    """The first level-1 heading outside code fences, or None."""
+    in_fence = False
+    for line in body.splitlines():
+        if line.startswith("```"):
+            in_fence = not in_fence
+        elif not in_fence and re.match(r"^# \S", line):
+            return line
+    return None
+
+
+def validate_chapter_references(path: Path, lines: list[str]) -> list[ValidationIssue]:
+    """Warn on a literal "Chapter N" outside code; write @sec-ch-<stem> instead."""
+    issues: list[ValidationIssue] = []
+    in_fence = False
+    for idx, line in enumerate(lines, start=1):
+        if line.startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        prose = re.sub(r"`[^`]*`", "", line)
+        m = _LITERAL_CHAPTER_RE.search(prose)
+        if m:
+            issues.append(ValidationIssue(
+                path, idx, "WARNING",
+                f"literal '{m.group()}': write @sec-ch-<file-stem> (and [-@sec-ch-<file-stem>] after 'Chapters')"))
+    return issues
 
 
 def validate_frontmatter(path: Path, text: str) -> list[ValidationIssue]:
@@ -68,8 +103,13 @@ def validate_frontmatter(path: Path, text: str) -> list[ValidationIssue]:
         fm = yaml.safe_load(raw_yaml)
         if not isinstance(fm, dict):
             issues.append(ValidationIssue(path, 1, "ERROR", "YAML frontmatter must be a dictionary"))
-        elif "title" not in fm or not str(fm["title"]).strip():
-            issues.append(ValidationIssue(path, 1, "ERROR", "YAML frontmatter missing non-empty 'title'"))
+        else:
+            front_title = bool(str(fm.get("title") or "").strip())
+            h1_title = _first_h1(text[fm_match.end():]) is not None
+            if not front_title and not h1_title:
+                issues.append(ValidationIssue(path, 1, "ERROR", "YAML frontmatter missing non-empty 'title' (or give the title as a level-1 heading)"))
+            elif front_title and h1_title:
+                issues.append(ValidationIssue(path, 1, "WARNING", "title given twice: in the front matter and in a level-1 heading"))
     except yaml.YAMLError as e:
         issues.append(ValidationIssue(path, 1, "ERROR", f"YAML frontmatter parse error: {e}"))
 
@@ -515,6 +555,8 @@ def validate_qmd_file(path: Path, citations: bool = True, strict: bool = False) 
     issues.extend(validate_code_chunks(path, text))
     issues.extend(validate_math_delimiters(path, lines))
     issues.extend(validate_section_breaks(path, lines))
+    if LINT_LITERAL_CHAPTERS:
+        issues.extend(validate_chapter_references(path, lines))
     if citations:
         issues.extend(validate_citations(path, text, strict=strict))
 

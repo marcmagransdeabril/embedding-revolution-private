@@ -58,12 +58,13 @@ FASHION = re.compile(
     r"\b(RAG|Retrieval-Augmented|Transformers?|Quantum|Topological Deep Learning|Agentic|LLMs?|GPT|"
     r"Neural Theorem Proving|Databases)\b"
 )
-TITLE_LINE = re.compile(r"^(?:#{1,3} .*|title: .*|\* \*\*Chapter \d+:.*)$")
+TITLE_LINE = re.compile(r"^(?:#{1,3} .*|title: .*|\* \*\*(?:Chapter \d+|@sec-ch-[\w-]+):.*)$")
 
 _FRONT = re.compile(r"^---\r?\n(.*?)\r?\n---\r?\n?", re.DOTALL)
 _HEADING = re.compile(r"^(#{1,6}) (.*?)(?:\s*\{([^}]*)\})?\s*$")
 _OPEN_COMMENT = re.compile(r"<!--\s*OPEN:(.*?)-->", re.DOTALL)
-_INDEX_TAG = re.compile(r"^\* \*\*(Chapter \d+|Epilogue): .*?\.\*\*\s*\*\((\w+)\)\*", re.MULTILINE)
+# A roadmap entry is keyed "Chapter N" (literal number), "@sec-ch-<stem>" (label, the form that survives reordering) or "Epilogue".
+_INDEX_TAG = re.compile(r"^\* \*\*(Chapter \d+|@sec-ch-[\w-]+|Epilogue): .*?\.\*\*\s*\*\((\w+)\)\*", re.MULTILINE)
 
 
 # --------------------------------------------------------------------- status
@@ -155,13 +156,39 @@ def index_tags(index_text: str) -> dict[str, str]:
     return {m.group(1): m.group(2) for m in _INDEX_TAG.finditer(index_text)}
 
 
+def chapter_label(path: str) -> str:
+    """The roadmap key of a chapter file: chapters/embedding_spaces.qmd -> @sec-ch-embedding-spaces."""
+    return "@sec-ch-" + Path(path).stem.replace("_", "-")
+
+
+def roadmap_order_problems(keys: list[str], numbered: list[str]) -> list[tuple[str, str, str]]:
+    """The chapters of the roadmap must appear once each and in the order of _quarto.yml."""
+    labels = [chapter_label(f) for f in numbered]
+    positions, problems = [], []
+    for k in keys:
+        if k == "Epilogue":
+            continue
+        if k.startswith("@sec-ch-"):
+            if k in labels:
+                positions.append(labels.index(k))
+            else:
+                problems.append(("error", "index.qmd", f"the roadmap lists {k}, which is not a numbered chapter of _quarto.yml"))
+        else:
+            positions.append(int(k.split()[1]) - 1)
+    if positions != sorted(set(positions)):
+        problems.append(("error", "index.qmd", "the order of the roadmap differs from the order of _quarto.yml (or repeats a chapter)"))
+    return problems
+
+
 def status_report(root: Path = REPO_ROOT) -> tuple[list[dict], list[tuple[str, str, str]]]:
     """Rows (one per chapter) and (severity, where, message) problems."""
     rows, problems = [], []
     order = book_order(root)
     tags = index_tags((root / "index.qmd").read_text(encoding="utf-8"))
     numbered = [f for f in order if not f.endswith("epilogue.qmd")]
-    expected_keys = {f: (f"Chapter {i}" if i else None) for i, f in enumerate(numbered, 1)}
+    problems.extend(roadmap_order_problems(list(tags), numbered))
+    # A chapter is found in the roadmap by its label, else by its position ("Chapter N").
+    expected_keys = {f: (chapter_label(f) if chapter_label(f) in tags else f"Chapter {i}") for i, f in enumerate(numbered, 1)}
     for f in order:
         text = (root / f).read_text(encoding="utf-8")
         st = chapter_status(text)

@@ -130,3 +130,62 @@ def test_diff_reports_only_changes():
     assert any("median year 1950 -> 2020" in line for line in out)
     assert any("relative_wording: +1 new" in line for line in out)
     assert any(line.startswith("status:") for line in out)
+
+
+# ---- roadmap entries written as @sec-ch-<stem> (Step 0 of notes/generative_chapter_plan.md)
+
+def make_labelled_book(tmp_path, roadmap_keys, tag="definitive", chapters=("a", "b")):
+    """A book of chapters a, b (and an epilogue) whose roadmap lists `roadmap_keys` in the given order."""
+    (tmp_path / "chapters").mkdir()
+    listed = "".join(f"    - chapters/{c}.qmd\n" for c in chapters)
+    (tmp_path / "_quarto.yml").write_text(
+        f"book:\n  chapters:\n  - index.qmd\n  - part: P\n    chapters:\n{listed}  - chapters/epilogue.qmd\n  - chapters/solutions.qmd\n")
+    lines = [f"* **{k}: T.** *({tag})* x\n" for k in roadmap_keys]
+    (tmp_path / "index.qmd").write_text("".join(lines) + "* **Epilogue: E.** *(idea)* y\n")
+    for c in chapters:
+        (tmp_path / "chapters" / f"{c}.qmd").write_text(f"---\nstatus: {tag}\n---\n\n# {c.upper()} {{#sec-ch-{c}}}\n\ntext\n")
+    (tmp_path / "chapters" / "epilogue.qmd").write_text("# E {.unnumbered .idea}\n\ntext\n")
+    return tmp_path
+
+
+def test_index_tags_accept_a_chapter_label_in_place_of_the_number():
+    idx = "* **@sec-ch-embedding-spaces: A.** *(definitive)* text\n* **Epilogue: B.** *(idea)* text\n"
+    assert dm.index_tags(idx) == {"@sec-ch-embedding-spaces": "definitive", "Epilogue": "idea"}
+
+
+def test_status_report_reads_roadmap_entries_by_label(tmp_path):
+    rows, problems = dm.status_report(make_labelled_book(tmp_path, ["@sec-ch-a", "@sec-ch-b"]))
+    assert [r["index_tag"] for r in rows] == ["definitive", "definitive", "idea"]
+    assert problems == []
+
+
+def test_status_report_flags_a_label_tag_mismatch(tmp_path):
+    book = make_labelled_book(tmp_path, ["@sec-ch-a", "@sec-ch-b"])
+    (book / "chapters" / "b.qmd").write_text("---\nstatus: idea\n---\n\n# B {#sec-ch-b}\n\ntext\n")
+    _, problems = dm.status_report(book)
+    assert any(s == "error" and "differs" in m for s, _, m in problems)
+
+
+def test_status_report_flags_a_roadmap_in_a_different_order_than_quarto_yml(tmp_path):
+    _, problems = dm.status_report(make_labelled_book(tmp_path, ["@sec-ch-b", "@sec-ch-a"]))
+    assert any(s == "error" and "order" in m for s, _, m in problems)
+
+
+def test_status_report_flags_a_roadmap_label_that_is_not_a_chapter(tmp_path):
+    _, problems = dm.status_report(make_labelled_book(tmp_path, ["@sec-ch-a", "@sec-ch-b", "@sec-ch-gone"]))
+    assert any(s == "error" and "sec-ch-gone" in m for s, _, m in problems)
+
+
+def test_status_report_flags_literal_numbers_out_of_order_or_repeated(tmp_path):
+    _, problems = dm.status_report(make_labelled_book(tmp_path, ["Chapter 2", "Chapter 1"]))
+    assert any(s == "error" and "order" in m for s, _, m in problems)
+
+
+def test_status_report_accepts_literal_numbers_in_order(tmp_path):
+    _, problems = dm.status_report(make_labelled_book(tmp_path, ["Chapter 1", "Chapter 2"]))
+    assert problems == []
+
+
+def test_fashion_titles_look_at_roadmap_entries_written_with_a_label():
+    texts = {"index.qmd": "* **@sec-ch-v: Vector Databases, RAG.** *(idea)* text\n"}
+    assert len(dm.fashion_titles(texts)) == 1

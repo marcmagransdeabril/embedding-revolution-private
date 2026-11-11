@@ -76,17 +76,28 @@ durability:
 
 check: validate
 
+# Quarto only warns about a cross-reference it cannot resolve (exit status 0, "?@sec-..." in the text). A chapter that
+# was renamed or dropped must stop the build, so the log is kept in .quarto/ and searched. HTML also stops by itself
+# (filters/book-chapter-refs.lua). Usage: $(call render,<format>)
+define render
+	@mkdir -p .quarto
+	@set -o pipefail; $(EXPORT_PATH) quarto render --to $(1) --no-clean 2>&1 | tee .quarto/render-$(1).log
+	@if grep -aq "Unable to resolve crossref" .quarto/render-$(1).log; then \
+	  echo "ERROR: unresolved cross-references in the $(1) build (a label is misspelt, or its chapter was renamed or dropped):" >&2; \
+	  grep -a "Unable to resolve crossref" .quarto/render-$(1).log | sort -u >&2; exit 1; fi
+endef
+
 pdf: sync-chapters sync-solutions
 	@echo "==> Building PDF Book (O'Reilly Format 7in x 9.1875in)..."
-	@$(EXPORT_PATH) quarto render --to pdf --no-clean
+	$(call render,pdf)
 
 html: sync-chapters sync-solutions
 	@echo "==> Building Multi-Page HTML Book..."
-	@$(EXPORT_PATH) quarto render --to html --no-clean
+	$(call render,html)
 
 epub: sync-chapters sync-solutions
 	@echo "==> Building EPUB 3 Book..."
-	@$(EXPORT_PATH) quarto render --to epub --no-clean
+	$(call render,epub)
 
 preview: sync-solutions
 	@echo "==> Launching Quarto live preview server..."

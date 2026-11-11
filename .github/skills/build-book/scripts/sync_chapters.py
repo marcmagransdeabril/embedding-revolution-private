@@ -135,7 +135,8 @@ def extract_title_from_qmd(qmd_path: Path) -> str:
     for line in text.splitlines():
         line = line.strip()
         if line.startswith("# "):
-            return line[2:].strip()
+            # Drop the attributes of `# Title {#sec-ch-... .unnumbered}`: only the words are matched against the outline.
+            return re.sub(r"\s*\{[^}]*\}\s*$", "", line[2:]).strip()
 
     return qmd_path.stem.replace("_", " ").title()
 

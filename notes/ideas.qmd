@@ -2,11 +2,76 @@
 title: "Ideas outside the book"
 ---
 
-This file is not part of the book (it is not listed in `_quarto.yml`). It keeps what the book explored and left, with the reason, so the same idea is not explored twice, and the durability actions that are still open. Ideas that are still alive stay in the chapters, tagged `provisional` or `idea`.
+This file is not part of the book (it is not listed in `_quarto.yml`). It keeps the open ideas, sorted by how far the classics point the same way, what the book explored and left, with the reason, so the same idea is not explored twice, and the durability actions that are still open. Ideas that are still alive stay in the chapters, tagged `provisional` or `idea`.
+
+## Open ideas, sorted by Lindy alignment
+
+Lines of exploration that came out of the review of embedding and latent spaces (`tmp/emb_vs_lat.md`, gaps in brackets). A speculative idea is explored first where the classics point the same way, because an idea backed by old sources has more future than one backed only by recent ones.
+
+How alignment is judged. A *classic* is a source from before 1980 that is held in `references/` and whose page was read. For each idea the classics are listed with what they say and whether they say it *directly* (about this very idea) or *by analogy* (the same principle, another object). Ties are broken mechanically, in this order: direct classics, all classics, sources from 1980 to 2009, oldest source. Levels: **High** is at least one direct classic and one more; **Medium** is one direct classic, or two by analogy; **Mixed** is a classic on each side; **Low** is no direct classic. A classic that points against an idea is reported, not hidden: the idea is then written as a test, not a claim. Alignment says where to look first, not whether the idea is true. Re-sort when evidence changes.
+
+### 1. Reasoning in the space as search over alternatives [Gap 9]
+- **Alignment:** High.
+- **Classics, direct:** problem solving "takes place by search in a problem space", "a major invariant of problem solving behavior" (Newell and Simon 1972, p. 819); heuristic search that expands the fewest nodes needed to find an optimal path (Hart et al. 1968, pp. 6-7).
+- **Younger:** Coconut's continuous thought "can encode multiple alternative next reasoning steps", a breadth-first search (Hao et al. 2024, pp. 1-2; the authors' claim).
+- **Explore by:** the classics say that reasoning is a search with a frontier of alternatives, and that a single path is the special case. Chapter 5 can state Coconut as a neural instance of that picture and test whether its claim replicates. The Prologue's "path" wording then needs a second look.
+- **Not claimed:** that a network actually performs the search the classics describe.
+
+### 2. Reconstruction as a fifth objective: autoencoders and VAEs [Gap 1]
+- **Alignment:** High.
+- **Classics:** the best matrix of rank $r$ in the least-squares sense, "every element of the given matrix being given equal weight" (Eckart and Young 1936, p. 2), which is a linear autoencoder (direct, through Bishop 2023, p. 575 for the link); "reproducing at one point either exactly or approximately a message selected at another point" (Shannon 1948, p. 1; by analogy, the problem an encoder and decoder solve).
+- **Younger:** autoencoders and VAEs (Bishop 2023, pp. 575 and 580); latent diffusion (Rombach et al. 2022, pp. 4-5).
+- **Explore by:** present the nonlinear autoencoder as the generalization of the Eckart-Young result the chapter already proves, and add the objective to the "what the vector pays for" comparison. Cheap own experiment: compare a linear autoencoder with the truncated SVD on the Chapter 3 corpus matrix.
+
+### 3. The generative tradition of "latent" and its bridge to embeddings [Gap 2]
+- **Alignment:** High.
+- **Classics:** maximum likelihood for models with unobserved variables, with factor analysis and finite mixtures as examples (Dempster et al. 1977, p. 2; direct); the SVD as a best low-rank approximation (Eckart and Young 1936, p. 2), which Hastie et al. (p. 577) show has a latent variable representation (by analogy).
+- **Established:** LSI estimates "latent semantic structure" with the SVD (Deerwester et al. 1990, p. 1); LDA grew out of the attempt to explain LSI, and Arora et al. 2016 (p. 2) link PMI embeddings to a latent variable model.
+- **Explore by:** tell the two traditions as one story that begins before deep learning. Chapter 3 gets a sentence on where topic models sit next to points and regions.
+
+### 4. Compatibility of embeddings across model versions: alignment up to a transformation [Gap 6]
+- **Alignment:** Medium.
+- **Classics:** geometry as the study of what is "not altered by the transformations of the group" (Klein 1893, p. 4; direct, by principle: a space is only determined up to its group). Shepard (1970) put the isomorphism in the second-order relations among representations, which Edelman (1998, p. 2) quotes; Shepard's paper is **not held**, so it counts as secondary until a PDF is added.
+- **Younger:** backward-compatible and forward-compatible training (Shen et al. 2020, p. 1; Ramanujan et al. 2022, p. 1); unpaired translation between text-embedding spaces (Jha et al. 2025, p. 1; authors' claim). A 2026 vendor announcement of a shared space is a perishable example.
+- **Explore by:** Chapter 12 states the isometry freedom in Klein's terms; Chapter 4 states the engineering cost (backfilling). Ask for Shepard 1970.
+
+### 5. Recommender systems as co-occurrence embeddings [Gap 3]
+- **Alignment:** Medium.
+- **Classics, by analogy:** entities are characterized by the distribution of their environments (Harris 1954, pp. 12 and 14), the principle that item embeddings apply to items in baskets; low-rank approximation of a matrix (Eckart and Young 1936).
+- **Established:** LSI on a term-document matrix (Deerwester et al. 1990, p. 1), the same construction as user-item.
+- **Younger:** item2vec casts item-based collaborative filtering as skip-gram with negative sampling, "competitive with SVD" (Barkan 2016, p. 1); a dot product beat learned MLP similarities once tuned (Rendle et al. 2020, pp. 1 and 8).
+- **Explore by:** one sentence in "Counting Company" (users and items instead of words and contexts), which no classic contradicts. No classic is about recommendation itself.
+
+### 6. Truth as a direction in a representation space [Gap 7]
+- **Alignment:** Mixed.
+- **Classic for:** directions that carry a quality are old: an evaluation factor ("good-bad") comes out of factor analysis of judgments of meaning (Osgood et al. 1957, p. 48; direct for evaluative, not for truth).
+- **Classic against:** the truth value of a sentence is its *reference*; its *sense* is the thought it expresses (Frege, pp. 5-6). A space built from the company words keep (Harris 1954) models sense and use, so a "truth direction" may track what the corpus asserts, not what is the case.
+- **Younger, both sides:** linear structure of truth at scale with causal interventions (Marks and Tegmark 2024, p. 1); an unsupervised direction beating zero-shot by 4% (Burns et al. 2023, p. 1); probes failing to generalize (Levinstein and Herrmann 2023, p. 1); the method may find "whatever feature of the activations is most prominent" (Farquhar et al. 2023, p. 1).
+- **Explore by:** write it as a test, not a claim: does the direction separate true from *commonly asserted*? The younger counter-evidence agrees with Frege's warning.
+
+### 7. Dot product against cosine, and maximum inner product search [Gap 4]
+- **Alignment:** Low.
+- **Classic, by analogy:** similarity as a contrast of common and distinctive features, with a direction of asymmetry set by the salience of the stimuli (Tversky 1977, pp. 7 and 12), the closest classic to the idea that magnitude may carry meaning that an angle discards. It is not about vectors.
+- **Younger:** cosine similarity can be arbitrary for regularized linear models (Steck et al. 2024, p. 1); maximum inner product search equals nearest-neighbour search only when norms are constant (Shrivastava and Li 2014, p. 2).
+- **Explore by:** state it as a known trade-off with its conditions in Chapter 4, not as a finding about meaning.
+
+### 8. The oversight cost of reasoning in the space [Gap 8]
+- **Alignment:** Low.
+- **Classic, by analogy and weak:** an interface that turns a silly mistake into an error message instead of a wrong answer protects the user (Dijkstra, EWD 667, p. 1, 1978). It is about programming languages, not about monitoring a model.
+- **Younger:** latent reasoning "might not need to verbalize any of their thoughts and would thus lose the safety advantages that CoT confers" (Korbak et al. 2025, p. 5); a lab reports a "J-space" that exposes silent reasoning (Gurnee et al. 2026, p. 1; vendor result, with stated limits on p. 4 and p. 54).
+- **Explore by:** a dated sentence in Chapter 5. There is no old support to lean on, so keep it short and attributed.
+
+### 9. A latent need not be a vector [Finding 2]
+- **Alignment:** Low.
+- **Classics:** none held that speak to it.
+- **Younger:** the latent of a latent diffusion model is a spatial tensor (Rombach et al. 2022, pp. 3-5).
+- **Explore by:** one clause in the convention sentence of Chapter 3. Not a chapter-level idea.
+
+Optional items that were not ranked: the Goldstein et al. 2025 update to "The Brain Also Embeds", and the smaller from-memory items at the end of Gap 11 of `tmp/emb_vs_lat.md`.
 
 ## Dropped ideas
 
-For each idea: when it was dropped, what was learned, and what would bring it back.
+For each idea: when it was dropped, what was learned, and what would bring it back. Ideas that sounded plausible and did not hold up under checking are kept here too, as unsuccessful explorations, with the check that failed them.
 
 ### "State of the art" callouts for perishable detail
 - **Dropped:** 2026-11-10.
@@ -17,6 +82,41 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Dropped:** 2026-11-10.
 - **Why:** the Makefile already re-runs the scripts that changed.
 - **Reopen if:** a result in the book cannot be regenerated from the repository.
+
+### "Embedding spaces are not metric spaces" as a perspective the book is missing
+- **Dropped:** 2026-11-11 (from a Hacker News post on whether embeddings behave like metric spaces).
+- **Why:** with $1-\cos$ as the distance the triangle inequality fails (computed: $\mathbf{u}=(1,0)$, $\mathbf{v}=(0,1)$, $\mathbf{w}=(1,1)/\sqrt{2}$ give $1 > 0.586$), but the angle $\arccos(\cos)$ is a metric on the sphere (checked on the same example, standard result). The book speaks of cosine similarity, not of a cosine distance, so no statement is wrong. The human-judgement version (asymmetric, non-metric similarity) is already in Chapter 1 through Tversky 1977. The post's measurements on trained models were not checked.
+- **Reopen if:** Chapter 4 relies on a metric index (trees, graph search) with cosine. Then say that for unit vectors the Euclidean distance and the angle order pairs the same way.
+
+### Interpolating between two grammatical sentences must leave the grammatical set, so working in latent space is not legitimate
+- **Dropped:** 2026-11-11, in its strong form (a Hacker News comment arguing from the discontinuity of Chomsky's grammaticality function).
+- **Why:** Bowman et al. 2016 (PDF p. 11) report for a variational autoencoder of sentences that "intermediate sentences are almost always grammatical", and describe the code space as "volume-filling and smooth" (p. 8). That is one small model from 2016, so it does not settle the question for current models. The weak form survives as a question for "Where a Single Vector Strains" in Chapter 3: a discrete property (well-formedness) in a continuous space.
+- **Reopen if:** evidence that interpolations between sentence embeddings of current models leave the well-formed set (not checked).
+
+### "The labs agree that chain-of-thought monitorability is essential, so latent reasoning is unsafe"
+- **Dropped:** 2026-11-11, in this wording (Hacker News comments on a paper about reasoning in latent space).
+- **Why:** Korbak et al. 2025 call chain-of-thought monitoring "imperfect", say it "shows promise", and that monitorability "may be fragile" (PDF pp. 1 and 4). The checked statement is narrower: latent reasoning models "might not need to verbalize any of their thoughts and would thus lose the safety advantages that CoT confers" (p. 5). The book already reports that written chains can be unfaithful (Turpin, Lanham, Chen), so the stake of text against space is two-sided.
+- **Reopen if:** never as a consensus claim. The narrower statement is a candidate sentence for Chapter 5.
+
+### "Token vectors are not points: the empty regions of the space reveal the structure of language"
+- **Not pursued:** 2026-11-11 (a LessWrong post discussed on Hacker News).
+- **Why:** the strongest comment attributes the reported phenomena to ordinary high-dimensional probability, which Chapter 2 covers, and the anisotropy papers the book cites (Timkey and van Schijndel, Razzhigaev et al.) cover the shared-direction part. The post's own data were not read, so this is "not checked", not "refuted".
+- **Reopen if:** a peer-reviewed analysis separates the claim from concentration of measure.
+
+### Curvature-aware reranking as a missing retrieval perspective
+- **Dropped as a gap:** 2026-11-11 (a Hacker News post proposing Ricci curvature as a reranking signal).
+- **Why:** the post reports the author's own, unreviewed experiments. The checked background is already cited: Arvanitidis et al. 2018 (PDF p. 1) show that latent distances depend on the decoder's Jacobian and that Euclidean interpolation can mislead. Curved geometry has its place in Chapter 6.
+- **Reopen if:** a reviewed result shows curvature-aware ranking beating dot product or cosine at matched cost.
+
+### "The dot product favours popular items, so Chapter 4 must warn about it"
+- **Dropped:** 2026-11-11, as stated (a claim in the first pass of the embedding and latent space review, written from memory).
+- **Why:** none of the three papers read on the subject says it: Steck et al. 2024 (cosine similarity can be arbitrary for regularized linear models), Shrivastava and Li 2014 (inner product search equals nearest-neighbour search only for constant norms), Rendle et al. 2020 (dot product against MLP similarities). What they support is narrower and is in the open ideas.
+- **Reopen if:** a source shows popularity bias tied to the norm of item embeddings.
+
+### "Recommender systems are the largest industrial use of embeddings"
+- **Dropped:** 2026-11-11, as stated (first pass, from memory).
+- **Why:** an unsourced superlative. Rendle et al. 2020 (p. 1) say embedding-based models "have been the state of the art in collaborative filtering for over a decade", which is about recommenders, not about all uses.
+- **Reopen if:** a survey of industrial uses ranks them.
 
 ## Open durability actions
 

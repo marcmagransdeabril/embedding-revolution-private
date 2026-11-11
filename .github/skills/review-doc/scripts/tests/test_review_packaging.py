@@ -170,7 +170,7 @@ def test_inquiry_integrity_is_outcome_neutral_and_evidence_ranked():
     for needle in ("Outcome-neutral", "evidence, then written chapters, then plan text", "Roll-up", "Roll-down",
                    "Evidence arrival", "Balance", "Calibration", "Falsifiability", "Direction of travel",
                    "Depth follows status", "notes/ideas.qmd", "decision due", "do not choose",
-                   "Open sets", "never report a missing member as incompleteness"):
+                   "Open sets", "never report a missing member as incompleteness", "sorted by Lindy alignment"):
         assert needle in text, f"§17 must cover: {needle}"
     assert "ledger" not in text.lower(), "§17 must not depend on a separate ledger file"
 

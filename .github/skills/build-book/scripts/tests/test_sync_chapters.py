@@ -90,3 +90,25 @@ def test_solutions_file_is_listed_last_and_not_a_chapter():
     if sync_chapters.SOLUTIONS_QMD.is_file():
         assert flat[-1] == "chapters/solutions.qmd"
         assert flat.count("chapters/solutions.qmd") == 1
+
+
+def test_title_comes_from_a_labelled_h1_without_its_attributes(tmp_path):
+    """Step 0 of the chapter-reference plan moves titles to `# Title {#sec-ch-...}`; matching must see the bare title."""
+    p = tmp_path / "x.qmd"
+    p.write_text("---\nstatus: idea\n---\n\n# Vector Databases, RAG {#sec-ch-vector-databases}\n\ntext\n", encoding="utf-8")
+    assert sync_chapters.extract_title_from_qmd(p) == "Vector Databases, RAG"
+    q = tmp_path / "y.qmd"
+    q.write_text("---\ntitle: Front Matter Title\nstatus: idea\n---\n\n## Section\n", encoding="utf-8")
+    assert sync_chapters.extract_title_from_qmd(q) == "Front Matter Title"
+    r = tmp_path / "z.qmd"
+    r.write_text("# Plain Title\n\ntext\n", encoding="utf-8")
+    assert sync_chapters.extract_title_from_qmd(r) == "Plain Title"
+
+
+def test_a_chapter_matches_the_same_slot_whether_its_title_is_in_the_front_matter_or_in_an_h1(tmp_path):
+    body = "text\n"
+    a = tmp_path / "embedding_spaces.qmd"
+    a.write_text('---\ntitle: "The Anatomy of Embedding and Latent Spaces"\n---\n\n' + body, encoding="utf-8")
+    b = tmp_path / "embedding_spaces_h1.qmd"
+    b.write_text("---\nstatus: definitive\n---\n\n# The Anatomy of Embedding and Latent Spaces {#sec-ch-embedding-spaces}\n\n" + body, encoding="utf-8")
+    assert sync_chapters.match_chapter_to_outline(a) == sync_chapters.match_chapter_to_outline(b)

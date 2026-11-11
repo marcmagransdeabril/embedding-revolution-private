@@ -28,7 +28,8 @@ def test_validate_frontmatter():
     issues = validate_book.validate_frontmatter(Path("test.qmd"), valid_text)
     assert len([i for i in issues if i.severity == "ERROR"]) == 0
 
-    no_title_text = "---\nsubtitle: 'No Title'\n---\n# Content"
+    # A level-1 heading counts as the title since Step 0 of the chapter-reference plan, so this text has none.
+    no_title_text = "---\nsubtitle: 'No Title'\n---\nContent"
     issues = validate_book.validate_frontmatter(Path("test.qmd"), no_title_text)
     assert any(i.severity == "ERROR" and "title" in i.message.lower() for i in issues)
 
@@ -334,3 +335,60 @@ def test_validate_missing_solutions_file(tmp_path):
     )
     issues = validate_book.validate_questions_and_solutions(files[:1])
     assert len(issues) == 1 and "solutions.qmd is missing" in issues[0].message
+
+
+# ---- chapter titles in a labelled H1, and literal chapter numbers (Step 0 of notes/generative_chapter_plan.md)
+
+def test_validate_frontmatter_accepts_a_labelled_h1_as_the_title():
+    """A chapter may keep status/open in the front matter and give its title as `# Title {#sec-ch-...}`."""
+    text = "---\nstatus: idea\n---\n\n# A Title {#sec-ch-a}\n\nBody\n"
+    assert validate_book.validate_frontmatter(Path("a.qmd"), text) == []
+
+
+def test_validate_frontmatter_still_requires_some_title():
+    text = "---\nstatus: idea\n---\n\nBody without a heading\n"
+    issues = validate_book.validate_frontmatter(Path("a.qmd"), text)
+    assert any(i.severity == "ERROR" and "title" in i.message.lower() for i in issues)
+
+
+def test_a_heading_inside_a_code_fence_is_not_a_title():
+    text = "---\nstatus: idea\n---\n\n```python\n# not a title\n```\n"
+    issues = validate_book.validate_frontmatter(Path("a.qmd"), text)
+    assert any(i.severity == "ERROR" and "title" in i.message.lower() for i in issues)
+
+
+def test_a_second_level_heading_is_not_a_title():
+    text = "---\nstatus: idea\n---\n\n## A section\n"
+    issues = validate_book.validate_frontmatter(Path("a.qmd"), text)
+    assert any(i.severity == "ERROR" and "title" in i.message.lower() for i in issues)
+
+
+def test_validate_frontmatter_warns_when_the_title_is_given_twice():
+    text = "---\ntitle: A\n---\n\n# A {#sec-ch-a}\n"
+    issues = validate_book.validate_frontmatter(Path("a.qmd"), text)
+    assert [i.severity for i in issues] == ["WARNING"]
+    assert "twice" in issues[0].message
+
+
+def test_literal_chapter_references_are_flagged_outside_code():
+    lines = [
+        "See Chapter 3 and Chapters 4 to 6.",
+        "```",
+        "Chapter 9 inside a fence",
+        "```",
+        "An inline `Chapter 2` is code.",
+        "The book has chapters, and Chapter [-@sec-ch-a] is a reference.",
+        "<!-- OPEN: after the Chapter 5 scale test -->",
+    ]
+    issues = validate_book.validate_chapter_references(Path("a.qmd"), lines)
+    assert [(i.line, i.severity) for i in issues] == [(1, "WARNING"), (7, "WARNING")]
+    assert "sec-ch-" in issues[0].message
+
+
+def test_literal_chapter_lint_is_off_until_enabled(tmp_path, monkeypatch):
+    p = tmp_path / "a.qmd"
+    p.write_text("---\ntitle: A\n---\n\nSee Chapter 3.\n", encoding="utf-8")
+    monkeypatch.setattr(validate_book, "LINT_LITERAL_CHAPTERS", False)
+    assert not any("sec-ch-" in i.message for i in validate_book.validate_qmd_file(p, citations=False))
+    monkeypatch.setattr(validate_book, "LINT_LITERAL_CHAPTERS", True)
+    assert any("sec-ch-" in i.message for i in validate_book.validate_qmd_file(p, citations=False))

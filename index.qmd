@@ -50,6 +50,12 @@ The reach of this paradigm is broad, and so are the questions it raises:
 
 Each item is also a question: what does the vector keep, and what does it lose?
 
+### Embedding Space or Latent Space?
+
+Two names appear in this book for what looks like the same place, and the literature does not keep them apart either. *Embedding space* comes from mathematics and language processing, where an embedding maps objects to vectors so that similar objects are close. *Latent space* comes from statistics and generative models, where a latent variable is the hidden cause of the data. Wikipedia treats them as synonyms, and papers often use both words for the same hidden layer.
+
+What does differ is how a space was trained. A space trained for similarity gives distance a meaning by construction and usually has no way back to the data. A space trained to reconstruct or generate usually has a decoder, and its distances mean only what the training made them mean. This book uses the two words loosely, with "embedding space" as the default, and says which kind of training produced a space whenever the difference matters.
+
 ### The Dog Test
 
 One question is harder than the others, and it returns in every part of this book. Take a dog. There is a photograph of it, the word "dog", the sound of its bark, and a video of how it runs. Four signals with nothing in common at the level of bytes: a grid of pixels, a string of characters, a pressure wave, a sequence of frames. Yet a child who meets a dog through any one of them recognizes the others as the same thing. Firth's company, "you shall know a word by the company it keeps", is a company of words. The dog test asks for more: can a photograph, a word, a bark, and a gait be placed in **one** space, near each other and far from a cat, a car, and a doorbell?
