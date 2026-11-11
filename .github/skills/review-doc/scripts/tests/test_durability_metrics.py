@@ -132,7 +132,7 @@ def test_diff_reports_only_changes():
     assert any(line.startswith("status:") for line in out)
 
 
-# ---- roadmap entries written as @sec-ch-<stem> (Step 0 of notes/generative_chapter_plan.md)
+# ---- roadmap entries written as @sec-ch-<stem> (chapter references by label)
 
 def make_labelled_book(tmp_path, roadmap_keys, tag="definitive", chapters=("a", "b")):
     """A book of chapters a, b (and an epilogue) whose roadmap lists `roadmap_keys` in the given order."""

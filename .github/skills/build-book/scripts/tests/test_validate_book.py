@@ -337,7 +337,7 @@ def test_validate_missing_solutions_file(tmp_path):
     assert len(issues) == 1 and "solutions.qmd is missing" in issues[0].message
 
 
-# ---- chapter titles in a labelled H1, and literal chapter numbers (Step 0 of notes/generative_chapter_plan.md)
+# ---- chapter titles in a labelled H1, and literal chapter numbers (chapter references by label)
 
 def test_validate_frontmatter_accepts_a_labelled_h1_as_the_title():
     """A chapter may keep status/open in the front matter and give its title as `# Title {#sec-ch-...}`."""

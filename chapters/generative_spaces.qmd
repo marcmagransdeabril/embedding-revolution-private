@@ -1,6 +1,6 @@
 ---
 status: idea
-open: "Home of the debate between prediction in the space (JEPA, @sec-ch-embedding-spaces) and scaled generative models. Decide when the last two sections of @sec-ch-embedding-spaces are written. Whether the closing sections can reconcile the two families, or can only show where they differ, depends on sources not yet read (notes/generative_chapter_plan.md, 4.3.7)."
+open: "Home of the debate between prediction in the space (JEPA, @sec-ch-embedding-spaces) and scaled generative models. Decide when the last two sections of @sec-ch-embedding-spaces are written. Whether the closing sections can reconcile the two families, or can only show where they differ, depends on sources not yet read (notes/ideas.qmd, idea 12)."
 ---
 
 # Latent Spaces from Generative Models {#sec-ch-generative-spaces}

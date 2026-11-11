@@ -12,6 +12,8 @@ Lines of exploration that came out of the review of embedding and latent spaces 
 
 How alignment is judged. A *classic* is a source from before 1980 that is held in `references/` and whose page was read. For each idea the classics are listed with what they say and whether they say it *directly* (about this very idea) or *by analogy* (the same principle, another object). Ties are broken mechanically, in this order: direct classics, all classics, sources from 1980 to 2009, oldest source. Levels: **High** is at least one direct classic and one more; **Medium** is one direct classic, or two by analogy; **Mixed** is a classic on each side; **Low** is no direct classic. A classic that points against an idea is reported, not hidden: the idea is then written as a test, not a claim. Alignment says where to look first, not whether the idea is true. Re-sort when evidence changes.
 
+Ideas keep their numbers when others leave, because other files point at them. Idea 2 (reconstruction as an objective) was adopted on 2026-11-11, in the section *Learning by Reconstruction* of the embedding chapter and in the chapter *Latent Spaces from Generative Models*, and is no longer an idea. Idea 3 (the generative tradition of "latent") was adopted in part, the hidden-cause view; what remains is below. Chapter numbers in the entries written before that date are those of that morning; the entries added since name the chapters by title.
+
 ### 1. Reasoning in the space as search over alternatives [Gap 9]
 - **Alignment:** High.
 - **Classics, direct:** problem solving "takes place by search in a problem space", "a major invariant of problem solving behavior" (Newell and Simon 1972, p. 819); heuristic search that expands the fewest nodes needed to find an optimal path (Hart et al. 1968, pp. 6-7).
@@ -19,17 +21,12 @@ How alignment is judged. A *classic* is a source from before 1980 that is held i
 - **Explore by:** the classics say that reasoning is a search with a frontier of alternatives, and that a single path is the special case. Chapter 5 can state Coconut as a neural instance of that picture and test whether its claim replicates. The Prologue's "path" wording then needs a second look.
 - **Not claimed:** that a network actually performs the search the classics describe.
 
-### 2. Reconstruction as a fifth objective: autoencoders and VAEs [Gap 1]
+### 3. Topic models next to points and regions, and the bridge from LSI to LDA [Gap 2]
 - **Alignment:** High.
-- **Classics:** the best matrix of rank $r$ in the least-squares sense, "every element of the given matrix being given equal weight" (Eckart and Young 1936, p. 2), which is a linear autoencoder (direct, through Bishop 2023, p. 575 for the link); "reproducing at one point either exactly or approximately a message selected at another point" (Shannon 1948, p. 1; by analogy, the problem an encoder and decoder solve).
-- **Younger:** autoencoders and VAEs (Bishop 2023, pp. 575 and 580); latent diffusion (Rombach et al. 2022, pp. 4-5).
-- **Explore by:** present the nonlinear autoencoder as the generalization of the Eckart-Young result the chapter already proves, and add the objective to the "what the vector pays for" comparison. Cheap own experiment: compare a linear autoencoder with the truncated SVD on the Chapter 3 corpus matrix.
-
-### 3. The generative tradition of "latent" and its bridge to embeddings [Gap 2]
-- **Alignment:** High.
-- **Classics:** maximum likelihood for models with unobserved variables, with factor analysis and finite mixtures as examples (Dempster et al. 1977, p. 2; direct); the SVD as a best low-rank approximation (Eckart and Young 1936, p. 2), which Hastie et al. (p. 577) show has a latent variable representation (by analogy).
-- **Established:** LSI estimates "latent semantic structure" with the SVD (Deerwester et al. 1990, p. 1); LDA grew out of the attempt to explain LSI, and Arora et al. 2016 (p. 2) link PMI embeddings to a latent variable model.
-- **Explore by:** tell the two traditions as one story that begins before deep learning. Chapter 3 gets a sentence on where topic models sit next to points and regions.
+- **Classics:** maximum likelihood for models with unobserved variables, with factor analysis and finite mixtures as examples (Dempster et al. 1977, p. 2; direct); the SVD as a best low-rank approximation (Eckart and Young 1936, p. 2), which has a latent variable representation (Hastie et al., p. 577; by analogy).
+- **Established:** LSI estimates "latent semantic structure" with the SVD (Deerwester et al. 1990, p. 1); LDA "evolved out of efforts in the 1990s to provide a generative model that explains the success of" LSI, and Arora et al. 2016 (p. 2, cited in the book) link PMI embeddings to a latent variable model; topic models "offer an alternative to semantic spaces", representing a word as a distribution over topics and not as a point (Mitchell and Lapata 2010, p. 3, in `references/`); factor analysis is a linear-Gaussian latent-variable model (Bishop 2023, p. 527).
+- **Already in the book:** the hidden-cause view (factor analysis, the "latent" of LSA, EM) in the stub of the generative chapter, and the latent of LSA in *Learning by Reconstruction*.
+- **Explore by:** one sentence where the book says that a meaning can be a point (the embedding chapter) or a region (*Meaning Can Be a Region*, in the properties chapter): topic models are the third option, a distribution over topics, and Arora et al. is the bridge between the two traditions. Nothing in the chapters says it yet (the epilogue mentions topic models only for their fit to human association).
 
 ### 4. Compatibility of embeddings across model versions: alignment up to a transformation [Gap 6]
 - **Alignment:** Medium.
@@ -74,9 +71,41 @@ Optional items that were not ranked: the Goldstein et al. 2025 update to "The Br
 ### 10. Part II as the remedies for the shortcomings of Part I [author, 2026-11-11]
 - **Alignment:** not assessed.
 - **The idea (author):** retrieval-augmented generation, whether it uses a vector database, keyword search or web search, keeps the output grounded and so patches hallucination; Part II could be about the shortcomings of the Part I approaches and the approaches that have been tried, successfully, to compensate for them.
-- **What the book already has:** the ledger of limits at the end of Chapter 3, which states each limit of a single vector as a cost and names the chapter that takes it up. Read that way, every later chapter is already a remedy (structure by design, curvature, relations, topology, binding, composition, alignment), so the idea names Part II after a device the book already uses, and could apply to Parts III and IV as well.
-- **A correction to keep the claim exact:** embedding vectors do not hallucinate; generative models do (Chapter 4), by producing what is plausible without checking it. Retrieval compensates by bringing external text into the context, and the retrieval itself runs on embeddings, with the limit of the dot product that the chapter states. So the retrieval chapter is a remedy for Chapter 4's shortcoming, and it has shortcomings of its own.
+- **What the book already has:** the ledger of limits at the end of the embedding chapter, which states each limit of a single vector as a cost and names the chapter that takes it up. Read that way, every later chapter is already a remedy (structure by design, curvature, relations, topology, binding, composition, alignment), so the idea names Part II after a device the book already uses, and could apply to Parts III and IV as well.
+- **A correction to keep the claim exact:** embedding vectors do not hallucinate; generative models do (the generative chapter), by producing what is plausible without checking it. Retrieval compensates by bringing external text into the context, and the retrieval itself runs on embeddings, with the limit of the dot product that the chapter states. So the retrieval chapter is a remedy for Chapter 4's shortcoming, and it has shortcomings of its own.
 - **Explore by:** decide at the Part II gate (the `OPEN` comment of `index.qmd`). Part II is currently the vector-database chapter followed by the three structure chapters, under the title "Structure in Vector Spaces", which does not fit the retrieval chapter; a title and intro about remedies would. Does not require reordering.
+
+### 11. A part for applications, and whether the retrieval chapter belongs in the book [author, 2026-11-11]
+- **Alignment:** not assessed.
+- **The idea (author):** retrieval-augmented generation is an application of embedding and latent spaces, not a fundamental technology, and it is not certain that the chapter on vector databases and RAG should be in the book at all. For the time being it is the first chapter of Part II, so that the contextual-vectors chapter, whose scale test gates Part II, closes Part I.
+- **Options:** (a) a closing part of applications before the epilogue, with the multimodal chapter, which is partly one; (b) it stays in Part II, retitled as a limit and a remedy (idea 10); (c) it is dropped and the book keeps only the ledger entry on the dot product (in the embedding chapter) and a paragraph in the contextual-vectors chapter.
+- **Explore by:** decide at the Part II gate. Moving or dropping it costs nothing in numbering, since every reference is a label; the edits are the table `MASTER_PARTS` in `sync_chapters.py` (and its test), the roadmap, the part intros, the "Next:" lines and the `OPEN` comment of `index.qmd`.
+
+### 12. One view of the objectives: information kept, and how distance is priced [author, 2026-11-11]
+- **Alignment:** not assessed.
+- **The idea:** the closing section of the generative chapter (a stub) reconciles the predictive, reconstructive and generative objectives, or shows exactly where they differ. One table over every objective of the embedding and generative chapters: what is compared, where the error is measured (in the data, among sampled candidates, in the code), what keeps the space from collapsing, whether there is a decoder and a density, what happens off the data, the typical failure, each cell marked structural (follows from the objective) or contingent (how systems behaved at a date). Then one attempt at a common currency: the InfoNCE objective as a bound on the information between two views (`oord2018representation`, in the bibliography), the reconstruction term of the evidence lower bound as a bound on the information the code keeps about the data, and the whole bound as a rate-distortion trade-off, which is Shannon's. The expected result is graded: the same family in what information is kept, different in how distance is priced and in whether there is a density. "Not reducible to one objective" is an acceptable result. A bound on information says nothing about geometry, reconstruction prices every detail while contrast prices only what separates the negatives (and caps at $\log_2 N$ bits), and there is published criticism of the mutual-information view of contrastive learning.
+- **Sources, all from memory and unchecked** (fetch with `fetch_references.py` and read the page with `ground_check.py` before writing any claim): Barber and Agakov 2003 (the variational bound on mutual information with a decoder); Poole et al. 2019 (the bounds side by side); Alemi et al. 2018 (the ELBO as rate-distortion); Tschannen et al. 2020 (the criticism); Shannon 1959 (rate-distortion). For the rest of the generative chapter: Kingma and Welling 2014 and their 2019 introduction (VAE); Goodfellow et al. 2014 and Radford et al. 2015 (GANs); Ho et al. 2020, Rombach et al. 2022 and Ramesh et al. 2022 (diffusion, latent diffusion, decoding from CLIP); Bowman et al. 2016 (posterior collapse); Locatello et al. 2019 (disentanglement is not identifiable without extra assumptions); Hinton and Salakhutdinov 2006 and Baldi and Hornik 1989 (autoencoders); Shao et al. 2018 and Lobashev et al. 2025 (geometry of decoders; the second is perishable, date it). Already in `references.bib`: `arvanitidis2018latent`, `dempster1977maximum`, `lecun2022path`, `assran2023selfsupervised`, `bardes2024revisiting`, `assran2025vjepa2`, `radford2021learning`, `eckart1936approximation`.
+- **Explore by:** write the table first, since it needs no bound; write the information section only as far as the sources read support it; the figure of idea 13 supplies the data.
+
+### 13. Experiments still to write for the embedding and generative chapters [own experiment]
+- **Alignment:** not applicable.
+- **Done:** `code/embedding_spaces/reconstruct_digits_ae.py` (about a minute, run by `make test-code`), on the digits of the contrast experiment (same data, split, augmentation, 16 dimensions, Adam settings and measures, imported from `contrast_digits_infonce.py`). It reproduces the `predict the other view` and InfoNCE N=128 rows of the contrast table, and checks the Eckart-Young result: the linear autoencoder of the same view, trained 20,000 steps (Adam needs ten times the 2,000 of the other models), reaches the held-out error of the PCA with 16 components, 0.0266 against 0.0266, within 4.8 to 12.5 degrees of the principal subspace; at 2,000 steps it was 7.5% above. Held-out error to the clean image and retrieval, mean over five seeds: predict the other view 0.0711, 13.9%; linear AE of the other view 0.0760, 8.1%; nonlinear AE of the other view 0.0670, 15.4%; AEs of the same view 0.1160 and 0.1209, 10.8% and 10.3%; denoising AE 0.0243, 32.6%; InfoNCE N=128, 38.8% (no decoder).
+- **Still to write:** (1) the JEPA script, a skeleton at `code/embedding_spaces/predict_embeddings_digits_jepa.py`: a context encoder, a predictor 16 to 128 to 16, a target encoder that is a moving average of the first with no gradient through it, a squared distance in the code space as the loss, no negatives and no decoder; runs with the moving average and with the target tied to the context encoder (collapse expected); effective rank during training, retrieval, alignment, uniformity; PyTorch is a candidate for the stop-gradient and the average. (2) `code/generative_spaces/generative_vs_maps_digits.py`, not yet a file: a VAE with a standard normal prior, whose beta is fixed by a rule on reconstruction alone (the largest beta whose held-out reconstruction is within a stated margin of the nonlinear autoencoder) before retrieval is computed, and reported; a decoder trained on the frozen InfoNCE code (16 to 128 to 64), the way back from a similarity code; interpolation, the pixel distance of the decoded midpoint of two held-out codes to the nearest training image against the same for the straight pixel average, with the InfoNCE midpoint taken on the sphere because its decoder saw unit vectors; optionally a tiny denoising chain on the autoencoder codes, if it stays under a page of code; one table over all the rows of both chapters and the figure of reconstruction error against retrieval for every model and seed, which is the data of idea 12.
+- **Rules kept:** numpy with hand-written gradients is the baseline of every script in `code/`; PyTorch or another library is welcome where it is shorter and clearer, with a note in the script header and in the table, and its first use records the dependency (`torch` is installed in `.venv` and declared nowhere). Rows that must reproduce the contrast table stay in numpy. Results are written in the text only after the scripts run and are copied from their output.
+
+### 14. The denoising autoencoder as a variant of its own in *Learning by Reconstruction* [own experiment]
+- **Alignment:** not assessed.
+- **The observation:** with the clean image as target the denoising autoencoder retrieves the other view in 32.6% of the cases, six points under the contrastive code and far above the autoencoders that copy their own noisy input (10 to 11%, no better than the raw pixels), with the lowest error to the clean image (0.0243). The target decides what the code keeps: the clean image removes the augmentation noise, and the shift is not undone.
+- **Explore by:** present it as a variant of its own, with the plain autoencoders as the baseline and what a cleaner target buys as its lesson, or keep it as the one clause it has now (the first step towards diffusion). The first keeps the line between reconstruction and contrast honest; the second keeps the section short. Decide when the section is reviewed.
+
+### 15. The universal translator: can an embedding translate animal communication? [author, 2026-11-11]
+- **Alignment:** not assessed.
+- **Status:** adopted provisionally on 2026-11-11 as the section *The Universal Translator* `{.idea}` of the Prologue (`index.qmd`), after the dog test, as a goal with a ladder of checks and not as a pass/fail test (the name is the author's: a science-fiction term). The Prologue text cites no source, because the papers below are unread. It is to be revisited when Parts II to IV are written; the other places it points to are the cross-domain and multimodal chapters.
+- **The idea (author):** given a multimodal embedding, could it interpret the language of birds, dolphins or whales, under the assumption that embeddings or language models capture something common to the languages of animals, and so serve as a universal translator?
+- **Verdict so far:** a real research question, with a weaker version that is supported and a strong version that is not. Supported: finding units, structure and context correlates in animal signals. Not supported: that those structures carry meanings that map onto human concepts. The book's cross-domain chapter already says what unsupervised alignment needs, and it works for human languages because they describe the same world with similar concept inventories; the theory below calls the same requirement "common ground". Reasons for doubt: structure is not meaning; there is no bilingual speaker to check a translation (only playback and behaviour); an embedding of calls may capture identity, recording conditions or acoustics; the convergence claim of the Platonic-representation hypothesis is about models of the same world, not about another species' signals.
+- **Sources found by search on 2026-11-11, not read (snippets only; fetch and read the page before citing):** Goldwasser, Gruber, Kalai and Paradise, "A Theory of Unsupervised Translation Motivated by Understanding Animal Communication" (NeurIPS 2023, arXiv 2211.11081): error rates inversely related to language complexity and amount of common ground; unsupervised translation of animal communication may be feasible if the system is sufficiently complex. Sharma et al., "Contextual and combinatorial structure in sperm whale vocalisations" (Nature Communications 2024, bioRxiv 2023.12.06.570484): codas form a combinatorial coding system (rhythm, tempo, rubato, ornamentation). Robinson et al., "NatureLM-audio" (ICLR 2025, arXiv 2411.07186): an audio-language model for bioacoustics, trained on text-audio pairs, for classification, detection and context labels. "On Non-interactive Evaluation of Animal Communication Translators" (arXiv 2510.15768): evaluation without a ground truth is itself open. Not confirmed: a 2025 dolphin model from a large lab, which the search did not return.
+- **As a third thought experiment (author, 2026-11-11):** the dog test is horizontal (one concept through several senses) and the book test of the draft plan is vertical (one subject at several scales); a translator test would be lateral: one meaning across two systems of communication that share no parallel data and perhaps no body or world. It probes the claim at the centre of the book, meaning as what views share, at the point where the shared part may be smallest. Criterion candidates, to choose among: (1) calibration on human languages, where unsupervised alignment of two corpora of the size of the animal one is scored against a held-out dictionary, so that a failure on animals can be read against a known baseline; (2) playback, where a signal built from a translation elicits the predicted response beyond what the context alone predicts; (3) prediction, where translated turns are more coherent in order than permuted (the idea of arXiv 2510.15768) and improve the prediction of the animal's next turn or behaviour; (4) a ladder of success with a check at each rung, units, then structure, then context categories, then referents, then open-ended translation, which echoes Chomsky's staircase in the symbols chapter. The asymmetry with the other two tests: the dog and the book have a human who can judge the output, the animal has none, so a pass is informative and a failure is not (no shared meanings, or a method that is too weak: the two cannot be told apart). That makes it a visionary goal with a calibrated ladder, not a pass/fail test. Links already in the book: the Umwelt as a reversal of the dog test ("what is the dog's embedding of us?", an unused line in the plan of the epilogue section *The Dog Test in the Brain*), the Platonic representation hypothesis as the optimistic prior, and Wittgenstein's lion (`wittgenstein1953philosophical` is in `references.bib`; the passage is not yet located).
+- **Explore by:** a short paragraph in the cross-domain chapter stating what alignment needs (shared structure, enough data, common ground) with the animal case as the hard limit, and a sentence in the dog test of the multimodal chapter; as a scale-test question: does scale make independently trained spaces alike, and what would "alike" mean when we do not know the meanings? Keep the claim exact: embeddings can reveal structure; translation also needs a way to check meaning.
 
 ## Dropped ideas
 
@@ -127,57 +156,151 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Why:** an unsourced superlative. Rendle et al. 2020 (p. 1) say embedding-based models "have been the state of the art in collaborative filtering for over a decade", which is about recommenders, not about all uses.
 - **Reopen if:** a survey of industrial uses ranks them.
 
-<!-- From notes/generative_chapter_plan.md, section 12, copied 2026-11-11 (Step H). -->
+<!-- Dropped on 2026-11-11 while restructuring the first part of the book (embedding, latent and generative chapters, the split of the old embedding chapter, chapter references by label). Chapters are named by title because their numbers moved. -->
 
-### Put the generative material in Chapter 3 instead of a new chapter
-- **Dropped:** 2026-11-11.
-- **Why:** Chapter 3 is `definitive` and already long (four objectives and a ledger of limits), and its question is how similarity becomes geometry. Reconstruction asks a different question (what distance means, and whether there is a way back), and Chapter 3 would lose its single thread.
-- **Reopen if:** the new chapter is still under about 6 pages when it reaches `provisional`. Then merge it into Chapter 3 as a fifth objective, followed by the ledger.
+### Put the generative material in the embedding chapter instead of a new chapter
+- **Dropped:** 2026-11-11
+- **Why:** the embedding chapter is `definitive` and long, and its question is how similarity becomes geometry. Reconstruction and generation ask what distance means and whether there is a way back, and the chapter would lose its single thread.
+- **Reopen if:** the generative chapter is under about six pages when it reaches `provisional`; then merge it into the embedding chapter as a further objective, before the ledger.
 
-### Leave the debate in the multimodal chapter, under JEPA
-- **Dropped:** 2026-11-11.
-- **Why:** Parts II and III need the similarity-against-generation distinction (pullback metric in Chapter 7, decoding from CLIP in Chapter 14), and putting it last in the book means introducing it after its first use.
-- **Reopen if:** D2 decides the debate's home is Chapter 14 after all. The *distinction* still stays in Chapter 4.
+### Leave the debate between prediction in the space and scaled generative models in the multimodal chapter
+- **Dropped:** 2026-11-11
+- **Why:** the pullback metric (geodesics chapter) and decoding from CLIP (multimodal chapter) need the distinction between maps and distributions, and putting it last in the book introduces it after its first use.
+- **Reopen if:** the debate's home is decided to be the multimodal chapter after all; the distinction itself stays in the generative chapter.
 
-### Title the chapter after the methods or a fashion word
-- **Dropped:** 2026-11-11.
-- **Examples:** "Latent Spaces", "Generative AI", "Autoencoders, VAEs and Diffusion".
-- **Why:** the durability rule says a title names the question, not a method name that dates. A list of methods also turns the chapter into a survey.
-- **Reopen if:** never for fashion words. A method name is fine if a method becomes the question itself (as with the SVD in Chapter 3).
+### Title the generative chapter after its methods or a fashion word
+- **Dropped:** 2026-11-11
+- **Why:** a title names the question, not a method name that dates ("Generative AI", "Autoencoders, VAEs and Diffusion"), and a list of methods turns the chapter into a survey.
+- **Reopen if:** never for fashion words; a method name is fine if the method becomes the question itself, as the SVD did.
 
 ### A survey of GANs and diffusion
-- **Dropped:** 2026-11-11.
-- **Why:** both are fast-moving and outside the question. One page of dated history is enough to show that the two kinds of space work together.
-- **Reopen if:** a later chapter needs a mechanism of diffusion (for example its latent geometry) as evidence. In that case, put it in that chapter.
+- **Dropped:** 2026-11-11
+- **Why:** both move fast and sit outside the question; one to two pages of dated history are enough to show that the two kinds of space work together.
+- **Reopen if:** a later chapter needs a mechanism of diffusion (for example its latent geometry) as evidence; put it in that chapter.
 
-### Gate Part II after the new Chapter 4's scale test
-- **Dropped:** 2026-11-11 (default of D6).
-- **Why:** the Part II question is whether transformers find these structures unaided, and the contextual-vectors chapter answers it. The new chapter does not.
-- **Reopen if:** the Chapter 4 scale test turns out to decide whether Part II's structures are needed (for example, if generation absorbs geometry by design).
+### Gate Part II after the scale test of the generative chapter
+- **Dropped:** 2026-11-11
+- **Why:** the Part II question is whether transformers find its structures unaided, and the contextual-vectors chapter answers it; the generative chapter does not.
+- **Reopen if:** the scale test of the generative chapter turns out to decide whether the Part II structures are needed, for example if generation absorbs geometry by design.
 
-### Move "Learning by Predicting Embeddings" (JEPA) from Chapter 3 to Chapter 4
-- **Dropped:** 2026-11-11 (it was my reading of the author's first D2 answer, and was in the plan for about an hour).
-- **Why:** the author's second answer is that Chapter 3 covers the predictive and reconstructive models and Chapter 4 the generative ones. JEPA is predictive, so it stays in Chapter 3; its debate with scaled generative models is the scale test of Chapter 4, where both are on the table.
-- **Reopen if:** the JEPA section grows so that Chapter 3 becomes unbalanced; then split it out, but into a section of Chapter 3's end, not into the generative chapter.
+### Move "Learning by Predicting Embeddings" (JEPA) from the embedding chapter to the generative chapter
+- **Dropped:** 2026-11-11
+- **Why:** it was a misreading of the author's first answer. The embedding chapter covers the predictive and reconstructive objectives and the generative chapter the generative ones; JEPA is predictive, so it stays, and its debate with scaled generative models is the scale test of the generative chapter, where both are on the table.
+- **Reopen if:** the JEPA section grows until the embedding chapter is unbalanced; then split it out at the end of the embedding chapter, not into the generative chapter.
 
 ### Keep the vector-database chapter in Part I because it is already there
-- **Dropped:** 2026-11-11 (author, D11, leaning).
-- **Why:** it is an application of embedding and latent spaces, not a fundamental technology; Part I is about what a space is and how it is built. Which part receives it is open.
-- **Reopen if:** the roadmap shows that the later chapters depend on its limits (the dot-product limits of the ledger) so much that they need it before Part II.
+- **Dropped:** 2026-11-11
+- **Why:** it is an application of embedding and latent spaces, not a fundamental technology, and Part I is about what a space is and how it is built. Where it goes is idea 11.
+- **Reopen if:** the later chapters turn out to depend on its limits (the dot product of the ledger) so much that they need it before Part II.
+
+### Fix "embedding" for the embedding chapter and "latent" for the generative chapter as a rule
+- **Dropped:** 2026-11-11
+- **Why:** the SVD has been called latent for decades (latent semantic analysis) and the literature does not keep the two words apart; a fixed rule would be wrong for that case. The rule the book states is the author's: interchangeable, except where the literature has settled on one word for a context. The embedding chapter was retitled "The Anatomy of Embedding Spaces".
+- **Reopen if:** a reader test shows that the two words confuse more than they help.
 
 ### State that embedding and latent spaces are one thing, with one objective
-- **Dropped:** 2026-11-11 (before it was written).
-- **Why:** it is a claim that the sources may not support (a bound on mutual information does not fix the geometry, and there is published criticism of the mutual-information view of contrastive learning). The consolidation is graded and sourced instead (4.3.7).
-- **Reopen if:** the sources read in Step L support a stronger statement.
+- **Dropped:** 2026-11-11
+- **Why:** the sources may not support it: a bound on mutual information does not fix the geometry, and the mutual-information view of contrastive learning has published criticism. The reconciliation is graded and sourced instead (idea 12).
+- **Reopen if:** the sources read support a stronger statement.
+
+### Write the reconciliation of the objectives before its sources are read
+- **Dropped:** 2026-11-11
+- **Why:** every statement about bounds is from memory. The section stays a stub until the sources are fetched and the pages read.
+- **Reopen if:** never.
 
 ### Move "Learning by Reconstruction" to the generative chapter to make the embedding chapter smaller
-- **Dropped:** 2026-11-11 (the author chose to split the chapter at its seam instead).
-- **Why:** the split removes 15 pages from the embedding chapter by itself, and the autoencoder belongs next to the SVD it generalises. Moving three pages would not have solved the size.
+- **Dropped:** 2026-11-11
+- **Why:** the split of the old embedding chapter at its seam (Shannon, Chomsky, one-hot symbols and Rice became "Symbols Without Interior") removed 15 pages by itself, and the autoencoder belongs next to the SVD it generalises; moving three pages would not have solved the size.
 - **Reopen if:** the embedding chapter is still too long when its stubs are written.
+
+### Put "Learning by Reconstruction" between prediction and contrast
+- **Dropped:** 2026-11-11
+- **Why:** the contrast section opens from the softmax problem of prediction and reuses its loss, so the maths wants them adjacent. Reconstruction needs the contrast experiment (its `predict` model is the first row of the reconstruction script) and the SVD, and leads to the generative chapter, so it goes last. The order minimising the novelty of each section is counting, prediction, contrast, prediction of embeddings, reconstruction.
+- **Reopen if:** the sections are written and the transitions read better the other way.
+
+### Renumber chapters by hand or by script as the main path
+- **Dropped:** 2026-11-11
+- **Why:** the roadmap expects chapters to be reshaped, merged or dropped, and each change redid about 200 edits. Labels (`@sec-ch-<file-stem>`) make Quarto number the chapters from `_quarto.yml`, and the conversion was checked by a text diff of the renders. A lint warns on a new literal "Chapter N".
+- **Reopen if:** the cross-references fail in an output format and cannot be fixed.
+
+### Leave `durability_metrics.py` unchanged when chapter titles move to headings
+- **Dropped:** 2026-11-11
+- **Why:** it read the roadmap tags only from literal `* **Chapter N:` lines, so `make status` would have stopped checking them without an error. It now reads `@sec-ch-<stem>` too and checks that the roadmap lists the chapters in the order of `_quarto.yml`.
+- **Reopen if:** never.
+
+### Convert `notes/ideas.qmd`, the skills and the README to chapter references
+- **Dropped:** 2026-11-11
+- **Why:** none of them is rendered in the book, so the references would not resolve; dated literal numbers are used there.
+- **Reopen if:** any of them is added to the book.
+
+### Name the file `generative_latent_spaces.qmd`
+- **Dropped:** 2026-11-11
+- **Why:** `sync_chapters.py` matches by substring and the first match wins, so the name would have matched the pattern `latent_spaces` of the embedding chapter and the file would have been placed there. The file is `generative_spaces.qmd`, and a test checks that each chapter is taken for itself.
+- **Reopen if:** matching becomes exact, or the pattern is removed.
+
+### Rely on Quarto's own cross-references in every page
+- **Dropped:** 2026-11-11
+- **Why:** in HTML, pages without a chapter number (`index.qmd`, the epilogue, `solutions.qmd`) render `@sec-ch-x` as "3 Title" and ignore `[-@sec-ch-x]` (Quarto bug #14132, scheduled for 1.12). The first pilot only tried numbered chapters. `filters/book-chapter-refs.lua` resolves chapter references in HTML; its tests check message and exit status, because Quarto's Lua `error` only logs and does not stop the build.
+- **Reopen if:** Quarto fixes #14132; delete the filter and check with the text diff of the renders (`notes/text_diff.py`).
+
+### Fix the HTML afterwards, by rewriting "3 Title" to "Chapter 3" in the rendered files
+- **Dropped:** 2026-11-11
+- **Why:** the output does not say whether the source was `@x` or `[-@x]`, and a range comes out as "Chapters 3 Title to 4 Title"; the Lua filter sees the source form.
+- **Reopen if:** never.
+
+### Keep literal numbers in `index.qmd`, the epilogue and `solutions.qmd`
+- **Dropped:** 2026-11-11
+- **Why:** `solutions.qmd` is generated from the answers in the chapters and receives their references; the roadmap and the epilogue hold most of the 200 numbers, so renumbering would stay by hand where most of it is.
+- **Reopen if:** never.
+
+### Make the chapter-reference filter handle PDF and EPUB as well
+- **Dropped:** 2026-11-11
+- **Why:** Quarto renders both correctly in every page, and a link made by the filter would lose the LaTeX cross-reference and the EPUB internal link.
+- **Reopen if:** Quarto's PDF or EPUB treatment of unnumbered pages breaks in a later version.
+
+### Reference sections (`@sec-prop-...`) from the pages without a chapter number
+- **Dropped:** 2026-11-11
+- **Why:** the same Quarto bug would render "1.1 Title" for "Section 1.1" in HTML, and the filter covers chapters only. No such reference exists today.
+- **Reopen if:** a page without a chapter number needs to point at a section; extend the filter to `sec-prop-*`, taking the numbering from the headings.
+
+### Give a new chapter its own `{#refs}` block
+- **Dropped:** 2026-11-11
+- **Why:** in the PDF the book prints, at each block, the references accumulated since the previous one, so the same 98 entries were printed twice (172 pages against 156). Chapters 1 and 2 have no block either; the HTML page of each chapter still lists its own references.
+- **Reopen if:** the book moves to a single bibliography at the end, or to per-chapter bibliographies in the PDF.
+
+### Compare a plain same-view autoencoder with InfoNCE on retrieval as the main result
+- **Dropped:** 2026-11-11
+- **Why:** InfoNCE is trained to be invariant to the augmentation and a same-view autoencoder is not, so retrieval of the other view would measure the training data and not the objective. The autoencoders of the main comparison reconstruct the other view; the same-view ones are reference rows.
+- **Reopen if:** never as the main comparison.
+
+### Present the autoencoder rows as new
+- **Dropped:** 2026-11-11
+- **Why:** the `predict the other view` model of the contrast experiment is already a cross-view autoencoder with a linear decoder, and has a row in the contrast table; presenting the new rows as the book's first reconstruction result would be wrong and the table would repeat itself.
+- **Reopen if:** never.
+
+### Tune beta of the VAE for retrieval or for good-looking interpolations
+- **Dropped:** 2026-11-11
+- **Why:** it would tune the experiment towards the story. Beta is fixed by a rule on reconstruction alone, before retrieval is computed.
+- **Reopen if:** never; to show more than one beta, report a sweep with all its values.
+
+### Interpolate InfoNCE codes along a straight line as the main measure
+- **Dropped:** 2026-11-11
+- **Why:** the decoder trained on unit-norm codes sees a midpoint of norm below 1, which is off-distribution by construction and makes the similarity code look worse than it is; take the midpoint on the sphere and report the straight one as a footnote.
+- **Reopen if:** never as the main measure.
+
+### Use PyTorch for every model, or mix it with numpy without saying so
+- **Dropped:** 2026-11-11
+- **Why:** every script in `code/` is numpy with hand-written gradients and the rows that must reproduce the contrast table have to run its code; a library for one model is welcome where it is clearer, with a note in the script header and in the table, and its first use records the dependency.
+- **Reopen if:** a model in numpy grows longer than the rest of its script, or the run time goes well past a minute.
+
+### Copy the InfoNCE code into the new scripts
+- **Dropped:** 2026-11-11
+- **Why:** two copies drift apart, and the shared table only holds if the chapters run the same code. The scripts import `contrast_digits_infonce.py`.
+- **Reopen if:** never.
 
 ## Open durability actions
 
-From the Lindy review of 2026-11-10 (`tmp/lindy_review.md`, which is gitignored). A review (`review-doc` §18) proposes new ones and checks whether the "done" ones really are.
+From the Lindy review of 2026-11-10 (`tmp/lindy_review.md`, which is gitignored; the chapter numbers in its items are those of that date) and later work. A review (`review-doc` §18) proposes new ones and checks whether the "done" ones really are.
 
 - **Open.** Decide the titles of Chapters 4, 5, 8 and 9 so that they name the question, not the fashion word (RAG, Transformers, Topological Deep Learning, Quantum).
 - **Open.** One home per fast-moving claim. The Prologue and Chapter 1 ask the question and point to Chapter 5 (reasoning in space or in text) and Chapter 13 (JEPA, convergence).
@@ -187,4 +310,9 @@ From the Lindy review of 2026-11-10 (`tmp/lindy_review.md`, which is gitignored)
 - **Open.** State N and status of small-study results in the clause that uses them (Held 2011, Vong 2024, clinical studies).
 - **Open.** Expert read-through of the Epilogue (Indian philosophy of language, psychiatry, the Chomsky debate) before publication.
 - **Open.** Back up `references/` and `tmp/` outside the working machine (both are gitignored).
+- **Open.** Delete `filters/book-chapter-refs.lua` when Quarto fixes #14132 (milestone 1.12), after checking with the text diff of the renders (`notes/text_diff.py extract` and `diff`) that nothing else depended on it.
+- **Open.** Re-snapshot the durability metrics (`durability_metrics.py snapshot`) after the author approves the restructuring of 2026-11-11. Until then `make durability` reports `fashion_titles +13/-13`, which is only the change of format of the title lines (from front matter to headings).
+- **Open.** The Further Reading paragraph of the embedding chapter says "The next chapter's argument about embedding dimensionality rests on the Johnson-Lindenstrauss lemma"; the next chapter is now the generative one. Check which chapter it meant and reword.
+- **Open.** The sentence on supervised and metric-learning embeddings in *Learning by Contrast* has a `REVIEW` comment and no source (Hadsell, Chopra and LeCun 2006 and Schroff et al. 2015 are candidates from memory, unchecked): ground-check them or cut the sentence.
+- **Open.** Part II still carries the title and intro "Structure in Vector Spaces", which do not describe its first chapter (vector databases and RAG); see ideas 10 and 11.
 - **Done.** Pin the Pride and Prejudice corpus (SHA-256 check in `utils.load_book`).

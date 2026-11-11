@@ -36,7 +36,7 @@ def test_match_future_chapter_patterns():
         ("embedding_spaces.qmd", 0, 3),        # Part I, Ch 4
         ("generative_spaces.qmd", 0, 4),       # Part I, Ch 5
         ("contextual_vectors.qmd", 0, 5),      # Part I, Ch 6 (closes Part I: the geometry is learned, not designed)
-        ("vector_databases.qmd", 1, 0),        # Part II, Ch 7 (opens Part II; position under review, notes/generative_chapter_plan.md D11)
+        ("vector_databases.qmd", 1, 0),        # Part II, Ch 7 (opens Part II; position under review, notes/ideas.qmd idea 11)
         ("tangent_spaces.qmd", 1, 1),          # Part II, Ch 8
         ("graph_embeddings.qmd", 1, 2),        # Part II, Ch 9
         ("topological_deep_learning.qmd", 1, 3), # Part II, Ch 10

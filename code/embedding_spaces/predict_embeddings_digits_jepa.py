@@ -1,4 +1,4 @@
-# SKELETON: not implemented, skipped by `make test-code` (see notes/generative_chapter_plan.md, section 5, Step J).
+# SKELETON: not implemented, skipped by `make test-code` (see notes/ideas.qmd, idea 13).
 """Learning by Predicting Embeddings: a joint-embedding predictive model on the toy of Learning by Contrast.
 
 Same data, split, augmentation, dimension and measures as contrast_digits_infonce.py, which is imported, not copied.
