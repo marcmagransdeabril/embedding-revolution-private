@@ -39,13 +39,13 @@ MASTER_PARTS = [
             },
             {
                 "num": 3,
-                "title": "The Anatomy of Embedding and Latent Spaces",
+                "title": "The Anatomy of Embedding Spaces",
                 "patterns": ["embedding_spaces", "anatomy", "latent_spaces", "03_", "chapter3"],
             },
             {
                 "num": 4,
-                "title": "Vector Databases, RAG, and the Limits of Single-Vector Retrieval",
-                "patterns": ["vector_database", "vector_db", "rag", "04_", "retrieval", "chapter4"],
+                "title": "Latent Spaces from Generative Models",
+                "patterns": ["generative_spaces", "04_", "chapter4"],
             },
             {
                 "num": 5,
@@ -59,18 +59,23 @@ MASTER_PARTS = [
         "chapters": [
             {
                 "num": 6,
-                "title": "Tangent Spaces, Geodesics, and Geometric Deep Learning",
-                "patterns": ["tangent_space", "geodesic", "geometric_deep_learning", "06_", "hyperbolic", "chapter6"],
+                "title": "Vector Databases, RAG, and the Limits of Single-Vector Retrieval",
+                "patterns": ["vector_database", "vector_db", "rag", "06_", "retrieval", "chapter6"],
             },
             {
                 "num": 7,
-                "title": "From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry",
-                "patterns": ["graph_embedding", "knowledge_graph", "07_", "relational_geometry", "chapter7"],
+                "title": "Tangent Spaces, Geodesics, and Geometric Deep Learning",
+                "patterns": ["tangent_space", "geodesic", "geometric_deep_learning", "07_", "hyperbolic", "chapter7"],
             },
             {
                 "num": 8,
+                "title": "From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry",
+                "patterns": ["graph_embedding", "knowledge_graph", "08_", "relational_geometry", "chapter8"],
+            },
+            {
+                "num": 9,
                 "title": "Beyond Graphs: Topological Deep Learning",
-                "patterns": ["topological_deep_learning", "topological", "08_", "simplicial", "homology", "chapter8"],
+                "patterns": ["topological_deep_learning", "topological", "09_", "simplicial", "homology", "chapter9"],
             },
         ],
     },
@@ -78,19 +83,19 @@ MASTER_PARTS = [
         "part": "The Algebra of Thought: Vectors as Symbols",
         "chapters": [
             {
-                "num": 9,
-                "title": "The Complex Plane and Quantum Logic: Wave-Nature in Latent Space",
-                "patterns": ["complex_plane", "quantum_logic", "09_", "cvnn", "complex_valued", "chapter9"],
-            },
-            {
                 "num": 10,
-                "title": "Vector Symbolic Architectures and Hyperdimensional Computing",
-                "patterns": ["vector_symbolic", "vsa", "hyperdimensional", "10_", "hdc", "chapter10"],
+                "title": "The Complex Plane and Quantum Logic: Wave-Nature in Latent Space",
+                "patterns": ["complex_plane", "quantum_logic", "10_", "cvnn", "complex_valued", "chapter10"],
             },
             {
                 "num": 11,
+                "title": "Vector Symbolic Architectures and Hyperdimensional Computing",
+                "patterns": ["vector_symbolic", "vsa", "hyperdimensional", "11_", "hdc", "chapter11"],
+            },
+            {
+                "num": 12,
                 "title": "Neuro-Symbolic Integration and Emergent Compositionality",
-                "patterns": ["neuro_symbolic", "neurosymbolic", "11_", "tpr", "ltn", "chapter11"],
+                "patterns": ["neuro_symbolic", "neurosymbolic", "12_", "tpr", "ltn", "chapter12"],
             },
         ],
     },
@@ -98,14 +103,14 @@ MASTER_PARTS = [
         "part": "Alignment, Transport, and Synthesis",
         "chapters": [
             {
-                "num": 12,
+                "num": 13,
                 "title": "Cross-Domain Transfer and Optimal Transport",
-                "patterns": ["cross_domain", "optimal_transport", "12_", "wasserstein", "chapter12"],
+                "patterns": ["cross_domain", "optimal_transport", "13_", "wasserstein", "chapter13"],
             },
             {
-                "num": 13,
+                "num": 14,
                 "title": "Many Senses, One Space: Multimodal Embeddings",
-                "patterns": ["multimodal", "many_senses", "13_", "chapter13"],
+                "patterns": ["multimodal", "many_senses", "14_", "chapter14"],
             },
         ],
     },

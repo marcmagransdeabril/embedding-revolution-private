@@ -19,10 +19,11 @@ book:
     - chapters/properties_of_meaning.qmd
     - chapters/curse_of_dimensionality.qmd
     - chapters/embedding_spaces.qmd
-    - chapters/vector_databases.qmd
+    - chapters/generative_spaces.qmd
     - chapters/contextual_vectors.qmd
   - part: 'Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology'
     chapters:
+    - chapters/vector_databases.qmd
     - chapters/tangent_spaces_geodesics.qmd
     - chapters/graph_embeddings.qmd
     - chapters/topological_deep_learning.qmd

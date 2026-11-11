@@ -71,6 +71,13 @@ How alignment is judged. A *classic* is a source from before 1980 that is held i
 
 Optional items that were not ranked: the Goldstein et al. 2025 update to "The Brain Also Embeds", and the smaller from-memory items at the end of Gap 11 of `tmp/emb_vs_lat.md`.
 
+### 10. Part II as the remedies for the shortcomings of Part I [author, 2026-11-11]
+- **Alignment:** not assessed.
+- **The idea (author):** retrieval-augmented generation, whether it uses a vector database, keyword search or web search, keeps the output grounded and so patches hallucination; Part II could be about the shortcomings of the Part I approaches and the approaches that have been tried, successfully, to compensate for them.
+- **What the book already has:** the ledger of limits at the end of Chapter 3, which states each limit of a single vector as a cost and names the chapter that takes it up. Read that way, every later chapter is already a remedy (structure by design, curvature, relations, topology, binding, composition, alignment), so the idea names Part II after a device the book already uses, and could apply to Parts III and IV as well.
+- **A correction to keep the claim exact:** embedding vectors do not hallucinate; generative models do (Chapter 4), by producing what is plausible without checking it. Retrieval compensates by bringing external text into the context, and the retrieval itself runs on embeddings, with the limit of the dot product that the chapter states. So the retrieval chapter is a remedy for Chapter 4's shortcoming, and it has shortcomings of its own.
+- **Explore by:** decide at the Part II gate (the `OPEN` comment of `index.qmd`). Part II is currently the vector-database chapter followed by the three structure chapters, under the title "Structure in Vector Spaces", which does not fit the retrieval chapter; a title and intro about remedies would. Does not require reordering.
+
 ## Dropped ideas
 
 For each idea: when it was dropped, what was learned, and what would bring it back. Ideas that sounded plausible and did not hold up under checking are kept here too, as unsuccessful explorations, with the check that failed them.
@@ -119,6 +126,49 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Dropped:** 2026-11-11, as stated (first pass, from memory).
 - **Why:** an unsourced superlative. Rendle et al. 2020 (p. 1) say embedding-based models "have been the state of the art in collaborative filtering for over a decade", which is about recommenders, not about all uses.
 - **Reopen if:** a survey of industrial uses ranks them.
+
+<!-- From notes/generative_chapter_plan.md, section 12, copied 2026-11-11 (Step H). -->
+
+### Put the generative material in Chapter 3 instead of a new chapter
+- **Dropped:** 2026-11-11.
+- **Why:** Chapter 3 is `definitive` and already long (four objectives and a ledger of limits), and its question is how similarity becomes geometry. Reconstruction asks a different question (what distance means, and whether there is a way back), and Chapter 3 would lose its single thread.
+- **Reopen if:** the new chapter is still under about 6 pages when it reaches `provisional`. Then merge it into Chapter 3 as a fifth objective, followed by the ledger.
+
+### Leave the debate in the multimodal chapter, under JEPA
+- **Dropped:** 2026-11-11.
+- **Why:** Parts II and III need the similarity-against-generation distinction (pullback metric in Chapter 7, decoding from CLIP in Chapter 14), and putting it last in the book means introducing it after its first use.
+- **Reopen if:** D2 decides the debate's home is Chapter 14 after all. The *distinction* still stays in Chapter 4.
+
+### Title the chapter after the methods or a fashion word
+- **Dropped:** 2026-11-11.
+- **Examples:** "Latent Spaces", "Generative AI", "Autoencoders, VAEs and Diffusion".
+- **Why:** the durability rule says a title names the question, not a method name that dates. A list of methods also turns the chapter into a survey.
+- **Reopen if:** never for fashion words. A method name is fine if a method becomes the question itself (as with the SVD in Chapter 3).
+
+### A survey of GANs and diffusion
+- **Dropped:** 2026-11-11.
+- **Why:** both are fast-moving and outside the question. One page of dated history is enough to show that the two kinds of space work together.
+- **Reopen if:** a later chapter needs a mechanism of diffusion (for example its latent geometry) as evidence. In that case, put it in that chapter.
+
+### Gate Part II after the new Chapter 4's scale test
+- **Dropped:** 2026-11-11 (default of D6).
+- **Why:** the Part II question is whether transformers find these structures unaided, and the contextual-vectors chapter answers it. The new chapter does not.
+- **Reopen if:** the Chapter 4 scale test turns out to decide whether Part II's structures are needed (for example, if generation absorbs geometry by design).
+
+### Move "Learning by Predicting Embeddings" (JEPA) from Chapter 3 to Chapter 4
+- **Dropped:** 2026-11-11 (it was my reading of the author's first D2 answer, and was in the plan for about an hour).
+- **Why:** the author's second answer is that Chapter 3 covers the predictive and reconstructive models and Chapter 4 the generative ones. JEPA is predictive, so it stays in Chapter 3; its debate with scaled generative models is the scale test of Chapter 4, where both are on the table.
+- **Reopen if:** the JEPA section grows so that Chapter 3 becomes unbalanced; then split it out, but into a section of Chapter 3's end, not into the generative chapter.
+
+### Keep the vector-database chapter in Part I because it is already there
+- **Dropped:** 2026-11-11 (author, D11, leaning).
+- **Why:** it is an application of embedding and latent spaces, not a fundamental technology; Part I is about what a space is and how it is built. Which part receives it is open.
+- **Reopen if:** the roadmap shows that the later chapters depend on its limits (the dot-product limits of the ledger) so much that they need it before Part II.
+
+### State that embedding and latent spaces are one thing, with one objective
+- **Dropped:** 2026-11-11 (before it was written).
+- **Why:** it is a claim that the sources may not support (a bound on mutual information does not fix the geometry, and there is published criticism of the mutual-information view of contrastive learning). The consolidation is graded and sourced instead (4.3.7).
+- **Reopen if:** the sources read in Step L support a stronger statement.
 
 ## Open durability actions
 

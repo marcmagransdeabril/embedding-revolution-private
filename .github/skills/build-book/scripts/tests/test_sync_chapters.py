@@ -33,16 +33,17 @@ def test_match_future_chapter_patterns():
         ("properties_of_meaning.qmd", 0, 0),   # Part I, Ch 1
         ("curse_of_dimensionality.qmd", 0, 1), # Part I, Ch 2
         ("embedding_spaces.qmd", 0, 2),        # Part I, Ch 3
-        ("vector_databases.qmd", 0, 3),        # Part I, Ch 4
-        ("contextual_vectors.qmd", 0, 4),      # Part I, Ch 5
-        ("tangent_spaces.qmd", 1, 0),          # Part II, Ch 6
-        ("graph_embeddings.qmd", 1, 1),        # Part II, Ch 7
-        ("topological_deep_learning.qmd", 1, 2), # Part II, Ch 8
-        ("complex_plane.qmd", 2, 0),           # Part III, Ch 9
-        ("vsa_hyperdimensional.qmd", 2, 1),    # Part III, Ch 10
-        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 11
-        ("optimal_transport.qmd", 3, 0),       # Part IV, Ch 12
-        ("multimodal_embeddings.qmd", 3, 1),   # Part IV, Ch 13
+        ("generative_spaces.qmd", 0, 3),       # Part I, Ch 4
+        ("contextual_vectors.qmd", 0, 4),      # Part I, Ch 5 (closes Part I: the geometry is learned, not designed)
+        ("vector_databases.qmd", 1, 0),        # Part II, Ch 6 (opens Part II; position under review, notes/generative_chapter_plan.md D11)
+        ("tangent_spaces.qmd", 1, 1),          # Part II, Ch 7
+        ("graph_embeddings.qmd", 1, 2),        # Part II, Ch 8
+        ("topological_deep_learning.qmd", 1, 3), # Part II, Ch 9
+        ("complex_plane.qmd", 2, 0),           # Part III, Ch 10
+        ("vsa_hyperdimensional.qmd", 2, 1),    # Part III, Ch 11
+        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 12
+        ("optimal_transport.qmd", 3, 0),       # Part IV, Ch 13
+        ("multimodal_embeddings.qmd", 3, 1),   # Part IV, Ch 14
     ]
 
     for filename, expected_part, expected_ch in test_cases:
@@ -112,3 +113,13 @@ def test_a_chapter_matches_the_same_slot_whether_its_title_is_in_the_front_matte
     b = tmp_path / "embedding_spaces_h1.qmd"
     b.write_text("---\nstatus: definitive\n---\n\n# The Anatomy of Embedding and Latent Spaces {#sec-ch-embedding-spaces}\n\n" + body, encoding="utf-8")
     assert sync_chapters.match_chapter_to_outline(a) == sync_chapters.match_chapter_to_outline(b)
+
+
+def test_generative_chapter_is_chapter_4_and_embedding_spaces_stays_chapter_3():
+    """`latent_spaces` is a pattern of Chapter 3; the file name generative_spaces must not be taken for it."""
+    gen = sync_chapters.match_chapter_to_outline(REPO_ROOT / "chapters" / "generative_spaces.qmd")
+    emb = sync_chapters.match_chapter_to_outline(REPO_ROOT / "chapters" / "embedding_spaces.qmd")
+    assert gen == (0, 3)
+    assert emb == (0, 2)
+    flat = [c for p in sync_chapters.discover_and_build_chapters_list()[1:] if isinstance(p, dict) for c in p["chapters"]]
+    assert flat.index("chapters/generative_spaces.qmd") == flat.index("chapters/embedding_spaces.qmd") + 1

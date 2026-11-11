@@ -172,7 +172,7 @@ printed-page locators `[@key, p. N]` when the prose is written):
 *Plan (1–2 pages).* Which structures of the book were absorbed by scale, which survived because they are cheap, and which because the problem demands them, set against the long history of hand-built meaning (Wilkins, Osgood's chosen scales, feature norms) and of meaning learned from use (Harris, Skyrms, LSA). The perfect language failed as an engineering project and succeeded as a learned one; what remains hand-built is symmetry, which Klein and the brain's grid code suggest is structural.
 
 - Claim: the bitter lesson is the outcome of a four-century experiment, not a decade of benchmarks.
-- Hooks: scale tests of Chapters [-@sec-ch-vector-databases] to [-@sec-ch-multimodal-embeddings].
+- Hooks: scale tests of Chapters [-@sec-ch-generative-spaces] to [-@sec-ch-multimodal-embeddings].
 - Open case: reasoning in the space versus in text, the bitter lesson applied to computation. Is keeping the steps continuous a durable advantage, or a prior that scaled token-level reasoning absorbs (Chapters [-@sec-ch-contextual-vectors] and [-@sec-ch-multimodal-embeddings])? The cost side: more search means more chances to exploit an imperfect verifier, so the verifier rather than the path may be the bottleneck [@brown2024large; @cobbe2021training; @gao2022scaling].
 
 ## Open Frontiers

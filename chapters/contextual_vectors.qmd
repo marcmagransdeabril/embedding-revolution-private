@@ -10,7 +10,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Why the vector of a word must depend on its sentence, and what transformers compute.*
 
 ## Attention as Similarity-Weighted Retrieval
-*The dot-product machinery of @sec-ch-vector-databases inside the model, and its link to associative memory.*
+*The dot-product machinery of retrieval (@sec-ch-vector-databases) inside the model, and its link to associative memory.*
 
 ## Tokenizing the Senses
 *Image patches, spectrogram frames, and video tubelets turned into tokens, so that the same attention machinery reads every modality. This is one of two routes to a shared space, a single network over interleaved tokens, compared in @sec-ch-multimodal-embeddings with separate encoders aligned by a contrastive loss.*
@@ -22,7 +22,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Chomsky's phrase-structure trees, looked for inside trained models: subject-verb agreement across intervening clauses (2016), agreement in nonsense sentences, "colorless green" networks (2018), and the structural probe (2019), which finds parse-tree distance as squared distance in a linear subspace of BERT and tree depth as a squared norm. Against it, the theoretical limits of self-attention on unbounded bracket nesting and the positive result for bounded depth. Brackets are the right test because of the Chomsky–Schützenberger theorem (1963): every context-free language is built from balanced brackets (a Dyck language) and a regular language. Bounded depth is Chomsky's competence versus performance (1963–1965): people also parse only a few levels of centre-embedding, and a network with finite precision and context is, strictly, a large finite automaton.*
 
 ## Sparse Autoencoders and Dictionary Learning
-*Recovering more features than dimensions, which uses the near-orthogonality of @sec-ch-curse-of-dimensionality.*
+*An autoencoder (@sec-ch-embedding-spaces) with a sparse code wider than its input, recovering more features than dimensions, which uses the near-orthogonality of @sec-ch-curse-of-dimensionality.*
 
 ## Reasoning in Text or in the Space
 *Chain of thought [@wei2022chain] as a path through the model's space that is rounded to a token at every step, which puts reasoning on Shannon's boundary (@sec-ch-embedding-spaces); pause tokens (2023) [@goyal2023think] and filler tokens (2024) [@pfau2024lets] as extra computation that is not quite language; and the latent alternatives that keep the steps in the space, continuous chain of thought (Coconut, 2024) [@hao2024training] and recurrent-depth models (2025). Planning in latent space is taken up in @sec-ch-multimodal-embeddings.*

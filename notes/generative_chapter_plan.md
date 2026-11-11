@@ -11,10 +11,14 @@ Background: `notes/emb_vs_lat.md` (gaps, errors, inconsistencies) and the discus
 ## 1. Decision summary
 
 - **Add a new Chapter 4** to Part I, right after Chapter 3, tagged `idea`. File `chapters/generative_spaces.qmd`, label `sec-ch-generative-spaces` (D4; the name avoids the `latent_spaces` pattern of Chapter 3 in `sync_chapters.py`, see 7).
-- **The durable question** (not a fashion word): *what does the training objective make distance mean, and can you get back from the vector to the data?* The chapter compares spaces trained for similarity (Chapter 3) with spaces trained to reconstruct or generate.
-- **Old Chapters 4 to 13 become 5 to 14.** Chapters 1 to 3 keep their numbers.
+- **The durable question** (not a fashion word): *what does the training objective make distance mean, and can you get back from the vector to the data?* The chapter compares spaces trained for similarity (Chapter 3) with spaces trained to reconstruct, generate or predict.
+- **Scope, final reading (author, 2026-11-11, D2/D3/D4/D8/D11/D12).** The two chapters split the field by one question: *does the model only learn a map, or does it define a distribution over the data?*
+  - **Chapter 3 (embedding spaces)** covers the objectives that learn a map, from counting to prediction, **reconstruction (new section, the autoencoder)**, contrast and **prediction of embeddings (JEPA, which stays)**. Its title, "The Anatomy of Embedding and Latent Spaces", fits.
+  - **Chapter 4 (generative models and their latent spaces, new)** covers the models that define a distribution: latent-variable models (VAE), denoising and diffusion, adversarial models, autoregressive models. It **ends by reconciling them with the predictive and reconstructive models of Chapter 3**, or by showing where they are similar and where they differ (4.3.7).
+  - **RAG and vector databases (D11, open):** the author thinks they are an application of embedding and latent spaces, not a fundamental technology, so the chapter probably leaves Part I; where it goes is not decided. Until D11 is closed it stays where it is, and the plan numbers it as Chapter 5. Moving it later is cheap: the labels and cross-references follow `_quarto.yml`, so it is a change of `MASTER_PARTS` in `sync_chapters.py` plus the hand-offs (Step I2).
+- **Old Chapters 4 to 13 become 5 to 14** (until D11 moves the vector-database chapter; the numbers are whatever `_quarto.yml` says). Chapters 1 to 3 keep their numbers (Chapter 3 gains one section, see 4.3a).
 - **Step 0 first (section 1a):** replace the hand-typed "Chapter 13" by Quarto cross-references, so Quarto numbers the chapters from `_quarto.yml` and the insertion needs no renumbering. A pilot on a scratch copy worked in HTML and PDF.
-- **Tone and size.** Same register as Chapter 3, light on scholarship: few citations, each where it carries a number or a theorem. Length target 12 to 15 pages for the finished chapter.
+- **Tone and size.** Same register as Chapter 3, light on scholarship: few citations, each where it carries a number or a theorem. Length target 15 to 18 pages for the finished chapter (it grew from 12 to 15 with JEPA and the consolidation).
 - **Every section ends with exercises that reproduce its figures** (book rule), with a script under `code/generative_spaces/`.
 
 Open decisions for the author are in section 9. The plan assumes the default in each.
@@ -57,10 +61,10 @@ Open decisions for the author are in section 9. The plan assumes the default in 
 
 ## 2. Why this chapter
 
-1. Chapter 3 tells how similarity-trained vectors are built (counting, prediction, contrast, prediction of embeddings). The most common meaning of "latent space" in machine learning, the space of an autoencoder or generative model, is not in the book (gap 1 of `notes/emb_vs_lat.md`). Only sparse autoencoders appear (old Chapter 5, new 6).
+1. Chapter 3 tells how similarity-trained vectors are built (counting, prediction, contrast, prediction of embeddings; the autoencoder is added, see 4.3a). The most common meaning of "latent space" in machine learning, the space of an autoencoder or generative model, is not in the book (gap 1 of `notes/emb_vs_lat.md`). Only sparse autoencoders appear (old Chapter 5, new 6).
 2. Whether distance means anything depends on the objective. Chapter 1's first property, *nearness is likeness* (`@sec-prop-nearness`), holds by construction in a similarity-trained space and is not automatic in a reconstruction-trained one.
 3. *Meaning can move: paths* (`@sec-prop-paths`) and the thread "reasoning as a path through the space" need a way to say when the midpoint of a path is meaningful. A decoder gives a check; a contrastive embedding does not.
-4. The live scale question of the book, whether prediction in latent space scales as a general method or scaled generative models absorb it, is this distinction. It is planned for old Chapter 13 (new 14) under JEPA, and it needs a home before Parts II and III use it.
+4. The live scale question of the book, whether prediction in latent space scales as a general method or scaled generative models absorb it, is this distinction. It was planned for old Chapter 13 (new 14) under JEPA; JEPA's mechanism stays in Chapter 3 and its debate with scaled generative models is the scale test of Chapter 4, which gives it a home before Parts II and III use it.
 5. Later chapters build on it. New Chapter 7 (old 6, geodesics and curvature) needs the metric a decoder induces. New Chapter 14 (old 13, multimodal) needs the difference between what a space keeps and what it can regenerate, since text-to-image systems decode from a similarity-trained space.
 
 ## 3. Placement and numbering
@@ -69,9 +73,9 @@ Open decisions for the author are in section 9. The plan assumes the default in 
 |:--|:--|:--|:--|
 | 1 | 1 | `properties_of_meaning.qmd` | unchanged |
 | 2 | 2 | `curse_of_dimensionality.qmd` | unchanged |
-| 3 | 3 | `embedding_spaces.qmd` | unchanged; "Next:" line and ledger of limits change |
+| 3 | 3 | `embedding_spaces.qmd` | gains "Learning by Reconstruction" (4.3a); "Next:" line and ledger of limits change |
 | – | **4** | `generative_spaces.qmd` | **new, `idea`** |
-| 4 | 5 | `vector_databases.qmd` | |
+| 4 | 5 | `vector_databases.qmd` | D11: probably leaves Part I (an application); position open |
 | 5 | 6 | `contextual_vectors.qmd` | Part II gate moves to its scale test (D6) |
 | 6 | 7 | `tangent_spaces_geodesics.qmd` | |
 | 7 | 8 | `graph_embeddings.qmd` | |
@@ -97,9 +101,10 @@ open: "Home of the JEPA-against-generative scale question (here or in Chapter 14
 # <title, see D1> {#sec-ch-generative-spaces}
 ```
 
-Title candidates, all naming the question and none a fashion word (D1):
-- "What the Objective Makes a Space Mean: Similarity, Reconstruction, and the Way Back"
-- "Two Ways to Build a Space: Similarity and Generation"
+Title (D1: the title of this new chapter, open). It should name the question, not a method; now that the chapter is the latent counterpart of Chapter 3 and "latent" is the word the literature uses for these spaces, three candidates:
+- "Latent Spaces: Reconstructing, Generating, Predicting, and What They Share" (names the contents and the consolidation).
+- "Latent Spaces: When the Vector Has a Way Back to the Data" (names the question; the shortest to remember).
+- "What the Objective Makes a Space Mean: Similarity, Reconstruction, and the Way Back" (the first candidate of the plan; it covers both chapters more than this one).
 
 Check the chosen title against the patterns of `MASTER_PARTS` in `sync_chapters.py` (matching is a substring test on stem *and* title, first match wins).
 
@@ -109,63 +114,101 @@ Check the chosen title against the patterns of `MASTER_PARTS` in `sync_chapters.
 - **Properties named, with anchors.** `@sec-prop-nearness`, `@sec-prop-paths`, `@sec-prop-arrangement`, `@sec-prop-invariance` (the invertible-matrix freedom of Chapter 3, exercise 22, and the rotation-symmetric prior of a VAE). `@sec-prop-direction` only if the latent-arithmetic material is kept.
 - **Closing.** The chapter's current reading of its scale test, dated and with its evidence class, "undecided" being valid. The hand-off to Chapter 5 (4.4).
 
-### 4.3 Sections
+### 4.3 Sections of Chapter 4
 
 Each section is a stub at first (`idea`), written like the existing stubs (one italic paragraph of plan per section). Each finished section ends with the questions and answers blocks (`::: {.questions}` then `::: {.answers}`).
 
-1. **The Fork: What Does Distance Mean?**
-   One-page recap of what Chapter 3 built (similarity defines distance; no way back). Name the question. The Prologue's terminology note made precise in one table (the one drafted in `notes/emb_vs_lat.md`). Hook: Chapter 3's "Learning by Predicting Embeddings", which already drops the decoder, and Chapter 3's pixel predictor, which already keeps one (section 5).
-2. **Reconstruction and the Bottleneck: The Autoencoder.**
-   Pay for every detail through a small code. The linear case is the SVD of Chapter 3 ($\mathbf{M}\approx\mathbf{E}\mathbf{V}^\top$ is a linear encoder-decoder; Eckart–Young is `eckart1936approximation`). Nonlinear autoencoders; what the code keeps (what is needed to rebuild, brightness included) against what a contrastive code keeps (what separates). No guarantee that distance means anything.
-3. **Giving the Space a Density: Latent Variable Models and the VAE.**
-   The hidden-cause view (factor analysis, LSA's "latent", EM). The evidence lower bound as a reconstruction term plus a prior term. What the prior buys (sampling, smoothness) and costs (posterior collapse as the cousin of the dimensional collapse of Chapter 3; holes between the codes). Identifiability: the standard prior is rotation-symmetric, so the invertible-matrix freedom of Chapter 3 survives as a rotation freedom, and disentanglement is not free.
-4. **Generation Without a Single Vector: GANs and Diffusion.**
-   Dated history, past tense. Latent diffusion works in the latent space of a pretrained autoencoder, and conditioning typically comes from a similarity-trained encoder (CLIP). So the two kinds of space cooperate, and this is where Chapter 14's multimodal spaces meet generation. One page; the aim is the contrast, not a survey.
+**The map the two chapters share** (it is the first table of Chapter 4 and the closing table of 4.3.7): two questions classify every objective. *Where is the error measured?* In the data, among sampled candidates, or in the code. *Does the model define a distribution over the data* (something to sample and to score)?
+
+| Objective | Kind | Error measured | Distribution over the data | Chapter |
+|:--|:--|:--|:--|:--|
+| counting and SVD | reconstructive (of a matrix) | in the data (a matrix) | no | 3 |
+| prediction of the neighbour (word2vec) | predictive | in the data (the neighbour), a softmax over the vocabulary | only of the neighbour, given the word | 3 |
+| autoencoder | reconstructive | in the data (the input) | no | 3 (new) |
+| contrast (InfoNCE) | contrastive (discriminative) | among sampled candidates | no | 3 |
+| prediction of embeddings (JEPA) | predictive, in the code | in the code | no | 3 |
+| VAE | reconstructive and generative | in the data, plus a prior on the code | yes (prior and decoder) | 4 |
+| denoising and diffusion | reconstructive (of noise) and generative | in the data (noise) | yes (a score, a chain) | 4 |
+| GAN | generative (adversarial) | by a discriminator | yes, implicit (can sample, cannot score) | 4 |
+| autoregressive and masked models | predictive and generative | in the data (the next token) | yes (chain rule) | 4 |
+
+The *Kind* column uses the labels of the author's suggestion (reconstructive, predictive, generative; the "hybrid" is the rows with two kinds), plus *contrastive*, which none of the three labels covers (D15).
+
+1. **The Fork: A Map or a Distribution?**
+   One-page recap of the objectives of Chapter 3, now including the autoencoder, and what they do not have: a way to draw a new point and to say how likely a point is. The table above. The terminology of the Prologue made precise (the table drafted in `notes/emb_vs_lat.md`), with the places where the literature has settled on one word (D8). The sentence that fixes the scope: flows and energy-based models are not told here (4.3, "Where the map stops").
+2. **Giving the Space a Density: Latent Variable Models and the VAE.**
+   The hidden-cause view (factor analysis, LSA's "latent", EM). The evidence lower bound as a reconstruction term plus a prior term, read against the autoencoder of Chapter 3: the same decoder, a prior added. What the prior buys (sampling, smoothness) and costs (posterior collapse as the cousin of the dimensional collapse of Chapter 3; holes between the codes). Identifiability: the standard prior is rotation-symmetric, so the invertible-matrix freedom of Chapter 3 survives as a rotation freedom, and disentanglement is not free.
+3. **Denoising, Diffusion and the Adversarial Game.**
+   Dated history, past tense. A denoising autoencoder (Chapter 3) learns the direction towards the data; chained, it is a diffusion model. Latent diffusion works in the latent space of a pretrained autoencoder, and conditioning typically comes from a similarity-trained encoder (CLIP), so the two kinds of space cooperate; this is where Chapter 14's multimodal spaces meet generation. GANs: a discriminator in place of a likelihood, which can sample and cannot score. One to two pages; the aim is the contrast, not a survey.
+4. **Autoregressive and Masked Models: Predicting the Next Piece.**
+   The prediction of Chapter 3 (word2vec's softmax over the neighbour) taken to the whole sequence by the chain rule is a generative model of text; Shannon's generator and the n-gram models of Chapter 3 were already one. Its hidden vectors, not a code trained for it, are the contextual vectors of Chapter 6, which is how this section hands the thread on. One page.
 5. **The Geometry a Decoder Induces.**
-   A decoder pulls a metric back onto the code space, so straight lines in the code are curved in the data, and the shortest path is a geodesic of the pullback metric. Anchor: `arvanitidis2018latent`. This is the one home of the pullback idea; Chapter 7 develops geodesics and points back. The same section answers *when is a midpoint meaningful*.
-6. **Side by Side: What Each Kind of Space Keeps.**
-   The comparison table (meaning of distance, decoder, density, off-data points, typical failure, geometry), each row marked *structural* (follows from the objective) or *contingent* (how systems behaved at a date), plus the experiment of section 5.
-7. **Scale Test (dated 2026).**
-   Question: as data and compute grow, does generation absorb similarity-trained spaces (a decoder everywhere), does prediction without a decoder absorb generation, or do both survive because they answer different questions (what you can get back, against what you can compare)? Evidence classes kept apart: a position paper (the JEPA argument), scaled generative results, and the chapter's own toy experiment, which is small and says so. Closing reading: undecided unless the evidence moves.
+   A decoder pulls a metric back onto the code space, so straight lines in the code are curved in the data, and the shortest path is a geodesic of the pullback metric. Anchor: `arvanitidis2018latent`. This is the one home of the pullback idea; it applies to the autoencoder of Chapter 3 as well, and Chapter 7 develops geodesics and points back. The same section answers *when is a midpoint meaningful*.
+6. **Where the Map Stops.**
+   Half a page: what the two chapters leave out and why (normalising flows, which are invertible and so give an exact way back; energy-based models; supervised and metric-learning embeddings, mentioned in Chapter 3 under contrast; learned states of agents, Chapter 14).
+7. **Reconciling the Two Families.** *(two or three sections; the author's request, D4)*
+   - *What each pays for.* The table above completed with the other columns: what keeps the space from collapsing, whether there is a decoder, what happens off the data, the typical failure. Each cell marked *structural* (follows from the objective) or *contingent* (how systems behaved at a date).
+   - *A common currency: information.* The attempt at one view, in Shannon's terms, the backbone of Chapter 3. Candidate statements to check against sources before they are written: the InfoNCE objective is a lower bound on the mutual information between the two views (`oord2018representation`); the reconstruction term of the ELBO is a lower bound on the information the code keeps about the data, and the whole ELBO trades that information (distortion) against the description length of the code (rate), Shannon's rate–distortion trade-off; so both families maximise information kept about the data, one with a decoder as the variational family and one with a critic that compares candidates. If it holds, it is one inequality and one picture; the experiment's figure (a), reconstruction error against retrieval, is then a rate–distortion-like plane.
+   - *Similarities and differences.* To be stated only as far as the sources and the experiment support it: a bound on information says nothing about the geometry (two encoders at the same bound can have different distances); reconstruction prices every detail by the metric on the data, while contrast prices only what separates a sample of negatives and caps at $\log_2 N$ bits; JEPA prices only what is predictable in the code; only the generative family gives a density; and there is work arguing that the mutual-information view does not explain why contrastive methods work. The result is graded: **the same family at the level of what information the code keeps, different at the level of how distance is priced and of whether there is a distribution**. "Not reducible to one objective" is a valid result.
+8. **Scale Test (dated 2026).**
+   Question: as data and compute grow, does generation absorb the maps of Chapter 3 (a decoder everywhere), does prediction without a decoder (JEPA) absorb generation, or do both survive because they answer different questions (what you can get back and sample, against what you can compare)? Evidence classes kept apart: a position paper (`lecun2022path`), scaled generative results, and the chapter's own toy experiment, which is small and says so. Closing reading: undecided unless the evidence moves.
+
+### 4.3a What Chapter 3 gains
+
+One new section, tagged `{.idea}`, between "Learning by Prediction" and "Learning by Contrast":
+
+- **Learning by Reconstruction.** Prediction predicts a neighbour; reconstruction predicts the input itself through a small code. The linear case is the SVD the chapter already proves (Eckart–Young): $\mathbf{M}\approx\mathbf{E}\mathbf{V}^\top$ is a linear encoder-decoder, and "latent" in LSA is this case. The nonlinear autoencoder generalises it; a denoising autoencoder reconstructs from a corrupted input and is the first step towards Chapter 4. What the code keeps (what is needed to rebuild, brightness included) against what a contrastive code keeps (what separates); no guarantee that distance means anything. This is the author's own idea of `notes/ideas.qmd` (the autoencoder as the generalisation of Eckart–Young), now adopted. Experiment and exercises: section 5 (script `code/embedding_spaces/reconstruct_digits_ae.py`).
+- The claim of the JEPA section ("the four objectives differ in what the vector pays for") becomes "the five", with reconstruction paying for every detail of the input; the intro of the chapter and the roadmap entry list five objectives.
+- The ledger of limits gains one entry (4.4).
 
 ### 4.4 Hand-offs
 
-- **Chapter 3 to 4.** New "Next:" line for Chapter 3: *similarity is one way to build a space; the other keeps a way back to the data.* The ledger of limits at the end of Chapter 3 gains one entry stated as a cost: a similarity-trained space has no way back, so nothing checks the points between; a generative space has a way back, but distance no longer has to mean similarity (home: @sec-ch-generative-spaces).
-- **Chapter 4 to 5.** The old Chapter 3 hand-off moves here: *the first limit is practical, finding the nearest vector among billions.* The nearest-neighbour search of Chapter 5 applies to either kind of space.
+- **Chapter 3 gains the autoencoder and keeps JEPA** (4.3a). Its roadmap entry in `index.qmd` ("Counting, predicting, contrasting, and predicting embeddings turn Shannon's own quantities into geometry") adds reconstruction.
+- **Chapter 3 to 4.** New "Next:" line for Chapter 3: *a map from data to vectors is one way to build a space; the other defines a distribution over the data, and with it a way to sample and to score.* The ledger of limits at the end of Chapter 3 gains one entry stated as a cost: the objectives of this chapter fix what distance means and none of them says how likely a point is or what lies between the data; the models of @sec-ch-generative-spaces add a distribution, and distance then no longer has to mean similarity.
+- **Chapter 4 to the next chapter.** Until D11 is closed, the next chapter is the vector-database chapter and Chapter 3's old hand-off moves here: *the first limit is practical, finding the nearest vector among billions; search applies to either kind of space.* If D11 moves that chapter out of Part I, the next chapter is the contextual-vectors one and the hand-off is *the same dot-product machinery runs inside the model* (the autoregressive section of Chapter 4 already points there).
+- **Chapter 14** keeps the image and video forms of JEPA and the modality gap, and points to Chapter 4 for the debate with scaled generative models.
 
-## 5. Experiment and exercises (reproducible, reusing Chapter 3's toy)
+## 5. Experiments and exercises (reproducible, reusing Chapter 3's toy)
 
-Goal: put the comparison of 4.3.6 on the same data and metrics as Chapter 3's contrast experiment, so the two chapters share numbers.
+Goal: put the objectives of both chapters on the same data and metrics as Chapter 3's contrast experiment, so that the chapters share one table of numbers and the consolidation (4.3.7) is read from data. There are two scripts, one per chapter.
 
 **What Chapter 3 already has.** `contrast_digits_infonce.py` trains, besides InfoNCE, a `predict` model: the same encoder (64 → 128 → 16, ReLU) with a *linear* read-out of the unnormalised 16 coordinates, trained by squared error to produce the pixels of the *other* view. It is a cross-view autoencoder with a linear decoder, and it is already a row of `tbl-contrast-digits`. The new models are placed relative to it, not beside it as if new.
 
 - **Data.** The 8×8 digits of scikit-learn, 1,200 training and 597 held-out images, the same split and augmentation (`augment`: shift of at most one pixel, Gaussian noise 0.15). Dimension $d=16$ for every model.
 - **Training inputs.** Every model sees augmented views, as in Chapter 3. Autoencoders reconstruct the *other* view of the same image (a denoising, cross-view objective), so they are trained with the same invariance as InfoNCE and the retrieval comparison is fair. A plain same-view autoencoder is reported once as a reference row.
-- **Models.** `numpy` with hand-written backward passes, like every script in `code/` (D9; no new dependency).
-  0. Chapter 3's `predict` (linear decoder), imported, not retrained differently.
-  1. Linear autoencoder (check against the PCA/SVD of the same dimension, already a baseline in Chapter 3).
-  2. Nonlinear autoencoder (64 → 128 → 16 → 128 → 64): model 0 with a nonlinear decoder.
-  3. VAE with a standard normal prior (same sizes). Retrieval and interpolation use the posterior mean. $\beta$ is fixed from the reconstruction alone (the largest $\beta$ whose held-out reconstruction is within a stated margin of model 2), *before* retrieval is computed, and the rule is reported.
-  4. The InfoNCE encoder of Chapter 3 at $N=128$.
-  5. Model 4 frozen, plus a decoder (16 → 128 → 64) trained on its unit-norm codes: the "way back from a similarity code".
-- **Reuse.** Import `augment`, `forward`, `retrieval`, `alignment`, `uniformity`, `cosines` and the training of model 4 from `code/embedding_spaces/contrast_digits_infonce.py` (its top level only loads data; the run is under `if __name__ == "__main__"`). The import needs a path insertion; if that is too fragile, move the shared parts to `code/embedding_spaces/utils.py`, which the Makefile already treats as a helper of every script (`CODE_HELPERS`).
+- **Library.** `numpy` with hand-written backward passes is the baseline, like every script in `code/`. D9 (closed): if PyTorch (or another library) makes a model shorter and clearer to read, use it for that model, and say so in the script header and in the table; `torch` 2.14.1 is already installed in `.venv` but is declared nowhere (the repository has no requirements file) and no script uses it yet, so the first use must also record the dependency. Rows that must reproduce Chapter 3's numbers stay in numpy.
+- **Reuse.** Import `augment`, `forward`, `retrieval`, `alignment`, `uniformity`, `cosines` and the training of the InfoNCE encoder from `code/embedding_spaces/contrast_digits_infonce.py` (its top level only loads data; the run is under `if __name__ == "__main__"`). The import needs a path insertion; if that is too fragile, move the shared parts to `code/embedding_spaces/utils.py`, which the Makefile already treats as a helper of every script (`CODE_HELPERS`).
+
+**Script of Chapter 3: `code/embedding_spaces/reconstruct_digits_ae.py`** (rows for "Learning by Reconstruction" and "Learning by Predicting Embeddings"; it imports, and does not change, the contrast script):
+  0. Chapter 3's `predict` (linear decoder), imported.
+  1. Linear autoencoder, checked against the PCA/SVD of the same dimension (already a baseline in Chapter 3).
+  2. Nonlinear autoencoder (64 → 128 → 16 → 128 → 64): model 0 with a nonlinear decoder; and its denoising variant (corrupted input, clean target).
+  3. A JEPA-style model: the same encoder for the context view, a predictor (16 → 128 → 16) and a target encoder that is a moving average of the first, the loss a squared distance in the code space, no negatives and no decoder. Torch is a good candidate for this one. It provides the exercise inherited from the plan of that section: switch the moving average off and watch the collapse.
+  Measures: the five of the list below. Figures in `figures/embedding_spaces/`.
+
+**Script of Chapter 4: `code/generative_spaces/generative_vs_maps_digits.py`:**
+  4. VAE with a standard normal prior (same sizes). Retrieval and interpolation use the posterior mean. $\beta$ is fixed from the reconstruction alone (the largest $\beta$ whose held-out reconstruction is within a stated margin of model 2), *before* retrieval is computed, and the rule is reported.
+  5. The InfoNCE encoder of Chapter 3 at $N=128$, frozen, plus a decoder (16 → 128 → 64) trained on its unit-norm codes: the "way back from a similarity code".
+  6. Optional, if the run stays under a few minutes: a tiny denoising chain (a few noise levels) on the codes of the autoencoder, to show sampling from a model that defines a distribution. Dropped if it needs more than a page of code.
+  The script also **collects the rows of the other script and of Chapter 3's contrast script into one table** (`tbl-generative-digits`), which is the data of the consolidation.
+
 - **Measures** (mean over five seeds with [minimum, maximum], as in Chapter 3).
-  - Reconstruction error on held-out images (pixel MSE).
+  - Reconstruction error on held-out images (pixel MSE), for every model with a decoder.
   - Retrieval of the other view among the held-out views (Chapter 3's definition).
   - Alignment, uniformity and offset (same definitions).
+  - Effective rank of the codes (the exponential of the entropy of the normalised singular values), to show collapse in model 3 without the moving average and the narrow cone of the plain autoencoder.
   - Interpolation. For every model with a decoder, decode the midpoint between the codes of two held-out images and report its pixel distance to the nearest *training* image, against the same distance for the straight pixel average. For model 5 the midpoint is taken on the sphere (normalised), because the decoder was trained on unit-norm codes; the unnormalised midpoint is reported as a footnote to show the difference.
-- **Figures** (saved in `figures/generative_spaces/`).
-  - (a) Reconstruction error against retrieval, one point per model and seed: the "pays for every detail" against "pays for what separates" trade-off, read once the numbers exist.
-  - (b) Interpolation strips for models 2, 3 and 5.
-  - (c) The cosines or offsets, if needed to show a narrow cone for the autoencoder.
-- **Table.** Default: extend `tbl-contrast-digits` in Chapter 3 with a pointer, and give Chapter 4 its own `tbl-generative-digits` that repeats rows 0 and 4 for reference. Both are filled from script output; no number is typed by hand.
-- **Do not state results in the plan.** The prose and the answers are written after the script runs, and the numbers are copied from its output (as for `contrast_digits_infonce.py`).
-- **Exercises** (3 to 4, each with an answer in the `::: {.answers}` block).
-  1. Show that a linear autoencoder with squared error recovers the span of the top-$d$ singular vectors (link to Chapter 3's SVD and Eckart–Young).
-  2. Write the evidence lower bound of a VAE with a Gaussian posterior and prior, and say what each term pays for.
-  3. Why is the midpoint of two codes checkable for one kind of space and not for the other?
-  4. The experiment, with the script name, run time and what to look at in each figure.
-- **Script** `code/generative_spaces/ae_vs_infonce_digits.py`. It asserts its main numbers like the other scripts, runs in about a minute (measure; Chapter 3's script trains 25 encoders for 2,000 steps, this one trains 30 models, so parallelise like it with `ProcessPoolExecutor`), and saves the figures. `make test-code` picks it up through the wildcard `code/*/*.py`.
+- **Figures.**
+  - (a) Reconstruction error against retrieval, one point per model and seed: the "pays for every detail" against "pays for what separates" trade-off, read once the numbers exist. Chapter 4, `figures/generative_spaces/`.
+  - (b) Interpolation strips for models 2, 4 and 5.
+  - (c) The cosines or offsets, if needed to show a narrow cone for the autoencoder (Chapter 3).
+  - (d) For the consolidation: the plane of (a) with all models joined in the order of the table of 4.3, so that "one family, different pricing" is read from the data and not from the prose. If the points do not fall on one trade-off curve, the section says so.
+- **Tables.** Chapter 3 gets its own small table for the new rows, pointing to `tbl-contrast-digits`; Chapter 4 gets `tbl-generative-digits`. Both are filled from script output; no number is typed by hand.
+- **Do not state results in the plan.** The prose and the answers are written after the scripts run, and the numbers are copied from their output (as for `contrast_digits_infonce.py`).
+- **Exercises** (3 to 4 per chapter, each with an answer in the `::: {.answers}` block).
+  - Chapter 3: (1) show that a linear autoencoder with squared error recovers the span of the top-$d$ singular vectors (link to the SVD and Eckart–Young); (2) the collapse of the JEPA-style model without the moving average, measured by the effective rank; (3) the experiment, with script name, run time and what to look at in each figure.
+  - Chapter 4: (1) write the evidence lower bound of a VAE with a Gaussian posterior and prior, and say what each term pays for; (2) why is the midpoint of two codes checkable for one kind of space and not for the other; (3) the experiment and the consolidation figure.
+- **Scripts run** in about a minute each (measure; Chapter 3's script trains 25 encoders for 2,000 steps, so parallelise like it with `ProcessPoolExecutor`), assert their main numbers like the other scripts, and `make test-code` picks them up through the wildcard `code/*/*.py`.
 
 ## 6. Renumbering procedure (fallback, only if Step 0 is abandoned)
 
@@ -182,31 +225,33 @@ With Step 0 done, skip this section.
 ## 7. Files to change (checklist, assuming Step 0 is done)
 
 **New**
-- `chapters/generative_spaces.qmd` (stub with the sections of 4.3, `status: idea`, labelled H1).
-- `code/generative_spaces/` (the script; shared helpers go to `code/embedding_spaces/utils.py`, see 5).
-- `figures/generative_spaces/` (written by the script).
+- `chapters/generative_spaces.qmd` (stub with the eight sections of 4.3, `status: idea`, labelled H1).
+- `code/generative_spaces/generative_vs_maps_digits.py` and `code/embedding_spaces/reconstruct_digits_ae.py` (shared helpers go to `code/embedding_spaces/utils.py`, see 5).
+- `figures/generative_spaces/` and the new figures of `figures/embedding_spaces/` (written by the scripts).
 
 **Registration**
-- `.github/skills/build-book/scripts/sync_chapters.py`: `MASTER_PARTS` gets the new entry with `num: 4` and patterns (`"generative_spaces"`, `"generative"`), and the later `num` values and their `"0N_"`/`"chapterN"` patterns shift by one. Add a test in `tests/test_sync_chapters.py` that `generative_spaces.qmd` maps to Chapter 4 and `embedding_spaces.qmd` still maps to Chapter 3. (Had the file been called `generative_latent_spaces.qmd`, it would have matched Chapter 3's `"latent_spaces"` pattern, because matching is a substring test where the first match wins; if D4 brings that name back, remove `"latent_spaces"` from Chapter 3's patterns.)
+- `.github/skills/build-book/scripts/sync_chapters.py` (D11 may add a second change here: the vector-database chapter moves to another part, which is an edit of the same table): `MASTER_PARTS` gets the new entry with `num: 4` and patterns (`"generative_spaces"`, `"generative"`), and the later `num` values and their `"0N_"`/`"chapterN"` patterns shift by one. Add a test in `tests/test_sync_chapters.py` that `generative_spaces.qmd` maps to Chapter 4 and `embedding_spaces.qmd` still maps to Chapter 3. (Had the file been called `generative_latent_spaces.qmd`, it would have matched Chapter 3's `"latent_spaces"` pattern, because matching is a substring test where the first match wins; if D4 brings that name back, remove `"latent_spaces"` from Chapter 3's patterns.)
 - `_quarto.yml`: by `make sync-chapters`, not by hand.
 - `.github/skills/build-book/SKILL.md` (file list), `.github/skills/review-doc/SKILL.md` ("Chapters 3 to 13" → "3 to 14"): these keep literal numbers (excluded from Step 0).
 
 **Semantic edits** (what no numbering fixes)
 - `index.qmd`
   - New Chapter 4 paragraph in Part I with its scale test and "Next:" line, tagged `*(idea)*`, not in the voice of a written chapter.
-  - The Chapter 3 "Next:" line (4.4).
+  - The Chapter 3 roadmap entry: add reconstruction to its list of objectives ("Counting, predicting, reconstructing, contrasting, and predicting embeddings turn Shannon's own quantities into geometry") and the new "Next:" line (4.4).
+  - The note "Embedding Space or Latent Space?" in the introduction: the book uses the two words interchangeably, except where the literature has settled on one for a context, with the examples of D8; where the training matters, it says which one produced the space.
   - The Part I intro sentence: add that the way a space is built decides what its distances mean.
   - The "three devices" paragraph: the range of chapters closing with a scale test starts at the new Chapter 4 (`Chapters [-@sec-ch-generative-spaces] to [-@sec-ch-multimodal-embeddings]`).
   - The old Chapter 5 scale test ("which structures of Chapters 6 to 12"): check that the converted range still means Part II and III structures and not the new Chapter 4.
-  - The old Chapter 13 roadmap entry: the JEPA scale question points to Chapter 4 (D2).
+  - The old Chapter 13 roadmap entry: the debate between JEPA and scaled generative models is Chapter 4's scale test and this entry points to it; its mention of "prediction in latent space (JEPA)" keeps the image and video forms.
+  - Part I is now six chapters long. If D11 moves the vector-database chapter out of Part I (Step I2), the parts of `_quarto.yml` (which `make sync-chapters` writes from `MASTER_PARTS`), the Part I intro, the Chapter 3 and 4 hand-offs and the `OPEN` comment change with it.
   - The `OPEN` comment on Parts II to IV: "after the Chapter 5 scale test" becomes a reference to `sec-ch-contextual-vectors` (D6).
 - `chapters/embedding_spaces.qmd`
   - Closing "Next:" hook and the ledger of limits in "Where a Single Vector Strains" (new entry, 4.4).
-  - The plan of "Learning by Predicting Embeddings": the JEPA mechanism stays; the debate moves to Chapter 4 (D2, D3).
-  - The contrast experiment: one sentence pointing to Chapter 4 for the decoder side of the `predict` row.
-- `chapters/multimodal_embeddings.qmd`: scale-test wording if D2 moves the JEPA question; pointers to Chapter 4.
+  - New section "Learning by Reconstruction" `{.idea}` between "Learning by Prediction" and "Learning by Contrast" (4.3a); the section "Learning by Predicting Embeddings" stays, and its claim "the four objectives differ in what the vector pays for" becomes "the five"; the chapter introduction and any mention of "four objectives" are updated.
+  - The contrast experiment: one sentence pointing to Chapter 4 for the decoder side of the `predict` row and to the consolidation table.
+- `chapters/multimodal_embeddings.qmd`: the stub says "The fourth objective of Chapter 3, now applied where it was designed"; with the new section JEPA is the fifth, so the sentence is reworded to name it ("the prediction of embeddings of Chapter 3") and points to Chapter 4 for the debate with scaled generative models. This chapter's scale test asks whether scale closes the modality gap.
 - `chapters/tangent_spaces_geodesics.qmd`: point to Chapter 4 for the pullback metric instead of introducing it.
-- `chapters/contextual_vectors.qmd`: sparse autoencoders now follow Chapter 4's autoencoder; add the pointer.
+- `chapters/contextual_vectors.qmd`: sparse autoencoders now follow the autoencoder of Chapter 3 (the new section); add the pointer. The autoregressive section of Chapter 4 points here.
 
 **Step 0** (section 1a): all numbered `chapters/*.qmd` (title to labelled H1, references converted), `index.qmd`, `validate_book.py` and `test_validate_book.py`, `durability_metrics.py` and `test_durability_metrics.py`, `sync_chapters.py` (title attribute), `filters/book-chapter-refs.lua` and the `filters:` list of the `html` format in `_quarto.yml` (by hand: `sync_chapters.py` must be checked not to overwrite it), `Makefile` (fail on unresolved references).
 
@@ -226,6 +271,7 @@ To add and verify, **all from memory and not yet checked** (do not cite until fe
 - VAE: Kingma and Welling 2014; their Foundations and Trends introduction of 2019.
 - GAN: Goodfellow and colleagues 2014; DCGAN vector arithmetic (Radford and colleagues 2015).
 - Diffusion: Ho and colleagues 2020; Rombach and colleagues 2022 (latent diffusion); Ramesh and colleagues 2022 (decoding from CLIP embeddings).
+- Consolidation (4.3.7), all from memory and unchecked: Barber and Agakov 2003 (the variational lower bound on mutual information with a decoder); Poole and colleagues 2019 (a survey of the bounds, with InfoNCE and the reconstruction bound side by side); Alemi and colleagues 2018 (the ELBO read as a rate–distortion trade-off); Tschannen and colleagues 2020 (arguing that mutual-information maximisation does not by itself explain the success of contrastive representation learning); Shannon 1959 (rate–distortion). `oord2018representation` (InfoNCE as a lower bound on mutual information) is already in `references.bib`. Without these read, the section states no unification claim.
 - Collapse and identifiability: Bowman and colleagues 2016 (posterior collapse in text VAEs); Locatello and colleagues 2019 (disentanglement is not identifiable without extra assumptions).
 - Geometry of decoders: Shao and colleagues 2018; Lobashev and colleagues 2025 (Hessian geometry of diffusion latent spaces; perishable, date it if used).
 
@@ -235,18 +281,27 @@ Rules for use (the book's brief, discussion of 2026-11-10 on tone):
 - A locator for every specific claim (`ground_check.py` finds the page).
 - Run `fetch_references.py` for the new entries and `build_index.py` afterwards.
 
-## 9. Open decisions for the author
+## 9. Decisions of the author
 
-- **D1. Title.** One of the two candidates in 4.1, or another that names the question.
-- **D2. Home of the JEPA-against-generative debate.** Default: Chapter 4's scale test. Chapter 3 keeps the mechanism (collapse and how to avoid it), Chapter 14 keeps the image and video forms and the modality gap, and both point to Chapter 4 for the debate (one home per fast-moving claim).
-- **D3. Does Chapter 3's "Learning by Predicting Embeddings" stay in Chapter 3?** Default yes: it is the last of four objectives for building embeddings. Only the *comparison with generation* moves.
-- **D4. File name.** Default `generative_spaces.qmd` (avoids the Chapter 3 pattern collision, section 7). The title is independent of it.
-- **D5. When.** Default: Step 0 now (it pays off whatever happens to the new chapter), then the chapter. Alternative: Step 0 only, and leave the idea in `notes/ideas.qmd` and the `OPEN` comment until the chapter is wanted.
-- **D6. Part II gate.** The `OPEN` comment says Part II is decided after the Chapter 5 scale test (contextual vectors). With the new chapter that is the Chapter 6 test. Default: the gate stays on contextual vectors, not on the new Chapter 4. Confirm.
-- **D7. Title in the heading.** Step 0 moves each chapter title from the front matter to a labelled `#` heading (the epilogue already does it). Confirm.
-- **D8. Chapter 3's title.** "The Anatomy of Embedding and Latent Spaces" (tagged `definitive`) claims latent spaces, which the new chapter now owns in their generative sense, and the terminology note in `index.qmd` separates the two words. Options: keep it (the note says the book uses the words loosely), or retitle to "The Anatomy of Embedding Spaces". Old Chapter 9's "Wave-Nature in Latent Space" is the same question at a smaller scale. Default: keep both titles until Chapter 4 is `provisional`, then decide.
-- **D9. Library for the experiment.** Default numpy with hand-written gradients, like the rest of `code/`. Adding torch or jax is a new dependency for the whole book; choose it only if the VAE makes numpy impractical.
-- **D10. Roadmap headings (0a).** **Closed 2026-11-11: option A** (labels, `durability_metrics.py` updated). The bold-colon form renders correctly in PDF and EPUB, and in HTML through the filter (pilot, 1a). Option B (literal numbers) is no longer needed.
+Answers of 2026-11-11. "Closed" means decided; "open" is still waiting for the author.
+
+- **D1. Title of the new chapter.** **Closed** (author, 2026-11-11): "Latent Spaces from Generative Models". The label is `sec-ch-generative-spaces` whatever the title.
+- **D2. Split between Chapters 3 and 4.** **Closed** (author, second answer of 2026-11-11, replacing my first reading): Chapter 3 is about embedding spaces and the predictive and reconstructive models (counting, prediction, reconstruction, contrast, prediction of embeddings); Chapter 4 is about generative models and ends by reconciling them with the predictive and reconstructive ones, or by showing their similarities and differences. The debate between prediction in the space (JEPA) and scaled generative models is the scale test of Chapter 4; Chapter 14 keeps the image and video forms of JEPA and the modality gap, and points back.
+- **D3. Does "Learning by Predicting Embeddings" stay in Chapter 3?** **Closed: yes** (it is predictive; "see D2"). The plan's earlier idea of moving it to Chapter 4 was a misreading and is recorded as dropped in section 12.
+- **D4. File name.** **Closed:** `generative_spaces.qmd`. New requirement: the chapter ends with one or more sections that consolidate the two approaches if possible and explain why they are not the same if not (4.3.7).
+- **D5. When.** **Closed:** insert the chapter now (Step 0 is done).
+- **D6. Part II gate.** **Closed:** Part II stays as it is, decided after the contextual-vectors scale test.
+- **D7. Title in the heading.** **Closed** (done in Step E).
+- **D8. Chapter 3's title and the words.** **Closed:** no retitling. The introduction says that the book uses "embedding space" and "latent space" interchangeably, except where the literature has settled on one word for a context (for example *latent semantic analysis*, *latent variable*, *latent diffusion* against *word embedding*, *embedding model*); where the training matters, it says which one produced the space. Chapter 3 leans on "embedding" and Chapter 4 on "latent" because that is what their literatures do, and the SVD, which is "latent" in LSA, is named as the case where the two chapters meet (4.3.2). The note in `index.qmd` ("Embedding Space or Latent Space?") is edited in Step I; Chapter 3's title ("The Anatomy of Embedding and Latent Spaces") and the Wave-Nature chapter's stay as they are.
+- **D9. Library for the experiment.** **Closed:** numpy is the baseline and the good default; PyTorch or another library is welcome if it is easier and more didactic for a model (see section 5).
+- **D10. Roadmap headings.** **Closed 2026-11-11: option A** (labels).
+- **D11. Where does RAG (the vector-database chapter) belong?** **Closed for now (author, 2026-11-11), the chapter's future is open.** The author is not sure the chapter should be in the book at all ("idea phase"). For the time being: **contextual vectors is Chapter 5 and closes Part I; the vector-database chapter is Chapter 6 and opens Part II** (the swap of the two options of D11b, chosen by the author after seeing that the literal reading would move contextual vectors into Part II). Applied in Step I2. If the chapter is dropped, nothing else in the numbering changes.
+- **D16. Part II as the remedies for the shortcomings of Part I** (author, steering of 2026-11-11). **Open idea, recorded as idea 10 in `notes/ideas.qmd` and in the `OPEN` comment of `index.qmd`; not applied.** Retrieval grounds generation and so patches hallucination; Part II could be the shortcomings of Part I and the remedies that were tried. The book's ledger of limits (Chapter 3) already works this way for every later chapter. One correction recorded with it: embeddings do not hallucinate, generative models do; retrieval is a remedy for Chapter 4's shortcoming, running on embeddings. The current layout already fits it (Part II opens with retrieval); only the title and intro of Part II would change. Decided at the Part II gate.
+- **D12. Reading of D2.** **Closed 2026-11-11 ("yes") and then refined by the author**: see D2. The refinement moves the autoencoder to Chapter 3 and keeps JEPA there, so the first reading ("Chapter 4 covers reconstruction, generation and JEPA") no longer holds.
+
+- **D13. Title of Chapter 3.** **Closed** (author, 2026-11-11): "The Anatomy of Embedding Spaces" (the recommended option; "Latent" is dropped because Chapter 4 owns it by name). Applied: the H1, the roadmap heading, the `SKILL.md` example and the title in `MASTER_PARTS`; the label is unchanged. The rejected-ideas entry "Retitle Chapter 3 to drop Latent, or fix embedding/latent as a rule" is now to be reworded: the retitle was adopted, the fixed rule was not.
+- **D14. Is an autoencoder a generative model?** **Answered by the plan, to be reviewed.** Strictly no: its decoder generates a point from a code, but nothing says which codes are valid, so it defines no distribution to sample from or to score; with a prior (the variational autoencoder) it does. Loosely yes, and that is how the word is often used. The plan keeps the autoencoder in Chapter 3 (it is the generalisation of the SVD that the chapter already proves, and the author's own idea 2 of `notes/ideas.qmd`) and opens Chapter 4 with the variational autoencoder; both chapters state the boundary. Alternative: make the autoencoder the first section of Chapter 4. Cost of switching: moving one stub section and its script.
+- **D15. Taxonomy labels** (author, steering of 2026-11-11: "divide the chapters in Reconstructive, Predictive, Generative, and Hybrid, although generative seems to be hybrid"). **Open, with a recommendation.** Use the labels as the *Kind* column of the map (4.3) and not as four chapters. Reasons: (1) the kinds overlap (a VAE is reconstructive and generative; an autoregressive model is predictive and generative; JEPA is predictive in the code), so "hybrid" is not a fourth kind but the rows with two kinds, and "generative seems hybrid" is exactly what the table shows; (2) contrast is none of the three and needs its own label (*contrastive*, or *discriminative* in the literature); (3) four chapters would split the objectives that Chapter 3 compares on one data set, and the reconciliation needs them side by side. The two questions of the map (where the error is measured; whether there is a distribution) remain the criterion; the labels are the vocabulary.
 
 ## 10. Order of work with quality gates
 
@@ -324,22 +379,50 @@ Conventions of the gates:
 
 ### Step G. Decisions  (D1, D2, D4, D5, author)
 - **Do:** the author answers.
-- **Gate:** each decision is written next to its default in section 9 (date and choice) before Step H. If D5 says "Step 0 only", stop here and record the idea in `notes/ideas.qmd`.
-- **Status:** pending.
+- **Gate:** each decision is written in section 9 with date and choice before Step H; the structure of 4.3 and 4.4 agrees with the answers; an answer that could be read two ways is confirmed before it changes the files.
+- **Status:** done for what Step H needs. D1 (title of Chapter 4), D2 to D10 closed. **Open for later steps:** D11b (contextual vectors and the vector-database chapter, Step I2), D13 (Chapter 3's title), D14 (autoencoder in Chapter 3, to be reviewed), D15 (the labels reconstructive, predictive, generative, hybrid).
 
 ### Step H. Insert the stub and register it
-- **Do:** create `chapters/generative_spaces.qmd` (labelled H1, `status: idea`, the sections of 4.3 as stubs), the roadmap entry, the hand-off lines, the ledger entry, `sync_chapters.py` and its test; copy the **[book]** entries of section 12 to `notes/ideas.qmd`; run `make sync-chapters`.
-- **Gate:** `git diff _quarto.yml` shows only the new line, between `embedding_spaces` and `vector_databases`; the new test passes (the file maps to Chapter 4; `embedding_spaces.qmd` still to Chapter 3); `make validate` has no new error or warning kind; `make status` lists 15 chapter lines with the new one as `idea` and no tag disagreement.
-- **Status:** pending.
+- **Do:** create `chapters/generative_spaces.qmd` (labelled H1, `status: idea`, eight section stubs), its roadmap entry, the hand-off lines of the Chapter 3 roadmap entry, the new stub "Learning by Reconstruction" `{.idea}` in Chapter 3, `sync_chapters.py` and its test; copy the book-level rejected ideas of section 12 to `notes/ideas.qmd`; run `make sync-chapters`. Also, at the author's request, one phrase on supervised and metric-learning embeddings in the contrast section of Chapter 3.
+- **Gate:** `git diff _quarto.yml` shows only the new line, between `embedding_spaces` and `vector_databases`; the new test passes (the file maps to Chapter 4; `embedding_spaces.qmd` still to Chapter 3); `make validate` has no new error or warning kind; `make status` lists 15 chapter lines with the new one as `idea` and no tag disagreement; the HTML build passes.
+- **Status:** done 2026-11-11.
+- **Result:**
+  - `chapters/generative_spaces.qmd`: working title "Latent Spaces from Generative Models" (D1), eight stub sections as in 4.3, `open:` note in the front matter. The new lint caught five literal "Chapter 3" in my own stub, which were replaced by `@sec-ch-embedding-spaces`.
+  - `index.qmd`: new roadmap entry (idea) with its scale test and "Next:"; the Chapter 3 entry now lists five objectives and has the new "Next:" (a map against a distribution). The Part I intro, the "three devices" paragraph and the terminology note are Step I.
+  - `chapters/embedding_spaces.qmd`: new section "Learning by Reconstruction" `{.idea}` between prediction and contrast (it states the boundary: an autoencoder generates from a code but defines no distribution, D14); one parenthetical sentence on labels, metric learning with pairs or triplets, and the penultimate layer of a classifier in the contrast section, with an HTML comment `REVIEW` next to it (no source yet; two candidates from memory, unchecked). Not yet changed in Chapter 3: its introduction ("in four ways"), the ledger of limits and its closing hook (Step I).
+  - `sync_chapters.py`: new entry (num 4, patterns `generative_spaces`, `04_`, `chapter4`), later `num` and numeric patterns shifted by one; the test `test_match_future_chapter_patterns` was updated to the new positions and `test_generative_chapter_is_chapter_4_and_embedding_spaces_stays_chapter_3` added. `git diff _quarto.yml`: exactly one added line, in the right place.
+  - `make validate`: 0 errors, only the "not cited" warnings; `make status`: 15 chapter lines (including the epilogue), the new one `idea`, Chapter 3 now "4 provisional section(s), 1 idea section(s)", no problems. `make html`: exit 0, no `?@`; the sidebar and headings read "4 Latent Spaces from Generative Models" and "5 Vector Databases, RAG, ...", the roadmap reads "Chapter 4: Latent Spaces from Generative Models". Tests: all pass.
+  - `notes/ideas.qmd`: eight book-level rejected ideas copied under "Dropped ideas" (the retitle entry waits for D13).
+  - Not run: PDF and EPUB builds (Step I's `make book`).
+- **Checkpoint:** the author commits (the new chapter, the roadmap entries, `embedding_spaces.qmd`, `sync_chapters.py` and its test, `ideas.qmd`, the plan).
 
 ### Step I. Semantic edits and full build  (section 7, "Semantic edits")
-- **Do:** make the edits of section 7 and run `make book`.
-- **Gate:** the build log has no unresolved reference; the rendered roadmap in HTML shows Chapters 1 to 14 in order and the PDF text has "Chapter 14" and no "Chapter 15"; the text diff against the Step F render differs only in the lines of the new chapter, the hand-offs and the semantic edits (read every differing line); each file of the "Semantic edits" list has a changed line, or a note here saying why not.
-- **Status:** pending.
+- **Do:** make the edits of section 7 and run `make book` (the three formats).
+- **Gate:** the build log has no unresolved reference; the rendered roadmap shows Chapters 1 to 14 in order; the text diff against the previous render differs only in the lines of the semantic edits (every distinct change read); `grep -n "fourth objective\|four objectives\|four ways" chapters/embedding_spaces.qmd index.qmd chapters/multimodal_embeddings.qmd` finds no stale count; Chapter 3 still validates and keeps its `definitive` tag.
+- **Status:** done 2026-11-11, with Step I2 before it (the order was swapped because the author decided the move first).
+- **Author's ruling:** the introduction of Chapter 3 and `index.qmd` are provisional text, so they may be edited; the `definitive` tag of the chapter concerns its settled sections.
+- **Result:** 11 distinct changes in 5 files against the render of Step I2, all intended (the diff was read after a token-level comparison):
+  - `embedding_spaces.qmd`: the introduction says "five ways" and lists reconstructing; it ends by pointing to @sec-ch-generative-spaces; the JEPA section is the "fifth objective" and its claim says "the five objectives" and adds reconstruction; its bitter-lesson line points to the scale test of Chapter 4; the contrast experiment says its `predict` model has a linear decoder and points to Chapter 4; the ledger of limits has a new first entry (a map says nothing about how likely a point is; a model that does has distances that mean only what its training made them mean) and now follows the order of the book (generative, contextual, vector databases, ...).
+  - `index.qmd`: the terminology note now says the two words are interchangeable except where the literature settled on one (with examples), and that Chapter 3 leans on "embedding" and Chapter 4 on "latent"; the multimodal entry points to Chapter 4 for the debate between prediction in latent space and scaled generative models.
+  - `multimodal_embeddings.qmd`: "The fourth objective of Chapter 3" became "The prediction of embeddings of Chapter 3", with a pointer to Chapter 4's scale test; `tangent_spaces_geodesics.qmd`: points to Chapter 4 for the pullback metric; `contextual_vectors.qmd`: the sparse autoencoder is an autoencoder (Chapter 3) with a sparse code.
+  - `make html`, `make epub`, `make pdf` exit 0; no "Unable to resolve crossref"; `?@` count 0 in the three extracted texts; `make validate` 0 errors; 126 tests pass. Not done: the "Chapter 3 to 4" closing hook as a separate paragraph (the introduction and the ledger carry it).
 - **Checkpoint:** the author commits.
 
-### Step J. Script and experiment  (section 5)
-- **Do:** write `code/generative_spaces/ae_vs_infonce_digits.py` and run it.
+### Step I2. Move the vector-database chapter  (D11)
+- **Do:** change `MASTER_PARTS` (contextual vectors last in Part I; the vector-database chapter first in Part II) and its test, run `make sync-chapters`, edit the "Next:" lines of the neighbouring chapters, the Part intros, the roadmap order of `index.qmd` and the ranges of scale tests. Also the Chapter 3 retitle (D13).
+- **Gate:** `make status` has no order problem (the roadmap lists the chapters in the order of `_quarto.yml`, a check built in Step D); the text diff against the Step H render differs only in the numbers of the moved chapters, the Chapter 3 title, the hand-off lines and the part intros (every distinct change read); every cross-reference still resolves (`?@` count 0 in the three formats); the ranges "Chapters N to 14" start at the first chapter with a scale test.
+- **Status:** done 2026-11-11.
+- **Result:**
+  - `_quarto.yml` (by `make sync-chapters`): Part I = properties, curse, embedding spaces, generative spaces, contextual vectors; Part II = vector databases, tangent spaces, graph embeddings, topological deep learning.
+  - Text diff against the HTML of Step H (57 distinct changes, read all): the Chapter 3 title in sidebars and headings; the numbers 5 and 6 swapped for the two chapters, with their section numbers (5.1 to 5.9 and 6.1 to 6.6) and every cross-reference to them in the epilogue, the multimodal, properties-of-meaning and curse chapters (checked by token: only `Chapter 5`↔`Chapter 6` and two ranges); the roadmap (contextual vectors now before the Part II heading, vector databases after it); the new Part I and Part II intros; the "Next:" lines. Nothing else.
+  - **One error found and fixed by the diff:** the ranges "Chapters 4 to 14" of the "three devices" paragraph and of the epilogue hook were typed with the vector-database chapter as first endpoint and had become "5 to 14" and then "6 to 14", which dropped the new chapter and contextual vectors, both with a scale test. They now start at `sec-ch-generative-spaces` and read "Chapters 4 to 14".
+  - After that fix: `make html`, `make epub`, `make pdf` exit 0; no "Unable to resolve crossref" in the three logs; `?@` count 0 in the extracted text of the three formats; `make validate`: 0 errors; `make status`: no problem; tests: 126 passed.
+  - Contextual stub: "The dot-product machinery of Chapter N inside the model" now points forward, so it reads "of retrieval (Chapter 6) inside the model".
+  - Not done here (Step I): the Chapter 3 introduction ("in four ways"), its ledger entry and closing hook, the terminology note, the pointers in the tangent and contextual chapters. The Part II title "Structure in Vector Spaces" does not describe the retrieval chapter (D16).
+- **Checkpoint:** the author commits.
+
+### Step J. Scripts and experiments  (section 5)
+- **Do:** write `code/embedding_spaces/reconstruct_digits_ae.py` (Chapter 3's new rows) and then `code/generative_spaces/generative_vs_maps_digits.py` (Chapter 4's rows and the combined table), and run them.
 - **Gate:** it runs in about a minute (time it and write the figure here); its asserts pass; for the models shared with Chapter 3 (InfoNCE at N=128, `predict`), its numbers equal those of `tbl-contrast-digits` to the printed precision; the ranges over five seeds are reported; the β rule is written in the script header and was applied before the retrieval numbers were printed (the code orders the steps this way); `make test-code` passes. No claim is written yet.
 - **Status:** pending.
 
@@ -365,7 +448,11 @@ Conventions of the gates:
 - [ ] The new chapter is registered (`_quarto.yml`, `sync_chapters.py` with a test that it maps to Chapter 4 and Chapter 3 still maps to itself) and tagged `idea`, in the roadmap and in its own front matter.
 - [ ] The rendered book shows Chapters 1 to 14 in order and no "?@sec-".
 - [ ] The Chapter 3 hand-off, the ledger of limits and the Part I intro agree with the new chapter.
-- [ ] The JEPA-against-generative question has one home, and the other chapters point to it.
+- [ ] The JEPA-against-generative question has one home (the scale test of Chapter 4); the JEPA mechanism stays in Chapter 3; Chapter 14 and Chapter 3 point to Chapter 4 for the debate.
+- [ ] Chapter 3 has the new section "Learning by Reconstruction" and counts five objectives everywhere (intro, roadmap, the claim of the JEPA section).
+- [ ] D11 is closed, and the vector-database chapter is where the author decided (Step I2).
+- [ ] Chapter 4 ends with the reconciliation (4.3.7): one table over all the objectives of Chapters 3 and 4, an information-theoretic attempt at one view with every claim sourced, and a graded statement of where the two families are the same and where they are not; "not reducible to one objective" is accepted if that is what the sources and the experiment support.
+- [ ] The introduction says that the two words are used interchangeably except where the literature settled on one, with examples (D8).
 - [ ] The experiment includes Chapter 3's `predict` model as a row, and the script's numbers are the ones in the text.
 - [ ] Each section has exercises that reproduce its figures.
 - [ ] Citations are few, located and checked against the PDFs.
@@ -487,3 +574,34 @@ These are ideas that came up while writing and reviewing this plan and were drop
 - **Dropped:** 2026-11-11 (no such reference exists today).
 - **Why:** the same Quarto bug would render "1.1 Title" instead of "Section 1.1" in HTML, and the filter only covers chapters.
 - **Reopen if:** a page without a chapter number needs to point at a section; then extend the filter to `sec-prop-*`, with the numbering taken from the headings.
+
+### Move "Learning by Predicting Embeddings" (JEPA) from Chapter 3 to Chapter 4
+- **Dropped:** 2026-11-11 (it was my reading of the author's first D2 answer, and was in the plan for about an hour).
+- **Why:** the author's second answer is that Chapter 3 covers the predictive and reconstructive models and Chapter 4 the generative ones. JEPA is predictive, so it stays in Chapter 3; its debate with scaled generative models is the scale test of Chapter 4, where both are on the table. [book]
+- **Reopen if:** the JEPA section grows so that Chapter 3 becomes unbalanced; then split it out, but into a section of Chapter 3's end, not into the generative chapter.
+
+### Keep the vector-database chapter in Part I because it is already there
+- **Dropped:** 2026-11-11 (author, D11, leaning).
+- **Why:** it is an application of embedding and latent spaces, not a fundamental technology; Part I is about what a space is and how it is built. Which part receives it is open. [book]
+- **Reopen if:** the roadmap shows that the later chapters depend on its limits (the dot-product limits of the ledger) so much that they need it before Part II.
+
+### Fix "embedding for Chapter 3 and latent for Chapter 4" as a rule
+- **Note (2026-11-11):** D13 was closed with the retitle "The Anatomy of Embedding Spaces"; what is dropped is only the fixed rule. To be copied to `notes/ideas.qmd` at the next checkpoint with its reason.
+- **Dropped:** 2026-11-11 (author, D8).
+- **Why:** the SVD has been called "latent" in the literature for decades (LSA), and the literature does not keep the words apart; a fixed rule would be wrong for that case. The rule the book states is the author's: interchangeable, except where the literature has settled on one word for a context. [book]
+- **Reopen if:** a reader test shows the two words confuse more than they help.
+
+### State that embedding and latent spaces are one thing, with one objective
+- **Dropped:** 2026-11-11 (before it was written).
+- **Why:** it is a claim that the sources may not support (a bound on mutual information does not fix the geometry, and there is published criticism of the mutual-information view of contrastive learning). The consolidation is graded and sourced instead (4.3.7). [book]
+- **Reopen if:** the sources read in Step L support a stronger statement.
+
+### Write the consolidation before the sources are read
+- **Dropped:** 2026-11-11.
+- **Why:** every statement of 4.3.7 about bounds comes from memory. The section is a stub until Step L has fetched and read them, and the plan lists them as unchecked.
+- **Reopen if:** never.
+
+### Mix numpy and torch in the same table without saying so
+- **Dropped:** 2026-11-11.
+- **Why:** models 0 to 5 must reproduce Chapter 3's numbers with Chapter 3's code; if one row uses torch, the script says so in its header and the seeds and initialisation are not comparable bit by bit. Only a model that is clearer in torch (the VAE, JEPA) may use it, and the table reports it.
+- **Reopen if:** never.

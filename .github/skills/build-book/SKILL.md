@@ -170,7 +170,7 @@ A chapter keeps `status:` (and `open:`) in the YAML frontmatter and gives its ti
 status: idea
 ---
 
-# The Anatomy of Embedding and Latent Spaces {#sec-ch-embedding-spaces}
+# The Anatomy of Embedding Spaces {#sec-ch-embedding-spaces}
 
 ::: {.callout-note}
 ## The Geek's Epiphany

@@ -1,0 +1,32 @@
+---
+status: idea
+open: "Home of the debate between prediction in the space (JEPA, @sec-ch-embedding-spaces) and scaled generative models. Decide when the last two sections of @sec-ch-embedding-spaces are written. Whether the closing sections can reconcile the two families, or can only show where they differ, depends on sources not yet read (notes/generative_chapter_plan.md, 4.3.7)."
+---
+
+# Latent Spaces from Generative Models {#sec-ch-generative-spaces}
+
+This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
+
+## The Fork: A Map or a Distribution?
+*The objectives of @sec-ch-embedding-spaces learn a map from data to vectors; none of them can draw a new point or say how likely a point is. A model that defines a distribution over the data can do both, and its hidden variables are what the literature calls the latent space. Two questions classify every objective of the two chapters: where is the error measured (in the data, among sampled candidates, in the code), and is there a distribution over the data. Terminology: where the literature has settled on one word for a context, the book uses it (latent variable, latent diffusion against word embedding).*
+
+## Giving the Space a Density: Latent Variable Models and the VAE
+*The hidden-cause view (factor analysis, the "latent" of LSA, EM). The evidence lower bound as a reconstruction term plus a prior term, read against the autoencoder of @sec-ch-embedding-spaces: the same decoder with a prior added. What the prior buys (sampling, smoothness) and what it costs (posterior collapse, the cousin of the dimensional collapse of @sec-ch-embedding-spaces; holes between the codes). Identifiability: the standard prior is rotation-symmetric, so the invertible-matrix freedom of @sec-ch-embedding-spaces survives as a rotation freedom, and disentanglement is not free.*
+
+## Denoising, Diffusion and the Adversarial Game
+*Dated history, past tense. A denoising autoencoder learns the direction towards the data; chained, it is a diffusion model. Latent diffusion works in the latent space of a pretrained autoencoder, and its conditioning typically comes from a similarity-trained encoder (CLIP), so the two kinds of space cooperate; this is where @sec-ch-multimodal-embeddings meets generation. GANs replace a likelihood by a discriminator: they can sample and cannot score. One to two pages; the aim is the contrast, not a survey.*
+
+## Autoregressive and Masked Models: Predicting the Next Piece
+*The prediction of @sec-ch-embedding-spaces (word2vec's softmax over the neighbour) taken to the whole sequence by the chain rule is a generative model of text; Shannon's generator and the n-gram models of @sec-ch-embedding-spaces were already one. Its hidden vectors, not a code trained for the purpose, are the contextual vectors of @sec-ch-contextual-vectors, which is how this section hands the thread on.*
+
+## The Geometry a Decoder Induces
+*A decoder pulls a metric back onto the code space, so straight lines in the code are curved in the data and the shortest path is a geodesic of the pullback metric [@arvanitidis2018latent]. This is the one home of the pullback idea; it applies to the autoencoder of @sec-ch-embedding-spaces as well, and @sec-ch-tangent-spaces-geodesics develops geodesics and points back. The same section answers when the midpoint of two codes is meaningful.*
+
+## Where the Map Stops
+*Half a page on what the two chapters leave out and why: normalising flows (invertible, so an exact way back), energy-based models, supervised and metric-learning embeddings, and the learned states of agents.*
+
+## Reconciling the Two Families
+*What each objective pays for, in one table over the objectives of both chapters, each cell marked structural (follows from the objective) or contingent (how systems behaved at a date). A common currency, information: the InfoNCE objective as a bound on the information between two views [@oord2018representation], the reconstruction term of the evidence lower bound as a bound on the information the code keeps about the data, and the whole bound as a rate–distortion trade-off, Shannon's own. Then where the two families remain different: a bound on information says nothing about geometry, reconstruction prices every detail while contrast prices only what separates the negatives, and only the generative family has a density. The result is graded, the same family in what is kept and different in how distance is priced, and "not reducible to one objective" is an acceptable result. Every claim about bounds is to be checked against its sources before it is written.*
+
+## Scale Test
+*As data and compute grow, does generation absorb the maps of @sec-ch-embedding-spaces (a decoder everywhere), does prediction without a decoder absorb generation, or do both survive because they answer different questions (what you can get back and sample, against what you can compare)? Evidence kept in separate classes: a position paper [@lecun2022path], scaled generative results, and the chapter's own small experiment. Reading, dated 2026: undecided unless the evidence moves.*
