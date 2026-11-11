@@ -1,8 +1,9 @@
 ---
-title: "The Properties of Meaning as Geometry"
 status: definitive
 open: "The list of properties is open. It grows and changes as the field does, and some members are known to experts the author has not met. Add, merge or drop one when a chapter needs it or an expert points to it. A property earns its place by being tested by a chapter and sourced by someone other than the author."
 ---
+
+# The Properties of Meaning as Geometry {#sec-ch-properties-of-meaning}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that later chapters can already cross-reference its sections. It is a catalog: each section states one property that meaning acquires once it becomes position in a space, in the plain language of distance and direction, and points forward to the chapters that earn it. Each section also carries a first-pass line of sources, to be pruned when the chapter is written.
 
@@ -11,16 +12,16 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 
 Figure (planned): a small map in which "dog", "puppy", and "wolf" cluster, while "car" and "doorbell" sit far away.
 
-Earned in Chapter 3 (where the distances come from), Chapter 2 (why distance still works in many dimensions), and Chapter 4 (search by nearness).
+Earned in @sec-ch-embedding-spaces (where the distances come from), @sec-ch-curse-of-dimensionality (why distance still works in many dimensions), and @sec-ch-vector-databases (search by nearness).
 
-Sources (first pass). The distributional idea that likeness of meaning shows as likeness of company [@harris1954distributional; @firth1957synopsis]; the first vector spaces built from counts [@deerwester1990indexing; @lund1996producing]; generalization that falls off with distance in a psychological space [@shepard1987toward]; meanings as points in a space of quality dimensions [@gardenfors2000conceptual]. Two caveats: human similarity judgements are not always symmetric or metric [@tversky1977features], and in some trained spaces all vectors share a large common direction, so that raw nearness is relative to the space (Chapter 3).
+Sources (first pass). The distributional idea that likeness of meaning shows as likeness of company [@harris1954distributional; @firth1957synopsis]; the first vector spaces built from counts [@deerwester1990indexing; @lund1996producing]; generalization that falls off with distance in a psychological space [@shepard1987toward]; meanings as points in a space of quality dimensions [@gardenfors2000conceptual]. Two caveats: human similarity judgements are not always symmetric or metric [@tversky1977features], and in some trained spaces all vectors share a large common direction, so that raw nearness is relative to the space (@sec-ch-embedding-spaces).
 
 ## Difference Is a Relation {#sec-prop-difference}
 *The step from one meaning to another is itself meaningful, and the same step can be taken from elsewhere.*
 
 Figure (planned): the analogy parallelogram, with the step from "man" to "woman" repeated from "king" to "queen".
 
-Earned in Chapter 3 (analogy), Chapter 7 (relations as translations and rotations), and Chapter 12 (aligning two spaces by their steps rather than their points).
+Earned in @sec-ch-embedding-spaces (analogy), @sec-ch-graph-embeddings (relations as translations and rotations), and @sec-ch-cross-domain-transfer (aligning two spaces by their steps rather than their points).
 
 Sources (first pass). The offset between word vectors encodes relations such as plural or gender [@mikolov2013linguistic; @mikolov2013efficient; @pennington2014glove]; analogy as a mapping of relations, in cognitive science [@rumelhart1973model; @gentner1983structure]; relations as translations of the space [@bordes2013translating].
 
@@ -29,7 +30,7 @@ Sources (first pass). The offset between word vectors encodes relations such as 
 
 Figure (planned): a sentence nudged along one direction, changing tone while keeping its topic.
 
-Earned in Chapter 3 (directions as concepts, steering), Chapter 5 (features as directions), and Chapter 2 (why there is room for so many directions).
+Earned in @sec-ch-embedding-spaces (directions as concepts, steering), @sec-ch-contextual-vectors (features as directions), and @sec-ch-curse-of-dimensionality (why there is room for so many directions).
 
 Sources (first pass). Constant offsets between word vectors [@mikolov2013linguistic]; directions that also carry social bias [@caliskan2017semantics; @garg2018word]; the linear representation hypothesis for large language models [@park2024linear]; more features than dimensions, stored as nearly orthogonal directions in superposition [@elhage2022toy].
 
@@ -38,7 +39,7 @@ Sources (first pass). Constant offsets between word vectors [@mikolov2013linguis
 
 Figure (planned): "dog" as a region inside "animal", with the individual dogs as points within it.
 
-Earned in Chapter 6 (hierarchies in curved space) and Chapter 9 (concepts as subspaces).
+Earned in @sec-ch-tangent-spaces-geodesics (hierarchies in curved space) and @sec-ch-complex-plane-quantum-logic (concepts as subspaces).
 
 Sources (first pass). Concepts as convex regions of a conceptual space [@gardenfors2000conceptual]; words as Gaussian densities instead of points [@vilnis2015word]; hierarchies embedded in hyperbolic space [@nickel2017poincare]; a parse tree recovered from distances under a linear map [@hewitt2019structural]; concepts as subspaces with a logic of their own [@widdows2004geometry; @birkhoff1936logic].
 
@@ -47,18 +48,18 @@ Sources (first pass). Concepts as convex regions of a conceptual space [@gardenf
 
 Figure (planned): a running dog drawn as a curve, each frame a point along it.
 
-Earned in Chapter 6 (geodesics and trajectories) and Chapter 13 (motion, time, and planning in the space).
+Earned in @sec-ch-tangent-spaces-geodesics (geodesics and trajectories) and @sec-ch-multimodal-embeddings (motion, time, and planning in the space).
 
 Sources (first pass). Cognitive maps and the navigation of conceptual space [@tolman1948cognitive; @behrens2018cognitive]; the chain of thought as intermediate steps written in text [@wei2022chain]; reasoning carried out in a continuous latent space instead of tokens [@hao2024training]; the boundary between bits and meaning [@shannon1948mathematical; @weaver1949recent].
 
-Note on reasoning. A model's chain of thought is such a path, but one that keeps collapsing back to words: at every step the position in the space is rounded to a token and then read back in. It sits on Shannon's boundary, the reasoning version of the split between bits and meaning (Chapter 3, "Shannon's Boundary Problem"). Nor is such a path a straight line to the answer: a chain is one sample from a distribution of paths, and only in aggregate does training make it likely to end in a correct one (Chapter 5). Whether reasoning can stay in the space instead of passing through text is an open question, developed in Chapter 5, Chapter 13, and the Epilogue.
+Note on reasoning. A model's chain of thought is such a path, but one that keeps collapsing back to words: at every step the position in the space is rounded to a token and then read back in. It sits on Shannon's boundary, the reasoning version of the split between bits and meaning (@sec-ch-embedding-spaces, "Shannon's Boundary Problem"). Nor is such a path a straight line to the answer: a chain is one sample from a distribution of paths, and only in aggregate does training make it likely to end in a correct one (@sec-ch-contextual-vectors). Whether reasoning can stay in the space instead of passing through text is an open question, developed in @sec-ch-contextual-vectors, @sec-ch-multimodal-embeddings, and the Epilogue.
 
 ## Meanings Combine {#sec-prop-combine}
 *Two meanings can be added into a bundle or bound into a pair, and the result is again a position in the same space.*
 
 Figure (planned): "red" and "ball" combined into "red ball", and the failure case where "red ball, blue cube" cannot say which colour belongs to which object.
 
-Earned in Chapter 10 (bundling and binding) and Chapter 11 (composition and systematicity).
+Earned in @sec-ch-vector-symbolic-architectures (bundling and binding) and @sec-ch-neurosymbolic-integration (composition and systematicity).
 
 Sources (first pass). Binding and bundling of vectors by circular convolution [@plate1995holographic], by random high-dimensional vectors [@kanerva2009hyperdimensional], and by tensor products [@smolensky1990tensor], surveyed in [@kleyko2023survey]; why composition is the crux, as a question of systematicity [@fodor1988connectionism]; addition and multiplication as composition in distributional models [@mitchell2010composition; @coecke2010mathematical].
 
@@ -67,7 +68,7 @@ Sources (first pass). Binding and bundling of vectors by circular convolution [@
 
 Figure (planned): the four signals of the dog test of the Prologue, converging on one neighbourhood.
 
-Earned in Chapter 13 (multimodal embeddings) and Chapter 12 (aligning separate spaces).
+Earned in @sec-ch-multimodal-embeddings (multimodal embeddings) and @sec-ch-cross-domain-transfer (aligning separate spaces).
 
 Sources (first pass). The grounding problem [@harnad1990symbol]; the old question whether touch and sight yield one concept [@locke1694essay; @held2011newly]; single neurons that respond to one person across photographs and name [@quiroga2005invariant]; crossmodal correspondences and synaesthesia [@spence2011crossmodal; @ramachandran2001synaesthesia]; images and text trained into one space by contrastive learning [@radford2021learning]; the claim that separate models converge on a shared representation [@huh2024platonic].
 
@@ -76,7 +77,7 @@ Sources (first pass). The grounding problem [@harnad1990symbol]; the old questio
 
 Figure (planned): a table of pairwise distances among a handful of words, with no coordinates anywhere, from which the map can still be redrawn.
 
-Earned in Chapter 3 (invariance to relabelling), Chapter 8 (the shape of a representation), and Chapter 12 (comparing two spaces by their relations).
+Earned in @sec-ch-embedding-spaces (invariance to relabelling), @sec-ch-topological-deep-learning (the shape of a representation), and @sec-ch-cross-domain-transfer (comparing two spaces by their relations).
 
 Sources (first pass). Meaning as a system of differences [@saussure1916cours]; representation as a pattern of similarities [@edelman1998representation; @kriegeskorte2008representational]; communicating across latent spaces through relative positions [@moschella2023relative].
 
@@ -109,6 +110,6 @@ The literature supports the pieces: gauge equivariance is developed for data on 
 
 Local non-uniformity also limits the global story: anisotropy and intrinsic dimension vary across layers and, by region, within a space.
 
-Earned in Chapter 3 (invariance to relabelling), Chapter 6 (curved space, geodesics, and parallel transport), Chapter 8 (the shape of a representation, and which symmetries a training objective leaves intact), and Chapter 12 (aligning two spaces up to a rotation, and comparing them independently of one).
+Earned in @sec-ch-embedding-spaces (invariance to relabelling), @sec-ch-tangent-spaces-geodesics (curved space, geodesics, and parallel transport), @sec-ch-topological-deep-learning (the shape of a representation, and which symmetries a training objective leaves intact), and @sec-ch-cross-domain-transfer (aligning two spaces up to a rotation, and comparing them independently of one).
 
 Sources (first pass). Geometry as what survives a group of transformations [@klein1893comparative; @bronstein2021geometric, section 4.5 on gauges and bundles]; comparing representations independently of rotation or invertible linear maps [@kornblith2019similarity]; communicating across latent spaces through relative positions, invariant to isometries and rescalings [@moschella2023relative]; the same models related by an isometry of the underlying manifold, through the pullback metric [@yu2025relative; @arvanitidis2018latent]; an exact rotation symmetry of the residual stream of a transformer, used to compress and quantize [@ashkboos2024slicegpt; @ashkboos2024quarot]; features as nearly orthogonal directions in superposition [@elhage2022toy]; the claim that separate models converge on a shared representation, up to such a map [@huh2024platonic]. Local forms: gauge equivariance on manifolds [@cohen2019gauge; @weiler2021coordinate]; parallel transport and holonomy [@needham2021visual]; analogy by parallel transport in hyperbolic space [@tifrea2019poincare; @nickel2017poincare]; invariance to augmentations and its cost [@bardes2022vicreg; @ericsson2021invariance]; variation of anisotropy and intrinsic dimension [@razzhigaev2023shape]. Origin and breaking of the symmetry: factorisation non-uniqueness [@levy2014neural]; implicit bias of gradient descent in matrix factorisation [@gunasekar2017implicit; @arora2019implicit]; privileged bases [@elhage2022toy]; nested embeddings [@kusupati2022matryoshka]; outlier and rogue dimensions [@kovaleva2021bert; @timkey2021rogue; @dettmers2022llmint8]. To add: a classical reference for a configuration being fixed up to rotation by its inner products.

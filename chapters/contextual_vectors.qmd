@@ -1,7 +1,8 @@
 ---
-title: "Contextual Vectors: Attention, Transformers, and Looking Inside"
 status: idea
 ---
+
+# Contextual Vectors: Attention, Transformers, and Looking Inside {#sec-ch-contextual-vectors}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
@@ -9,10 +10,10 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Why the vector of a word must depend on its sentence, and what transformers compute.*
 
 ## Attention as Similarity-Weighted Retrieval
-*The dot-product machinery of Chapter 4 inside the model, and its link to associative memory.*
+*The dot-product machinery of @sec-ch-vector-databases inside the model, and its link to associative memory.*
 
 ## Tokenizing the Senses
-*Image patches, spectrogram frames, and video tubelets turned into tokens, so that the same attention machinery reads every modality. This is one of two routes to a shared space, a single network over interleaved tokens, compared in Chapter 13 with separate encoders aligned by a contrastive loss.*
+*Image patches, spectrogram frames, and video tubelets turned into tokens, so that the same attention machinery reads every modality. This is one of two routes to a shared space, a single network over interleaved tokens, compared in @sec-ch-multimodal-embeddings with separate encoders aligned by a contrastive loss.*
 
 ## Features as Directions
 *The linear representation and superposition hypotheses, stated as claims together with the experiments that test them (probing and steering). Results are told as dated history.*
@@ -21,10 +22,10 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Chomsky's phrase-structure trees, looked for inside trained models: subject-verb agreement across intervening clauses (2016), agreement in nonsense sentences, "colorless green" networks (2018), and the structural probe (2019), which finds parse-tree distance as squared distance in a linear subspace of BERT and tree depth as a squared norm. Against it, the theoretical limits of self-attention on unbounded bracket nesting and the positive result for bounded depth. Brackets are the right test because of the Chomsky–Schützenberger theorem (1963): every context-free language is built from balanced brackets (a Dyck language) and a regular language. Bounded depth is Chomsky's competence versus performance (1963–1965): people also parse only a few levels of centre-embedding, and a network with finite precision and context is, strictly, a large finite automaton.*
 
 ## Sparse Autoencoders and Dictionary Learning
-*Recovering more features than dimensions, which uses the near-orthogonality of Chapter 2.*
+*Recovering more features than dimensions, which uses the near-orthogonality of @sec-ch-curse-of-dimensionality.*
 
 ## Reasoning in Text or in the Space
-*Chain of thought [@wei2022chain] as a path through the model's space that is rounded to a token at every step, which puts reasoning on Shannon's boundary (Chapter 3); pause tokens (2023) [@goyal2023think] and filler tokens (2024) [@pfau2024lets] as extra computation that is not quite language; and the latent alternatives that keep the steps in the space, continuous chain of thought (Coconut, 2024) [@hao2024training] and recurrent-depth models (2025). Planning in latent space is taken up in Chapter 13.*
+*Chain of thought [@wei2022chain] as a path through the model's space that is rounded to a token at every step, which puts reasoning on Shannon's boundary (@sec-ch-embedding-spaces); pause tokens (2023) [@goyal2023think] and filler tokens (2024) [@pfau2024lets] as extra computation that is not quite language; and the latent alternatives that keep the steps in the space, continuous chain of thought (Coconut, 2024) [@hao2024training] and recurrent-depth models (2025). Planning in latent space is taken up in @sec-ch-multimodal-embeddings.*
 
 *A path is not a geodesic. A sampled chain is one draw from a distribution over paths, and nothing guarantees that a single draw converges on the answer. What training raises is the probability $p_x$ that a draw ends in the set of answers a verifier accepts, summed over every path that does. The picture is old: problem solving as search in a problem space [@simon1971human; @newell1972human], which has guarantees only when the structure supplies them (A\* [@hart1968formal], UCT [@kocsis2006bandit]). A language model samples instead of searching, and gives up the guarantee. The same sum is the marginal likelihood of a latent-variable model whose latent variable is the chain of thought [@phan2023training], and self-consistency marginalizes it by voting [@wang2022self].*
 
@@ -35,7 +36,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *What the tokens mean. An outcome reward does not constrain the text. Chains are plausible yet can be unfaithful [@turpin2023language], faithfulness varies by task and falls with model size on most tasks [@lanham2023measuring], and scaling outcome-based RL leaves it on a low plateau [@chen2025reasoning]. Rounding to a token is therefore no guarantee that the token carries the step. Reward hacking is the same Goodhart effect seen from the other side: proxy rewards are rarely unhackable [@skalse2022defining], and optimizing harder hurts the true reward [@gao2022scaling]. Whether a continuous chain escapes this, and how one is trained when there is no sampled token to reward, is open.*
 
 ## Do Different Models Share a Geometry?
-*Claims of representational convergence across models, as a bridge to Chapters 12 and 13, which take up alignment between spaces and across modalities.*
+*Claims of representational convergence across models, as a bridge to Chapters [-@sec-ch-cross-domain-transfer] and [-@sec-ch-multimodal-embeddings], which take up alignment between spaces and across modalities.*
 
 ## Scale Test
-*Here the geometry is learned rather than designed. Which of the structures of Chapters 6 to 12 do trained transformers discover on their own? For reasoning, the bitter lesson [@sutton2019bitter] poses the question sharply: search and learning are the methods that scaled, so is keeping the steps in the space a prior that sampling, verification, and amortization absorb, or a different use of compute (serial depth, a distribution over paths held in one vector)? The test: at matched compute, does a latent chain beat sampled token chains plus a verifier, on problems with an oracle verifier and on problems without one?*
+*Here the geometry is learned rather than designed. Which of the structures of Chapters [-@sec-ch-tangent-spaces-geodesics] to [-@sec-ch-cross-domain-transfer] do trained transformers discover on their own? For reasoning, the bitter lesson [@sutton2019bitter] poses the question sharply: search and learning are the methods that scaled, so is keeping the steps in the space a prior that sampling, verification, and amortization absorb, or a different use of compute (serial depth, a distribution over paths held in one vector)? The test: at matched compute, does a latent chain beat sampled token chains plus a verifier, on problems with an oracle verifier and on problems without one?*

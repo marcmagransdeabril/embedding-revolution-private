@@ -1,12 +1,13 @@
 ---
-title: "Vector Symbolic Architectures and Hyperdimensional Computing"
 status: idea
 ---
+
+# Vector Symbolic Architectures and Hyperdimensional Computing {#sec-ch-vector-symbolic-architectures}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
 ## Near-Orthogonality as a Resource
-*The payoff of Chapter 2, representing concepts directly in 10,000-dimensional hypervectors.*
+*The payoff of @sec-ch-curse-of-dimensionality, representing concepts directly in 10,000-dimensional hypervectors.*
 
 ## Algebraic Operations on Thoughts
 

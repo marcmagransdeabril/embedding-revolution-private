@@ -35,7 +35,7 @@ _UNNUMBERED_H1_RE = re.compile(r"^# .*\{[^}]*(?:\.unnumbered|-)[^}]*\}\s*$")
 
 # Chapter references are written @sec-ch-<stem>, or [-@sec-ch-<stem>] inside "Chapters A to B", so that Quarto and
 # filters/book-chapter-refs.lua number them from the order of _quarto.yml. Turn the lint on once the book is converted.
-LINT_LITERAL_CHAPTERS = False
+LINT_LITERAL_CHAPTERS = True
 _LITERAL_CHAPTER_RE = re.compile(r"\bChapters? \d+")
 
 

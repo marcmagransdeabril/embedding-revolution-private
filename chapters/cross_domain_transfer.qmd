@@ -1,15 +1,16 @@
 ---
-title: "Cross-Domain Transfer and Optimal Transport"
 status: idea
 ---
+
+# Cross-Domain Transfer and Optimal Transport {#sec-ch-cross-domain-transfer}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
 ## Gauge Freedom
-*A trained space is determined only up to an isometry, the relabelling invariance of Chapter 3 seen from the other side, so comparing two spaces is a geometric problem.*
+*A trained space is determined only up to an isometry, the relabelling invariance of @sec-ch-embedding-spaces seen from the other side, so comparing two spaces is a geometric problem.*
 
 ## Aligning Two Spaces
-*Canonical correlation analysis (Hotelling, 1936), orthogonal Procrustes, and Mikolov's 2013 linear map between the embedding spaces of two languages: the classical, linear forms of alignment, and the precursors of the contrastive alignment of Chapter 13.*
+*Canonical correlation analysis (Hotelling, 1936), orthogonal Procrustes, and Mikolov's 2013 linear map between the embedding spaces of two languages: the classical, linear forms of alignment, and the precursors of the contrastive alignment of @sec-ch-multimodal-embeddings.*
 
 ## Optimal Transport & Wasserstein Distances
 *Monge-Kantorovich formulations for transporting probability mass across latent manifolds.*
@@ -21,7 +22,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Transfer through aligned spaces, and the evidence for and against representational convergence across models.*
 
 ## Principles and Parameters
-*Chomsky's picture (1981) of languages as one shared core with a few switches, read geometrically: multilingual models encode grammatical relations in a subspace shared across languages, with directions specific to each (2020), the same shared-plus-specific structure as the concept subspaces of Chapter 9.*
+*Chomsky's picture (1981) of languages as one shared core with a few switches, read geometrically: multilingual models encode grammatical relations in a subspace shared across languages, with directions specific to each (2020), the same shared-plus-specific structure as the concept subspaces of @sec-ch-complex-plane-quantum-logic.*
 
 ## Scale Test
 *Does scale make independently trained spaces more alike, and if so, what is left for alignment to do?*

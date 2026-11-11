@@ -1,7 +1,8 @@
 ---
-title: "From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry"
 status: idea
 ---
+
+# From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry {#sec-ch-graph-embeddings}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 

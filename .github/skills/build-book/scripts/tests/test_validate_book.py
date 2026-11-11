@@ -392,3 +392,10 @@ def test_literal_chapter_lint_is_off_until_enabled(tmp_path, monkeypatch):
     assert not any("sec-ch-" in i.message for i in validate_book.validate_qmd_file(p, citations=False))
     monkeypatch.setattr(validate_book, "LINT_LITERAL_CHAPTERS", True)
     assert any("sec-ch-" in i.message for i in validate_book.validate_qmd_file(p, citations=False))
+
+
+def test_the_book_has_no_literal_chapter_numbers():
+    """Chapters are referred to by label (@sec-ch-<stem>), so that inserting a chapter renumbers the prose."""
+    files = [validate_book.INDEX_QMD, *sorted(validate_book.CHAPTERS_DIR.glob("*.qmd"))]
+    literal = [str(i) for f in files for i in validate_book.validate_chapter_references(f, f.read_text(encoding="utf-8").splitlines())]
+    assert literal == []

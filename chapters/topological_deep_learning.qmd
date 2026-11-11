@@ -1,7 +1,8 @@
 ---
-title: "Beyond Graphs: Topological Deep Learning"
 status: idea
 ---
+
+# Beyond Graphs: Topological Deep Learning {#sec-ch-topological-deep-learning}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
@@ -15,7 +16,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Decomposing flows into gradient, curl, and harmonic parts, and learning representations on manifolds with topological holes.*
 
 ## Measuring the Shape of a Representation
-*Persistent homology in latent spaces, with barcodes and persistence diagrams as tools to test the manifold hypothesis of Chapter 2.*
+*Persistent homology in latent spaces, with barcodes and persistence diagrams as tools to test the manifold hypothesis of @sec-ch-curse-of-dimensionality.*
 
 ## Scale Test
 *Much of this machinery is young. Which parts earn their cost at scale, and which are mainly analysis tools?*

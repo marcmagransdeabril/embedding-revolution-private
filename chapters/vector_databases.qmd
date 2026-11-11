@@ -1,7 +1,8 @@
 ---
-title: "Vector Databases, RAG, and the Limits of Single-Vector Retrieval"
 status: idea
 ---
+
+# Vector Databases, RAG, and the Limits of Single-Vector Retrieval {#sec-ch-vector-databases}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
@@ -9,16 +10,16 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*
 
 ## What a Fixed-Dimension Dot Product Can Express
-*Where the dot product comes from: a dual encoder trained with the contrastive loss of Chapter 3, in which a question and the passage that answers it are a positive pair and the other passages of the batch are the negatives [@karpukhin2020dense, pp. 6771–6772]. The structural limit: how many distinct rankings and subsets a query vector of dimension $d$ can realize, and what that means for negation, conjunction, and multi-hop queries.*
+*Where the dot product comes from: a dual encoder trained with the contrastive loss of @sec-ch-embedding-spaces, in which a question and the passage that answers it are a positive pair and the other passages of the batch are the negatives [@karpukhin2020dense, pp. 6771–6772]. The structural limit: how many distinct rankings and subsets a query vector of dimension $d$ can realize, and what that means for negation, conjunction, and multi-hop queries.*
 
 ## Retrieval-Augmented Generation
 *Bridging parametric model memory with external latent storage, told as the answer of the 2020s.*
 
 ## Hybrid Search & Multi-Vector Alignments
-*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item. The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of Chapter 13 are practical problems.*
+*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item. The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-multimodal-embeddings are practical problems.*
 
 ## Negation, Multi-Hop Reasoning, and Hallucination (a dated case study)
 *How retrieval systems behaved, what followed, and why the structural limit remains.*
 
 ## Scale Test
-*Scale forced approximation. Will long contexts and agentic search absorb retrieval, or does external memory survive on cost? The same trade appears in reasoning (Chapter 5): search can be paid once in training and amortized into the weights, or paid at every query. Parametric memory is the amortized side, retrieval and agentic search the per-query side, and which wins depends on the difficulty of the question and the compute available [@snell2024scaling; @jones2021scaling].*
+*Scale forced approximation. Will long contexts and agentic search absorb retrieval, or does external memory survive on cost? The same trade appears in reasoning (@sec-ch-contextual-vectors): search can be paid once in training and amortized into the weights, or paid at every query. Parametric memory is the amortized side, retrieval and agentic search the per-query side, and which wins depends on the difficulty of the question and the compute available [@snell2024scaling; @jones2021scaling].*

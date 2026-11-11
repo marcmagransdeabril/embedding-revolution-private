@@ -126,13 +126,14 @@ Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 ```
 
 **Checks Performed**:
-1. **Frontmatter**: Non-empty `title`, valid YAML delimiters.
+1. **Frontmatter**: Non-empty `title` (in the front matter, or as the level-1 heading `# Title {#sec-ch-<stem>}`; both is a warning), valid YAML delimiters.
 2. **Callouts**: Perfectly balanced `:::` container blocks.
 3. **Executable Code**: Valid Python syntax within ````{python}`` blocks.
 4. **Display Math**: Balanced `$$` delimiters and valid LaTeX math environments.
 5. **Section Breaks**: `{{< pagebreak >}}` used instead of `---` horizontal rules between parts/chapters/special sections.
 6. **Citations**: Every `@citekey` resolves against `references.bib`; no orphan bib entries; `file =` paths exist under `references/`; no legacy hand-numbered `## References` lists (gated by `--citations`/`--no-citations`, default on).
 7. **Review questions and solutions**: every `::: {.questions}` block is followed immediately by a `::: {.answers}` block with the same number of items, and the generated `chapters/solutions.qmd` is up to date.
+8. **Chapter references**: no literal `Chapter N` or `Chapters N to M` outside code (warning); see "Referring to chapters" below.
 
 ---
 
@@ -153,18 +154,23 @@ The file-to-chapter mapping lives in `MASTER_PARTS` in `scripts/sync_chapters.py
 a file goes to the first chapter whose pattern is a substring of its filename
 stem or its title, so keep patterns specific.
 
+### Referring to chapters
+Never type a chapter number: the numbers follow the order of `_quarto.yml`, so an inserted, merged or dropped chapter renumbers the book by itself.
+- The label of a chapter is `sec-ch-` plus its file stem with `-` for `_`: `chapters/embedding_spaces.qmd` is `@sec-ch-embedding-spaces`.
+- `@sec-ch-embedding-spaces` renders "Chapter 3". After the word "Chapters", write `[-@...]`, which renders only the number: `Chapters [-@sec-ch-vector-databases] to [-@sec-ch-multimodal-embeddings]` gives "Chapters 4 to 13". Write a reference alone (no prefix, suffix or other citation inside the brackets).
+- A roadmap entry in `index.qmd` is `* **@sec-ch-<stem>: Title.** *(status)*`; `make status` reads the tag by the label and checks that the roadmap lists the chapters in the order of `_quarto.yml`.
+- Why a filter: in HTML, Quarto 1.5 renders a chapter reference in a page without a chapter number (`index.qmd`, the epilogue, `solutions.qmd`) as "3 Title" and ignores `[-@...]` (quarto-dev/quarto-cli#14132). `filters/book-chapter-refs.lua` resolves every `@sec-ch-*` itself in HTML and stops the build on an unknown label; PDF and EPUB are left to Quarto. Delete the filter when Quarto fixes the bug (the text diff of the renders shows whether it still matters). Do not reference *sections* (`@sec-prop-...`) from those three pages in HTML: the same bug applies and the filter does not cover them.
+- An unresolved label in PDF or EPUB is only a warning in Quarto; `make pdf`/`make epub` search the log (`.quarto/render-<format>.log`) and fail.
+
 ### Chapter Frontmatter & Structure
-Each chapter file should begin with YAML frontmatter:
+A chapter keeps `status:` (and `open:`) in the YAML frontmatter and gives its title as the labelled level-1 heading:
 
 ```markdown
 ---
-title: "The Anatomy of Embedding and Latent Spaces"
-subtitle: "From Shannon's Bits to High-Dimensional Geometric Knowledge"
-author: "Marc Magrans de Abril"
-jupyter: python3
+status: idea
 ---
 
-# Introduction: The Epistemological Leap {#sec-intro}
+# The Anatomy of Embedding and Latent Spaces {#sec-ch-embedding-spaces}
 
 ::: {.callout-note}
 ## The Geek's Epiphany

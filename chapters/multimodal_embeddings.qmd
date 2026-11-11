@@ -1,7 +1,8 @@
 ---
-title: "Many Senses, One Space: Multimodal Embeddings"
 status: idea
 ---
+
+# Many Senses, One Space: Multimodal Embeddings {#sec-ch-multimodal-embeddings}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
@@ -9,28 +10,28 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Firth's company is a company of words. Harnad's symbol grounding, Bender and Koller's argument that form alone does not yield meaning, and Gärdenfors's conceptual spaces, set against the dog test of the Prologue: what would a photograph, the word, a bark, and a gait have to share? Chomsky's distinction (1986) between I-language, the system in the speaker's head, and E-language, the corpus of what is said: a text model is trained on E-language only, and a multimodal one adds the senses but not the head.*
 
 ## Meaning as What Views Share
-*A working definition of the semantic content of a signal as the information shared by different views of the same cause, which is Shannon's mutual information between channels. Told as a historical sequence: CCA (1936), deep CCA and DeViSE (2013), natural pairs such as the frames and the audio track of a video (2017), and CLIP (2021) as InfoNCE across modalities, whose optimum relates to the pointwise mutual information between an image and its caption, the cross-modal counterpart of the word-context PMI of Chapter 3.*
+*A working definition of the semantic content of a signal as the information shared by different views of the same cause, which is Shannon's mutual information between channels. Told as a historical sequence: CCA (1936), deep CCA and DeViSE (2013), natural pairs such as the frames and the audio track of a video (2017), and CLIP (2021) as InfoNCE across modalities, whose optimum relates to the pointwise mutual information between an image and its caption, the cross-modal counterpart of the word-context PMI of @sec-ch-embedding-spaces.*
 
 ## One Hub, Many Modalities
 *How binding every modality to images (ImageBind, 2023) aligns pairs that were never seen together, such as audio and text, and what that suggests about the shared structure of the senses.*
 
 ## Two Routes to One Space
-*Separate encoders aligned by a contrastive loss versus a single transformer over interleaved tokens (Chapter 5), with post-hoc alignment (Chapter 12) as a third, and what each route keeps and loses.*
+*Separate encoders aligned by a contrastive loss versus a single transformer over interleaved tokens (@sec-ch-contextual-vectors), with post-hoc alignment (@sec-ch-cross-domain-transfer) as a third, and what each route keeps and loses.*
 
 ## What a Shared Space Loses
 *A contrastive objective keeps what the views share and discards what is specific to one of them, and the InfoNCE estimate of mutual information cannot exceed $\log N$ for $N$ examples per batch. The fur texture of the dog is not in its bark.*
 
 ## The Modality Gap
-*Why embeddings of different modalities occupy separate cones even after contrastive training, its relation to the anisotropy of Chapter 3 and the hubness of Chapters 2 and 4, and what it means for the claim of a "single" space.*
+*Why embeddings of different modalities occupy separate cones even after contrastive training, its relation to the anisotropy of @sec-ch-embedding-spaces and the hubness of Chapters [-@sec-ch-curse-of-dimensionality] and [-@sec-ch-vector-databases], and what it means for the claim of a "single" space.*
 
 ## Motion and Time
-*Events as trajectories in the shared space (Chapter 6), and why dynamics are the weakest part of current multimodal spaces. The gait is the hardest of the dog's four signals.*
+*Events as trajectories in the shared space (@sec-ch-tangent-spaces-geodesics), and why dynamics are the weakest part of current multimodal spaces. The gait is the hardest of the dog's four signals.*
 
 ## Predicting in the Space, Not the Signal
-*Joint-embedding predictive architectures (JEPA), which predict the embedding of a masked or future part of a signal from the embedding of its context, so that the views are context and target within one signal rather than two modalities. The fourth objective of Chapter 3, now applied where it was designed to matter: a generative model must spend capacity on every pixel, a latent predictor can ignore what it cannot predict. Told as a historical sequence: LeCun's position paper on autonomous machine intelligence (2022); I-JEPA for images (2023); V-JEPA for video (2024); and V-JEPA 2 (2025), whose action-conditioned predictor plans in latent space. A world model is a learned map from a state and an action to the next state, a discrete vector field on the embedding manifold, and planning is the search for a trajectory along it (Chapter 6), which is where the agentic trajectories of the Prologue live. The question of Chapter 5, whether thinking can stay in the space instead of passing through text, is here asked of planning, where latent rollouts have a longer record: world models (Ha and Schmidhuber, 2018; Dreamer) and diffusion planners (Diffuser, 2022). The link to predictive processing in the brain is taken up in the Epilogue.*
+*Joint-embedding predictive architectures (JEPA), which predict the embedding of a masked or future part of a signal from the embedding of its context, so that the views are context and target within one signal rather than two modalities. The fourth objective of @sec-ch-embedding-spaces, now applied where it was designed to matter: a generative model must spend capacity on every pixel, a latent predictor can ignore what it cannot predict. Told as a historical sequence: LeCun's position paper on autonomous machine intelligence (2022); I-JEPA for images (2023); V-JEPA for video (2024); and V-JEPA 2 (2025), whose action-conditioned predictor plans in latent space. A world model is a learned map from a state and an action to the next state, a discrete vector field on the embedding manifold, and planning is the search for a trajectory along it (@sec-ch-tangent-spaces-geodesics), which is where the agentic trajectories of the Prologue live. The question of @sec-ch-contextual-vectors, whether thinking can stay in the space instead of passing through text, is here asked of planning, where latent rollouts have a longer record: world models (Ha and Schmidhuber, 2018; Dreamer) and diffusion planners (Diffuser, 2022). The link to predictive processing in the brain is taken up in the Epilogue.*
 
 ## Composition Across Senses
-*Binding attributes to objects across modalities (Chapters 10 and 11), and the failures that remain.*
+*Binding attributes to objects across modalities (Chapters [-@sec-ch-vector-symbolic-architectures] and [-@sec-ch-neurosymbolic-integration]), and the failures that remain.*
 
 ## Do the Senses Converge?
 *The Platonic representation hypothesis: evidence for and against the claim that models trained on different modalities approach the same geometry, and what the dog test says about it.*

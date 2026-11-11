@@ -4,6 +4,8 @@ title: "Ideas outside the book"
 
 This file is not part of the book (it is not listed in `_quarto.yml`). It keeps the open ideas, sorted by how far the classics point the same way, what the book explored and left, with the reason, so the same idea is not explored twice, and the durability actions that are still open. Ideas that are still alive stay in the chapters, tagged `provisional` or `idea`.
 
+This file is not rendered, so it cannot use chapter references: its chapter numbers are those of 2026-11-11, before any chapter was inserted (Chapter 3 is `embedding_spaces.qmd`, Chapter 5 `contextual_vectors.qmd`; the file stems are in `_quarto.yml`). Read them as of that date.
+
 ## Open ideas, sorted by Lindy alignment
 
 Lines of exploration that came out of the review of embedding and latent spaces (`tmp/emb_vs_lat.md`, gaps in brackets). A speculative idea is explored first where the classics point the same way, because an idea backed by old sources has more future than one backed only by recent ones.

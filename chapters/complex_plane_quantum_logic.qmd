@@ -1,7 +1,8 @@
 ---
-title: "The Complex Plane and Quantum Logic: Wave-Nature in Latent Space"
 status: idea
 ---
+
+# The Complex Plane and Quantum Logic: Wave-Nature in Latent Space {#sec-ch-complex-plane-quantum-logic}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
