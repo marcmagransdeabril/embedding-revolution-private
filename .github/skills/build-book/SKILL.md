@@ -59,6 +59,7 @@ make validate           # Audit chapter markdown, math, code syntax, and citatio
 make validate-citations # Audit only @citekey citations against references.bib
 make sync-chapters      # Auto-discover chapters/*.qmd and update _quarto.yml
 make sync-solutions     # Regenerate chapters/solutions.qmd from the answers blocks in each chapter
+make test-code          # Run the solution scripts in code/ that changed; a script whose first line is `# SKELETON` is listed and skipped
 
 # Live editing preview server
 make preview
@@ -143,11 +144,12 @@ Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 Place new chapters in `chapters/`:
 - `chapters/properties_of_meaning.qmd` (Chapter 1)
 - `chapters/curse_of_dimensionality.qmd` (Chapter 2)
-- `chapters/embedding_spaces.qmd` (Chapter 3)
-- `chapters/vector_databases.qmd` (Chapter 4)
-- `chapters/contextual_vectors.qmd` (Chapter 5)
-- `chapters/tangent_spaces_geodesics.qmd` (Chapter 6)
-- ...
+- `chapters/symbols_without_interior.qmd` (Chapter 3)
+- `chapters/embedding_spaces.qmd` (Chapter 4)
+- `chapters/generative_spaces.qmd` (Chapter 5)
+- `chapters/contextual_vectors.qmd` (Chapter 6)
+- `chapters/vector_databases.qmd` (Chapter 7)
+- ... (the numbers are those of `_quarto.yml`; in the text, refer to chapters by label, see "Referring to chapters")
 
 Run `make sync-chapters` to automatically register newly added files into `_quarto.yml`.
 The file-to-chapter mapping lives in `MASTER_PARTS` in `scripts/sync_chapters.py`:

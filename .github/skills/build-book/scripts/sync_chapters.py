@@ -39,18 +39,23 @@ MASTER_PARTS = [
             },
             {
                 "num": 3,
-                "title": "The Anatomy of Embedding Spaces",
-                "patterns": ["embedding_spaces", "anatomy", "latent_spaces", "03_", "chapter3"],
+                "title": "Symbols Without Interior",
+                "patterns": ["symbols_without_interior", "interior", "orthogonal_catastrophe", "03_", "chapter3"],
             },
             {
                 "num": 4,
-                "title": "Latent Spaces from Generative Models",
-                "patterns": ["generative_spaces", "04_", "chapter4"],
+                "title": "The Anatomy of Embedding Spaces",
+                "patterns": ["embedding_spaces", "anatomy", "latent_spaces", "04_", "chapter4"],
             },
             {
                 "num": 5,
+                "title": "Latent Spaces from Generative Models",
+                "patterns": ["generative_spaces", "05_", "chapter5"],
+            },
+            {
+                "num": 6,
                 "title": "Contextual Vectors: Attention, Transformers, and Looking Inside",
-                "patterns": ["contextual_vector", "contextual", "attention", "05_", "interpretability", "chapter5"],
+                "patterns": ["contextual_vector", "contextual", "attention", "06_", "interpretability", "chapter6"],
             },
         ],
     },
@@ -58,24 +63,24 @@ MASTER_PARTS = [
         "part": "Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology",
         "chapters": [
             {
-                "num": 6,
-                "title": "Vector Databases, RAG, and the Limits of Single-Vector Retrieval",
-                "patterns": ["vector_database", "vector_db", "rag", "06_", "retrieval", "chapter6"],
-            },
-            {
                 "num": 7,
-                "title": "Tangent Spaces, Geodesics, and Geometric Deep Learning",
-                "patterns": ["tangent_space", "geodesic", "geometric_deep_learning", "07_", "hyperbolic", "chapter7"],
+                "title": "Vector Databases, RAG, and the Limits of Single-Vector Retrieval",
+                "patterns": ["vector_database", "vector_db", "rag", "07_", "retrieval", "chapter7"],
             },
             {
                 "num": 8,
-                "title": "From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry",
-                "patterns": ["graph_embedding", "knowledge_graph", "08_", "relational_geometry", "chapter8"],
+                "title": "Tangent Spaces, Geodesics, and Geometric Deep Learning",
+                "patterns": ["tangent_space", "geodesic", "geometric_deep_learning", "08_", "hyperbolic", "chapter8"],
             },
             {
                 "num": 9,
+                "title": "From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry",
+                "patterns": ["graph_embedding", "knowledge_graph", "09_", "relational_geometry", "chapter9"],
+            },
+            {
+                "num": 10,
                 "title": "Beyond Graphs: Topological Deep Learning",
-                "patterns": ["topological_deep_learning", "topological", "09_", "simplicial", "homology", "chapter9"],
+                "patterns": ["topological_deep_learning", "topological", "10_", "simplicial", "homology", "chapter10"],
             },
         ],
     },
@@ -83,19 +88,19 @@ MASTER_PARTS = [
         "part": "The Algebra of Thought: Vectors as Symbols",
         "chapters": [
             {
-                "num": 10,
-                "title": "The Complex Plane and Quantum Logic: Wave-Nature in Latent Space",
-                "patterns": ["complex_plane", "quantum_logic", "10_", "cvnn", "complex_valued", "chapter10"],
-            },
-            {
                 "num": 11,
-                "title": "Vector Symbolic Architectures and Hyperdimensional Computing",
-                "patterns": ["vector_symbolic", "vsa", "hyperdimensional", "11_", "hdc", "chapter11"],
+                "title": "The Complex Plane and Quantum Logic: Wave-Nature in Latent Space",
+                "patterns": ["complex_plane", "quantum_logic", "11_", "cvnn", "complex_valued", "chapter11"],
             },
             {
                 "num": 12,
+                "title": "Vector Symbolic Architectures and Hyperdimensional Computing",
+                "patterns": ["vector_symbolic", "vsa", "hyperdimensional", "12_", "hdc", "chapter12"],
+            },
+            {
+                "num": 13,
                 "title": "Neuro-Symbolic Integration and Emergent Compositionality",
-                "patterns": ["neuro_symbolic", "neurosymbolic", "12_", "tpr", "ltn", "chapter12"],
+                "patterns": ["neuro_symbolic", "neurosymbolic", "13_", "tpr", "ltn", "chapter13"],
             },
         ],
     },
@@ -103,14 +108,14 @@ MASTER_PARTS = [
         "part": "Alignment, Transport, and Synthesis",
         "chapters": [
             {
-                "num": 13,
+                "num": 14,
                 "title": "Cross-Domain Transfer and Optimal Transport",
-                "patterns": ["cross_domain", "optimal_transport", "13_", "wasserstein", "chapter13"],
+                "patterns": ["cross_domain", "optimal_transport", "14_", "wasserstein", "chapter14"],
             },
             {
-                "num": 14,
+                "num": 15,
                 "title": "Many Senses, One Space: Multimodal Embeddings",
-                "patterns": ["multimodal", "many_senses", "14_", "chapter14"],
+                "patterns": ["multimodal", "many_senses", "15_", "chapter15"],
             },
         ],
     },

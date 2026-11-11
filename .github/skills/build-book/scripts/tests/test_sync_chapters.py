@@ -18,13 +18,13 @@ import sync_chapters
 
 
 def test_match_existing_chapter():
-    """Verify that embedding_spaces.qmd (Anatomy) matches Chapter 3 in Part I."""
+    """Verify that embedding_spaces.qmd (Anatomy) matches the fourth slot of Part I (after symbols_without_interior)."""
     emb_file = REPO_ROOT / "chapters" / "embedding_spaces.qmd"
     match = sync_chapters.match_chapter_to_outline(emb_file)
     assert match is not None
     part_idx, ch_idx = match
     assert part_idx == 0  # Part I
-    assert ch_idx == 2    # Chapter 3
+    assert ch_idx == 3    # Chapter 4 (Chapter 3 is symbols_without_interior)
 
 
 def test_match_future_chapter_patterns():
@@ -32,18 +32,19 @@ def test_match_future_chapter_patterns():
     test_cases = [
         ("properties_of_meaning.qmd", 0, 0),   # Part I, Ch 1
         ("curse_of_dimensionality.qmd", 0, 1), # Part I, Ch 2
-        ("embedding_spaces.qmd", 0, 2),        # Part I, Ch 3
-        ("generative_spaces.qmd", 0, 3),       # Part I, Ch 4
-        ("contextual_vectors.qmd", 0, 4),      # Part I, Ch 5 (closes Part I: the geometry is learned, not designed)
-        ("vector_databases.qmd", 1, 0),        # Part II, Ch 6 (opens Part II; position under review, notes/generative_chapter_plan.md D11)
-        ("tangent_spaces.qmd", 1, 1),          # Part II, Ch 7
-        ("graph_embeddings.qmd", 1, 2),        # Part II, Ch 8
-        ("topological_deep_learning.qmd", 1, 3), # Part II, Ch 9
-        ("complex_plane.qmd", 2, 0),           # Part III, Ch 10
-        ("vsa_hyperdimensional.qmd", 2, 1),    # Part III, Ch 11
-        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 12
-        ("optimal_transport.qmd", 3, 0),       # Part IV, Ch 13
-        ("multimodal_embeddings.qmd", 3, 1),   # Part IV, Ch 14
+        ("symbols_without_interior.qmd", 0, 2), # Part I, Ch 3
+        ("embedding_spaces.qmd", 0, 3),        # Part I, Ch 4
+        ("generative_spaces.qmd", 0, 4),       # Part I, Ch 5
+        ("contextual_vectors.qmd", 0, 5),      # Part I, Ch 6 (closes Part I: the geometry is learned, not designed)
+        ("vector_databases.qmd", 1, 0),        # Part II, Ch 7 (opens Part II; position under review, notes/generative_chapter_plan.md D11)
+        ("tangent_spaces.qmd", 1, 1),          # Part II, Ch 8
+        ("graph_embeddings.qmd", 1, 2),        # Part II, Ch 9
+        ("topological_deep_learning.qmd", 1, 3), # Part II, Ch 10
+        ("complex_plane.qmd", 2, 0),           # Part III, Ch 11
+        ("vsa_hyperdimensional.qmd", 2, 1),    # Part III, Ch 12
+        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 13
+        ("optimal_transport.qmd", 3, 0),       # Part IV, Ch 14
+        ("multimodal_embeddings.qmd", 3, 1),   # Part IV, Ch 15
     ]
 
     for filename, expected_part, expected_ch in test_cases:
@@ -115,11 +116,21 @@ def test_a_chapter_matches_the_same_slot_whether_its_title_is_in_the_front_matte
     assert sync_chapters.match_chapter_to_outline(a) == sync_chapters.match_chapter_to_outline(b)
 
 
-def test_generative_chapter_is_chapter_4_and_embedding_spaces_stays_chapter_3():
+def test_generative_chapter_follows_embedding_spaces_and_neither_is_taken_for_the_other():
     """`latent_spaces` is a pattern of Chapter 3; the file name generative_spaces must not be taken for it."""
     gen = sync_chapters.match_chapter_to_outline(REPO_ROOT / "chapters" / "generative_spaces.qmd")
     emb = sync_chapters.match_chapter_to_outline(REPO_ROOT / "chapters" / "embedding_spaces.qmd")
-    assert gen == (0, 3)
-    assert emb == (0, 2)
+    assert gen == (0, 4)
+    assert emb == (0, 3)
     flat = [c for p in sync_chapters.discover_and_build_chapters_list()[1:] if isinstance(p, dict) for c in p["chapters"]]
     assert flat.index("chapters/generative_spaces.qmd") == flat.index("chapters/embedding_spaces.qmd") + 1
+
+
+def test_symbols_chapter_precedes_embedding_spaces_and_matches_by_its_own_name():
+    """`interior`/`symbols_without_interior` must not catch embedding_spaces, and the reverse."""
+    sym = sync_chapters.match_chapter_to_outline(REPO_ROOT / "chapters" / "symbols_without_interior.qmd")
+    emb = sync_chapters.match_chapter_to_outline(REPO_ROOT / "chapters" / "embedding_spaces.qmd")
+    assert sym == (0, 2)
+    assert emb == (0, 3)
+    flat = [c for p in sync_chapters.discover_and_build_chapters_list()[1:] if isinstance(p, dict) for c in p["chapters"]]
+    assert flat.index("chapters/symbols_without_interior.qmd") + 1 == flat.index("chapters/embedding_spaces.qmd")

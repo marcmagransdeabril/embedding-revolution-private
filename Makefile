@@ -11,7 +11,9 @@ EXPORT_PATH := PATH="$(TINYTEX_BIN):$(PATH)" QUARTO_PYTHON="$(VENV_PYTHON)"
 
 # Solution scripts (code/<chapter>/*.py) are re-run only when they or their shared helper change
 CODE_HELPERS := $(wildcard code/*/utils.py)
-CODE_SCRIPTS := $(filter-out $(CODE_HELPERS),$(wildcard code/*/*.py))
+# A script whose first line is `# SKELETON` is a plan for a script, not a script: it is listed and skipped, never stamped as passed.
+CODE_SKELETONS := $(shell grep -l '^\# SKELETON' $(wildcard code/*/*.py) 2>/dev/null)
+CODE_SCRIPTS := $(filter-out $(CODE_HELPERS) $(CODE_SKELETONS),$(wildcard code/*/*.py))
 CODE_STAMPS  := $(CODE_SCRIPTS:code/%.py=.code-tests/%.ok)
 
 .PHONY: help all book pdf html epub sync-chapters sync-solutions test-code validate validate-citations status durability check preview clean
@@ -41,6 +43,7 @@ help:
 book: test-code sync-chapters sync-solutions html pdf
 
 test-code: $(CODE_STAMPS)
+	@for f in $(CODE_SKELETONS); do echo "==> Skipped (skeleton, not implemented): $$f"; done
 
 .code-tests/%.ok: code/%.py $(CODE_HELPERS)
 	@echo "==> Running $<..."

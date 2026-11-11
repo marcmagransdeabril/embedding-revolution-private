@@ -18,6 +18,7 @@ book:
     chapters:
     - chapters/properties_of_meaning.qmd
     - chapters/curse_of_dimensionality.qmd
+    - chapters/symbols_without_interior.qmd
     - chapters/embedding_spaces.qmd
     - chapters/generative_spaces.qmd
     - chapters/contextual_vectors.qmd

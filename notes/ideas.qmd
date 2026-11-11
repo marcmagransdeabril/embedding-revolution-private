@@ -4,7 +4,7 @@ title: "Ideas outside the book"
 
 This file is not part of the book (it is not listed in `_quarto.yml`). It keeps the open ideas, sorted by how far the classics point the same way, what the book explored and left, with the reason, so the same idea is not explored twice, and the durability actions that are still open. Ideas that are still alive stay in the chapters, tagged `provisional` or `idea`.
 
-This file is not rendered, so it cannot use chapter references: its chapter numbers are those of 2026-11-11, before any chapter was inserted (Chapter 3 is `embedding_spaces.qmd`, Chapter 5 `contextual_vectors.qmd`; the file stems are in `_quarto.yml`). Read them as of that date.
+This file is not rendered, so it cannot use chapter references: its chapter numbers are those of 2026-11-11, before any chapter was inserted or split (Chapter 3 was `embedding_spaces.qmd`, which is now split into `symbols_without_interior.qmd`, the old sections on Shannon, Chomsky, one-hot symbols and Rice, and `embedding_spaces.qmd`, the sections on counting, prediction, contrast and what follows; Chapter 5 was `contextual_vectors.qmd`; the file stems are in `_quarto.yml`). Read them as of that date.
 
 ## Open ideas, sorted by Lindy alignment
 
@@ -169,6 +169,11 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Dropped:** 2026-11-11 (before it was written).
 - **Why:** it is a claim that the sources may not support (a bound on mutual information does not fix the geometry, and there is published criticism of the mutual-information view of contrastive learning). The consolidation is graded and sourced instead (4.3.7).
 - **Reopen if:** the sources read in Step L support a stronger statement.
+
+### Move "Learning by Reconstruction" to the generative chapter to make the embedding chapter smaller
+- **Dropped:** 2026-11-11 (the author chose to split the chapter at its seam instead).
+- **Why:** the split removes 15 pages from the embedding chapter by itself, and the autoencoder belongs next to the SVD it generalises. Moving three pages would not have solved the size.
+- **Reopen if:** the embedding chapter is still too long when its stubs are written.
 
 ## Open durability actions
 

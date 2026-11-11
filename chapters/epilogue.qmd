@@ -43,7 +43,7 @@ printed-page locators `[@key, p. N]` when the prose is written):
 *Plan (1 page).* Short recap of the arc of the book, from Boole's discrete laws of thought [@boole1854investigation] to vectors: Shannon's deliberate exclusion of meaning [@shannon1948mathematical], Weaver's three levels [@weaver1949recent], the orthogonal catastrophe, Rice's theorem, and the move to graded similarity. State the question of the epilogue: was the move from symbol to geometry a discovery of computer science, or a rediscovery?
 
 - Claim: computer science excluded meaning by design and readmitted it as geometry; other fields never excluded it.
-- Hooks: @sec-ch-embedding-spaces (Shannon's Boundary Problem, Orthogonal Catastrophe).
+- Hooks: @sec-ch-symbols-without-interior (Shannon's Boundary Problem, Orthogonal Catastrophe).
 
 ## The Meaning of Meaning
 
@@ -57,10 +57,10 @@ printed-page locators `[@key, p. N]` when the prose is written):
 
 *Plan (2 pages).* The religious and philosophical dream of a sign that reveals the thing [@eco1995search]: the Adamic language, Kabbalistic gematria, in which words become numbers and equal numbers reveal hidden connections [@scholem1941major] (a one-dimensional embedding with hash collisions), Llull's combinatorial wheels of divine attributes [@bonner2007art], and Wilkins's *Real Character* [@wilkins1668essay], a hand-built hierarchical code in which the spelling of a word is its address in a taxonomy. Locke had diagnosed the problem a few years later, in his chapters on the imperfection and abuse of words (*Essay* III.ix–x) [@locke1694essay]. Borges's essay on Wilkins and the "Chinese encyclopedia" [@borges1964other] is the critique: every hand-made taxonomy is arbitrary. Eco's opposition of the dictionary (a tree of definitions) and the encyclopedia (a network without a root) [@eco1984semiotics] frames the choice between hierarchy and graph that Chapters [-@sec-ch-tangent-spaces-geodesics] and [-@sec-ch-graph-embeddings] make in geometry. The reply from cognitive science is that the form can be learned too: a tree is the best form for living kinds, but rings, chains, and grids fit other domains better [@kemp2008discovery].
 
-- Claim: the perfect-language tradition is the opposite of the bitter lesson [@sutton2019bitter], the hand-written dense table of @sec-ch-embedding-spaces at the scale of a civilization, and it failed for the same reason.
+- Claim: the perfect-language tradition is the opposite of the bitter lesson [@sutton2019bitter], the hand-written dense table of @sec-ch-symbols-without-interior at the scale of a civilization, and it failed for the same reason.
 - Precedent: Wilkins's code is a tree address, the discrete ancestor of hyperbolic embeddings of taxonomies.
 - Challenge: Borges, against any fixed set of dimensions of meaning; Kemp and Tenenbaum, against any single fixed form (a tree is a choice, not a given).
-- Hooks: @sec-ch-embedding-spaces (hand-made dense table, bitter lesson), @sec-ch-tangent-spaces-geodesics (hierarchies).
+- Hooks: @sec-ch-symbols-without-interior (hand-made dense table), @sec-ch-embedding-spaces (bitter lesson), @sec-ch-tangent-spaces-geodesics (hierarchies).
 
 ## Meaning by Difference and by Company
 
@@ -131,7 +131,7 @@ printed-page locators `[@key, p. N]` when the prose is written):
 
 - Claim: literature anticipated both the power and the emptiness of combinatorial meaning.
 - Unused: Funes as the epilogue's image for the low-rank argument; conceptual metaphor as a cross-domain map (@sec-ch-cross-domain-transfer).
-- Hooks: @sec-ch-embedding-spaces (Shannon's generator, low rank), @sec-ch-curse-of-dimensionality, @sec-ch-contextual-vectors, @sec-ch-cross-domain-transfer.
+- Hooks: @sec-ch-symbols-without-interior (Shannon's generator), @sec-ch-embedding-spaces (low rank), @sec-ch-curse-of-dimensionality, @sec-ch-contextual-vectors, @sec-ch-cross-domain-transfer.
 
 ## The Mathematics of Meaning
 
@@ -165,7 +165,7 @@ printed-page locators `[@key, p. N]` when the prose is written):
 
 - Claim: the debate is not settled by performance, because each side measures a different thing: E-language for the models, I-language for Chomsky [@chomsky1986knowledge].
 - Challenge: data efficiency, children learn from fewer than 100 million words [@warstadt2023findings]; the hierarchical generalization that sequential networks miss [@mccoy2020syntax] and transformers learn late [@murty2023grokking].
-- Hooks: @sec-ch-embedding-spaces (the staircase), @sec-ch-contextual-vectors (structural probe), @sec-ch-neurosymbolic-integration (poverty of the stimulus), @sec-ch-multimodal-embeddings (I-language and grounding).
+- Hooks: @sec-ch-symbols-without-interior (the staircase), @sec-ch-contextual-vectors (structural probe), @sec-ch-neurosymbolic-integration (poverty of the stimulus), @sec-ch-multimodal-embeddings (I-language and grounding).
 
 ## The Bitter Lesson and the Perfect Language
 
