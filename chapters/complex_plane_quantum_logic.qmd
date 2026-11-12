@@ -10,7 +10,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 The guiding fact is that $\mathbb{C}^n$ is $\mathbb{R}^{2n}$ with a rotation structure added. Any advantage therefore comes from that structure (a phase that multiplies, a squared readout), not from the extra dimensions, and each section asks for a real baseline of the same size.
 
 ## Concepts as Subspaces
-*The logic of subspaces (Birkhoff and von Neumann): negation as orthogonal complement, and why that logic is not distributive. A concept such as "dog" is better described as a subspace, with directions shared by all modalities and directions specific to each, than as a single point. This section does not need complex numbers: the construction works over the reals, and the chapter says so.*
+*The logic of subspaces (Birkhoff and von Neumann): negation as orthogonal complement, and why that logic is not distributive. A concept such as "dog" is better described as a subspace, with directions shared by all modalities and directions specific to each, than as a single point. This section does not need complex numbers: the construction works over the reals, and the chapter says so. In this logic, containment of subspaces is implication, orthogonality is exclusion, and anything else is undetermined, which is the geometric reading of "entailed, refuted, undetermined" tested in @sec-ch-neurosymbolic-integration.*
 
 Sources (first pass). The logic of subspaces [@birkhoff1936logic]; negation and disjunction in vector-space retrieval and semantics [@widdows2004geometry].
 
