@@ -414,42 +414,65 @@ Look once more at the gradient of the predictor. Each step pulls the word toward
 
 ## Learning by Contrast {.provisional}
 
-Prediction improved on counting because it could learn from one window of text at a time. But it still asks a question that only words make convenient: *which member of a fixed vocabulary comes next?* To answer it, a softmax must score every possible word and normalize across the whole list. A vocabulary is large but finite. The possible images, sounds, programs, or states of a robot are not. Even a small grey-scale image has more possible outcomes than could ever be listed. Nor is it always sensible to make a representation reproduce every detail of such an outcome. If two photographs show the same dog in different light, the light may matter for reconstructing one photograph from the other, but not for recognizing that both are of the dog.
+Prediction improved on counting because it could learn from one window of text at a time. But it still asks a question that only words make convenient: *which member of a fixed vocabulary comes next?* To answer it, a softmax must score every possible word and normalize across the whole list. A vocabulary is large but can be listed. The possible images, sounds, programs, or states of a robot cannot. Even a small grey-scale image has more possible outcomes than could ever be listed, and the states of a robot are continuous. Nor is it always sensible to make a representation reproduce every detail of such an outcome. If two photographs show the same dog in different light, the light may matter for reconstructing one photograph from the other, but not for recognizing that both are of the dog.
 
-Contrastive learning grew from this practical difficulty. Instead of asking a model to name an answer from the whole universe of answers, give it one pair that belongs together and a few alternatives that do not. The task is no longer “reproduce the neighbour” but “recognize the neighbour among these candidates.” This was made feasible by a technique named *negative sampling* [@mikolov2013distributed] that reduces the cost of the softmax normalization.
+Contrastive learning grew from this practical difficulty. Instead of asking a model to name an answer from the whole universe of answers, give it one pair that belongs together and a few alternatives that do not. The task is no longer “reproduce the neighbour” but “recognize the neighbour among these candidates.” This was made feasible by *noise-contrastive estimation* (NCE) [@gutmann2010noise], a technique that avoids the cost of the softmax normalization.
 
 In the previous section the cost was in the denominator of the softmax function. For one observed pair $(w,c)$, the sum $\sum_{c'} \exp\langle \mathbf{e}_w, \mathbf{v}_{c'}\rangle$ needs the dot product of $\mathbf{e}_w$ with all the vectors $\mathbf{v}_{c'}$ of the vocabulary. The gradient updates every one of the rows of $\mathbf{V}$, because every word $c'$ has a non-zero probability. With $|\mathcal{V}|$ in the hundreds of thousands, and the step repeated for every window of a corpus of billions of words, this is the bottleneck. All that work has a single purpose, to keep $Q(\cdot \mid w)$ normalized, so that it is a true probability distribution.
 
-Negative sampling gives up that normalization. It stops asking "which word of the vocabulary is the neighbour of $w$?" and asks a yes/no question about one pair at a time, "is $(w,c)$ a pair that was read from the text, or one that was made up?". The model is trained to give high probability to the positives and low probability to the negatives, by minimizing
+Noise-contrastive estimation gives up the normalization over the whole vocabulary and learns against a small random subset of it instead. For one observed pair $(w,c)$, write $s_c=\langle \mathbf{e}_w, \mathbf{v}_c\rangle$ for its score. The loss of the previous section is the negative log-probability of the observed neighbour,
 
 $$
-\ell_{w,c} = -\ln \sigma\bigl(\langle \mathbf{e}_w, \mathbf{v}_c\rangle\bigr) - \sum_{i=1}^{k} \ln \sigma\bigl(-\langle \mathbf{e}_w, \mathbf{v}_{c'_i}\rangle\bigr).
+-\ln Q(c \mid w) = -s_c + \ln \sum_{c' \in \mathcal{V}} e^{s_{c'}},
+$$
+
+and the logarithm of the sum is the expensive term. NCE replaces the question "which word of the vocabulary is the neighbour of $w$?" by a yes/no question about one pair at a time, "is $(w,c)$ a pair that was read from the text, or one that was made up?". The two answers are normalized against each other, not against the vocabulary. A pair is made up by keeping $w$ and replacing $c$ with a word drawn from a *noise distribution* $P_n(c)$, for instance the word frequencies $P(c)$, so `the` is a frequent noise word and `dawn` a rare one. For each pair read from the text we draw $k$ of them, $c'_1,\dots,c'_k$ (the *negatives*). A classifier gives the probability $\sigma(z)=1/(1+e^{-z})$ that a pair was read from the text, where $\sigma$ is the **sigmoid** and $z$ is the *logit* of the pair, a number computed from its score. The observed pair should be judged as read from the text and the $k$ made-up pairs as made up. The model is trained to give high probability to the positives and low probability to the negatives, by minimizing
+
+$$
+\ell_{w,c} = -\ln \sigma(z_c) - \sum_{i=1}^{k} \ln \sigma\bigl(-z_{c'_i}\bigr).
 $$
 
 For a corpus of text, the pairs $(w,c)$ are consecutive words, the positive examples come from the text, while the negative examples are made up by replacing $c$ with $k$ random words from the vocabulary. Normalizing the loss function over a random subset of the vocabulary, also called the negative sample, reduces the computational cost compared to normalizing over the entire vocabulary.
 
-With this loss, the gradient touches only the rows corresponding to the positive and negative examples, not the entire vocabulary:
+Which logit should the model use? To see what the classifier needs to learn, count how often it is shown a given pair $(w,c)$ as each kind of example:
+
+- as a positive, in proportion to $P(w,c)$, its frequency in the text;
+- as a negative, in proportion to $k\,P(w)\,P_n(c)$, because $w$ comes from the text and $c$ is drawn independently of it, $k$ times.
+
+Among all the examples that present this pair, the fraction of positives is therefore $P(w,c)/\bigl(P(w,c)+k\,P(w)P_n(c)\bigr)$. The loss is the cross-entropy of a yes/no classifier, which, like the softmax loss, is minimized when the predicted probability equals the true one, so $\sigma(z_c)$ should equal that fraction, and the logit should be
 
 $$
-\frac{\partial \ell_{w,c}}{\partial \mathbf{v}_c} = \bigl(\sigma(s_c)-1\bigr)\,\mathbf{e}_w,
+z_c = \ln \frac{P(w,c)}{k\,P(w)\,P_n(c)} = \ln P(c \mid w) - \ln\bigl(k\,P_n(c)\bigr).
+$$
+
+NCE [@gutmann2010noise] therefore gives the model the logit
+$$
+z_c = s_c - \ln\bigl(k\,P_n(c)\bigr),
+$$
+so that the score $s_c$ takes the place of $\ln P(c \mid w)$.
+
+If the vectors are rich enough for every score to reach its best value, the optimum is $s_c = \ln P(c \mid w)$, a true log-probability, even though the model never summed over the vocabulary. The normalization is learned, not computed: the maximizer of this objective has unit total probability automatically, provided that $P_n(c)$ is not zero where $P(c \mid w)$ is not [@gutmann2010noise, Theorem 1]. A step costs $k+1$ scores, whatever the size of the vocabulary.
+
+The logits differ from the scores only by constants, so with this loss the gradient touches only the rows corresponding to the positive and negative examples, not the entire vocabulary:
+
+$$
+\frac{\partial \ell_{w,c}}{\partial \mathbf{v}_c} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{e}_w,
 \qquad
-\frac{\partial \ell_{w,c}}{\partial \mathbf{v}_{c'_i}} = \sigma(s_{c'_i})\,\mathbf{e}_w,
+\frac{\partial \ell_{w,c}}{\partial \mathbf{v}_{c'_i}} = \sigma(z_{c'_i})\,\mathbf{e}_w,
 \qquad
-\frac{\partial \ell_{w,c}}{\partial \mathbf{e}_w} = \bigl(\sigma(s_c)-1\bigr)\,\mathbf{v}_c + \sum_{i=1}^{k} \sigma(s_{c'_i})\,\mathbf{v}_{c'_i},
+\frac{\partial \ell_{w,c}}{\partial \mathbf{e}_w} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{v}_c + \sum_{i=1}^{k} \sigma(z_{c'_i})\,\mathbf{v}_{c'_i}.
 $$
-where $\sigma(x)=\frac{1}{1+e^{-x}}$ and the gradient is almost the same as the one we saw in the previous section.
+Like the gradient of the softmax loss, it has the form “predicted minus observed”: $\sigma(z_c)-1$ for the positive and $\sigma(z_{c'_i})$ for each negative. But only the $k+1$ words drawn have a term, while the softmax has one for every word of the vocabulary.
 
-How are the negatives drawn? They are drawn according to the word frequencies $P(c)$, so `the` is a frequent negative and `dawn` a rare one. This creates a Monte Carlo estimate of the normalization constant that would appear in the softmax.
-
-Among all the examples that present this pair, the fraction of positives is therefore $P(w,c)/\bigl(P(w,c)+k\,P(w)P(c)\bigr)$. The loss is the cross-entropy of a yes/no classifier, which, like the softmax loss, is minimized when the predicted probability equals the true one, so $\sigma\bigl(\langle \mathbf{e}_w, \mathbf{v}_c\rangle\bigr)$ should equal that fraction. Solving for the score,
+*A simplification.* Negative sampling, the version used by word2vec [@mikolov2013distributed], drops the correction $\ln(k\,P_n(c))$ and uses the score itself as the logit, $z_c = s_c$. The classifier no longer needs the probabilities of the noise words, only samples from them. But the optimum changes. With the word frequencies as noise, $P_n=P$, the logit above is $s_c = \ln P(c \mid w)/\bigl(k\,P(c)\bigr)$, that is
 
 $$
-\langle \mathbf{e}_w, \mathbf{v}_c\rangle = \ln \frac{P(w,c)}{k\,P(w)\,P(c)} = \mathrm{PMI}(w,c) - \ln k,
+\langle \mathbf{e}_w, \mathbf{v}_c\rangle = \mathrm{PMI}(w,c) - \ln k,
 $$
 
-again the PMI shifted by a constant [@levy2014neural].
+again the PMI, here measured in nats, shifted by the constant $\ln k$ [@levy2014neural]. The score is no longer a log-probability, and the model is no longer a distribution over neighbours. Word vectors do not need one: in the comparison of Mikolov et al., negative sampling matched the training time of NCE and scored higher on the analogy task, 59% against 53% in total accuracy (Table 1). On text, then, the gain over the plain softmax was speed, not a new geometry.
 
-The same idea can be used for signals with no vocabulary. In *InfoNCE* (Information Noise-Contrastive Estimation), named in 2018 [@oord2018representation], a batch of $N$ matched pairs $(x_i,y_i)$, for example two augmented views of one image. Two encoders $f$ and $g$ (in the experiment below, the same network) map each side to a unit vector, $\mathbf{u}_i = f(x_i)$ and $\mathbf{z}_j = g(y_j)$, and the score of a candidate is their dot product divided by a temperature $\tau$, $s_{ij} = \langle \mathbf{u}_i, \mathbf{z}_j\rangle/\tau$. For each $x_i$, its own $y_i$ is the positive and the other $N-1$ values of $y$ in the batch are the alternatives. The loss is the softmax cross-entropy of picking the positive,
+The same idea can be used for signals with no vocabulary. *InfoNCE* (Information Noise-Contrastive Estimation), named in 2018 [@oord2018representation], takes a batch of $N$ matched pairs $(x_i,y_i)$, for example two augmented views of one image. Two encoders $f$ and $g$ (in the experiment below, the same network) map each side to a unit vector, $\mathbf{u}_i = f(x_i)$ and $\mathbf{z}_j = g(y_j)$, and the score of a candidate is their dot product divided by a temperature $\tau$, $s_{ij} = \langle \mathbf{u}_i, \mathbf{z}_j\rangle/\tau$. For each $x_i$, its own $y_i$ is the positive and the other $N-1$ values of $y$ in the batch are the alternatives. The loss is the softmax cross-entropy of picking the positive,
 
 $$
 \ell_N = -\frac{1}{N}\sum_{i=1}^{N} \ln \frac{e^{s_{ii}}}{\sum_{j=1}^{N} e^{s_{ij}}},
