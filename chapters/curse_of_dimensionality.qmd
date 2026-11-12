@@ -33,3 +33,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 
 ## An Aside on Optimization
 *Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, their ratio to local minima growing exponentially with dimension [@dauphin2014identifying], and what overparameterization changes. This concerns parameter space, not embedding space.*
+
+## Room Enough for Everything
+
+*Plan (half a page).* Findings: high dimensions break intuition about volume, distance and walks, and the same strangeness leaves room for exponentially many nearly orthogonal directions; real data lies on a manifold much smaller than the space that holds it. Achieved for the representation of meaning: nearness can still mean something in thousands of dimensions (@sec-prop-nearness), and there is room for as many directions as there are qualities to carry (@sec-prop-direction). Computation: random projections preserve distances at a known price (Johnson–Lindenstrauss), and how much a vector of dimension $D$ can hold is bounded, a bound that later chapters spend. Still out of reach: room for meanings is not meanings, and a table of symbols placed in that room is still a table (@sec-ch-symbols-without-interior).
