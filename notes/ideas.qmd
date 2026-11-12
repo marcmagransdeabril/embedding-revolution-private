@@ -300,6 +300,41 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Why:** two copies drift apart, and the shared table only holds if the chapters run the same code. The scripts import `contrast_digits_infonce.py`.
 - **Reopen if:** never.
 
+### "Complex vectors let an agent separate belief (magnitude) from utility (phase)"
+- **Dropped:** 2026-11-12 (from a draft list of advantages of $\mathbb{C}^n$ for decision-making agents).
+- **Why:** in Yukalov and Sornette's quantum decision theory the choice probability is a utility factor plus an interference term; utility is not stored in the phase of an amplitude (from memory, not re-read). Under the Born rule a global phase is unobservable, and relative phases show only through interference, so belief and preference are not independent. A real vector also separates norm from direction, so the contrast with "one scalar" is a strawman.
+- **Reopen if:** a model is found that learns utility in a phase and beats a real model with a separate utility parameter at matched size.
+
+### "Phase interference gives guided exploration, so complex policies converge faster and avoid local optima"
+- **Dropped:** 2026-11-12.
+- **Why:** Grover-style amplification is a quadratic query speedup on quantum hardware; simulated on a classical machine the state vector costs what it saves. Dong et al. 2008 is a real quantum-inspired reinforcement-learning paper, but from memory its experiments are small gridworlds without matched-compute baselines, and a "Li et al. 2020" paper on the claim could not be identified. The chapter is not about quantum hardware.
+- **Reopen if:** a matched-compute comparison on a standard reinforcement-learning benchmark shows a gain, from a source that was read.
+
+### "Complex-valued networks escape saddle points more easily"
+- **Dropped:** 2026-11-12.
+- **Why:** a complex network is a real network on $\mathbb{R}^{2n}$ with a real loss, and its saddles are real saddles. Liouville's theorem is a constraint on complex networks (a bounded entire function is constant, so activations cannot be both bounded and holomorphic), which is why split activations and Wirtinger calculus exist; it is not a benefit. Trabelsi et al. 2018 report results competitive with real networks, not better, and not on sequential control. Hirose's *Complex-Valued Neural Networks* is a textbook, not a benchmark. Saddles in parameter space are the subject of the curse-of-dimensionality chapter (Dauphin et al. 2014).
+- **Reopen if:** a paired experiment at equal real-parameter count shows fewer plateaus or faster convergence for the complex model.
+
+### "Real vectors need tensor products to bind; complex vectors bind in fixed dimension (holographic reduced representations)"
+- **Dropped:** 2026-11-12 (as a claim about complex numbers; the binding material stays in the chapter on vector symbolic architectures).
+- **Why:** Plate's holographic reduced representations are real-valued, and circular convolution keeps the dimension fixed in the real case. What the complex (Fourier) form adds is an exact inverse, binding as elementwise phase addition and unbinding by the conjugate (FHRR in the survey of Kleyko et al. 2023, not re-read for this point), not the escape from tensor products. Superposition remains lossy.
+- **Reopen if:** never as stated. The comparison of real and complex binding at matched dimension belongs to the vector-symbolic chapter.
+
+### "Unitary transformations avoid gimbal lock, so real rotations are worse"
+- **Dropped:** 2026-11-12.
+- **Why:** gimbal lock comes from the Euler-angle parametrization of rotations, not from $SO(n)$, which is a compact Lie group as smooth as $U(n)$. The true result nearby is that unit quaternions double-cover $SO(3)$, which sits in the quaternion section of the chapter.
+- **Reopen if:** never.
+
+### "A complex policy can interpolate between contradictory policies without discontinuities"
+- **Dropped:** 2026-11-12.
+- **Why:** no source, and the argument is the gimbal-lock one: a continuous path through the orthogonal group is as available over the reals as over the complex numbers.
+- **Reopen if:** a source shows a task in which real interpolation fails and complex interpolation does not.
+
+### Renou et al. 2021 (real quantum theory falsified) as support for complex vectors in latent space
+- **Dropped:** 2026-11-12.
+- **Why:** the result is about physical experiments in a network scenario, not about learning or representation, and a 2026 preprint (snippet only) claims the opposite conclusion under other assumptions. It neither supports nor refutes complex embeddings.
+- **Reopen if:** never for this book.
+
 ## Open durability actions
 
 From the Lindy review of 2026-11-10 (`tmp/lindy_review.md`, which is gitignored; the chapter numbers in its items are those of that date) and later work. A review (`review-doc` §18) proposes new ones and checks whether the "done" ones really are.

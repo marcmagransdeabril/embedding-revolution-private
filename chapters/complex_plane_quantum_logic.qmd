@@ -1,25 +1,43 @@
 ---
 status: idea
+open: "The chapter earns its place only if complex or hypercomplex vectors beat real ones of the same size, in the representation of meaning or in compute, on a parameter-matched comparison. Each section below names the comparison. A section whose comparison shows no gain is dropped to notes/ideas.qmd with the check that failed it, and when no section is left the chapter is removed from the book and from the roadmap in index.qmd. Quantum hardware is out of scope."
 ---
 
 # The Complex Plane and Quantum Logic: Wave-Nature in Latent Space {#sec-ch-complex-plane-quantum-logic}
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
+The guiding fact is that $\mathbb{C}^n$ is $\mathbb{R}^{2n}$ with a rotation structure added. Any advantage therefore comes from that structure (a phase that multiplies, a squared readout), not from the extra dimensions, and each section asks for a real baseline of the same size.
+
 ## Concepts as Subspaces
-*The logic of subspaces (Birkhoff and von Neumann): negation as orthogonal complement, and why that logic is not distributive. A concept such as "dog" is better described as a subspace, with directions shared by all modalities and directions specific to each, than as a single point.*
+*The logic of subspaces (Birkhoff and von Neumann): negation as orthogonal complement, and why that logic is not distributive. A concept such as "dog" is better described as a subspace, with directions shared by all modalities and directions specific to each, than as a single point. This section does not need complex numbers: the construction works over the reals, and the chapter says so.*
 
-## Complex-Valued Neural Networks (CVNN)
-*Embedding data into $\mathbb{C}^D$ and hypercomplex quaternions $\mathbb{H}^D$.*
+Sources (first pass). The logic of subspaces [@birkhoff1936logic]; negation and disjunction in vector-space retrieval and semantics [@widdows2004geometry].
 
-## Phase vs. Amplitude
-*Separating categorical identity from intensity, resolving phase singularities, and orthogonal decision boundaries.*
+## Phase as Position and Period
+*Where a phase is the natural variable. A relative position is a rotation, so a shift becomes a multiplication by $e^{i\omega k}$: complex embeddings of word order, and rotary position embeddings in the transformer (@sec-ch-tangent-spaces-geodesics). Periodic concepts (days of the week, months) are stored as circles in trained models, and a small transformer solves modular addition by Fourier features and a rotation on a circle. Test: the same architecture with learned real position vectors, at the same parameter count. Where the data is natively complex (audio, radar, MRI) phase carries information, and that is the clearest case.*
+
+Sources (first pass, none yet in `references.bib`; read before citing). Wang et al., "Encoding word order in complex embeddings", ICLR 2020; Nanda et al., "Progress measures for grokking via mechanistic interpretability", ICLR 2023; Engels et al., "Not all language model features are one-dimensionally linear", ICLR 2025.
+
+## Complex and Hypercomplex Weights
+*Embedding data into $\mathbb{C}^D$ and quaternions $\mathbb{H}^D$. Quaternion layers use a quarter of the parameters of a dense layer at comparable accuracy, and learned hypercomplex multiplications generalize this to $1/n$, which points to structured weight sharing as the source of the gain and not to the algebra. A single complex neuron can compute XOR, which a real one cannot, at twice the parameters. Test: a dense layer with the same number of parameters and a block-structured weight sharing.*
+
+Sources (first pass, none yet in `references.bib`; read before citing). Zhang et al., "Beyond fully-connected layers with quaternions: parameterization of hypercomplex multiplications with $1/n$ parameters", ICLR 2021; Nitta's single-neuron XOR (check the year and venue).
+
+## Unitary and Near-Unitary Dynamics
+*A unitary or orthogonal map keeps norms and inner products, so gradients neither explode nor vanish, information is not lost, and the Lipschitz constant is one. These benefits belong to the isometry, and real orthogonal matrices have them too; the complex case is easier to parametrize, since a diagonal phase is cheap. Exact unitarity cannot forget, so the successful sequence models keep eigenvalues close to the unit circle, not on it. Complex eigenvalues are the ones that rotate, and there is a proof that a real state-space model needs a much higher dimension, or exponentially large weights, to do what a complex one does; the evidence on language modelling is mixed (real-valued variants matched complex ones in Mamba, and later work brings complex updates back for state tracking). A change of basis that keeps all similarities is also the principle of aligning two embedding spaces by an orthogonal map (@sec-ch-cross-domain-transfer). Test: complex against real diagonal recurrences at matched state size, on tasks that need rotation (state tracking, parity) and on language modelling.*
+
+Sources (first pass, none yet in `references.bib`; read before citing). Arjovsky, Shah and Bengio, "Unitary evolution recurrent neural networks", ICML 2016; Lezcano-Casado and Martínez-Rubio, "Cheap orthogonal constraints in neural networks", ICML 2019; Cisse et al., "Parseval networks", ICML 2017; Orvieto et al., "Resurrecting recurrent neural networks for long sequences", ICML 2023; Ran-Milo et al., "Provable benefits of complex parameterizations for structured state space models", NeurIPS 2024; Gu and Dao, "Mamba", 2023.
+
+## Interference
+*Under the Born rule the squared sum of amplitudes is the sum of squares plus a cross-term, and that cross-term is the interference. Two things have to be separated: the quadratic readout (a real model with squared features has one) and the continuous phase (real signs only give plus or minus). In quantum cognition the cross-term is the explanation; in the bundling of vector symbolic architectures (@sec-ch-vector-symbolic-architectures) the same cross-term is crosstalk noise that limits capacity. The evidence that a Born-rule readout beats a softmax is weak: the interpretable quantum-inspired matching network was comparable to its CNN and RNN baselines, and early reports are mixed on calibration. Test: coherent against incoherent aggregation, and complex against real amplitudes with the same quadratic readout, at matched parameters.*
+
+Sources (first pass, none yet in `references.bib`; read before citing). Li, Wang and Melucci, "CNM: an interpretable complex-valued network for matching", NAACL 2019. Three 2025–2026 preprints on Born-rule readouts, coherent aggregation and unitary heads turned up in a search, as snippets only; they are hypotheses until read.
 
 ## Quantum Decision Making in Vector Spaces
-*Superposition, phase interference, and non-commutative models of cognition, a debated line of work.*
+*Non-commutative models of cognition, a debated line of work. What it has: the quantum question-order model makes a parameter-free prediction (the QQ equality) that held on a set of national surveys, and the conjunction fallacy, Ellsberg and Allais are the benchmarks. What it has not shown: that complex amplitudes, and not projections in a real space, are needed, and that classical probability cannot reproduce the equality. Test: a real-Hilbert-space model against the complex one on the same data.*
 
-## Quantum-Inspired Embeddings
-*Replacing classical probability logits with probability amplitudes.*
+Sources (first pass, none yet in `references.bib`; read before citing). Wang and Busemeyer et al., "Context effects produced by question orders reveal quantum nature of human judgments", PNAS 2014; a classical-probability account of the same equality (found as a snippet, author to be checked).
 
 ## Can a Space Say No?
-*Plan (1 page). Findings: what concepts as subspaces buy (negation as the orthogonal complement, in a logic that is not distributive), what complex and quaternion networks add (phase against amplitude), and what the debated quantum-inspired models of cognition do and do not show. Achieved for the representation of meaning: meanings that combine, now with a negation (@sec-prop-combine), and regions (@sec-prop-region). This chapter is where the limit stated at the end of @sec-ch-embedding-spaces, that a nearest-neighbour query cannot negate, is tested. Computation: whether complex-valued or quantum-inspired models beat real-valued ones when parameter count and compute are matched. Still out of reach: a logic of single concepts needs an algebra to combine them and to keep track of which attribute belongs to which object (@sec-ch-vector-symbolic-architectures).*
+*Plan (1 page). Findings: what concepts as subspaces buy (negation as the orthogonal complement, in a logic that is not distributive, and over the reals), where a phase is the right variable (position, period, native signals), what complex and hypercomplex networks add beyond weight sharing, and whether interference or unitary dynamics survive a parameter-matched test. Achieved for the representation of meaning: meanings that combine, now with a negation (@sec-prop-combine), and regions (@sec-prop-region). This chapter is where the limit stated at the end of @sec-ch-embedding-spaces, that a nearest-neighbour query cannot negate, is tested. Computation: whether complex-valued or quantum-inspired models beat real-valued ones when parameter count and compute are matched. Still out of reach: a logic of single concepts needs an algebra to combine them and to keep track of which attribute belongs to which object (@sec-ch-vector-symbolic-architectures).*
