@@ -24,5 +24,5 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ## Gauge Equivariance
 *When coordinate frames depend on local manifold position.*
 
-## Scale Test
-*Sutton's essay itself keeps convolution and certain invariances. Which symmetries does scale absorb through data and augmentation, which survive because they are cheap, and is hyperbolic geometry worth its cost?*
+## The Shape of a Tree
+*Plan (1 page). Findings: what a representation is invariant to, how a static thing is a point and an event a curve, and where negative curvature helps: trees embed with low distortion in few dimensions, against the dimension cost of flat space. Achieved for the representation of meaning: meaning that survives symmetries (@sec-prop-invariance) and moves along paths (@sec-prop-paths), and hierarchies that fit as regions. Computation: some symmetries are absorbed by data and augmentation, and some survive because they are cheap, as convolution and rotary position embeddings did; whether hyperbolic geometry earns its cost beyond trees is read from its cost per step and its gain at matched compute, dated. Still out of reach: a hierarchy of definitions in which one idea has several parents is a graph and not a tree, so hyperbolic space holds the tree part only. Relations are the next step (@sec-ch-graph-embeddings).*

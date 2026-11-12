@@ -1,6 +1,6 @@
 # Epilogue: An Algebra of Thought {.unnumbered .idea}
 
-<!-- OPEN: where it goes. Its sections are of two kinds. Some supply concepts the chapters could use (The Meaning of Meaning, The Perfect Language, Meaning by Difference and by Company, Measuring Meaning Before Computers, Where Psychology Said No). Others re-read results the chapters produce (A Ledger of Limits Revisited, The Bitter Lesson and the Perfect Language, The Dog Test Revisited, Open Frontiers). Options: keep it last; split it (concept sections before or between the parts, re-readings last); weave each tradition into the chapter where it bears; or publish it apart. Test per section: does a chapter use its vocabulary or sources (prior), or does it depend on a result a chapter produced (posterior)? Decide after Parts I and II. -->
+<!-- OPEN: which sections survive. Where it goes is decided (author, 2026-11-12): last, as Part III of the book, alone for now. Its first two sections collect the answers of the two tests of the Prologue (The Dog Test, Revisited and The Critical Literacy Test, Revisited); the rest is a bag of exploratory ideas that go beyond the state of the art, each starting from a drawback of the existing approaches. A section that cannot name such a drawback is reworded until it can, or moved to notes/ideas.qmd with the reason, once the author agrees. The register of thought experiments that the two tests do not cover (universal translator, radical translation, Twin Earth, Mary's room and the Chinese room, systematicity, meaning over time, plus and quus, Funes) is in tmp/three_part_plan.md, section 6b, rows R1 to R8; verified sources go to references.bib. -->
 
 <!--
 SKETCH FOR REVIEW. Only the argumental arc and the references of each section
@@ -41,7 +41,22 @@ printed-page locators `[@key, p. N]` when the prose is written):
   - Hewitt 2019: squared L2 distance encodes parse-tree distance, squared norm encodes depth, p. 1.
 -->
 
-*Arc in one paragraph.* The book argued that meaning can be treated as position in a space shaped by company, and that each limit of a single vector is a cost, not an impossibility. Computer science arrived at that idea late. Philosophy, linguistics, psychology, neuroscience, sociology, biology, psychiatry, literature, theology, mathematics, logic, decision theory, and the philosophical traditions of India and China had each reached a version of it before, and each had found, in its own vocabulary, most of the limits in the ledger of @sec-ch-embedding-spaces. The epilogue reads the book again through those traditions: first what they anticipated, then what they disputed, then what they hold that the book does not yet use. It ends where the Prologue began, with the dog, and with the answer that meaning is a relation rather than a place.
+*Arc in one paragraph.* The book argued that meaning can be treated as position in a space shaped by company, and that each limit of a single vector is a cost, not an impossibility. Computer science arrived at that idea late. Philosophy, linguistics, psychology, neuroscience, sociology, biology, psychiatry, literature, theology, mathematics, logic, decision theory, and the philosophical traditions of India and China had each reached a version of it before, and each had found, in its own vocabulary, most of the limits in the ledger of @sec-ch-embedding-spaces. The epilogue opens by collecting what the dog test and the critical literacy test of the Prologue found, chapter by chapter. It then reads the book again through those traditions: first what they anticipated, then what they disputed, then what they hold that the book does not yet use. It is more speculative than the rest of the book, and each idea in it starts from a drawback of the existing approaches. It ends with the question of whether a geometry of the known can reach the new.
+
+## The Dog Test, Revisited
+
+*Plan (1–2 pages).* Restate the test in a paragraph, pointing to the Prologue. Then collect the partial answers that the chapters gave in their closing sections, each with its chapter: what a shared space keeps and loses, the modality gap and the weakness of dynamics (@sec-ch-multimodal-embeddings); the alignment of spaces trained apart (@sec-ch-cross-domain-transfer); the concept as a subspace with directions shared by all modalities and directions specific to each (@sec-ch-complex-plane-quantum-logic); and modality as a role in a bundle of bindings, so that a photograph, a bark and a gait stay distinguishable (@sec-ch-vector-symbolic-architectures). Then the human answer: the concept cell and the hub as the neural version of one place for many senses, and the Umwelt as the reminder that the dog has a space of its own. Conclude that meaning is a relation, not a place: Saussure's differences, Yoneda's lemma, and second-order isomorphism agree that only the pattern of distances is meaningful, which is also why a space is defined only up to an isometry.
+
+- Claim: the dog test is a transversal goal, and its answer is the set of partial answers, with what each one loses.
+- Hooks: @sec-ch-multimodal-embeddings, @sec-ch-cross-domain-transfer, @sec-ch-complex-plane-quantum-logic, @sec-ch-vector-symbolic-architectures, and the section The Dog Test in the Brain below.
+
+## The Critical Literacy Test, Revisited
+
+*Plan (1–2 pages).* Restate the test in a paragraph, pointing to the Prologue. Then, per kind of question, what the chapters found and whether the representation passed on its own or needed something beside the space (a retrieval step, a verifier). Granularity: retrieval, hyperbolic geometry for trees, and the capacity of a bundle (@sec-ch-vector-databases, @sec-ch-tangent-spaces-geodesics, @sec-ch-vector-symbolic-architectures). Dependency: the graph of prerequisites (@sec-ch-graph-embeddings), and the part of it that is a tree. Internal consistency: negation as the orthogonal complement and the composition of parts (@sec-ch-complex-plane-quantum-logic, @sec-ch-neurosymbolic-integration). External consistency: retrieval against verified sources (@sec-ch-vector-databases). Then the testbed: what a formalized subject lets one measure, a dependency graph and a checker for the claim that a formal statement follows, and what stays unmeasurable outside mathematics. Last, what stays open, handed to the sections that follow: truth as coherence against correspondence, and the question of what the test is applied to (a single vector, a set of vectors, or a model that reads the text), which the book has not decided.
+
+- Claim: whether a representation can carry consistency, or must be checked from outside, is the open question; this section reports what the chapters found and does not assume the answer.
+- Precedent (to verify): theories of truth as coherence and as correspondence, and Tarski on truth in a metalanguage; the section What a System Cannot Say About Itself below.
+- Hooks: the closing sections of the chapters named above, written first; this section is written after them.
 
 ## Looking Back
 
@@ -63,10 +78,10 @@ printed-page locators `[@key, p. N]` when the prose is written):
 
 *Plan (2 pages).* The religious and philosophical dream of a sign that reveals the thing [@eco1995search]: the Adamic language, Kabbalistic gematria (words as numbers, a one-dimensional embedding with hash collisions), Llull's combinatorial wheels, and Wilkins's *Real Character* [@wilkins1668essay], a hand-built hierarchical code in which the spelling of a word is its address in a taxonomy. Borges's essay on Wilkins and the "Chinese encyclopedia" [@borges1964other] is the critique: every hand-made taxonomy is arbitrary. Locke had diagnosed the problem a few years later, in his chapters on the imperfection and abuse of words. Eco's opposition of the dictionary (a tree of definitions) and the encyclopedia (a network without a root) frames the choice between hierarchy and graph that Chapters [-@sec-ch-tangent-spaces-geodesics] and [-@sec-ch-graph-embeddings] make in geometry; the reply from cognitive science is that the form can be learned too (Kemp and Tenenbaum: a tree for living kinds, rings, chains, and grids elsewhere).
 
-- Claim: the perfect-language tradition is the opposite of the bitter lesson, the hand-written dense table of @sec-ch-symbols-without-interior at the scale of a civilization, and it failed for the same reason.
+- Claim: the perfect-language tradition is hand-built meaning at the scale of a civilization, the hand-written dense table of @sec-ch-symbols-without-interior at the scale of a civilization, and it failed for the same reason.
 - Precedent: Wilkins's code is a tree address, the discrete ancestor of hyperbolic embeddings of taxonomies.
 - Challenge: Borges, against any fixed set of dimensions of meaning; a tree is a choice, not a given.
-- Hooks: @sec-ch-symbols-without-interior (hand-made dense table), @sec-ch-embedding-spaces (bitter lesson), @sec-ch-tangent-spaces-geodesics (hierarchies).
+- Hooks: @sec-ch-symbols-without-interior (hand-made dense table), @sec-ch-embedding-spaces (meaning learned from use instead of built in), @sec-ch-tangent-spaces-geodesics (hierarchies).
 
 ## Meaning by Difference and by Company
 
@@ -94,7 +109,7 @@ printed-page locators `[@key, p. N]` when the prose is written):
 
 - Claim: every objection is a cost on the ledger, and the reply each time was more structure or a context-dependent metric.
 - Challenge: Tversky → asymmetric relations (@sec-ch-graph-embeddings); Goodman and Nosofsky → contextual vectors (@sec-ch-contextual-vectors); Gentner → composition (@sec-ch-neurosymbolic-integration); Rosch → hierarchy (@sec-ch-tangent-spaces-geodesics); Murphy and Medin → similarity is not a logic (@sec-ch-complex-plane-quantum-logic).
-- Hooks: @sec-ch-embedding-spaces (ledger of limits), and the scale test of each chapter.
+- Hooks: @sec-ch-embedding-spaces (ledger of limits), and the closing section of each chapter.
 
 ## The Brain Also Embeds
 
@@ -215,9 +230,11 @@ printed-page locators `[@key, p. N]` when the prose is written):
 
 *Plan (2 pages).* The drawback, the universal translator row (R1): two systems of communication with no parallel data and no check. Whorf held that the structure of a language shapes habitual thought, in a strong form that is generally rejected and a weak form that is contested [@whorf1956language]. Benjamin held that a translation points toward a shared target that no single language contains [@benjamin1923aufgabe], and Steiner that all understanding is translation, with something lost or added each time [@steiner1975after]. Fodor's language of thought and Vygotsky's inner speech are the two classic accounts of how thought relates to language.
 
+The universal translator, the device of science fiction, is the extreme case (speculation). The dog test varies the channel, one concept through several senses; the critical literacy test varies the scale; the translator varies the mind: can the calls of a bird, the clicks of a dolphin or the codas of a sperm whale be placed in the same space as a human language, without a single translated sentence to learn from? Researchers are trying this on animal recordings, and a theory of unsupervised translation says it may be possible if the animal's system is complex enough and the two systems share enough common ground (sources found by search and not yet read, so none is cited here; idea 15 of notes/ideas.qmd). It is harder than the dog test in one respect that matters: a photograph, a word and a bark can be checked by a person who knows what a dog is, and nobody can check a translation of a whale. Finding structure in a signal is not finding its meaning, and a space of calls may capture who is calling, or how the recording was made, instead of what is said. So it is kept as a goal and not as a test that passes or fails: a failure would not tell whether the animals share no meanings with us or whether the method is too weak. Whorf, Benjamin and Steiner bear on the same question for human languages, where a check exists.
+
 - Claim: alignment between two spaces is a translation problem with Benjamin's structure, a map toward a target neither space contains, and the gauge freedom is the formal form of that.
 - Challenge: Davidson, in the section Does Structure Fix Meaning?, says total untranslatability is incoherent.
-- Hooks: @sec-ch-cross-domain-transfer, @sec-ch-neurosymbolic-integration (language of thought).
+- Hooks: @sec-ch-cross-domain-transfer (what alignment needs: shared structure, enough data, common ground), @sec-ch-multimodal-embeddings (what a shared space keeps), @sec-ch-neurosymbolic-integration (language of thought).
 
 ## Limits That May Not Be Costs
 
@@ -232,44 +249,43 @@ printed-page locators `[@key, p. N]` when the prose is written):
 *Plan (2 pages).* A single table: each limit of the ledger of @sec-ch-embedding-spaces, the tradition outside computer science that met it first, and the verdict of the book (structural, contingent, or open), including the cost of a shared space across senses (modality gap, loss of what is specific to each sense).
 
 | Ledger entry | Chapter | Anticipated by |
-|:---|:---:|:---|
-| Negation and multi-hop queries | 3 | apoha, apophatic theology [@pseudodionysius1987complete] |
-| Hierarchies need curvature or dimensions | 5 | Wilkins, Collins–Quillian, Rosch, Kemp–Tenenbaum |
-| Asymmetric relations | 6 | Tversky |
-| Multi-way interactions | 7 | Peirce's irreducible triad of sign, object, and interpretant [@peirce1931collected] |
-| Similarity is not a logic | 8 | Goodman, Murphy–Medin, Tarski |
-| Binding | 9 | Jakobson's combination axis, Barsalou |
-| Systematic composition | 10 | Montague, Gentner, Chomsky (structure dependence, Merge) |
-| Spaces defined up to isometry | 11 | Quine, Shepard–Chipman, RSA, Newman, Putnam |
+|:---|:---|:---|
+| One vector per word cannot follow its sentence | @sec-ch-contextual-vectors | Frege's context principle (to verify) |
+| No density and no way to check what a sampled point means; plausible is not true | @sec-ch-generative-spaces, @sec-ch-vector-databases | coherence against correspondence in theories of truth (to verify) |
+| Negation and multi-hop queries | @sec-ch-vector-databases | apoha, apophatic theology [@pseudodionysius1987complete] |
+| Hierarchies need curvature or dimensions | @sec-ch-tangent-spaces-geodesics | Wilkins, Collins–Quillian, Rosch, Kemp–Tenenbaum |
+| Asymmetric relations | @sec-ch-graph-embeddings | Tversky |
+| Multi-way interactions | @sec-ch-topological-deep-learning | Peirce's irreducible triad of sign, object, and interpretant [@peirce1931collected] |
+| Similarity is not a logic | @sec-ch-complex-plane-quantum-logic | Goodman, Murphy–Medin, Tarski |
+| Binding | @sec-ch-vector-symbolic-architectures | Jakobson's combination axis, Barsalou |
+| Systematic composition | @sec-ch-neurosymbolic-integration | Montague, Gentner, Chomsky (structure dependence, Merge) |
+| Spaces defined up to isometry | @sec-ch-cross-domain-transfer | Quine, Shepard–Chipman, RSA, Newman, Putnam |
 | Finite data underdetermine the space | all | Hume, Goodman, Kripke, Wolpert |
-| Unseen events (closed-world top-$k$, missing mass) | 3 | Knight, Savage, Good |
-| Modality gap and modality-specific loss | 12 | Paivio, Barsalou, hub-and-spoke |
+| Unseen events (closed-world top-$k$, missing mass) | @sec-ch-vector-databases | Knight, Savage, Good |
+| Modality gap and modality-specific loss | @sec-ch-multimodal-embeddings | Paivio, Barsalou, hub-and-spoke |
+| A book as one vector keeps neither its parts nor the zoom; parts cannot be checked against each other or against sources | @sec-ch-vector-databases, @sec-ch-tangent-spaces-geodesics, @sec-ch-graph-embeddings, @sec-ch-vector-symbolic-architectures | Funes and the map the size of the empire (Borges), the hermeneutic circle (Gadamer) |
 
 : Draft mapping of the ledger to its precedents (to be completed when the chapters are written). {#tbl-ledger-precedents}
 
 ## Chomsky Against Statistics
 
-*Plan (2 pages).* One debate, sixty years long, and the clearest case of the bitter lesson argued by its opponent. Chomsky's review of Skinner argued that language needs internal representations, which made the cognitive revolution and is, ironically, what probing finds inside language models. "Colorless green ideas sleep furiously" [@chomsky1957syntactic] said that grammaticality is not probability; Pereira answered with a class-based bigram model [@pereira2000formal]. The argument from the poverty of the stimulus and recursion as the core of the faculty of language say what must be innate. Norvig's essay [@norvig2011chomsky] answered Chomsky's dismissal of statistical models with the case for the "two cultures"; the 2023 op-ed that language models cannot tell the possible from the impossible, and the impossible-languages experiments that tested it, are the current form of the quarrel. Underneath is prediction versus explanation, which is the interpretability frontier of the book. Berwick and Chomsky's thesis that language evolved as an instrument of thought, not of communication, is the strongest form of the claim that an algebra of thought needs more than company.
+*Plan (2 pages).* One debate, sixty years long, and the clearest case of how much must be built in, argued by its opponent. Chomsky's review of Skinner argued that language needs internal representations, which made the cognitive revolution and is, ironically, what probing finds inside language models. "Colorless green ideas sleep furiously" [@chomsky1957syntactic] said that grammaticality is not probability; Pereira answered with a class-based bigram model [@pereira2000formal]. The argument from the poverty of the stimulus and recursion as the core of the faculty of language say what must be innate. Norvig's essay [@norvig2011chomsky] answered Chomsky's dismissal of statistical models with the case for the "two cultures"; the 2023 op-ed that language models cannot tell the possible from the impossible, and the impossible-languages experiments that tested it, are the current form of the quarrel. Underneath is prediction versus explanation, which is the interpretability frontier of the book. Berwick and Chomsky's thesis that language evolved as an instrument of thought, not of communication, is the strongest form of the claim that an algebra of thought needs more than company.
 
 - Claim: the debate is not settled by performance, because each side measures a different thing: E-language for the models, I-language for Chomsky.
 - Challenge: data efficiency (children learn from fewer than 100 million words), and the hierarchical generalization that sequential networks miss and transformers learn late.
 - Hooks: @sec-ch-symbols-without-interior (the staircase), @sec-ch-contextual-vectors (structural probe), @sec-ch-neurosymbolic-integration (poverty of the stimulus), @sec-ch-multimodal-embeddings (I-language and grounding).
 
-## The Bitter Lesson and the Perfect Language
+## Hand-Built Meaning, Four Centuries On
 
-*Plan (1–2 pages).* Which structures of the book were absorbed by scale, which survived because they are cheap, and which because the problem demands them [@sutton2019bitter], set against the long history of hand-built meaning (Wilkins, Osgood's chosen scales, feature norms) and of meaning learned from use (Harris, Skyrms, LSA). The perfect language failed as an engineering project and succeeded as a learned one; what remains hand-built is symmetry, which Klein and the brain's grid code suggest is structural.
+*Plan (1–2 pages).* The long history of hand-built meaning (Wilkins, Osgood's chosen scales, feature norms) and of meaning learned from use (Harris, Skyrms, LSA), read against one requirement for whatever the book proposes: it must align with computational efficiency and scalability, or say why it need not. This is the one place in the Epilogue that names the bitter lesson [@sutton2019bitter]. The perfect language failed as an engineering project and succeeded as a learned one; what remains hand-built is symmetry, which Klein and the brain's grid code suggest is structural.
 
-- Claim: the bitter lesson is the outcome of a four-century experiment, not a decade of benchmarks.
-- Hooks: scale tests of Chapters [-@sec-ch-generative-spaces] to [-@sec-ch-multimodal-embeddings].
-- Open case: reasoning in the space versus in text, the bitter lesson applied to computation. Is keeping the steps continuous a durable advantage, or a prior that scaled token-level reasoning absorbs (Chapters [-@sec-ch-contextual-vectors] and [-@sec-ch-multimodal-embeddings])? The cost side: more search means more chances to exploit an imperfect verifier, so the verifier rather than the path may be the bottleneck (sources in @sec-ch-contextual-vectors).
+- Claim: general methods that keep improving with computation have repeatedly beaten the building-in of what researchers know, and the experiment is four centuries long, not a decade of benchmarks.
+- Hooks: the closing sections of Chapters [-@sec-ch-generative-spaces] to [-@sec-ch-multimodal-embeddings].
+- Open case: reasoning in the space versus in text, applied to computation. Is keeping the steps continuous a durable advantage, or a prior that scaled token-level reasoning absorbs (Chapters [-@sec-ch-contextual-vectors] and [-@sec-ch-multimodal-embeddings])? The cost side: more search means more chances to exploit an imperfect verifier, so the verifier rather than the path may be the bottleneck (sources in @sec-ch-contextual-vectors).
 
 ## Open Frontiers
 
 *Plan (1–2 pages).* Interpretability, geometric bounds on reasoning, whether a written chain is faithful to the computation behind it (@sec-ch-contextual-vectors), whether reasoning can stay in the space or must keep passing through text (Chapters [-@sec-ch-contextual-vectors] and [-@sec-ch-multimodal-embeddings]), grounding and multimodal composition, and the questions the other disciplines pose that the book leaves open: asymmetric similarity at scale (Tversky), embodiment and action (Varela, Smith–Gasser), the clinical use of semantic geometry (Bedi, Corcoran), and representational alignment between brains and models (RSA).
-
-## The Dog Test, Revisited
-
-*Plan (1–2 pages).* Where the photograph, the word, the bark, and the gait end up, by the answers of @sec-ch-multimodal-embeddings; the concept cell and the hub as the human answer; the Umwelt as the reminder that the dog has a space of its own. Conclude that meaning is a relation, not a place: Saussure's differences, Yoneda's lemma, and second-order isomorphism agree that only the pattern of distances is meaningful, which is also why a space is defined only up to an isometry.
 
 ## Final Geek Musings: Where Does Human Intuition Live in the Latent Space?
 

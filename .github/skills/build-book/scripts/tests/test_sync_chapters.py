@@ -40,11 +40,12 @@ def test_match_future_chapter_patterns():
         ("tangent_spaces.qmd", 1, 1),          # Part II, Ch 8
         ("graph_embeddings.qmd", 1, 2),        # Part II, Ch 9
         ("topological_deep_learning.qmd", 1, 3), # Part II, Ch 10
-        ("complex_plane.qmd", 2, 0),           # Part III, Ch 11
-        ("vsa_hyperdimensional.qmd", 2, 1),    # Part III, Ch 12
-        ("neurosymbolic_integration.qmd", 2, 2), # Part III, Ch 13
-        ("optimal_transport.qmd", 3, 0),       # Part IV, Ch 14
-        ("multimodal_embeddings.qmd", 3, 1),   # Part IV, Ch 15
+        ("complex_plane.qmd", 1, 4),           # Part II, Ch 11
+        ("vsa_hyperdimensional.qmd", 1, 5),    # Part II, Ch 12
+        ("neurosymbolic_integration.qmd", 1, 6), # Part II, Ch 13
+        ("optimal_transport.qmd", 1, 7),       # Part II, Ch 14
+        ("multimodal_embeddings.qmd", 1, 8),   # Part II, Ch 15
+        ("epilogue.qmd", 2, 0),                # Part III, the Epilogue alone
     ]
 
     for filename, expected_part, expected_ch in test_cases:
@@ -134,3 +135,17 @@ def test_symbols_chapter_precedes_embedding_spaces_and_matches_by_its_own_name()
     assert emb == (0, 3)
     flat = [c for p in sync_chapters.discover_and_build_chapters_list()[1:] if isinstance(p, dict) for c in p["chapters"]]
     assert flat.index("chapters/symbols_without_interior.qmd") + 1 == flat.index("chapters/embedding_spaces.qmd")
+
+
+def test_book_has_three_parts_and_the_epilogue_is_part_three_alone():
+    """Three-part plan (2026-11-12): Part I is chapters 1 to 6, Part II chapters 7 to 15, Part III the Epilogue."""
+    assert [len(p["chapters"]) for p in sync_chapters.MASTER_PARTS] == [6, 9, 1]
+    assert sync_chapters.MASTER_PARTS[2]["part"] == "Limits of Meaning Representation"
+    parts = [e for e in sync_chapters.discover_and_build_chapters_list() if isinstance(e, dict) and e["part"] != "Additional Chapters"]
+    assert [e["part"] for e in parts] == ["Vectors as Meaning", "Representation Extensions", "Limits of Meaning Representation"]
+    assert parts[-1]["chapters"] == ["chapters/epilogue.qmd"]
+
+
+def test_epilogue_is_wrapped_in_a_part_not_listed_bare():
+    chapters_struct = sync_chapters.discover_and_build_chapters_list()
+    assert "chapters/epilogue.qmd" not in chapters_struct

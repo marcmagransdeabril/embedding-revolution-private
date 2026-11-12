@@ -26,5 +26,5 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ## Graph Databases vs. Vector Databases
 *The convergence of discrete graph topology and continuous latent coordinates.*
 
-## Scale Test
-*Do embeddings learned from data make explicit graph structure unnecessary, or do the graph and the vector converge?*
+## Arrows That Point One Way
+*Plan (1 page). Findings: which relation patterns (symmetric, antisymmetric, inverse, compositional) each knowledge-graph model can and cannot express, in the order in which each fixed what the previous one could not: translation, bilinear products, rotation. Achieved for the representation of meaning: difference as a relation (@sec-prop-difference), with a direction for each relation. Computation: whether embeddings learned from data make explicit graph structure unnecessary, or graph and vector converge into one system, read from cost per query and quality at matched data, dated. Still out of reach: a pairwise edge cannot express a relation among three or more things, and the prerequisite order of a subject is a graph that a space has to recover (the dependency question of the critical literacy test). Multi-way interactions are taken up in @sec-ch-topological-deep-learning.*

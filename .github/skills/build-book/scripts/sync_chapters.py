@@ -2,7 +2,8 @@
 """Sync Quarto book chapter registry (_quarto.yml) with chapters/ directory.
 
 Discovers existing .qmd files in chapters/, maps them to the canonical
-book outline (Parts I to IV + Epilogue), and updates _quarto.yml.
+book outline (Part I, Part II and Part III, which for now holds only the
+Epilogue), and updates _quarto.yml.
 """
 from __future__ import annotations
 
@@ -22,10 +23,13 @@ INDEX_QMD = REPO_ROOT / "index.qmd"
 # numbered chapter, so it is excluded from discovery and always listed last.
 SOLUTIONS_QMD = CHAPTERS_DIR / "solutions.qmd"
 
-# Canonical master outline from book architecture
+# Canonical master outline from book architecture. Part II keeps the groupings
+# of the former Parts II to IV as comments only, so no chapter moves:
+# grounding and structure by design (7 to 10), logic and composition (11 to 13),
+# alignment and the senses (14, 15).
 MASTER_PARTS = [
     {
-        "part": "Vectors as Meaning: Why It Works and Where It Strains",
+        "part": "Vectors as Meaning",
         "chapters": [
             {
                 "num": 1,
@@ -60,7 +64,7 @@ MASTER_PARTS = [
         ],
     },
     {
-        "part": "Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology",
+        "part": "Representation Extensions",
         "chapters": [
             {
                 "num": 7,
@@ -82,11 +86,6 @@ MASTER_PARTS = [
                 "title": "Beyond Graphs: Topological Deep Learning",
                 "patterns": ["topological_deep_learning", "topological", "10_", "simplicial", "homology", "chapter10"],
             },
-        ],
-    },
-    {
-        "part": "The Algebra of Thought: Vectors as Symbols",
-        "chapters": [
             {
                 "num": 11,
                 "title": "The Complex Plane and Quantum Logic: Wave-Nature in Latent Space",
@@ -102,11 +101,6 @@ MASTER_PARTS = [
                 "title": "Neuro-Symbolic Integration and Emergent Compositionality",
                 "patterns": ["neuro_symbolic", "neurosymbolic", "13_", "tpr", "ltn", "chapter13"],
             },
-        ],
-    },
-    {
-        "part": "Alignment, Transport, and Synthesis",
-        "chapters": [
             {
                 "num": 14,
                 "title": "Cross-Domain Transfer and Optimal Transport",
@@ -119,12 +113,18 @@ MASTER_PARTS = [
             },
         ],
     },
+    {
+        # Part III is the Epilogue alone, for now (three-part plan, 2026-11-12).
+        "part": "Limits of Meaning Representation",
+        "chapters": [
+            {
+                "num": None,
+                "title": "Epilogue: An Algebra of Thought",
+                "patterns": ["epilogue", "algebra_of_thought"],
+            },
+        ],
+    },
 ]
-
-EPILOGUE_ENTRY = {
-    "title": "Epilogue: An Algebra of Thought",
-    "patterns": ["epilogue", "algebra_of_thought"],
-}
 
 
 def extract_title_from_qmd(qmd_path: Path) -> str:
@@ -162,11 +162,6 @@ def match_chapter_to_outline(qmd_file: Path) -> tuple[int, int] | None:
                 if pat in stem or pat in title:
                     return (part_idx, ch_idx)
 
-    # Check epilogue
-    for pat in EPILOGUE_ENTRY["patterns"]:
-        if pat in stem or pat in title:
-            return (len(MASTER_PARTS), 0)
-
     return None
 
 
@@ -178,7 +173,7 @@ def discover_and_build_chapters_list() -> list[Any]:
     chapters_struct: list[Any] = ["index.qmd"]
 
     # Map discovered files to parts
-    part_buckets: dict[int, list[tuple[int, Path]]] = {i: [] for i in range(len(MASTER_PARTS) + 1)}
+    part_buckets: dict[int, list[tuple[int, Path]]] = {i: [] for i in range(len(MASTER_PARTS))}
     unmatched: list[Path] = []
 
     for qmd in discovered_qmds:
@@ -200,11 +195,6 @@ def discover_and_build_chapters_list() -> list[Any]:
                 "part": part_info["part"],
                 "chapters": part_chapters,
             })
-
-    # Add epilogue if present
-    epilogue_entries = part_buckets[len(MASTER_PARTS)]
-    for _, path in epilogue_entries:
-        chapters_struct.append(f"chapters/{path.name}")
 
     # Add any unmatched chapters
     if unmatched:

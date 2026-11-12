@@ -14,7 +14,7 @@ book:
     right: Marc Magrans de Abril
   chapters:
   - index.qmd
-  - part: 'Vectors as Meaning: Why It Works and Where It Strains'
+  - part: Vectors as Meaning
     chapters:
     - chapters/properties_of_meaning.qmd
     - chapters/curse_of_dimensionality.qmd
@@ -22,22 +22,20 @@ book:
     - chapters/embedding_spaces.qmd
     - chapters/generative_spaces.qmd
     - chapters/contextual_vectors.qmd
-  - part: 'Structure in Vector Spaces: Symmetry, Curvature, Relations, and Topology'
+  - part: Representation Extensions
     chapters:
     - chapters/vector_databases.qmd
     - chapters/tangent_spaces_geodesics.qmd
     - chapters/graph_embeddings.qmd
     - chapters/topological_deep_learning.qmd
-  - part: 'The Algebra of Thought: Vectors as Symbols'
-    chapters:
     - chapters/complex_plane_quantum_logic.qmd
     - chapters/vector_symbolic_architectures.qmd
     - chapters/neurosymbolic_integration.qmd
-  - part: Alignment, Transport, and Synthesis
-    chapters:
     - chapters/cross_domain_transfer.qmd
     - chapters/multimodal_embeddings.qmd
-  - chapters/epilogue.qmd
+  - part: Limits of Meaning Representation
+    chapters:
+    - chapters/epilogue.qmd
   - chapters/solutions.qmd
 format:
   html:

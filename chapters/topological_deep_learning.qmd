@@ -18,5 +18,5 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ## Measuring the Shape of a Representation
 *Persistent homology in latent spaces, with barcodes and persistence diagrams as tools to test the manifold hypothesis of @sec-ch-curse-of-dimensionality.*
 
-## Scale Test
-*Much of this machinery is young. Which parts earn their cost at scale, and which are mainly analysis tools?*
+## More Than Pairs
+*Plan (1 page). Findings: what simplicial and cell complexes, boundary operators and the Hodge decomposition express that edges cannot, and what persistent homology says about the manifold hypothesis of @sec-ch-curse-of-dimensionality. Achieved for the representation of meaning: structure among many things at once, and regions with holes (@sec-prop-region). Computation: much of this machinery is young; which parts earn their cost at scale, and which are mainly tools for analysis, is read from cost per step and from what the results teach. Still out of reach: a complex records who belongs with whom, not what follows from what, so similarity is still not a logic (@sec-ch-complex-plane-quantum-logic).*

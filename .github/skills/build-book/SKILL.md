@@ -99,7 +99,7 @@ Drives the entire build lifecycle with automatic environment variable injection 
 - `--no-validate`: Skip syntax, math, and citation validation.
 
 ### 2. `sync_chapters.py` — Dynamic Chapter Registry
-Scans `chapters/*.qmd`, maps files to the canonical Parts I–IV + Epilogue structure, and updates `_quarto.yml`:
+Scans `chapters/*.qmd`, maps files to the canonical three-part structure (Part I: chapters 1–6; Part II: chapters 7–15; Part III: the Epilogue alone), and updates `_quarto.yml`:
 
 ```bash
 .venv/bin/python .github/skills/build-book/scripts/sync_chapters.py --verbose

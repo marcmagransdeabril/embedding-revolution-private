@@ -23,5 +23,5 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ## Associative Clean-Up Memories & Capacity Bounds
 *Theoretical bounds on robust concept retrieval without weight retraining, and the relation to attention as associative memory.*
 
-## Scale Test
-*Capacity grows with dimension, and dimension is cheap. When does a hyperdimensional encoding beat a learned one?*
+## Which Red, Which Ball
+*Plan (1 page). Findings: what bundling, binding and permutation can express in hypervectors of ten thousand dimensions, how clean-up memories recover a stored concept, and the capacity bounds that say how many can be bundled. Achieved for the representation of meaning: meanings that combine without losing track of which belongs to which (@sec-prop-combine). Partial answer to the dog test: modality as a role, so that a photograph, a bark and a gait can be bundled and still told apart. Computation: capacity grows with dimension, and dimension is cheap; when a hyperdimensional encoding beats a learned one is read from capacity per dimension, cost per operation and accuracy at matched compute. Still out of reach: an algebra can bind, but whether composition is systematic is another question (@sec-ch-neurosymbolic-integration).*

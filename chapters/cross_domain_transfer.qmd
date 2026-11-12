@@ -24,5 +24,5 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ## Principles and Parameters
 *Chomsky's picture (1981) of languages as one shared core with a few switches, read geometrically: multilingual models encode grammatical relations in a subspace shared across languages, with directions specific to each (2020), the same shared-plus-specific structure as the concept subspaces of @sec-ch-complex-plane-quantum-logic.*
 
-## Scale Test
-*Does scale make independently trained spaces more alike, and if so, what is left for alignment to do?*
+## Same Map, Different North
+*Plan (1 page). Findings: a trained space is fixed only up to an isometry, so comparing two is a geometric problem, and the classical alignments, optimal transport, domain adaptation and zero-shot transfer each answer a version of it. Achieved for the representation of meaning: what is real is the arrangement (@sec-prop-arrangement), and spaces trained apart can be compared through it. Computation: does scale make independently trained spaces more alike, and if so, what is left for alignment to do? Read from the evidence for and against representational convergence, dated. Still out of reach: aligning two spaces from paired examples is one problem, and aligning two systems of communication with no parallel data and no way to check the result is another, the universal translator of the Epilogue. Joining the senses in one space is the next step (@sec-ch-multimodal-embeddings).*

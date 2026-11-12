@@ -128,12 +128,20 @@ def test_scope_is_clarified_first_and_supports_incremental_and_portion():
 def test_book_contract_section_covers_continuity_and_thematic_contract():
     """§15 must define Job A (continuity), Job B (thematic contract), incremental scoping, and report-first output."""
     content = SKILL_MD.read_text(encoding="utf-8")
-    sec15 = re.search(r"### 15\. Book-level contract and hand-offs(.*?)(?=## Output)", content, flags=re.DOTALL)
+    sec15 = re.search(r"### 15\. Book-level contract and hand-offs(.*?)(?=### 16\.)", content, flags=re.DOTALL)
     assert sec15 is not None, "Failed to locate §15 in review-doc/SKILL.md"
     text = sec15.group(1)
     assert "Job A" in text and "Job B" in text
-    assert "bitter lesson" in text and "@sec-prop-" in text
+    assert "@sec-prop-" in text
     assert "Incremental scope" in text
+    # Job B no longer asks the chapter to state a bet against the bitter lesson: the phrase is named only in the Prologue and the Epilogue.
+    job_b = text.split("**Job B", 1)[1].split("**Incremental scope", 1)[0]
+    assert "states the bet" not in job_b
+    assert "only in the Prologue and the Epilogue" in job_b
+    assert "Part I" in job_b and "Part II" in job_b, "Job B's range is stated in terms of parts, not by number alone"
+    # Mechanical hints: the allow-list grep and the banned closing titles.
+    hints = text.split("**Mechanical hints", 1)[1]
+    assert "Sutton" in hints and "Conclusion" in hints and "Summary" in hints and "Scale Test" in hints
     out = content.split("## Output", 1)[1]
     assert "Report first" in out
 
@@ -196,3 +204,35 @@ def test_contract_fixes_form_not_conclusions():
     content = SKILL_MD.read_text(encoding="utf-8")
     assert "fixes form, not conclusions" in content
     assert "valid close" in content
+
+
+def test_section_flow_names_three_strands_and_requires_none():
+    """§2: opening promises, ending answers, strands (meaning, computation, limits) are never mandatory, judged by content."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec2 = re.search(r"### 2\. Style(.*?)(?=### 3\.)", content, flags=re.DOTALL).group(1)
+    for needle in ("meaning", "computation", "limits"):
+        assert needle in sec2
+    assert "No strand is required" in sec2
+    assert "never filled" in sec2
+    assert "content, not wording" in sec2
+
+
+def test_payoff_step_is_a_review_step_that_adds_no_text_and_only_proposes_removals():
+    """§19: scale and durability inferred by the reviewer (pointer to §18), a third question on whether a remedy solves the limit,
+    no text added to the book, and a removal only proposed, never applied without the author."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec19 = re.search(r"### 19\. Pay-off step(.*?)(?=## Output)", content, flags=re.DOTALL)
+    assert sec19 is not None, "Failed to locate §19 in review-doc/SKILL.md"
+    text = sec19.group(1)
+    assert "review step" in content.split("### 19.", 1)[1].split("\n", 1)[0]
+    assert "No section, sentence or label is added to the book" in text
+    assert "§18" in text and "§17" in text
+    assert "Scale" in text and "Durability" in text
+    assert "Does it solve the limit?" in text
+    assert "Part II" in text and "not Part I" in text
+    assert "fully, partly or not at all" in text
+    assert "valid findings" in text
+    assert "Nothing is removed until the author and the reviewer agree" in text
+    assert "notes/ideas.qmd" in content.split("### Change policy", 1)[1].split("### Metacognitive", 1)[0]
+    policy = re.search(r"### Change policy(.*?)(?=### Metacognitive)", content, flags=re.DOTALL).group(1)
+    assert "Never apply a removal proposed by the pay-off step" in policy
