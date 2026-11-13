@@ -418,34 +418,33 @@ Prediction improved on counting because it could learn from one window of text a
 
 Contrastive learning grew from this practical difficulty. Instead of asking a model to name an answer from the whole universe of answers, it gives the model one pair that belongs together and a few alternatives that do not. The task is no longer "reproduce the neighbour" but "recognize the neighbour among these candidates." This was made feasible by *noise-contrastive estimation* (NCE) [@gutmann2010noise], a technique that avoids the cost of the softmax normalization.
 
-In the previous section the cost was in the denominator of the softmax function used to perform the conditional probability estimate $Q(w|c)$. For one observed pair $(w,c)$, the sum $\sum_{c'} \exp\langle \mathbf{e}_w, \mathbf{v}_{c'}\rangle$ needs the dot product of $\mathbf{e}_w$ with all the vectors $\mathbf{v}_{c'}$ of the vocabulary. The gradient updates every row of $\mathbf{V}$, because a change to any single dot product denormalizes the distribution if the change is not applied consistently across the vocabulary. With $|\mathcal{V}|$ in the hundreds of thousands, and the step repeated for every window of a corpus of billions of words, this is the bottleneck. All that work has a single purpose, to keep $Q(\cdot \mid w)$ normalized, so that it is a true probability distribution.
+In the previous section the cost was in the denominator of the softmax function used to perform the conditional probability estimate $Q(c \mid w)$. For one observed pair $(w,c)$, the sum $\sum_{c'} \exp\langle \mathbf{e}_w, \mathbf{v}_{c'}\rangle$ needs the dot product of $\mathbf{e}_w$ with all the vectors $\mathbf{v}_{c'}$ of the vocabulary. The gradient updates every row of $\mathbf{V}$, because a change to any single dot product breaks the normalization of the distribution if the change is not applied consistently across the vocabulary. With $|\mathcal{V}|$ in the hundreds of thousands, and the step repeated for every window of a corpus of billions of words, this is the bottleneck. All that work has a single purpose: to keep $Q(\cdot \mid w)$ normalized, so that it is a true probability distribution.
 
-Noise-contrastive estimation avoids computing the normalization over the whole vocabulary. It learns to tell observed pairs from a small random sample of noise pairs instead. For one observed pair $(w,c)$, write $s_c=\langle \mathbf{e}_w, \mathbf{v}_c\rangle$ for its score. 
+Noise-contrastive estimation avoids computing the normalization over the whole vocabulary. It learns to tell observed pairs from a small random sample of noise pairs instead. For one observed pair $(w,c)$, write $s_c=\langle \mathbf{e}_w, \mathbf{v}_c\rangle$ for its score.
 
-If we remember, the loss of the previous section is the negative log-probability of the observed neighbour,
+Recall that the loss of the previous section is the negative log-probability of the observed neighbour,
 
 $$
 -\ln Q(c \mid w) = -s_c + \ln \sum_{c' \in \mathcal{V}} e^{s_{c'}},
 $$
 
-and the logarithm of the sum is the expensive term. NCE replaces this second term by a random sample of the vocabulary, 
+and the logarithm of the sum is the expensive term. NCE replaces this second term with a random sample of the vocabulary,
 
 $$
--\ln Q(c \mid w) = -s_c + \ln \sum_{i=1}^{k} e^{s_{c'}},
+-\ln Q(c \mid w) = -s_c + \ln \sum_{i=1}^{k} e^{s_{c'_i}},
 $$
 
+and in doing so it turns the question "which word of the vocabulary is the neighbour of $w$?" into a yes/no question about one pair at a time, "is $(w,c)$ a pair that was read from the text, or one that was made up?" The two answers are normalized against each other, not against the vocabulary. The pseudo-normalization term is made up of pairs that keep $w$ and replace $c$ with a word drawn from a *noise distribution* of the current word frequencies $P(c)$: for instance, `the` is a frequent noise word and `dawn` a rare one.
 
-and in doing so it turns the question "which word of the vocabulary is the neighbour of $w$?" by a yes/no question about one pair at a time, "is $(w,c)$ a pair that was read from the text, or one that was made up?". The two answers are normalized against each other, not against the vocabulary. The pseudo-normalization term is made up of pairs keeping $w$ and replacing $c$ with a word drawn from a *noise distribution* of the current word frequencies $P(c)$ --for instance, `the` is a frequent noise word and `dawn` a rare one. 
+For a corpus of text, the pairs $(w,c)$ are consecutive words; the positive examples come from the text, while the negative examples are made up by replacing $c$ with $k$ random words from the vocabulary. Normalizing the loss function over a random subset of the vocabulary, also called the negative sample, reduces the computational cost compared to normalizing over the entire vocabulary.
 
-For a corpus of text, the pairs $(w,c)$ are consecutive words, the positive examples come from the text, while the negative examples are made up by replacing $c$ with $k$ random words from the vocabulary. Normalizing the loss function over a random subset of the vocabulary, also called the negative sample, reduces the computational cost compared to normalizing over the entire vocabulary.
-
-With the chanegs above the cross-entropy loss for one observed pair $(w,c)$ becomes the binary classification loss of distinguishing the positive pair from the negative samples.
+With the changes above, the cross-entropy loss for one observed pair $(w,c)$ becomes the binary classification loss for distinguishing the positive pair from the negative samples:
 
 $$
 \ell_{w,c} = -\ln \sigma(z_c) - \sum_{i=1}^{k} \ln \sigma\bigl(-z_{c'_i}\bigr).
 $$
 
-Applying gradient decent to this loss function, gives the following gradients with respect to the embeddings:
+Differentiating this loss function gives the following gradients with respect to the embeddings:
 
 $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{v}_c} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{e}_w,
@@ -455,8 +454,9 @@ $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{e}_w} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{v}_c + \sum_{i=1}^{k} \sigma(z_{c'_i})\,\mathbf{v}_{c'_i}.
 $$
 
-If the vectors are rich enough for every score to reach its best value, the optimum is $s_c = \ln P(c \mid w)$, a true log-probability, even though the model never summed over the vocabulary. The normalization is learned, not computed. The maximizer of this objective has unit total probability automatically, provided that $P_n(c)$ is not zero where $P(c \mid w)$ is not [@gutmann2010noise, Theorem 1]. A step costs $k+1$ scores, whatever the size of the vocabulary.
+If the vectors are rich enough for every score to reach its best value, the optimum is $s_c = \ln P(c \mid w)$, a true log-probability, even though the model never summed over the vocabulary. The normalization is learned, not computed. The minimizer of this loss has unit total probability automatically, provided that $P(c)$ is not zero where $P(c \mid w)$ is not [@gutmann2010noise]. A step costs $k+1$ scores, regardless of the size of the vocabulary.
 
+*********
 
 *A simplification.* Negative sampling, the version used by word2vec [@mikolov2013distributed], drops the correction $\ln(k\,P_n(c))$ and uses the score itself as the logit, $z_c = s_c$. The classifier no longer needs the probabilities of the noise words, only samples from them. But the optimum changes. With the word frequencies as noise, $P_n=P$, the logit above is $s_c = \ln P(c \mid w)/\bigl(k\,P(c)\bigr)$, that is
 
