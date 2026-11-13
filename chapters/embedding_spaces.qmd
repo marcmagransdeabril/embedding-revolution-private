@@ -420,21 +420,25 @@ Contrastive learning grew from this practical difficulty. Instead of asking a mo
 
 In the previous section the cost was in the denominator of the softmax function used to perform the conditional probability estimate $Q(c \mid w)$. For one observed pair $(w,c)$, the sum $\sum_{c'} \exp\langle \mathbf{e}_w, \mathbf{v}_{c'}\rangle$ needs the dot product of $\mathbf{e}_w$ of all the vocabulary vectors $\mathbf{v}_{c'}$. The gradient updates every row of $\mathbf{V}$, because a change to any single dot product breaks the normalization of the distribution unless the change is applied consistently across the vocabulary. With a vocabulary size $|\mathcal{V}|$ in the hundreds of thousands, and the step repeated for every window of a corpus of billions of words, it becomes the bottleneck. All that work has a single purpose: to keep $Q(\cdot \mid w)$ normalized, so that it is a true probability distribution.
 
-Noise-contrastive estimation avoids computing the normalization over the whole vocabulary. It learns using a small random sample of noise pairs instead. For one observed "positive" pair $(w,c)$ aproximates the negative log-probability of the observed neighbour by,
+Noise-contrastive estimation (NCE) avoids computing the normalization over the whole vocabulary. Instead, it learns by contrasting observed data against a small random sample of noise pairs. Rather than approximating the full softmax denominator directly—which would yield a biased Monte Carlo estimate of the log-partition function—NCE reformulates the problem as a binary logistic regression, asking: "Is $(w,c)$ a pair from the real text, or one drawn from a noise distribution?" The two possibilities are normalized against each other, not against the entire vocabulary.
+
+Let $s_c = \langle \mathbf{e}_w, \mathbf{v}_c \rangle$ be the unnormalized log-probability (score) of context word $c$ given target word $w$, where $\mathbf{e}_w$ is the embedding of $w$ and $\mathbf{v}_c$ is the embedding of $c$. For each observed "positive" pair $(w,c)$, we draw $k$ negative samples $c'_1, \dots, c'_k$ from a known *noise distribution* $P_n(c)$ (for instance, based on unigram word frequencies, where `the` is a frequent noise word and `dawn` is a rare one). 
+
+The log-odds (logit) that a candidate pair $(w, c)$ came from the data distribution rather than the noise distribution is:
 
 $$
--\ln Q(c \mid w) = -s_c + \ln \sum_{i=1}^{k} e^{s_{c'_i}},
+z_c = s_c - \ln\bigl(k P_n(c)\bigr).
 $$
 
-Where the first term is the same as in the full softmax (i.e., the score $s_c=\langle \mathbf{e}_w, \mathbf{v}_c\rangle$ is the dot product of the embedding of $w$ by the embedding of $c$), and the second term is the logarithm of the sum of scores over a set of $k$ random samples drawn from a *noise distribution* of the current word frequencies $P(c)$. For instance, `the` is a frequent noise word and `dawn` a rare one. This second term being a sum of $k$ terms instead of a sum over the shole vocabulary entails a proportional reduction in computational cost. In doing so it turns the question "which word of the vocabulary is the neighbour of $w$?" into a yes/no question about one pair at a time, "is $(w,c)$ a pair that was read from the text, or one that was made up?" The two answers are normalized against each other, not against the vocabulary. 
-
-With the changes above, the cross-entropy loss for one observed pair $(w,c)$ becomes the binary classification loss for distinguishing the positive pair from the negative samples:
+Using this logit, the cross-entropy loss for one observed pair $(w,c)$ becomes the binary classification loss for distinguishing the positive pair from the $k$ negative samples:
 
 $$
-\ell_{w,c} = -\ln \sigma(z_c) - \sum_{i=1}^{k} \ln \sigma\bigl(-z_{c'_i}\bigr).
+\ell_{w,c} = -\ln \sigma(z_c) - \sum_{i=1}^{k} \ln \sigma\bigl(-z_{c'_i}\bigr),
 $$
 
-Differentiating this loss function over the embeddings gives the following gradients with respect to the embeddings:
+where $\sigma(z) = (1 + e^{-z})^{-1}$ is the logistic sigmoid function. Evaluating this loss requires computing only $k+1$ scores instead of summing over the whole vocabulary $V$, reducing the per-step computational cost from $O(|V|)$ to $O(k)$.
+
+Differentiating this loss with respect to the embeddings yields the following gradients:
 
 $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{v}_c} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{e}_w,
@@ -444,7 +448,11 @@ $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{e}_w} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{v}_c + \sum_{i=1}^{k} \sigma(z_{c'_i})\,\mathbf{v}_{c'_i}.
 $$
 
-If the vectors are rich enough for every score to reach its best value, the optimum score becomes $s_c = \ln P(c \mid w)$, a true log-probability, even though the model never summed over the vocabulary. The normalization is learned, not computed. The minimizer of this loss converges to a solution that has unit total probability automatically, provided that $P(c)$ is not zero where $P(c \mid w)$ is not. If the model family contains the true distribution, the minimizer of the loss over the $|\mathcal{D}|$ observed pairs converges in probability to the true parameters as $|\mathcal{D}|$ grows, and its error becomes asymptotically normal, with a mean squared error that decreases as $1/|\mathcal{D}|$, as it does for maximum likelihood. The number of negatives $k$ does not move the optimum, only the variance around it. A step costs $k+1$ scores, regardless of the size of the vocabulary [@gutmann2010noise].
+*(Note: If $c = c'_i$ for any $i$, the gradients for that vector sum together).*
+
+If the embedding space is expressive enough for every score to reach its optimum, the minimizer of this loss satisfies $z_c^* = \ln \frac{P(c \mid w)}{k P_n(c)}$, which implies $s_c^* = \ln P(c \mid w)$—a true normalized log-probability, even though the model never explicitly summed over the vocabulary. The normalization constant is learned implicitly (self-normalized), converging to a solution with unit total probability automatically, provided that $P_n(c) > 0$ wherever $P(c \mid w) > 0$. 
+
+Furthermore, if the model family contains the true distribution, the NCE estimator over $|\mathcal{D}|$ observed pairs is consistent—converging in probability to the true parameters as $|\mathcal{D}| \to \infty$—and asymptotically normal, with a mean squared error that decreases at the parametric rate of $O(1/|\mathcal{D}|)$, matching maximum likelihood estimation. Increasing the number of negative samples $k$ does not shift the asymptotic optimum, only reduces the asymptotic variance around it [@gutmann2010noise].
 
 The same idea can be used for signals with no vocabulary (i.e., images, sounds, video). *InfoNCE* (Information Noise-Contrastive Estimation), named in 2018 [@oord2018representation], takes a batch of $N$ matched pairs $(x_i,y_i)$, for example two augmented views of one image, or an image and one or more labels associate dto it. Two encoders $f$ and $g$ (see box on encoders; in the experiment below, the same network, sharing the weights between encoders) map each side to a unit vector, $\mathbf{u}_i = f(x_i)$ and $\mathbf{z}_j = g(y_j)$, and the score of a candidate is their dot product divided by a temperature $\tau$, $s_{ij} = \langle \mathbf{u}_i, \mathbf{z}_j\rangle/\tau$. For each $x_i$, its own $y_i$ is the positive and the other $N-1$ values of $y$ in the batch are the alternatives (@fig-infonce). The loss is the softmax cross-entropy of picking the positive,
 
