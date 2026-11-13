@@ -250,3 +250,22 @@ def test_payoff_result_question_separates_smoke_tests_from_evidence_at_scale():
         assert needle in sec19, f"§19.4 must cover: {needle}"
     out = content.split("## Output", 1)[1]
     assert "§19.4" in out
+
+
+def test_colon_fix_defaults_to_a_period_and_keeps_semicolons_for_quasi_enumerations():
+    """§3: a joint colon becomes a period; the semicolon is not the plain substitute."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec3 = re.search(r"### 3\. Grammar and usage(.*?)(?=### 4\.)", content, flags=re.DOTALL).group(1)
+    assert "The default is a period" in sec3
+    assert "quasi-enumerations" in sec3
+    assert "never as the plain replacement of a colon" in sec3
+    assert "swapping the punctuation only" in sec3
+
+
+def test_page_locators_are_for_books_only():
+    """§6: papers are cited by key alone (checked with --doc); page locators are reserved for books."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec6 = re.search(r"### 6\. Citations and referenced documents(.*?)(?=### 7\.)", content, flags=re.DOTALL).group(1)
+    assert "is for books only" in sec6
+    assert "cite the key alone" in sec6
+    assert "--doc" in sec6

@@ -16,7 +16,7 @@ years and venues were checked by web search or taken from memory (see the Review
 nothing has been read, and no PDF is held. Per `tmp/three_part_plan.md` they are
 claims about what a source says, to be confirmed before the prose is written.
 Ground truth (PDF pages of `references/`, checked with ground-truth-review; add
-printed-page locators `[@key, p. N]` when the prose is written):
+printed-page locators `[@key, p. N]` for books only when the prose is written; papers are cited by key alone, and the pages below serve the ground-truth check):
   - Osgood 1957: "multidimensional semantic space" p. 36; evaluation, potency, activity p. 153, 335.
   - Bradley 2022: object determined up to isomorphism by its relationships (Yoneda) p. 5.
   - Matilal 1990: Dignaga's apoha p. 49-50; Bhartrhari's sphota p. 97, 116.

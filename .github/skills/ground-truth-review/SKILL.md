@@ -57,7 +57,7 @@ If the claim under review carries a citation (`[@citekey]` or `[@citekey, p. N]`
 - Look up the citekey's `file =` field.
   - If it names a PDF under `references/`, pass `--doc <doc_stem>` to `ground_check.py` to restrict the search to that single document — this is a precision win over a corpus-wide search and is the main practical payoff of having `file =` fields.
   - If `file =` is empty, there is no local copy: skip candidate retrieval, verify only the bibliographic metadata (authors, title, year, venue), and report the claim as **unverifiable locally** (see Step 5) rather than unsupported.
-- If the claim carries a page locator (`[@key, p. N]`), prefer `--render-page <doc_stem> <N>` directly over a blind search — the locator already tells you where to look.
+- If the claim carries a page locator (`[@key, p. N]`), prefer `--render-page <doc_stem> <N>` directly over a blind search — the locator already tells you where to look. Only books carry page locators in the text; for a paper the `--doc` restriction is the targeting, and a page found by the search may be reported without being added to the citation.
 
 ### Step 2: Live Claim Extraction & Query Formulation
 For each discrete assertion in the text under review, classify its claim type and construct a concise, term-dense query (typically 2–4 key terms). Formulate queries tailored to how that claim type appears in literature across the 5 claim archetypes:
