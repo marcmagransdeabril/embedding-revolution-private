@@ -1,0 +1,23 @@
+% Shared TikZ preamble for book diagrams
+% Usage: \input{../preamble.tex} after \documentclass
+
+\usepackage{tikz}
+\usepackage{amsmath,amssymb}
+
+\usetikzlibrary{arrows.meta, calc, positioning, decorations.pathreplacing}
+
+% --- Color palette ---
+% Consistent across all diagrams in the book
+\definecolor{basis1}{RGB}{31,119,180}    % blue: encoders, structure
+\definecolor{msg}{RGB}{44,160,44}        % green: positives
+\definecolor{aux}{RGB}{127,127,127}      % gray: alternatives, auxiliary
+\definecolor{highlight}{RGB}{255,127,14} % orange: highlights
+\definecolor{lightfill}{RGB}{230,240,255}% light blue: shaded regions
+
+% --- Reusable styles ---
+\tikzset{
+  encoder/.style={draw=basis1!60, fill=lightfill, rounded corners=3pt,
+    minimum width=1.0cm, minimum height=0.8cm},
+  flow/.style={-{Stealth[length=5pt,width=4pt]}, line width=0.8pt},
+  annotation/.style={font=\footnotesize, text=aux!80!black},
+}
