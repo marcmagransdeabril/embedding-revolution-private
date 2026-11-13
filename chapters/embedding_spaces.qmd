@@ -422,23 +422,33 @@ In the previous section the cost was in the denominator of the softmax function 
 
 Noise-contrastive estimation (NCE) avoids computing the normalization over the whole vocabulary. Instead, it learns by contrasting observed data against a small random sample of noise pairs. Rather than approximating the full softmax denominator directly—which would yield a biased Monte Carlo estimate of the log-partition function—NCE reformulates the problem as a binary logistic regression, asking: "Is $(w,c)$ a pair from the real text, or one drawn from a noise distribution?" The two possibilities are normalized against each other, not against the entire vocabulary.
 
-Let $s_c = \langle \mathbf{e}_w, \mathbf{v}_c \rangle$ be the unnormalized log-probability (score) of context word $c$ given target word $w$, where $\mathbf{e}_w$ is the embedding of $w$ and $\mathbf{v}_c$ is the embedding of $c$. For each observed "positive" pair $(w,c)$, we draw $k$ negative samples $c'_1, \dots, c'_k$ from a known *noise distribution* $P_n(c)$ (for instance, based on unigram word frequencies, where `the` is a frequent noise word and `dawn` is a rare one). 
+We build the loss in the same three steps as in Learning by Prediction: a model, a function to descend, and its gradient.
 
-The log-odds (logit) that a candidate pair $(w, c)$ came from the data distribution rather than the noise distribution is:
+*The model.* The previous section kept the score $s_c = \langle \mathbf{e}_w, \mathbf{v}_c \rangle$ of each neighbour and turned the exponentials of the scores into probabilities by dividing by their sum over the vocabulary. Here we keep the score and drop the division. The model for the probability of a neighbour is the unnormalized $e^{s_c}$, which costs one dot product. This model is not a probability distribution yet, since its values over the vocabulary do not add up to one for $w$. But the vectors have room to learn the missing normalization. If every $\mathbf{v}_c$ has an extra coordinate equal to 1, then $\mathbf{e}_w$ has a coordinate that adds a constant $a_w$ to all the scores of the word $w$, and it can take the value $-\ln \sum_{c'} e^{s_{c'}}$ that the softmax computed by brute force. Whether training finds it is decided below.
 
-$$
-z_c = s_c - \ln\bigl(k P_n(c)\bigr).
-$$
-
-Using this logit, the cross-entropy loss for one observed pair $(w,c)$ becomes the binary classification loss for distinguishing the positive pair from the $k$ negative samples:
+*The question.* Each real pair $(w,c)$ of the text comes with $k$ noise neighbours $c'_1,\dots,c'_k$, drawn independently from a noise distribution $P_n$ that we can sample and evaluate, for example the frequency of the words in the text. We label the real pair 1 and the $k$ noise pairs 0, so that one candidate in $k+1$ is real. A candidate $c$ for the word $w$ is real with weight $1 \cdot P(c \mid w)$ and noise with weight $k \cdot P_n(c)$, and by Bayes' rule the probability that it is real is
 
 $$
-\ell_{w,c} = -\ln \sigma(z_c) - \sum_{i=1}^{k} \ln \sigma\bigl(-z_{c'_i}\bigr),
+P(\text{real} \mid w,c) = \frac{P(c \mid w)}{P(c \mid w) + k\,P_n(c)}.
 $$
 
-where $\sigma(z) = (1 + e^{-z})^{-1}$ is the logistic sigmoid function. Evaluating this loss requires computing only $k+1$ scores instead of summing over the whole vocabulary $V$, reducing the per-step computational cost from $O(|V|)$ to $O(k)$.
+Replacing $P(c \mid w)$ by the model $e^{s_c}$ and dividing the numerator and the denominator by $e^{s_c}$,
 
-Differentiating this loss with respect to the embeddings yields the following gradients:
+$$
+P(\text{real} \mid w,c) = \frac{e^{s_c}}{e^{s_c} + k\,P_n(c)} = \frac{1}{1 + e^{-z_c}} = \sigma(z_c), \qquad z_c = s_c - \ln\bigl(k\,P_n(c)\bigr),
+$$
+
+where $\sigma(z) = 1/(1+e^{-z})$ is the *logistic function*. The logistic function appears because $e^{z_c}$ is the odds of a real pair against a noise pair. Notice that $\ln(k P_n(c))$ plays the role that $\ln P(c)$ played before, a log-frequency that is subtracted from the score, with the difference that here it is known, since we chose $P_n$, and it need not be learned. Also notice that the sum over the vocabulary is gone. A candidate is judged against the noise probability of itself alone, and not against all the others.
+
+*The loss.* The labels give a likelihood to maximize, as in the box on cross-entropy, now with two outcomes. The model gives probability $\sigma(z_c)$ to the label 1 of the real pair and $1 - \sigma(z_{c'_i})$ to the label 0 of each noise pair. Minus the logarithm of the probability of all the labels is the loss of the pair,
+
+$$
+\ell_{w,c} = -\ln \sigma(z_c) - \sum_{i=1}^{k} \ln\bigl(1 - \sigma(z_{c'_i})\bigr),
+$$
+
+which involves $k+1$ vectors $\mathbf{v}$ and the vector $\mathbf{e}_w$, whatever the size of the vocabulary.
+
+*The gradient.* The chain rule goes as in step 4 of the box on cross-entropy, with a simpler first link. The derivative of the logistic function is $\sigma'(z) = \sigma(z)\bigl(1-\sigma(z)\bigr)$, so $\frac{d}{dz}\bigl(-\ln\sigma(z)\bigr) = -\bigl(1-\sigma(z)\bigr) = \sigma(z) - 1$ and $\frac{d}{dz}\bigl(-\ln(1-\sigma(z))\bigr) = \sigma(z)$. In both cases the derivative with respect to a score is *what the model predicted minus what happened*, $\sigma(z) - \text{label}$, as it was for the softmax, $Q(c' \mid w) - \delta_{c'c}$. The scores are still dot products, so $\partial z_c / \partial \mathbf{v}_c = \mathbf{e}_w$ and $\partial z_c / \partial \mathbf{e}_w = \mathbf{v}_c$, and differentiating the loss with respect to the embeddings yields the following gradients:
 
 $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{v}_c} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{e}_w,
@@ -450,7 +460,15 @@ $$
 
 *(Note: If $c = c'_i$ for any $i$, the gradients for that vector sum together).*
 
-If the embedding space is expressive enough for every score to reach its optimum, the minimizer of this loss satisfies $z_c^* = \ln \frac{P(c \mid w)}{k P_n(c)}$, which implies $s_c^* = \ln P(c \mid w)$—a true normalized log-probability, even though the model never explicitly summed over the vocabulary. The normalization constant is learned implicitly (self-normalized), converging to a solution with unit total probability automatically, provided that $P_n(c) > 0$ wherever $P(c \mid w) > 0$. 
+Compare these gradients with those of the softmax. The descent step on $\mathbf{e}_w$ is again a pull towards the observed neighbour, with weight $1 - \sigma(z_c)$, the probability that the model failed to give to the pair being real, and a push away from the noise neighbours, each with weight $\sigma(z_{c'_i})$, the probability that the model gave to a noise pair being real. The softmax pushed away from $\sum_{k'} Q(k' \mid w)\,\mathbf{v}_{k'}$, the average of the vectors of the whole vocabulary under the model, which needs all of them. Here the average is replaced by the $k$ noise vectors that happened to be drawn, which is a sample of it. Only $k+1$ rows of $\mathbf{V}$ change at each step, not $|\mathcal{V}|$. There is also a difference. The derivatives of the softmax with respect to the scores add up to zero, since adding a constant to all the scores changes nothing. Here they add up to $(\sigma(z_c) - 1) + \sum_i \sigma(z_{c'_i})$, which is not zero in general, because each candidate is judged on its own and raising all the scores together is no longer free. This is the mechanism by which the normalization is learned. A word whose scores are too high is told so by the noise pairs, and one whose scores are too low by the real pairs.
+
+Where does the descent lead? For a fixed word $w$, the loss averaged over the corpus counts each real neighbour with frequency $P(c \mid w)$ and each noise neighbour $k$ times with frequency $P_n(c)$,
+
+$$
+\mathbb{E}[\ell_w] = -\sum_{c} \Bigl[P(c \mid w)\,\ln \sigma(z_c) + k\,P_n(c)\,\ln\bigl(1-\sigma(z_c)\bigr)\Bigr].
+$$
+
+Each term depends on a single score, so each can be minimized on its own. Setting the derivative with respect to $z_c$ to zero, $-P(c \mid w)\bigl(1-\sigma(z_c)\bigr) + k\,P_n(c)\,\sigma(z_c) = 0$, gives $\sigma(z_c) = P(c \mid w)/\bigl(P(c \mid w) + k P_n(c)\bigr)$, the Bayes probability of the beginning, so the model learns the correct posterior of the question it was asked. If the embedding space is expressive enough for every score to reach its optimum, the minimizer of this loss satisfies $z_c^* = \ln \frac{P(c \mid w)}{k P_n(c)}$, which implies $s_c^* = \ln P(c \mid w)$—a true normalized log-probability, even though the model never explicitly summed over the vocabulary. The normalization constant is learned implicitly (self-normalized), converging to a solution with unit total probability automatically, provided that $P_n(c) > 0$ wherever $P(c \mid w) > 0$. 
 
 Furthermore, if the model family contains the true distribution, the NCE estimator over $|\mathcal{D}|$ observed pairs is consistent—converging in probability to the true parameters as $|\mathcal{D}| \to \infty$—and asymptotically normal, with a mean squared error that decreases at the parametric rate of $O(1/|\mathcal{D}|)$, matching maximum likelihood estimation. Increasing the number of negative samples $k$ does not shift the asymptotic optimum, only reduces the asymptotic variance around it [@gutmann2010noise].
 
