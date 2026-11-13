@@ -428,15 +428,13 @@ $$
 
 Where the first term is the same as in the full softmax (i.e., the score $s_c=\langle \mathbf{e}_w, \mathbf{v}_c\rangle$ is the dot product of the embedding of $w$ by the embedding of $c$), and the second term is the logarithm of the sum of scores over a set of $k$ random samples drawn from a *noise distribution* of the current word frequencies $P(c)$. For instance, `the` is a frequent noise word and `dawn` a rare one. This second term being a sum of $k$ terms instead of a sum over the shole vocabulary entails a proportional reduction in computational cost. In doing so it turns the question "which word of the vocabulary is the neighbour of $w$?" into a yes/no question about one pair at a time, "is $(w,c)$ a pair that was read from the text, or one that was made up?" The two answers are normalized against each other, not against the vocabulary. 
 
-For a corpus of text, the pairs $(w,c)$ are consecutive words; the positive examples come from the text, while the negative examples are made up by replacing $c$ with $k$ random words from the vocabulary. Normalizing the loss function over a random subset of the vocabulary, also called the negative sample, reduces the computational cost compared to normalizing over the entire vocabulary.
-
 With the changes above, the cross-entropy loss for one observed pair $(w,c)$ becomes the binary classification loss for distinguishing the positive pair from the negative samples:
 
 $$
 \ell_{w,c} = -\ln \sigma(z_c) - \sum_{i=1}^{k} \ln \sigma\bigl(-z_{c'_i}\bigr).
 $$
 
-Differentiating this loss function gives the following gradients with respect to the embeddings:
+Differentiating this loss function over the embeddings gives the following gradients with respect to the embeddings:
 
 $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{v}_c} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{e}_w,
