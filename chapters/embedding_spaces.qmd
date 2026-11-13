@@ -420,21 +420,13 @@ Contrastive learning grew from this practical difficulty. Instead of asking a mo
 
 In the previous section the cost was in the denominator of the softmax function used to perform the conditional probability estimate $Q(c \mid w)$. For one observed pair $(w,c)$, the sum $\sum_{c'} \exp\langle \mathbf{e}_w, \mathbf{v}_{c'}\rangle$ needs the dot product of $\mathbf{e}_w$ of all the vocabulary vectors $\mathbf{v}_{c'}$. The gradient updates every row of $\mathbf{V}$, because a change to any single dot product breaks the normalization of the distribution unless the change is applied consistently across the vocabulary. With a vocabulary size $|\mathcal{V}|$ in the hundreds of thousands, and the step repeated for every window of a corpus of billions of words, it becomes the bottleneck. All that work has a single purpose: to keep $Q(\cdot \mid w)$ normalized, so that it is a true probability distribution.
 
-Noise-contrastive estimation avoids computing the normalization over the whole vocabulary. It learns to tell observed pairs from a small random sample of noise pairs instead. For one observed pair $(w,c)$, write $s_c=\langle \mathbf{e}_w, \mathbf{v}_c\rangle$ for its score.
-
-Recall that the loss of the previous section is the negative log-probability of the observed neighbour,
-
-$$
--\ln Q(c \mid w) = -s_c + \ln \sum_{c' \in \mathcal{V}} e^{s_{c'}},
-$$
-
-and the logarithm of the sum is the expensive term. NCE replaces this second term with a random sample of the vocabulary,
+Noise-contrastive estimation avoids computing the normalization over the whole vocabulary. It learns using a small random sample of noise pairs instead. For one observed "positive" pair $(w,c)$ aproximates the negative log-probability of the observed neighbour by,
 
 $$
 -\ln Q(c \mid w) = -s_c + \ln \sum_{i=1}^{k} e^{s_{c'_i}},
 $$
 
-and in doing so it turns the question "which word of the vocabulary is the neighbour of $w$?" into a yes/no question about one pair at a time, "is $(w,c)$ a pair that was read from the text, or one that was made up?" The two answers are normalized against each other, not against the vocabulary. The pseudo-normalization term is made up of pairs that keep $w$ and replace $c$ with a word drawn from a *noise distribution* of the current word frequencies $P(c)$: for instance, `the` is a frequent noise word and `dawn` a rare one.
+Where the first term is the same as in the full softmax (i.e., the score $s_c=\langle \mathbf{e}_w, \mathbf{v}_c\rangle$ is the dot product of the embedding of $w$ by the embedding of $c$), and the second term is the logarithm of the sum of scores over a set of $k$ random samples drawn from a *noise distribution* of the current word frequencies $P(c)$. For instance, `the` is a frequent noise word and `dawn` a rare one. This second term being a sum of $k$ terms instead of a sum over the shole vocabulary entails a proportional reduction in computational cost. In doing so it turns the question "which word of the vocabulary is the neighbour of $w$?" into a yes/no question about one pair at a time, "is $(w,c)$ a pair that was read from the text, or one that was made up?" The two answers are normalized against each other, not against the vocabulary. 
 
 For a corpus of text, the pairs $(w,c)$ are consecutive words; the positive examples come from the text, while the negative examples are made up by replacing $c$ with $k$ random words from the vocabulary. Normalizing the loss function over a random subset of the vocabulary, also called the negative sample, reduces the computational cost compared to normalizing over the entire vocabulary.
 
