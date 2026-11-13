@@ -454,25 +454,18 @@ $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{e}_w} = \bigl(\sigma(z_c)-1\bigr)\,\mathbf{v}_c + \sum_{i=1}^{k} \sigma(z_{c'_i})\,\mathbf{v}_{c'_i}.
 $$
 
-If the vectors are rich enough for every score to reach its best value, the optimum is $s_c = \ln P(c \mid w)$, a true log-probability, even though the model never summed over the vocabulary. The normalization is learned, not computed. The minimizer of this loss has unit total probability automatically, provided that $P(c)$ is not zero where $P(c \mid w)$ is not [@gutmann2010noise]. A step costs $k+1$ scores, regardless of the size of the vocabulary.
+If the vectors are rich enough for every score to reach its best value, the optimum is $s_c = \ln P(c \mid w)$, a true log-probability, even though the model never summed over the vocabulary. The normalization is learned, not computed. The minimizer of this loss converges to a solution that has unit total probability automatically, provided that $P(c)$ is not zero where $P(c \mid w)$ is not. If the model family contains the true distribution, the minimizer of the loss over the $|\mathcal{D}|$ observed pairs converges in probability to the true parameters as $|\mathcal{D}|$ grows, and its error becomes asymptotically normal, with a mean squared error that decreases as $1/|\mathcal{D}|$, as it does for maximum likelihood. The number of negatives $k$ does not move the optimum, only the variance around it. A step costs $k+1$ scores, regardless of the size of the vocabulary [@gutmann2010noise].
 
-*********
 
-*A simplification.* Negative sampling, the version used by word2vec [@mikolov2013distributed], drops the correction $\ln(k\,P_n(c))$ and uses the score itself as the logit, $z_c = s_c$. The classifier no longer needs the probabilities of the noise words, only samples from them. But the optimum changes. With the word frequencies as noise, $P_n=P$, the logit above is $s_c = \ln P(c \mid w)/\bigl(k\,P(c)\bigr)$, that is
-
-$$
-\langle \mathbf{e}_w, \mathbf{v}_c\rangle = \mathrm{PMI}(w,c) - \ln k,
-$$
-
-again the PMI, here measured in nats, shifted by the constant $\ln k$ [@levy2014neural]. The score is no longer a log-probability, and the model is no longer a distribution over neighbours. Word vectors do not need one. In the comparison of Mikolov et al., negative sampling matched the training time of NCE and scored higher on the analogy task, 59% against 53% in total accuracy (Table 1). On text, then, the gain over the plain softmax was speed, not a new geometry.
-
-The same idea can be used for signals with no vocabulary. *InfoNCE* (Information Noise-Contrastive Estimation), named in 2018 [@oord2018representation], takes a batch of $N$ matched pairs $(x_i,y_i)$, for example two augmented views of one image. Two encoders $f$ and $g$ (in the experiment below, the same network) map each side to a unit vector, $\mathbf{u}_i = f(x_i)$ and $\mathbf{z}_j = g(y_j)$, and the score of a candidate is their dot product divided by a temperature $\tau$, $s_{ij} = \langle \mathbf{u}_i, \mathbf{z}_j\rangle/\tau$. For each $x_i$, its own $y_i$ is the positive and the other $N-1$ values of $y$ in the batch are the alternatives. The loss is the softmax cross-entropy of picking the positive,
+The same idea can be used for signals with no vocabulary (i.e., images, sounds, video). *InfoNCE* (Information Noise-Contrastive Estimation), named in 2018 [@oord2018representation], takes a batch of $N$ matched pairs $(x_i,y_i)$, for example two augmented views of one image. Two encoders $f$ and $g$ (in the experiment below, the same network) map each side to a unit vector, $\mathbf{u}_i = f(x_i)$ and $\mathbf{z}_j = g(y_j)$, and the score of a candidate is their dot product divided by a temperature $\tau$, $s_{ij} = \langle \mathbf{u}_i, \mathbf{z}_j\rangle/\tau$. For each $x_i$, its own $y_i$ is the positive and the other $N-1$ values of $y$ in the batch are the alternatives. The loss is the softmax cross-entropy of picking the positive,
 
 $$
 \ell_N = -\frac{1}{N}\sum_{i=1}^{N} \ln \frac{e^{s_{ii}}}{\sum_{j=1}^{N} e^{s_{ij}}},
 $$
 
 the loss of the preceding section with a temporary set of candidates in place of a permanent vocabulary. Its gradient with respect to the scores is the same “predicted minus observed”, the softmax of each row minus the identity, divided by $N$, and the temperature sets how much the hardest alternatives count. Training uses nats.
+
+The convergence argument carries over with a weaker conclusion. Suppose the encoders are rich enough, the data are unlimited, the positives come from the joint distribution $P(x,y)$ and the alternatives are drawn independently from $P(y)$. Then, for any $N\ge 2$, the minimizer of $\ell_N$ is a score $s_{ij} = \ln \dfrac{P(y_j\mid x_i)}{P(y_j)} + a(x_i)$, where $a(x_i)$ depends on the anchor only [@oord2018representation, Section 2.3]. The softmax normalizes over the candidates, so each row of scores is fixed only up to a constant. InfoNCE recovers the ratio $P(y\mid x)/P(y)$, the PMI of the pair, and not $\ln P(y\mid x)$ itself. As in NCE, the number of alternatives changes the variance and not the optimum. What grows with $N$ is the bound below.
 
 The batch does two jobs at once. It makes the task possible for an image, a sound, or a sentence, because the model need compare only the examples in front of it. It also decides how sharply the task can distinguish things. With $N$ candidates, the loss gives a lower bound
 
