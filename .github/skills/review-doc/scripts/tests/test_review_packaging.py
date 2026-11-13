@@ -236,3 +236,17 @@ def test_payoff_step_is_a_review_step_that_adds_no_text_and_only_proposes_remova
     assert "notes/ideas.qmd" in content.split("### Change policy", 1)[1].split("### Metacognitive", 1)[0]
     policy = re.search(r"### Change policy(.*?)(?=### Metacognitive)", content, flags=re.DOTALL).group(1)
     assert "Never apply a removal proposed by the pay-off step" in policy
+
+
+def test_payoff_result_question_separates_smoke_tests_from_evidence_at_scale():
+    """§19.4: rankings rest on comparisons at scale found in the literature; the book's own experiments are smoke tests;
+    the question audits sentences, is not pass/fail, and reports gaps as epistemic boundaries."""
+    content = SKILL_MD.read_text(encoding="utf-8")
+    sec19 = re.search(r"### 19\. Pay-off step(.*?)(?=## Output)", content, flags=re.DOTALL).group(1)
+    assert "4. **Result.**" in sec19
+    for needle in ("systematic review or meta-analysis", "controlled comparison", "allegiance bias",
+                   "smoke tests", "cannot rank methods at scale", "Question 4 is not a pass or fail",
+                   "epistemic boundary"):
+        assert needle in sec19, f"§19.4 must cover: {needle}"
+    out = content.split("## Output", 1)[1]
+    assert "§19.4" in out
