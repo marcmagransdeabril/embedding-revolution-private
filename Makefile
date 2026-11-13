@@ -16,7 +16,7 @@ CODE_SKELETONS := $(shell grep -l '^\# SKELETON' $(wildcard code/*/*.py) 2>/dev/
 CODE_SCRIPTS := $(filter-out $(CODE_HELPERS) $(CODE_SKELETONS),$(wildcard code/*/*.py))
 CODE_STAMPS  := $(CODE_SCRIPTS:code/%.py=.code-tests/%.ok)
 
-.PHONY: help all book pdf html epub sync-chapters sync-solutions test-code validate validate-citations status durability check preview clean
+.PHONY: help all book pdf html epub diagrams sync-chapters sync-solutions test-code validate validate-citations status durability check preview clean
 
 # Default target
 all: book
@@ -26,6 +26,7 @@ help:
 	@echo " The Embedding Revolution - Book Build System"
 	@echo "======================================================================"
 	@echo " make book              - Run code tests, then build HTML and PDF book (O'Reilly 7in x 9.1875in)"
+	@echo " make diagrams          - Compile the TikZ diagrams in diagrams/*/*.tex to PDF (PDF book) and PNG (HTML, EPUB)"
 	@echo " make test-code         - Run the solution scripts in code/ that changed since their last pass"
 	@echo " make pdf               - Build PDF book (O'Reilly 7in x 9.1875in)"
 	@echo " make html              - Build interactive multi-page HTML book"
@@ -40,7 +41,24 @@ help:
 	@echo " make clean             - Clean build artifacts (_book, _freeze, .quarto)"
 	@echo "======================================================================"
 
-book: test-code sync-chapters sync-solutions html pdf
+book: diagrams test-code sync-chapters sync-solutions html pdf
+
+# TikZ diagrams: diagrams/<chapter>/<name>.tex -> .pdf (vector, for the PDF book) and .png (300 dpi, for HTML and EPUB)
+# Chapters reference the .pdf; filters/tikz-img.lua swaps it for the .png outside LaTeX.
+DIAGRAM_TEX := $(wildcard diagrams/*/*.tex)
+DIAGRAM_PDF := $(DIAGRAM_TEX:.tex=.pdf)
+DIAGRAM_PNG := $(DIAGRAM_TEX:.tex=.png)
+
+diagrams: $(DIAGRAM_PDF) $(DIAGRAM_PNG)
+
+diagrams/%.pdf: diagrams/%.tex diagrams/preamble.tex
+	@echo "==> Compiling $<..."
+	@cd $(dir $<) && $(EXPORT_PATH) lualatex --interaction=nonstopmode $(notdir $<) > $(notdir $(basename $<)).log 2>&1 \
+		|| { tail -n 30 $(notdir $(basename $<)).log; exit 1; }
+	@rm -f $(basename $<).aux $(basename $<).log
+
+diagrams/%.png: diagrams/%.pdf
+	@pdftoppm -png -r 300 -singlefile $< $(basename $<)
 
 test-code: $(CODE_STAMPS)
 	@for f in $(CODE_SKELETONS); do echo "==> Skipped (skeleton, not implemented): $$f"; done
@@ -90,15 +108,15 @@ define render
 	  grep -a "Unable to resolve crossref" .quarto/render-$(1).log | sort -u >&2; exit 1; fi
 endef
 
-pdf: sync-chapters sync-solutions
+pdf: diagrams sync-chapters sync-solutions
 	@echo "==> Building PDF Book (O'Reilly Format 7in x 9.1875in)..."
 	$(call render,pdf)
 
-html: sync-chapters sync-solutions
+html: diagrams sync-chapters sync-solutions
 	@echo "==> Building Multi-Page HTML Book..."
 	$(call render,html)
 
-epub: sync-chapters sync-solutions
+epub: diagrams sync-chapters sync-solutions
 	@echo "==> Building EPUB 3 Book..."
 	$(call render,epub)
 

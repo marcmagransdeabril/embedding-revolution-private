@@ -53,6 +53,7 @@ format:
     code-tools: true
     html-math-method: mathjax
     filters:
+    - filters/tikz-img.lua
     - filters/book-chapter-refs.lua
     - filters/book-questions.lua
     - filters/book-callouts.lua
@@ -97,6 +98,7 @@ format:
     css:
     - styles/epub.css
     filters:
+    - filters/tikz-img.lua
     - filters/book-questions.lua
     - filters/book-callouts.lua
     - filters/book-typography.lua

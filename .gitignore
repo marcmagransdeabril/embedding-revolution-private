@@ -9,6 +9,9 @@ tmp/
 _book/
 _freeze/
 *.tex
+!diagrams/**/*.tex
+diagrams/**/*.aux
+diagrams/**/*.log
 
 
 /.luarc.json
