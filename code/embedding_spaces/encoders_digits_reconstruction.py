@@ -1,23 +1,25 @@
-"""Encoders and the Chain Rule, question 2: an encoder that turns an image into 16 numbers, and a decoder that checks them.
+"""Encoder/Decoder and the Chain Rule, questions 1 to 3: an encoder that turns an image into a few numbers, and a decoder that checks them.
 
-The 8x8 digits of contrast_digits_infonce.py (imported, not copied: the same 1,200 training and 597 held-out images, the same 16
-dimensions, the same Adam settings). The images are clean here, without augmentation: nothing is paired with anything, the only task is
-to rebuild the image from the 16 numbers. The encoder is the one of the text, 64 -> 128 (ReLU) -> 16 (no ReLU), and the decoder is its
-mirror, 16 -> 128 (ReLU) -> 64 (no ReLU), trained with the squared error per pixel. The network is written as a list of layers, and the
-backward pass is the loop of the box on the chain rule: each layer receives delta from above, returns the gradient of its weights and
-passes a new delta down. A finite-difference check of the gradient is run before training.
+The 8x8 digits of contrast_digits_infonce.py (imported, not copied: the same 1,200 training and 597 held-out images, the same Adam settings).
+The images are clean here, without augmentation: nothing is paired with anything, the only task is to rebuild the image from the code.
+The encoder is the one of the text, 64 -> 128 (ReLU) -> 16 (no ReLU), and the decoder is its mirror, 16 -> 128 (ReLU) -> 64 (no ReLU),
+trained with the squared error per pixel. The network is written as a list of layers, and the backward pass is the loop of the section:
+each layer receives delta from above, returns the gradient of its weights and passes a new delta down. It is written by hand in numpy
+(no automatic differentiation in the training), and checked before training against central finite differences and against the
+automatic differentiation of PyTorch, which is used for nothing else.
 
 Models (five seeds each, the held-out error is the squared error per pixel with the 95% bootstrap interval over the seeds and the 597
 images, as in contrast_digits_infonce.py):
   one hidden layer     64 -> 128 -> 16 -> 128 -> 64
   two hidden layers    64 -> 128 -> 128 -> 16 -> 128 -> 128 -> 64   (question 3: one more layer on each side)
   linear               64 -> 16 -> 64, the same without any ReLU, trained for ten times more steps (the case of the PCA)
-References, not trained: the mean image, and the PCA with 16 components (the best linear code of 16 numbers, Eckart-Young).
+  ReLU on the code     the first model with a ReLU on the 16 coordinates (question 1)
+and, for question 3, the first two with a code of 2, 4, 8, 32 and 64 coordinates instead of 16.
+References, not trained: the mean image, and the PCA with the same number of components (the best linear code, Eckart-Young).
 
-Also printed: the number of parameters, the training error, and the error with the ReLU of the 16 coordinates added (question 1).
-Saves ../../figures/embedding_spaces/encoders_digits_reconstruction.png: one training image and one held-out image of each digit
-(the first of each in the data), and their reconstructions from 16 numbers by the autoencoders with one and two hidden layers and by
-the PCA (the first seed).
+Also printed: the number of parameters and the training error. Saves ../../figures/embedding_spaces/encoders_digits_reconstruction.png:
+one training image and one held-out image of each digit (the first of each in the data), and their reconstructions from 16 numbers by
+the autoencoders with one and two hidden layers and by the PCA (the first seed).
 """
 from concurrent.futures import ProcessPoolExecutor
 import os
@@ -43,6 +45,10 @@ MODELS = {
     "linear": ([64, DIM], False, 10 * STEPS),
     "ReLU on the 16 coordinates": ([64, HIDDEN, DIM], True, STEPS),
 }
+SWEEP_DIMS = [2, 4, 8, 16, 32, 64]  # question 3: the size of the code
+SWEEP = {f"{depth} hidden, d = {d}": ([64] + [HIDDEN] * depth + [d], False, STEPS)
+         for d in SWEEP_DIMS if d != DIM for depth in (1, 2)}
+ALL = MODELS | SWEEP
 
 
 def layers(sizes: list[int], relu_code: bool) -> list[bool]:
@@ -109,9 +115,33 @@ def gradient_check(seed: int = 0) -> float:
     return worst
 
 
+def autograd_check(seed: int = 0) -> float:
+    """Largest relative difference between the backpropagated gradient and the one of PyTorch's automatic differentiation on the
+    same weights and images (float64). Also checks that PyTorch gives the ReLU the derivative 0 at 0, as the mask 1[p > 0] does."""
+    import torch
+
+    rng = np.random.default_rng(seed)
+    sizes = MODELS["two hidden layers"][0]
+    relu = layers(sizes, False)
+    params = init(sizes, rng)
+    x = X_TRAIN[:8]
+    _, grads = loss_and_grads(params, relu, x)
+    tensors = [{k: torch.tensor(v, dtype=torch.float64, requires_grad=True) for k, v in layer.items()} for layer in params]
+    a = torch.tensor(x, dtype=torch.float64)
+    for layer, r in zip(tensors, relu):
+        a = a @ layer["W"] + layer["b"]
+        a = torch.relu(a) if r else a
+    ((a - torch.tensor(x, dtype=torch.float64)) ** 2).mean().backward()
+    zero = torch.zeros(1, requires_grad=True)
+    torch.relu(zero).backward()
+    assert zero.grad.item() == 0.0
+    return max(float(np.abs(layer[k].grad.numpy() - g[k]).max() / (np.abs(g[k]).max() + 1e-300))
+               for layer, g in zip(tensors, grads) for k in ("W", "b"))
+
+
 def train(job):
     name, seed = job
-    sizes, relu_code, steps = MODELS[name]
+    sizes, relu_code, steps = ALL[name]
     relu = layers(sizes, relu_code)
     rng = np.random.default_rng(seed)
     params = init(sizes, rng)
@@ -134,16 +164,19 @@ if __name__ == "__main__":
     check = gradient_check()
     print(f"gradient check: largest relative difference between backpropagation and finite differences = {check:.1e}")
     assert check < 1e-5, "the backward pass does not match the finite differences"
+    auto = autograd_check()
+    print(f"autograd check: largest relative difference between backpropagation and PyTorch's automatic differentiation = {auto:.1e}")
+    assert auto < 1e-9, "the backward pass does not match automatic differentiation"
 
     with ProcessPoolExecutor() as pool:
-        results = list(pool.map(train, [(name, seed) for name in MODELS for seed in SEEDS]))
-    by = {name: [r for r in results if r["name"] == name] for name in MODELS}
+        results = list(pool.map(train, [(name, seed) for name in ALL for seed in SEEDS]))
+    by = {name: [r for r in results if r["name"] == name] for name in ALL}
 
     mean_image = X_TRAIN.mean(0)
     _, _, vt = np.linalg.svd(X_TRAIN - mean_image, full_matrices=False)
     pca_out = mean_image + (X_TEST - mean_image) @ vt[:DIM].T @ vt[:DIM]
     errors = {"mean image": np.mean((mean_image - X_TEST) ** 2, axis=1)[None], f"PCA, {DIM} components": np.mean((pca_out - X_TEST) ** 2, axis=1)[None]}
-    errors |= {name: np.array([r["test"] for r in rs]) for name, rs in by.items()}
+    errors |= {name: np.array([r["test"] for r in rs]) for name, rs in by.items() if name in MODELS}
     print(f"\n{len(X_TRAIN)} training images, {len(X_TEST)} held-out images; squared error per pixel of the held-out images, "
           f"mean [95% bootstrap interval over the {len(SEEDS)} seeds and the images]")
     print(f"{'':28} {'parameters':>10} {'train error':>12} {'held-out error':>26}")
@@ -152,11 +185,29 @@ if __name__ == "__main__":
         train_error = f"{np.mean([r['train'] for r in by[name]]):.4f}" if name in by else ""
         print(f"{name:28} {params:>10} {train_error:>12} {base.fmt(e, '.4f'):>26}")
     print("\nheld-out error of each model minus the PCA (paired over the images, 95% bootstrap interval):")
-    for name in by:
+    for name in MODELS:
         mean, low, high = base.interval(errors[name] - errors[f"PCA, {DIM} components"])
         print(f"{name:28} {mean:+.4f} [{low:+.4f}, {high:+.4f}]")
     mean, low, high = base.interval(errors["two hidden layers"] - errors["one hidden layer"])
     print(f"{'two minus one hidden layer':28} {mean:+.4f} [{low:+.4f}, {high:+.4f}]")
+
+    # Question 3: the size d of the code. Held-out error of the PCA and of the two autoencoders, with the training error of the latter.
+    print(f"\nsquared error per pixel against the size d of the code (held-out, mean [95% interval]; training error of the autoencoders in parentheses)")
+    print(f"{'d':>3} {'PCA':>24} {'one hidden layer':>38} {'two hidden layers':>38}   paired differences: one - PCA, two - one")
+    sweep_rows = {}
+    for d in SWEEP_DIMS:
+        pca_d = mean_image + (X_TEST - mean_image) @ vt[:d].T @ vt[:d]
+        e_pca = np.mean((pca_d - X_TEST) ** 2, axis=1)[None]
+        runs = [by["one hidden layer" if d == DIM else f"1 hidden, d = {d}"], by["two hidden layers" if d == DIM else f"2 hidden, d = {d}"]]
+        e_one, e_two = (np.array([r["test"] for r in rs]) for rs in runs)
+        t_one, t_two = (np.mean([r["train"] for r in rs]) for rs in runs)
+        d1, d2 = base.interval(e_one - e_pca), base.interval(e_two - e_one)
+        sweep_rows[d] = (e_pca, e_one, e_two)
+        print(f"{d:>3} {base.fmt(e_pca, '.4f'):>24} {base.fmt(e_one, '.4f') + f' ({t_one:.4f})':>38} {base.fmt(e_two, '.4f') + f' ({t_two:.4f})':>38}"
+              f"   {d1[0]:+.4f} [{d1[1]:+.4f}, {d1[2]:+.4f}]  {d2[0]:+.4f} [{d2[1]:+.4f}, {d2[2]:+.4f}]")
+    # The PCA with as many components as pixels rebuilds everything, and the error of the PCA falls with d.
+    assert sweep_rows[64][0].mean() < 1e-12
+    assert all(sweep_rows[a][0].mean() > sweep_rows[b][0].mean() for a, b in zip(SWEEP_DIMS, SWEEP_DIMS[1:]))
 
     # The claims of the chapter: a nonlinear code of 16 numbers keeps what is needed to rebuild a held-out image, much better than the
     # mean image, and at least as well as the best linear code (the PCA).
