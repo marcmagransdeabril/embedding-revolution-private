@@ -2,7 +2,9 @@
 
 The images are the 8x8 digits bundled with scikit-learn. A positive pair is two augmented views of the same image (a shift of
 at most one pixel and Gaussian noise), the negatives are the other images of the batch. A small encoder (64 -> 128 -> 16, ReLU)
-is trained in numpy with the InfoNCE loss on unit-norm outputs, for several batch sizes N and several seeds. The same encoder is
+is trained in numpy with the InfoNCE loss on unit-norm outputs, for several batch sizes N and several seeds. The notation is the one
+of the chapter: column vectors, weights W_l of shape (outputs, inputs) (so a batch, one image per row, is x @ W.T), the encoders f_x
+and f_y (here the same network), the pre-normalization code z and the unit vectors e_i = f_x(x_i), v_j = f_y(y_j). The same encoder is
 also trained to predict the pixels of the other view with a squared error, through the same 16-dimensional bottleneck.
 Every number is a mean with a 95% bootstrap interval over the seeds and the held-out queries.
 We report, for each embedding and for raw pixels and a PCA of the same dimension, how often the other view of a held-out image is
@@ -51,9 +53,10 @@ def augment(x: np.ndarray, rng: np.random.Generator) -> np.ndarray:
 
 
 def forward(params: dict, x: np.ndarray):
-    """Encoder: x -> relu(x W1 + b1) -> h W2 + b2 = z. Returns the unit-norm embeddings z / ||z|| and what backward needs."""
-    h = np.maximum(0, x @ params["W1"] + params["b1"])
-    z = h @ params["W2"] + params["b2"]
+    """Encoder, for a batch with one image per row: h = relu(W1 x + b1), z = W2 h + b2. Returns the unit-norm vectors z / ||z||
+    and what backward needs."""
+    h = np.maximum(0, x @ params["W1"].T + params["b1"])
+    z = h @ params["W2"].T + params["b2"]
     norm = np.linalg.norm(z, axis=1, keepdims=True)
     return z / norm, (x, h, z, norm)
 
@@ -61,22 +64,23 @@ def forward(params: dict, x: np.ndarray):
 def backward_encoder(params: dict, grads: dict, cache, dz: np.ndarray) -> None:
     """Add to `grads` the gradient of the encoder parameters, given dL/dz."""
     x, h, _, _ = cache
-    dh = (dz @ params["W2"].T) * (h > 0)
-    grads["W2"] += h.T @ dz
+    dh = (dz @ params["W2"]) * (h > 0)  # delta_1 = (W2^T delta_2) * 1[p_1 > 0], one row per image
+    grads["W2"] += dz.T @ h  # dL/dW_l = delta_l a_{l-1}^T, summed over the images
     grads["b2"] += dz.sum(0)
-    grads["W1"] += x.T @ dh
+    grads["W1"] += dh.T @ x
     grads["b1"] += dh.sum(0)
 
 
-def infonce(params: dict, a: np.ndarray, c: np.ndarray):
-    """InfoNCE of the views a (anchors) and c (candidates): the i-th candidate is the positive of the i-th anchor.
+def infonce(params: dict, x: np.ndarray, y: np.ndarray):
+    """InfoNCE of the views x (anchors) and y (candidates): the j-th candidate is the positive of the i-th anchor when j = i.
 
-    Returns the loss in nats and its gradients. With the scores S = <u_a, u_c> / tau, the loss is the softmax cross-entropy
-    of picking the diagonal, so dL/dS = (softmax(S) - I) / N, the same 'predicted minus observed' as in Learning by Prediction.
+    Returns the loss in nats and its gradients. With the unit vectors e_i = f_x(x_i), v_j = f_y(y_j) (rows of e and v) and the scores
+    S_ij = <e_i, v_j> / tau, the loss is the softmax cross-entropy of picking the diagonal, so dL/dS = (softmax(S) - I) / N,
+    the same 'predicted minus observed' as in Learning by Prediction.
     """
-    n = len(a)
-    (ua, cache_a), (uc, cache_c) = forward(params, a), forward(params, c)
-    scores = ua @ uc.T / TAU
+    n = len(x)
+    (e, cache_x), (v, cache_y) = forward(params, x), forward(params, y)
+    scores = e @ v.T / TAU
     scores -= scores.max(1, keepdims=True)
     log_q = scores - np.log(np.exp(scores).sum(1, keepdims=True))
     loss = -np.mean(np.diag(log_q))
@@ -84,32 +88,33 @@ def infonce(params: dict, a: np.ndarray, c: np.ndarray):
     dscores[np.arange(n), np.arange(n)] -= 1
     dscores /= n
     grads = {k: np.zeros_like(v) for k, v in params.items()}
-    for du, cache, u in ((dscores @ uc / TAU, cache_a, ua), (dscores.T @ ua / TAU, cache_c, uc)):
+    for g, cache, u in ((dscores @ v / TAU, cache_x, e), (dscores.T @ e / TAU, cache_y, v)):  # g = dL/de_i, then dL/dv_j
         norm = cache[3]
-        backward_encoder(params, grads, cache, (du - u * (u * du).sum(1, keepdims=True)) / norm)  # through z / ||z||
+        backward_encoder(params, grads, cache, (g - u * (u * g).sum(1, keepdims=True)) / norm)  # through z / ||z||
     return loss, grads
 
 
-def predictor_loss(params: dict, a: np.ndarray, c: np.ndarray):
-    """Squared error per pixel between the pixels of the other view c and a linear read-out of the 16 coordinates z of a."""
-    _, cache = forward(params, a)
+def predictor_loss(params: dict, x: np.ndarray, y: np.ndarray):
+    """Squared error per pixel between the pixels of the other view y and a linear read-out W3 z + b3 of the 16 coordinates z of x."""
+    _, cache = forward(params, x)
     z = cache[2]
-    error = z @ params["W3"] + params["b3"] - c
+    error = z @ params["W3"].T + params["b3"] - y
     loss = np.mean(error ** 2)
     grads = {k: np.zeros_like(v) for k, v in params.items()}
     dpred = 2 * error / error.size
-    grads["W3"], grads["b3"] = z.T @ dpred, dpred.sum(0)
-    backward_encoder(params, grads, cache, dpred @ params["W3"].T)
+    grads["W3"], grads["b3"] = dpred.T @ z, dpred.sum(0)
+    backward_encoder(params, grads, cache, dpred @ params["W3"])
     return loss, grads
 
 
 def train_encoder(kind: str, batch: int, seed: int):
     """Train with Adam for STEPS steps on batches of `batch` training images. Returns the parameters and the final loss."""
     rng = np.random.default_rng(seed)
-    params = {"W1": rng.standard_normal((64, HIDDEN)) / 8, "b1": np.zeros(HIDDEN),
-              "W2": rng.standard_normal((HIDDEN, DIM)) / np.sqrt(HIDDEN), "b2": np.zeros(DIM)}
+    # W_l has shape (outputs, inputs); the draws are those of the (inputs, outputs) layout, transposed, so every seed starts from the same numbers.
+    params = {"W1": (rng.standard_normal((64, HIDDEN)) / 8).T, "b1": np.zeros(HIDDEN),
+              "W2": (rng.standard_normal((HIDDEN, DIM)) / np.sqrt(HIDDEN)).T, "b2": np.zeros(DIM)}
     if kind == "predict":
-        params |= {"W3": rng.standard_normal((DIM, 64)) / np.sqrt(DIM), "b3": np.zeros(64)}
+        params |= {"W3": (rng.standard_normal((DIM, 64)) / np.sqrt(DIM)).T, "b3": np.zeros(64)}
     loss_fn = infonce if kind == "infonce" else predictor_loss
     m = {k: np.zeros_like(v) for k, v in params.items()}
     v = {k: np.zeros_like(p) for k, p in params.items()}
@@ -168,13 +173,13 @@ def run(job):
     kind, batch, seed = job
     params, tail = train_encoder(kind, batch, seed)
     loss = float(tail.mean())
-    ea, eb = (forward(params, view)[1][2] for view in (VIEW_A, VIEW_B))  # z, before the normalization
-    z = np.concatenate([ea, eb])
+    za, zb = (forward(params, view)[1][2] for view in (VIEW_A, VIEW_B))  # z, before the normalization
+    z = np.concatenate([za, zb])
     return dict(kind=kind, batch=batch, seed=seed, loss=loss / LN2 if kind == "infonce" else loss,
                 heldout=heldout_loss(params, batch, seed) / LN2 if kind == "infonce" else None,
-                hits=retrieval(ea, eb), tail=tail / LN2 if kind == "infonce" else tail, alignment=alignment(ea, eb), uniformity=uniformity(ea),
+                hits=retrieval(za, zb), tail=tail / LN2 if kind == "infonce" else tail, alignment=alignment(za, zb), uniformity=uniformity(za),
                 offset=float(np.linalg.norm(z.mean(0)) / np.linalg.norm(z, axis=1).mean()),  # length of the mean vector / mean length
-                views=(ea, eb) if seed == 0 else None)
+                views=(za, zb) if seed == 0 else None)
 
 
 # Two fixed views of every held-out image: the task is to find, for each view in A, the other view of the same image in B.

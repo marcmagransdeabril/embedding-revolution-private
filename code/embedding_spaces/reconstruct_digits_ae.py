@@ -60,7 +60,7 @@ MODELS = {
 def encode(params: dict, x: np.ndarray, arch: str):
     """The 16 coordinates z of x, and what backward needs."""
     if arch == "linear":
-        return x @ params["E"] + params["e"], (x,)
+        return x @ params["W1"].T + params["b1"], (x,)
     cache = base.forward(params, x)[1]
     return cache[2], cache
 
@@ -68,9 +68,9 @@ def encode(params: dict, x: np.ndarray, arch: str):
 def decode(params: dict, z: np.ndarray, arch: str):
     """The 64 pixels reconstructed from z, and what backward needs."""
     if arch == "linear":
-        return z @ params["D"] + params["d"], (z,)
-    h = np.maximum(0, z @ params["W3"] + params["b3"])
-    return h @ params["W4"] + params["b4"], (z, h)
+        return z @ params["W2"].T + params["b2"], (z,)
+    h = np.maximum(0, z @ params["W3"].T + params["b3"])
+    return h @ params["W4"].T + params["b4"], (z, h)
 
 
 def reconstruction_loss(params: dict, arch: str, a: np.ndarray, target: np.ndarray):
@@ -82,15 +82,15 @@ def reconstruction_loss(params: dict, arch: str, a: np.ndarray, target: np.ndarr
     grads = {k: np.zeros_like(v) for k, v in params.items()}
     dout = 2 * error / error.size
     if arch == "linear":
-        grads["D"], grads["d"] = z.T @ dout, dout.sum(0)
-        dz = dout @ params["D"].T
-        grads["E"], grads["e"] = a.T @ dz, dz.sum(0)
+        grads["W2"], grads["b2"] = dout.T @ z, dout.sum(0)
+        dz = dout @ params["W2"]
+        grads["W1"], grads["b1"] = dz.T @ a, dz.sum(0)
     else:
         _, h = dec_cache
-        grads["W4"], grads["b4"] = h.T @ dout, dout.sum(0)
-        dpre = (dout @ params["W4"].T) * (h > 0)
-        grads["W3"], grads["b3"] = z.T @ dpre, dpre.sum(0)
-        base.backward_encoder(params, grads, enc_cache, dpre @ params["W3"].T)
+        grads["W4"], grads["b4"] = dout.T @ h, dout.sum(0)
+        dpre = (dout @ params["W4"]) * (h > 0)
+        grads["W3"], grads["b3"] = dpre.T @ z, dpre.sum(0)
+        base.backward_encoder(params, grads, enc_cache, dpre @ params["W3"])
     return loss, grads
 
 
@@ -99,13 +99,14 @@ def train(model: str, seed: int):
     arch, source, target_kind = MODELS[model]
     rng = np.random.default_rng(seed)
     if arch == "linear":
-        params = {"E": rng.standard_normal((64, DIM)) / 8, "e": np.zeros(DIM),
-                  "D": rng.standard_normal((DIM, 64)) / np.sqrt(DIM), "d": np.zeros(64)}
+        # W_l has shape (outputs, inputs); the draws are those of the (inputs, outputs) layout, transposed (the same numbers per seed).
+        params = {"W1": (rng.standard_normal((64, DIM)) / 8).T, "b1": np.zeros(DIM),
+                  "W2": (rng.standard_normal((DIM, 64)) / np.sqrt(DIM)).T, "b2": np.zeros(64)}
     else:
-        params = {"W1": rng.standard_normal((64, HIDDEN)) / 8, "b1": np.zeros(HIDDEN),
-                  "W2": rng.standard_normal((HIDDEN, DIM)) / np.sqrt(HIDDEN), "b2": np.zeros(DIM),
-                  "W3": rng.standard_normal((DIM, HIDDEN)) / np.sqrt(DIM), "b3": np.zeros(HIDDEN),
-                  "W4": rng.standard_normal((HIDDEN, 64)) / np.sqrt(HIDDEN), "b4": np.zeros(64)}
+        params = {"W1": (rng.standard_normal((64, HIDDEN)) / 8).T, "b1": np.zeros(HIDDEN),
+                  "W2": (rng.standard_normal((HIDDEN, DIM)) / np.sqrt(HIDDEN)).T, "b2": np.zeros(DIM),
+                  "W3": (rng.standard_normal((DIM, HIDDEN)) / np.sqrt(DIM)).T, "b3": np.zeros(HIDDEN),
+                  "W4": (rng.standard_normal((HIDDEN, 64)) / np.sqrt(HIDDEN)).T, "b4": np.zeros(64)}
     m = {k: np.zeros_like(v) for k, v in params.items()}
     v = {k: np.zeros_like(p) for k, p in params.items()}
     for t in range(1, (LINEAR_STEPS if arch == "linear" else STEPS) + 1):
@@ -147,7 +148,7 @@ def run(job):
     if model == "predict the other view":
         params, _ = base.train_encoder("predict", BATCH, seed)
         z_a, z_b = (base.forward(params, view)[1][2] for view in (base.VIEW_A, base.VIEW_B))
-        return dict(model=model, seed=seed, **measures(z_a, z_b, z_a @ params["W3"] + params["b3"]))
+        return dict(model=model, seed=seed, **measures(z_a, z_b, z_a @ params["W3"].T + params["b3"]))
     if model == "InfoNCE, N = 128":
         params, _ = base.train_encoder("infonce", 128, seed)
         z_a, z_b = (base.forward(params, view)[1][2] for view in (base.VIEW_A, base.VIEW_B))
@@ -156,7 +157,7 @@ def run(job):
     z_a, z_b = encode(params, base.VIEW_A, arch)[0], encode(params, base.VIEW_B, arch)[0]
     row = dict(model=model, seed=seed, **measures(z_a, z_b, decode(params, z_a, arch)[0]))
     if model == "linear AE, same view":
-        row["decoder"] = params["D"]
+        row["decoder"] = params["W2"].T  # (16, 64): the rows span the decoder's subspace of pixel space
     return row
 
 

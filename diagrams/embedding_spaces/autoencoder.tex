@@ -1,0 +1,101 @@
+\documentclass[tikz,border=8pt]{standalone}
+\input{../preamble.tex}
+
+% The pixels and the code of the worked example, written by code/embedding_spaces/encoders_digits_diagram.py:
+% \xpix, \xhatpix, \errpix (64 integers each, 0..100), \codepix (16 integers, -100..100), \errmax, \codemax, \lossval.
+\input{autoencoder.inc}
+
+\begin{document}
+\begin{tikzpicture}[
+  unit/.style={circle, draw=aux!70, fill=white, minimum size=0.28cm, inner sep=0pt},
+  hid/.style={unit, draw=basis1!70, fill=lightfill},
+  codeu/.style={unit, draw=highlight!80, fill=highlight!30},
+  outu/.style={unit, draw=basis1!80, fill=basis1!35},
+  wire/.style={aux!45, line width=0.3pt},
+  brace/.style={decorate, decoration={brace, amplitude=4pt}, aux!70, line width=0.5pt},
+]
+
+% An 8x8 image of gray levels #1 (a list of 64 integers, 0..100) with cell #2 and ink colour #3, top-left corner at the origin.
+\newcommand{\pixels}[3]{%
+  \foreach \v [count=\i from 0] in #1 {%
+    \pgfmathtruncatemacro{\r}{int(\i/8)}%
+    \pgfmathtruncatemacro{\c}{mod(\i,8)}%
+    \path[fill=#3!\v, draw=aux!40, line width=0.15pt] ({\c*#2},{-\r*#2}) rectangle ({(\c+1)*#2},{-(\r+1)*#2});%
+  }%
+}
+
+% === Input image (top left) and output image (top right), 8x8 cells of 0.2 cm, centred on the axis of the layers ===
+\begin{scope}[shift={(0,0.8)}]  \pixels{\xpix}{0.2}{black}    \end{scope}
+\begin{scope}[shift={(13.9,0.8)}] \pixels{\xhatpix}{0.2}{black} \end{scope}
+\node[annotation, align=center] at (0.8,-1.85) {$8\times 8$ image\\input $\mathbf{x}$};
+\node[annotation, align=center] at (14.7,-1.85) {$8\times 8$ image\\output $\hat{\mathbf{x}}$};
+
+% === Layers: columns of units, the middle unit stands for the omitted ones ===
+\def\xa{3.4}  \def\xb{5.6}  \def\xc{7.8}  \def\xd{10.0}  \def\xe{12.2}
+\foreach \k/\y in {1/1.1,2/0.55,3/-0.55,4/-1.1}{ \node[unit] (a\k) at (\xa,\y) {}; }
+\foreach \k/\y in {1/1.4,2/0.7,3/-0.7,4/-1.4}{ \node[hid] (b\k) at (\xb,\y) {}; }
+\foreach \k/\y in {1/0.9,2/0.45,3/-0.45,4/-0.9}{ \node[codeu] (c\k) at (\xc,\y) {}; }
+\foreach \k/\y in {1/1.4,2/0.7,3/-0.7,4/-1.4}{ \node[hid] (d\k) at (\xd,\y) {}; }
+\foreach \k/\y in {1/1.1,2/0.55,3/-0.55,4/-1.1}{ \node[outu] (e\k) at (\xe,\y) {}; }
+\foreach \x in {\xa,\xb,\xc,\xd,\xe}{ \node at (\x,0) {$\vdots$}; }
+
+% === Fully connected wires ===
+\foreach \p/\q in {a/b,b/c,c/d,d/e}{
+  \foreach \i in {1,2,3,4}{ \foreach \j in {1,2,3,4}{ \draw[wire] (\p\i) -- (\q\j); } }
+}
+
+% === Flatten and reshape ===
+\draw[flow] (1.95,0) -- (2.85,0);
+\node[annotation] at (2.4,0.3) {flatten};
+\draw[flow] (12.65,0) -- (13.55,0);
+\node[annotation] at (13.1,0.3) {reshape};
+
+% === What each layer computes ===
+\node[annotation, align=center] at (4.5,2.0) {$\mathbf{W}_1\mathbf{x}+\mathbf{b}_1$\\then ReLU};
+\node[annotation, align=center] at (6.7,2.0) {$\mathbf{W}_2\mathbf{h}+\mathbf{b}_2$\\no ReLU};
+\node[annotation, align=center] at (8.9,2.0) {$\mathbf{W}_3\mathbf{z}+\mathbf{b}_3$\\then ReLU};
+\node[annotation, align=center] at (11.1,2.0) {$\mathbf{W}_4(\cdot)+\mathbf{b}_4$\\no ReLU};
+\draw[brace] (3.2,2.6) -- (7.7,2.6) node[midway, above=4pt, annotation] {encoder $f$};
+\draw[brace] (7.9,2.6) -- (12.4,2.6) node[midway, above=4pt, annotation] {decoder $g$};
+
+% === ReLU defined: graph of max(0,a) ===
+\begin{scope}[shift={(0.8,2.0)}]
+  \draw[aux!70, line width=0.4pt] (-0.5,0) -- (0.5,0);
+  \draw[aux!70, line width=0.4pt] (0,-0.1) -- (0,0.55);
+  \draw[basis1, line width=0.9pt] (-0.5,0) -- (0,0) -- (0.5,0.5);
+  \node[annotation] at (0.62,-0.2) {$a$};
+  \node[annotation] at (0.4,-0.55) {$\mathrm{ReLU}(a)=\max(0,a)$};
+\end{scope}
+
+% === Labels below the layers ===
+\node[annotation, align=center] at (\xa,-1.85) {64 pixels\\$\mathbf{x}\in[0,1]^{64}$};
+\node[annotation, align=center] at (\xb,-1.85) {128 hidden\\units $\mathbf{h}$};
+\node[annotation, align=center, text=highlight!60!black] at (\xc,-1.85) {16 coordinates\\the code $\mathbf{z}$};
+\node[annotation, align=center] at (\xd,-1.85) {128 hidden\\units};
+\node[annotation, align=center] at (\xe,-1.85) {64 pixels\\$\hat{\mathbf{x}}$};
+
+% === The 16 numbers of the code of this image: blue if positive, orange if negative, shade = size ===
+\begin{scope}[shift={(6.2,-2.55)}]
+  \foreach \v [count=\i from 0] in \codepix {%
+    \pgfmathtruncatemacro{\a}{abs(\v)}%
+    \ifnum\v<0 \path[fill=highlight!\a, draw=aux!40, line width=0.15pt] ({\i*0.2},0) rectangle ({(\i+1)*0.2},-0.2);%
+    \else \path[fill=basis1!\a, draw=aux!40, line width=0.15pt] ({\i*0.2},0) rectangle ({(\i+1)*0.2},-0.2);\fi%
+  }
+\end{scope}
+\node[annotation, align=center, anchor=north] at (\xc,-2.85) {the code of this image: blue positive,\\orange negative, darkest $=\pm\codemax$};
+
+% === Comparing the output with the input: (output - input)^2 per pixel, then the mean ===
+\node[annotation, align=left, anchor=west] at (0,-4.85) {compare the output\\with the input};
+\begin{scope}[shift={(3.2,-4.0)}]  \pixels{\xhatpix}{0.2}{black} \end{scope}
+\node at (5.3,-4.8) {$-$};
+\begin{scope}[shift={(5.8,-4.0)}]  \pixels{\xpix}{0.2}{black} \end{scope}
+\draw[flow] (7.8,-4.8) -- (8.8,-4.8);
+\node[annotation] at (8.3,-4.5) {squared};
+\begin{scope}[shift={(9.2,-4.0)}]  \pixels{\errpix}{0.2}{highlight} \end{scope}
+\node[annotation, align=center, anchor=north] at (4.0,-5.7) {output $\hat{\mathbf{x}}$};
+\node[annotation, align=center, anchor=north] at (6.6,-5.7) {input $\mathbf{x}$};
+\node[annotation, align=center, anchor=north] at (10.0,-5.7) {squared error per pixel\\(darkest $=\errmax$)};
+\node[align=left, anchor=west, font=\small] at (11.3,-4.8) {$L=\dfrac{1}{64}\lVert\hat{\mathbf{x}}-\mathbf{x}\rVert^2$\\[2pt]$=\lossval$};
+
+\end{tikzpicture}
+\end{document}

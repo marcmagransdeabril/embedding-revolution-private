@@ -8,7 +8,7 @@
   alternative/.style={cell, fill=aux!8},
 ]
 
-% === Score matrix: row i is x_i, column j is y_j ===
+% === Score matrix: row i is x_i (vector e_i), column j is y_j (vector v_j) ===
 % Cell (i,j) sits at x = (j-1)*1.1, y = -(i-1)*1.1. Index 3 stands for the omitted ones.
 \foreach \i/\a in {1/1,2/2,4/N}{
   \foreach \j/\b in {1/1,2/2,4/N}{
@@ -27,26 +27,26 @@
 
 % === Labels: unit vectors of each side ===
 \foreach \j/\b in {1/1,2/2,4/N}{
-  \node at ({(\j-1)*1.1},0.95) {$\mathbf{z}_{\b}$};
-  \node at (-0.95,{-(\j-1)*1.1}) {$\mathbf{u}_{\b}$};
+  \node at ({(\j-1)*1.1},0.95) {$\mathbf{v}_{\b}$};
+  \node at (-0.95,{-(\j-1)*1.1}) {$\mathbf{e}_{\b}$};
 }
 \node at ({2*1.1},0.95) {$\cdots$};
 \node at (-0.95,{-2*1.1}) {$\vdots$};
 
-% === Encoder g (columns) ===
+% === Encoder f_y (columns) ===
 \node (y) at (1.65,3.9) {$y_j$};
-\node[encoder] (g) at (1.65,2.5) {$g$};
-\draw[flow] (y) -- (g);
+\node[encoder] (fy) at (1.65,2.5) {$f_y$};
+\draw[flow] (y) -- (fy);
 \draw[decorate, decoration={brace, amplitude=5pt}, draw=aux] (-0.55,1.35) -- (3.85,1.35);
-\draw[flow] (g) -- (1.65,1.62);
-\node[annotation, right=3pt of g, align=left] {same network\\as $f$ in the\\experiment};
+\draw[flow] (fy) -- (1.65,1.62);
+\node[annotation, right=3pt of fy, align=left] {same network\\as $f_x$ in the\\experiment};
 
-% === Encoder f (rows) ===
+% === Encoder f_x (rows) ===
 \node (x) at (-5.9,-1.6) {$x_i$};
-\node[encoder] (f) at (-4.0,-1.6) {$f$};
-\draw[flow] (x) -- (f);
+\node[encoder] (fx) at (-4.0,-1.6) {$f_x$};
+\draw[flow] (x) -- (fx);
 \draw[decorate, decoration={brace, amplitude=5pt}, draw=aux] (-1.45,-3.75) -- (-1.45,0.55);
-\draw[flow] (f) -- (-1.72,-1.6);
+\draw[flow] (fx) -- (-1.72,-1.6);
 
 % === Softmax over the row of the positive ===
 \draw[highlight, line width=1.2pt, rounded corners=2pt]
@@ -61,7 +61,7 @@
 \node[annotation, right=3pt of la, align=left] {alternatives: other\\images of the batch};
 
 % === Score ===
-\node at (1.65,-4.6) {$s_{ij}=\langle\mathbf{u}_i,\mathbf{z}_j\rangle/\tau$};
+\node at (1.65,-4.6) {$s_{ij}=\langle\mathbf{e}_i,\mathbf{v}_j\rangle/\tau$};
 
 \end{tikzpicture}
 \end{document}

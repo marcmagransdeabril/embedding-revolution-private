@@ -3,23 +3,23 @@
 The 8x8 digits of contrast_digits_infonce.py (imported, not copied: the same 1,200 training and 597 held-out images, the same Adam settings).
 The images are clean here, without augmentation: nothing is paired with anything, the only task is to rebuild the image from the code.
 The encoder is the one of the text, 64 -> 128 (ReLU) -> 16 (no ReLU), and the decoder is its mirror, 16 -> 128 (ReLU) -> 64 (no ReLU),
-trained with the squared error per pixel. The network is written as a list of layers, and the backward pass is the loop of the section:
+trained with the squared error per pixel. The notation is the one of the chapter: column vectors, layers p_l = W_l a_(l-1) + b_l and
+a_l = phi_l(p_l) with W_l of shape (outputs, inputs) (a batch, one image per row, is a @ W.T), the encoder f and the decoder g. The network is written as a list of layers, and the backward pass is the loop of the section:
 each layer receives delta from above, returns the gradient of its weights and passes a new delta down. It is written by hand in numpy
 (no automatic differentiation in the training), and checked before training against central finite differences and against the
 automatic differentiation of PyTorch, which is used for nothing else.
 
 Models (five seeds each, the held-out error is the squared error per pixel with the 95% bootstrap interval over the seeds and the 597
 images, as in contrast_digits_infonce.py):
-  one hidden layer     64 -> 128 -> 16 -> 128 -> 64
-  two hidden layers    64 -> 128 -> 128 -> 16 -> 128 -> 128 -> 64   (question 3: one more layer on each side)
-  linear               64 -> 16 -> 64, the same without any ReLU, trained for ten times more steps (the case of the PCA)
-  ReLU on the code     the first model with a ReLU on the 16 coordinates (question 1)
-and, for question 3, the first two with a code of 2, 4, 8, 32 and 64 coordinates instead of 16.
-References, not trained: the mean image, and the PCA with the same number of components (the best linear code, Eckart-Young).
+  autoencoder          64 -> 128 -> d -> 128 -> 64, for the size of the code d = 2, 4, 8, 16, 32 and 64 (d = 16 is the one of the text)
+  linear               64 -> 16 -> 64, the same without any ReLU, trained for ten times more steps (the case of the PCA; question 2)
+  ReLU on the code     the autoencoder with d = 16 and a ReLU on the 16 coordinates (question 1)
+References, not trained: the PCA with the same number of components d (the best linear code, Eckart-Young), and the mean image, which is
+the PCA with no component (d = 0) and uses no code.
 
-Also printed: the number of parameters and the training error. Saves ../../figures/embedding_spaces/encoders_digits_reconstruction.png:
-one held-out image of each digit (the first of each in the data), and its reconstructions from 16 numbers by the autoencoders with one and
-two hidden layers and by the PCA (the first seed).
+Also printed: the number of parameters, the training error, and the rows of the table of the chapter. Saves
+../../figures/embedding_spaces/encoders_digits_reconstruction.png: one held-out image of each digit (the first of each in the data), and its
+reconstructions by the autoencoder and by the PCA with d = 2, 4, 8 and 16 numbers (the first seed).
 """
 from concurrent.futures import ProcessPoolExecutor
 import os
@@ -38,16 +38,14 @@ import contrast_digits_infonce as base  # data, Adam settings, bootstrap interva
 
 DIM, HIDDEN, STEPS, BATCH, SEEDS, LEARNING_RATE = base.DIM, base.HIDDEN, base.STEPS, base.PREDICTOR_BATCH, base.SEEDS, base.LEARNING_RATE
 X_TRAIN, X_TEST = base.train.reshape(len(base.train), 64), base.test.reshape(len(base.test), 64)
-# name -> (sizes of the encoder, nonlinearity on the 16 coordinates, steps)
+SWEEP_DIMS = [2, 4, 8, 16, 32, 64]  # the size of the code
+# name -> (sizes of the encoder, nonlinearity on the code, steps)
 MODELS = {
-    "one hidden layer": ([64, HIDDEN, DIM], False, STEPS),
-    "two hidden layers": ([64, HIDDEN, HIDDEN, DIM], False, STEPS),
+    "autoencoder": ([64, HIDDEN, DIM], False, STEPS),
     "linear": ([64, DIM], False, 10 * STEPS),
     "ReLU on the 16 coordinates": ([64, HIDDEN, DIM], True, STEPS),
 }
-SWEEP_DIMS = [2, 4, 8, 16, 32, 64]  # question 3: the size of the code
-SWEEP = {f"{depth} hidden, d = {d}": ([64] + [HIDDEN] * depth + [d], False, STEPS)
-         for d in SWEEP_DIMS if d != DIM for depth in (1, 2)}
+SWEEP = {f"d = {d}": ([64, HIDDEN, d], False, STEPS) for d in SWEEP_DIMS if d != DIM}
 ALL = MODELS | SWEEP
 
 
@@ -65,15 +63,16 @@ def layers(sizes: list[int], relu_code: bool) -> list[bool]:
 
 def init(sizes: list[int], rng: np.random.Generator) -> list[dict]:
     full = sizes + sizes[::-1][1:]
-    return [{"W": rng.standard_normal((a, b)) / np.sqrt(a), "b": np.zeros(b)} for a, b in zip(full[:-1], full[1:])]
+    # W has shape (outputs, inputs); the draws are those of the (inputs, outputs) layout, transposed, so every seed starts from the same numbers.
+    return [{"W": (rng.standard_normal((a, b)) / np.sqrt(a)).T, "b": np.zeros(b)} for a, b in zip(full[:-1], full[1:])]
 
 
 def forward(params: list[dict], relu: list[bool], x: np.ndarray):
     """Returns the output, the code (the output of the layer that writes the 16 coordinates) and the inputs of every layer."""
     acts = [x]
     for layer, r in zip(params, relu):
-        z = acts[-1] @ layer["W"] + layer["b"]
-        acts.append(np.maximum(0, z) if r else z)
+        p = acts[-1] @ layer["W"].T + layer["b"]  # the pre-activation p_l of every image (one per row)
+        acts.append(np.maximum(0, p) if r else p)
     return acts[-1], acts
 
 
@@ -84,9 +83,9 @@ def loss_and_grads(params: list[dict], relu: list[bool], x: np.ndarray):
     delta = 2 * error / error.size  # dL / d(output)
     grads = [None] * len(params)
     for i in reversed(range(len(params))):
-        grads[i] = {"W": acts[i].T @ delta, "b": delta.sum(0)}  # the signal from above times the input of the layer
+        grads[i] = {"W": delta.T @ acts[i], "b": delta.sum(0)}  # dL/dW_l = delta_l a_(l-1)^T: the signal from above times the input of the layer
         if i > 0:
-            delta = delta @ params[i]["W"].T  # the signal passed down...
+            delta = delta @ params[i]["W"]  # the signal passed down, W_l^T delta_l...
             if relu[i - 1]:
                 delta = delta * (acts[i] > 0)  # ...through the ReLU of the layer below, if it has one
     return float(np.mean(error ** 2)), grads
@@ -95,7 +94,7 @@ def loss_and_grads(params: list[dict], relu: list[bool], x: np.ndarray):
 def gradient_check(seed: int = 0) -> float:
     """Largest relative difference between the backpropagated gradient and central finite differences, on random weights."""
     rng = np.random.default_rng(seed)
-    sizes = MODELS["two hidden layers"][0]
+    sizes = MODELS["autoencoder"][0]
     relu = layers(sizes, False)
     params = init(sizes, rng)
     x = X_TRAIN[:8]
@@ -121,7 +120,7 @@ def autograd_check(seed: int = 0) -> float:
     import torch
 
     rng = np.random.default_rng(seed)
-    sizes = MODELS["two hidden layers"][0]
+    sizes = MODELS["autoencoder"][0]
     relu = layers(sizes, False)
     params = init(sizes, rng)
     x = X_TRAIN[:8]
@@ -129,7 +128,7 @@ def autograd_check(seed: int = 0) -> float:
     tensors = [{k: torch.tensor(v, dtype=torch.float64, requires_grad=True) for k, v in layer.items()} for layer in params]
     a = torch.tensor(x, dtype=torch.float64)
     for layer, r in zip(tensors, relu):
-        a = a @ layer["W"] + layer["b"]
+        a = a @ layer["W"].T + layer["b"]
         a = torch.relu(a) if r else a
     ((a - torch.tensor(x, dtype=torch.float64)) ** 2).mean().backward()
     zero = torch.zeros(1, requires_grad=True)
@@ -157,7 +156,7 @@ def train(job):
     out_test = forward(params, relu, X_TEST)[0]
     out_train = forward(params, relu, X_TRAIN)[0]
     return dict(name=name, seed=seed, test=np.mean((out_test - X_TEST) ** 2, axis=1), train=float(np.mean((out_train - X_TRAIN) ** 2)),
-                out=out_test, out_train=out_train, parameters=sum(v.size for layer in params for v in layer.values()))
+                out=out_test, out_train=out_train, params=params, parameters=sum(v.size for layer in params for v in layer.values()))
 
 
 if __name__ == "__main__":
@@ -174,59 +173,69 @@ if __name__ == "__main__":
 
     mean_image = X_TRAIN.mean(0)
     _, _, vt = np.linalg.svd(X_TRAIN - mean_image, full_matrices=False)
-    pca_out = mean_image + (X_TEST - mean_image) @ vt[:DIM].T @ vt[:DIM]
-    errors = {"mean image": np.mean((mean_image - X_TEST) ** 2, axis=1)[None], f"PCA, {DIM} components": np.mean((pca_out - X_TEST) ** 2, axis=1)[None]}
-    errors |= {name: np.array([r["test"] for r in rs]) for name, rs in by.items() if name in MODELS}
-    print(f"\n{len(X_TRAIN)} training images, {len(X_TEST)} held-out images; squared error per pixel of the held-out images, "
+
+    def pca(d: int) -> np.ndarray:
+        """Reconstruction of the held-out images from their first d principal components (d = 0 is the mean image)."""
+        return mean_image + (X_TEST - mean_image) @ vt[:d].T @ vt[:d]
+
+    def per_image(out: np.ndarray) -> np.ndarray:
+        return np.mean((out - X_TEST) ** 2, axis=1)
+
+    def runs(d: int) -> list[dict]:
+        return by["autoencoder" if d == DIM else f"d = {d}"]
+
+    pca_error = {d: per_image(pca(d))[None] for d in [0] + SWEEP_DIMS}  # one row: nothing is trained
+    ae_error = {d: np.array([r["test"] for r in runs(d)]) for d in SWEEP_DIMS}  # one row per seed
+    ae_train = {d: float(np.mean([r["train"] for r in runs(d)])) for d in SWEEP_DIMS}
+    print(f"{len(X_TRAIN)} training images, {len(X_TEST)} held-out images; squared error per pixel of the held-out images, "
           f"mean [95% bootstrap interval over the {len(SEEDS)} seeds and the images]")
-    print(f"{'':28} {'parameters':>10} {'train error':>12} {'held-out error':>26}")
-    for name, e in errors.items():
+
+    # The table of the chapter: the error against the size d of the code, the PCA with the same number of components as reference.
+    print("\n| $d$ | PCA | autoencoder | autoencoder minus PCA | autoencoder, training error | parameters |")
+    print(f"| 0 (mean image) | {base.fmt(pca_error[0], '.4f')} | | | | |")
+    for d in SWEEP_DIMS:
+        mean, low, high = base.interval(ae_error[d] - pca_error[d])
+        print(f"| {d} | {base.fmt(pca_error[d], '.4f')} | {base.fmt(ae_error[d], '.4f')} | {mean:+.4f} [{low:+.4f}, {high:+.4f}] "
+              f"| {ae_train[d]:.4f} | {runs(d)[0]['parameters']:,} |")
+
+    # The other models of the questions, all with d = 16.
+    other = {name: np.array([r["test"] for r in by[name]]) for name in MODELS if name != "autoencoder"}
+    print(f"\n{'':28} {'parameters':>10} {'train error':>12} {'held-out error':>26}   minus the PCA, d = {DIM}")
+    for name, e in ({"autoencoder": ae_error[DIM]} | other | {f"PCA, {DIM} components": pca_error[DIM]}).items():
         params = f"{by[name][0]['parameters']:,}" if name in by else ""
         train_error = f"{np.mean([r['train'] for r in by[name]]):.4f}" if name in by else ""
-        print(f"{name:28} {params:>10} {train_error:>12} {base.fmt(e, '.4f'):>26}")
-    print("\nheld-out error of each model minus the PCA (paired over the images, 95% bootstrap interval):")
-    for name in MODELS:
-        mean, low, high = base.interval(errors[name] - errors[f"PCA, {DIM} components"])
-        print(f"{name:28} {mean:+.4f} [{low:+.4f}, {high:+.4f}]")
-    mean, low, high = base.interval(errors["two hidden layers"] - errors["one hidden layer"])
-    print(f"{'two minus one hidden layer':28} {mean:+.4f} [{low:+.4f}, {high:+.4f}]")
+        diff = ""
+        if name in by:
+            mean, low, high = base.interval(e - pca_error[DIM])
+            diff = f"{mean:+.4f} [{low:+.4f}, {high:+.4f}]"
+        print(f"{name:28} {params:>10} {train_error:>12} {base.fmt(e, '.4f'):>26}   {diff}")
 
-    # Question 3: the size d of the code. Held-out error of the PCA and of the two autoencoders, with the training error of the latter.
-    print(f"\nsquared error per pixel against the size d of the code (held-out, mean [95% interval]; training error of the autoencoders in parentheses)")
-    print(f"{'d':>3} {'PCA':>24} {'one hidden layer':>38} {'two hidden layers':>38}   paired differences: one - PCA, two - one")
-    sweep_rows = {}
-    for d in SWEEP_DIMS:
-        pca_d = mean_image + (X_TEST - mean_image) @ vt[:d].T @ vt[:d]
-        e_pca = np.mean((pca_d - X_TEST) ** 2, axis=1)[None]
-        runs = [by["one hidden layer" if d == DIM else f"1 hidden, d = {d}"], by["two hidden layers" if d == DIM else f"2 hidden, d = {d}"]]
-        e_one, e_two = (np.array([r["test"] for r in rs]) for rs in runs)
-        t_one, t_two = (np.mean([r["train"] for r in rs]) for rs in runs)
-        d1, d2 = base.interval(e_one - e_pca), base.interval(e_two - e_one)
-        sweep_rows[d] = (e_pca, e_one, e_two)
-        print(f"{d:>3} {base.fmt(e_pca, '.4f'):>24} {base.fmt(e_one, '.4f') + f' ({t_one:.4f})':>38} {base.fmt(e_two, '.4f') + f' ({t_two:.4f})':>38}"
-              f"   {d1[0]:+.4f} [{d1[1]:+.4f}, {d1[2]:+.4f}]  {d2[0]:+.4f} [{d2[1]:+.4f}, {d2[2]:+.4f}]")
-    # The PCA with as many components as pixels rebuilds everything, and the error of the PCA falls with d.
-    assert sweep_rows[64][0].mean() < 1e-12
-    assert all(sweep_rows[a][0].mean() > sweep_rows[b][0].mean() for a, b in zip(SWEEP_DIMS, SWEEP_DIMS[1:]))
+    # The claims of the chapter: the error of the PCA falls with d to 0 at d = 64, a nonlinear code of 16 numbers rebuilds a held-out image
+    # much better than the mean image, and better than the best linear code (the PCA).
+    assert pca_error[64].mean() < 1e-12
+    assert all(pca_error[a].mean() > pca_error[b].mean() for a, b in zip([0] + SWEEP_DIMS, SWEEP_DIMS))
+    assert ae_error[DIM].mean() < 0.5 * pca_error[0].mean()
+    assert base.interval(ae_error[DIM] - pca_error[DIM])[2] < 0
 
-    # The claims of the chapter: a nonlinear code of 16 numbers keeps what is needed to rebuild a held-out image, much better than the
-    # mean image, and at least as well as the best linear code (the PCA).
-    assert errors["one hidden layer"].mean() < 0.5 * errors["mean image"].mean()
-    assert base.interval(errors["one hidden layer"] - errors[f"PCA, {DIM} components"])[2] < 0
-
-    # Figure: one held-out image of each digit (the first of each in the data), and its reconstruction from 16 numbers.
+    # Figure: one held-out image of each digit (the first of each in the data), and its reconstruction from d numbers by the autoencoder
+    # (the first seed) and by the PCA, for d = 2, 4, 8 and 16.
     base.FIGURES.mkdir(parents=True, exist_ok=True)
     picks = [int(np.argmax(base.labels_test == digit)) for digit in range(10)]
-    rows = [("held-out image", X_TEST), ("one hidden layer", by["one hidden layer"][0]["out"]),
-            ("two hidden layers", by["two hidden layers"][0]["out"]), (f"PCA, {DIM}", pca_out)]
-    fig, axes = plt.subplots(len(rows), len(picks), figsize=(6.4, 2.8), gridspec_kw=dict(hspace=0.08, wspace=0.08))
+    shown = [2, 4, 8, 16]
+    rows = [("held-out image", X_TEST)]
+    for d in shown:
+        rows += [(f"autoencoder, $d={d}$", runs(d)[0]["out"]), (f"PCA, $d={d}$", pca(d))]
+    # Layout in inches: each image is 0.15 in wide (as in encoders_digits_sample.py), on a pitch of 0.3 in in both directions (as much padding as image, no frame).
+    image, pitch, left = 0.15, 0.3, 1.1
+    width, height = left + len(picks) * pitch, len(rows) * pitch
+    fig = plt.figure(figsize=(width, height))
     for r, (title, imgs) in enumerate(rows):
         for c, i in enumerate(picks):
-            ax = axes[r, c]
+            ax = fig.add_axes([(left + c * pitch + (pitch - image) / 2) / width, (height - (r + 1) * pitch + (pitch - image) / 2) / height,
+                               image / width, image / height])
             ax.imshow(np.clip(imgs[i], 0, 1).reshape(8, 8), cmap="gray_r", vmin=0, vmax=1)
-            ax.set_xticks([])
-            ax.set_yticks([])
+            ax.axis("off")
             if c == 0:
-                ax.set_ylabel(title, rotation=0, ha="right", va="center", fontsize=7)
+                fig.text((left - 0.04) / width, (height - (r + 0.5) * pitch) / height, title, ha="right", va="center", fontsize=6)
     fig.savefig(base.FIGURES / "encoders_digits_reconstruction.png", dpi=300, bbox_inches="tight")
     print(f"\nsaved {(base.FIGURES / 'encoders_digits_reconstruction.png').resolve()}")
