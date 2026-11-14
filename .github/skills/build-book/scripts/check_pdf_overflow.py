@@ -2,7 +2,9 @@
 """Fail when the PDF build has a line, a formula or a table that sticks out of the text block.
 
 LaTeX does not stop on these: it prints `Overfull \\hbox (12.3pt too wide)` in the log and goes on, and the formula or the table
-runs into the margin or off the page. `_quarto.yml` asks Quarto to keep the LaTeX log (`latex-clean: false`), and this script
+runs into the margin or off the page. The same for a page that does not fit: `Overfull \\vbox (276pt too high) has occurred while
+\\output is active` means that a float (a figure) and the text around it could not be laid out, and the text after the float can
+be lost from the PDF. This is always an error above the limit. `_quarto.yml` asks Quarto to keep the LaTeX log (`latex-clean: false`), and this script
 reads it after `make pdf`. An overflow larger than --max-pt (default 5 pt, a bit less than the outer margin of 54 pt, so
 anything smaller is invisible) is an error. The report gives the size, the page, and the start of the offending line.
 
@@ -15,6 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 OVERFULL = re.compile(r"^Overfull \\hbox \(([\d.]+)pt too wide\)(.*)$")
+OVERFULL_V = re.compile(r"^Overfull \\vbox \(([\d.]+)pt too high\) has occurred while \\output is active")
 PAGE = re.compile(r"\[(\d+)(?=[\s\]]|$)")  # a page that was shipped out: [53] or [53 (the closing bracket comes lines later)
 
 
@@ -31,6 +34,11 @@ def overflows(log: Path):
     lines = log.read_text(errors="replace").splitlines()
     page, pdf_page, i = 0, 0, 0
     while i < len(lines):
+        vertical = OVERFULL_V.match(lines[i])
+        if vertical:
+            yield float(vertical.group(1)), page, pdf_page, "(a page that does not fit: text can be lost)", ""
+            i += 1
+            continue
         match = OVERFULL.match(lines[i])
         if match:
             where = match.group(2).strip() or "in a box"
@@ -57,9 +65,10 @@ def main() -> int:
     for size, page, pdf_page, where, excerpt in sorted(found, key=lambda f: -f[0]):
         if size > args.max_pt or args.list_all:
             flag = "ERROR" if size > args.max_pt else "minor"
-            print(f"{flag}: {size:.1f}pt too wide, after page [{page}] (PDF page {pdf_page + 1}) {where}\n         {excerpt}", file=sys.stderr)
+            direction = "too high" if "does not fit" in where else "too wide"
+            print(f"{flag}: {size:.1f}pt {direction}, after page [{page}] (PDF page {pdf_page + 1}) {where}\n         {excerpt}", file=sys.stderr)
     if bad:
-        print(f"\nERROR: {len(bad)} formula(s), table(s) or line(s) stick out of the text block by more than {args.max_pt:g}pt "
+        print(f"\nERROR: {len(bad)} formula(s), table(s), line(s) or page(s) stick out of the text block by more than {args.max_pt:g}pt "
               f"in {log.name}. Split the formula (aligned), narrow the table (relative column widths in the separator row) "
               f"or rephrase.", file=sys.stderr)
         return 1
