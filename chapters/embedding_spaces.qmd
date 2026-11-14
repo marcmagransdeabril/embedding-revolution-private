@@ -442,10 +442,10 @@ $$
 
 where $\sigma(t) = 1/(1+e^{-t})$ is the *logistic function*. The logistic function appears because $e^{\lambda_c}$ is the odds of a real pair against a noise pair. Notice that $\ln(k P_n(c))$ plays the role that $\ln P(c)$ played before, a log-frequency that is subtracted from the score, with the difference that here it is known, since we chose $P_n$, and it need not be learned. Also notice that the sum over the vocabulary is gone. A candidate is judged against the noise probability of itself alone, and not against all the others.
 
-*The loss.* The labels give a likelihood to maximize, as in the box on cross-entropy, now with two outcomes. The model gives probability $\sigma(\lambda_c)$ to the label 1 of the real pair and $1 - \sigma(\lambda_{c\'_i})$ to the label 0 of each noise pair. Minus the logarithm of the probability of all the labels is the loss of the pair,
+*The loss.* The labels give a likelihood to maximize, as in the box on cross-entropy, now with two outcomes. The model gives probability $\sigma(\lambda_c)$ to the label 1 of the real pair and $1 - \sigma(\lambda_{c'_i})$ to the label 0 of each noise pair. Minus the logarithm of the probability of all the labels is the loss of the pair,
 
 $$
-\ell_{w,c} = -\ln \sigma(\lambda_c) - \sum_{i=1}^{k} \ln\bigl(1 - \sigma(\lambda_{c\'_i})\bigr),
+\ell_{w,c} = -\ln \sigma(\lambda_c) - \sum_{i=1}^{k} \ln\bigl(1 - \sigma(\lambda_{c'_i})\bigr),
 $$
 
 which involves $k+1$ vectors $\mathbf{v}$ and the vector $\mathbf{e}_w$, whatever the size of the vocabulary.
@@ -455,14 +455,14 @@ which involves $k+1$ vectors $\mathbf{v}$ and the vector $\mathbf{e}_w$, whateve
 $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{v}_c} = \bigl(\sigma(\lambda_c)-1\bigr)\,\mathbf{e}_w,
 \qquad
-\frac{\partial \ell_{w,c}}{\partial \mathbf{v}_{c'_i}} = \sigma(\lambda_{c\'_i})\,\mathbf{e}_w,
+\frac{\partial \ell_{w,c}}{\partial \mathbf{v}_{c'_i}} = \sigma(\lambda_{c'_i})\,\mathbf{e}_w,
 \qquad
-\frac{\partial \ell_{w,c}}{\partial \mathbf{e}_w} = \bigl(\sigma(\lambda_c)-1\bigr)\,\mathbf{v}_c + \sum_{i=1}^{k} \sigma(\lambda_{c\'_i})\,\mathbf{v}_{c'_i}.
+\frac{\partial \ell_{w,c}}{\partial \mathbf{e}_w} = \bigl(\sigma(\lambda_c)-1\bigr)\,\mathbf{v}_c + \sum_{i=1}^{k} \sigma(\lambda_{c'_i})\,\mathbf{v}_{c'_i}.
 $$
 
 *(Note: If $c = c'_i$ for any $i$, the gradients for that vector sum together).*
 
-Compare these gradients with those of the softmax. The descent step on $\mathbf{e}_w$ is again a pull towards the observed neighbour, with weight $1 - \sigma(\lambda_c)$, the probability that the model failed to give to the pair being real, and a push away from the noise neighbours, each with weight $\sigma(\lambda_{c\'_i})$, the probability that the model gave to a noise pair being real. The softmax pushed away from $\sum_{k'} Q(k' \mid w)\,\mathbf{v}_{k'}$, the average of the vectors of the whole vocabulary under the model, which needs all of them. Here the average is replaced by the $k$ noise vectors that happened to be drawn, which is a sample of it. Only $k+1$ rows of $\mathbf{V}$ change at each step, not $|\mathcal{V}|$. There is also a difference. The derivatives of the softmax with respect to the scores add up to zero, since adding a constant to all the scores changes nothing. Here they add up to $(\sigma(\lambda_c) - 1) + \sum_i \sigma(\lambda_{c\'_i})$, which is not zero in general, because each candidate is judged on its own and raising all the scores together is no longer free. This is the mechanism by which the normalization is learned. A word whose scores are too high is told so by the noise pairs, and one whose scores are too low by the real pairs.
+Compare these gradients with those of the softmax. The descent step on $\mathbf{e}_w$ is again a pull towards the observed neighbour, with weight $1 - \sigma(\lambda_c)$, the probability that the model failed to give to the pair being real, and a push away from the noise neighbours, each with weight $\sigma(\lambda_{c'_i})$, the probability that the model gave to a noise pair being real. The softmax pushed away from $\sum_{k'} Q(k' \mid w)\,\mathbf{v}_{k'}$, the average of the vectors of the whole vocabulary under the model, which needs all of them. Here the average is replaced by the $k$ noise vectors that happened to be drawn, which is a sample of it. Only $k+1$ rows of $\mathbf{V}$ change at each step, not $|\mathcal{V}|$. There is also a difference. The derivatives of the softmax with respect to the scores add up to zero, since adding a constant to all the scores changes nothing. Here they add up to $(\sigma(\lambda_c) - 1) + \sum_i \sigma(\lambda_{c'_i})$, which is not zero in general, because each candidate is judged on its own and raising all the scores together is no longer free. This is the mechanism by which the normalization is learned. A word whose scores are too high is told so by the noise pairs, and one whose scores are too low by the real pairs.
 
 Where does the descent lead? For a fixed word $w$, the loss averaged over the corpus counts each real neighbour with frequency $P(c \mid w)$ and each noise neighbour $k$ times with frequency $P_n(c)$,
 

@@ -4,7 +4,7 @@ The same corpus, the same pairs, the same 1,000,000 iterations of plain stochast
 size that decreases linearly from 0.1 to 0) and the same five seeds as prediction_toy_softmax.py, which is imported and not copied. The
 softmax predictor is trained there, with d = 5. Here the contrastive model is trained with d = 5 coordinates and one learned constant
 a_w per word (the extra coordinate of the text), K = 5 noise neighbours per pair drawn with the frequency of the neighbour, and the loss
-of the text, -ln sigma(z_c) - sum_i ln(1 - sigma(z_i)) with z = <e_w, v_c> + a_w - ln(K P_n(c)).
+of the text, -ln sigma(lam_c) - sum_i ln(1 - sigma(lam_i)) with lam = <e_w, v_c> + a_w - ln(K P_n(c)).
 
 Both models are judged by the same number: the cross-entropy of the softmax of their scores over the whole vocabulary, in bits per
 pair, which the contrastive model never computes while training. For the contrastive model we also report how far its scores are from
@@ -45,8 +45,8 @@ cdf = np.cumsum(p_c)
 seen = counts > 0
 
 
-def sigmoid(z: np.ndarray) -> np.ndarray:
-    return 1 / (1 + np.exp(-z))
+def sigmoid(t: np.ndarray) -> np.ndarray:
+    return 1 / (1 + np.exp(-t))
 
 
 def nce_step(e: np.ndarray, v: np.ndarray, a: np.ndarray, words: np.ndarray, neighbours: np.ndarray, noise: np.ndarray,
@@ -55,11 +55,11 @@ def nce_step(e: np.ndarray, v: np.ndarray, a: np.ndarray, words: np.ndarray, nei
     of the candidates is the real one. Only the K + 1 rows of v of each pair change, not the whole vocabulary."""
     cand = np.concatenate([neighbours[:, None], noise], axis=1)  # (pairs, K + 1)
     e_w, v_c = e[words], v[cand]
-    z = np.einsum("pd,pkd->pk", e_w, v_c) + a[words][:, None] - log_kpn[cand]
-    g = sigmoid(z)
-    g[:, 0] -= 1  # sigma(z) - label
-    np.add.at(e, words, -eta * np.einsum("pk,pkd->pd", g, v_c))  # dl/de_w = (sigma(z_c) - 1) v_c + sum_i sigma(z_i) v_i
-    np.add.at(v, cand, -eta * g[:, :, None] * e_w[:, None, :])  # dl/dv = (sigma(z) - label) e_w
+    lam = np.einsum("pd,pkd->pk", e_w, v_c) + a[words][:, None] - log_kpn[cand]  # the log-odds lambda of the text
+    g = sigmoid(lam)
+    g[:, 0] -= 1  # sigma(lambda) - label
+    np.add.at(e, words, -eta * np.einsum("pk,pkd->pd", g, v_c))  # dl/de_w = (sigma(lam_c) - 1) v_c + sum_i sigma(lam_i) v_i
+    np.add.at(v, cand, -eta * g[:, :, None] * e_w[:, None, :])  # dl/dv = (sigma(lam) - label) e_w
     np.add.at(a, words, -eta * g.sum(1))  # the constant a_w is the coordinate of e_w that multiplies a 1 in v
 
 
