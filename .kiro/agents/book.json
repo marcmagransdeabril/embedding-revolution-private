@@ -1,6 +1,6 @@
 {
   "name": "book",
-  "description": "Default book-writing agent: loads the repo skills and gates git commits on a review-doc pass over changed tests.",
+  "description": "Default book-writing agent: loads the repo skills and, after book changes are committed, asks for a review-doc pass on those changes.",
   "prompt": null,
   "tools": ["*"],
   "resources": [

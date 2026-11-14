@@ -4,6 +4,7 @@ The images are the 8x8 digits bundled with scikit-learn. A positive pair is two 
 at most one pixel and Gaussian noise), the negatives are the other images of the batch. A small encoder (64 -> 128 -> 16, ReLU)
 is trained in numpy with the InfoNCE loss on unit-norm outputs, for several batch sizes N and several seeds. The same encoder is
 also trained to predict the pixels of the other view with a squared error, through the same 16-dimensional bottleneck.
+Every number is a mean with a 95% bootstrap interval over the seeds and the held-out queries.
 We report, for each embedding and for raw pixels and a PCA of the same dimension, how often the other view of a held-out image is
 the nearest of all the held-out views (retrieval, after centring the vectors), the alignment and the uniformity of Wang and Isola, and, for InfoNCE, the loss and
 the bound log2 N - loss on the mutual information between the two views. Saves the two figures used in the chapter to
@@ -26,6 +27,7 @@ from sklearn.datasets import load_digits
 from sklearn.neighbors import KNeighborsClassifier
 
 BATCHES, SEEDS, STEPS = [2, 8, 32, 128], range(5), 2000
+BOOTSTRAP = 5000  # resamples of the percentile bootstrap behind every 95% interval
 PREDICTOR_BATCH = 128  # the predictor has no negatives, so the batch size only sets how many images it sees per step
 DIM, HIDDEN, TAU, NOISE, LEARNING_RATE, TAIL = 16, 128, 0.2, 0.15, 1e-3, 200  # TAIL: last steps averaged for the loss
 LN2 = float(np.log(2))  # training uses natural logarithms (nats); the results are reported in bits = nats / ln 2
@@ -120,21 +122,21 @@ def train_encoder(kind: str, batch: int, seed: int):
             m[k] = 0.9 * m[k] + 0.1 * grads[k]
             v[k] = 0.999 * v[k] + 0.001 * grads[k] ** 2
             params[k] -= LEARNING_RATE * (m[k] / (1 - 0.9 ** t)) / (np.sqrt(v[k] / (1 - 0.999 ** t)) + 1e-8)
-    return params, float(np.mean(losses[-TAIL:]))
+    return params, np.array(losses[-TAIL:])
 
 
 def unit(x: np.ndarray) -> np.ndarray:
     return x / np.linalg.norm(x, axis=1, keepdims=True)
 
 
-def retrieval(a: np.ndarray, b: np.ndarray) -> float:
-    """Fraction of the rows i for which the row of b most similar (cosine) to a[i] is b[i].
+def retrieval(a: np.ndarray, b: np.ndarray) -> np.ndarray:
+    """For each row i, whether the row of b most similar (cosine) to a[i] is b[i] (the mean of this vector is the retrieval).
 
     The vectors are centred first, on the mean of all the held-out views, for every method alike: a shared offset (the predictor's
     vectors put 96% of their norm in it) would otherwise make all the cosines high and handicap the method that has one.
     """
     mean = np.concatenate([a, b]).mean(0)
-    return float(np.mean(np.argmax(unit(a - mean) @ unit(b - mean).T, axis=1) == np.arange(len(a))))
+    return np.argmax(unit(a - mean) @ unit(b - mean).T, axis=1) == np.arange(len(a))
 
 
 def alignment(a: np.ndarray, b: np.ndarray) -> float:
@@ -164,12 +166,13 @@ def heldout_loss(params: dict, batch: int, seed: int, batches: int = 100) -> flo
 
 def run(job):
     kind, batch, seed = job
-    params, loss = train_encoder(kind, batch, seed)
+    params, tail = train_encoder(kind, batch, seed)
+    loss = float(tail.mean())
     ea, eb = (forward(params, view)[1][2] for view in (VIEW_A, VIEW_B))  # z, before the normalization
     z = np.concatenate([ea, eb])
     return dict(kind=kind, batch=batch, seed=seed, loss=loss / LN2 if kind == "infonce" else loss,
                 heldout=heldout_loss(params, batch, seed) / LN2 if kind == "infonce" else None,
-                retrieval=retrieval(ea, eb), alignment=alignment(ea, eb), uniformity=uniformity(ea),
+                hits=retrieval(ea, eb), tail=tail / LN2 if kind == "infonce" else tail, alignment=alignment(ea, eb), uniformity=uniformity(ea),
                 offset=float(np.linalg.norm(z.mean(0)) / np.linalg.norm(z, axis=1).mean()),  # length of the mean vector / mean length
                 views=(ea, eb) if seed == 0 else None)
 
@@ -178,9 +181,26 @@ def run(job):
 VIEW_A, VIEW_B = augment(test, np.random.default_rng(1)), augment(test, np.random.default_rng(2))
 
 
-def fmt(x, f, spread=True):
-    x = np.asarray(x)
-    return f"{x.mean():{f}} [{x.min():{f}}, {x.max():{f}}]" if spread else f"{x.mean():{f}}"
+def interval(x, rng=np.random.default_rng(12345)):
+    """Mean and 95% percentile-bootstrap interval of x, an array of shape (runs, items) or (runs,).
+
+    Two levels of resampling, as the two sources of noise are different: the runs (seeds: initialization and training batches) are drawn
+    with replacement, and then the items inside each drawn run (the 597 held-out queries, or the last training steps) too. With one run
+    (raw pixels, PCA: nothing is trained) only the items are resampled. With five runs the interval is itself approximate, and a
+    bootstrap of five seeds is known to be narrow, so the intervals are a guide to the size of the noise and not an exact coverage.
+    """
+    x = np.asarray(x, dtype=float)
+    x = x[:, None] if x.ndim == 1 else x
+    runs, items = x.shape
+    pick_run = rng.integers(0, runs, (BOOTSTRAP, runs))
+    pick_item = rng.integers(0, items, (BOOTSTRAP, runs, items))
+    means = x[pick_run[:, :, None], pick_item].mean(axis=(1, 2))
+    return x.mean(), *np.percentile(means, [2.5, 97.5])
+
+
+def fmt(x, f):
+    mean, low, high = interval(x)
+    return f"{mean:{f}} [{low:{f}}, {high:{f}}]"
 
 
 if __name__ == "__main__":
@@ -196,50 +216,61 @@ if __name__ == "__main__":
         results = list(pool.map(run, jobs))
 
     baselines = {"raw pixels": (VIEW_A, VIEW_B), f"PCA, {DIM} dimensions": (pca(VIEW_A), pca(VIEW_B))}
-    rows = {name: dict(retrieval=[retrieval(a, b)], alignment=[alignment(a, b)], uniformity=[uniformity(a)])
+    rows = {name: dict(hits=retrieval(a, b)[None], alignment=[alignment(a, b)], uniformity=[uniformity(a)])
             for name, (a, b) in baselines.items()}
-    raw = rows["raw pixels"]["retrieval"][0]
     groups = {"predict the other view": [r for r in results if r["kind"] == "predict"]}
     groups |= {f"InfoNCE, N = {n}": [r for r in results if r["kind"] == "infonce" and r["batch"] == n] for n in BATCHES}
     for name, rs in groups.items():
-        rows[name] = {k: [r[k] for r in rs] for k in ("retrieval", "alignment", "uniformity", "offset")}
+        rows[name] = {k: np.array([r[k] for r in rs]) for k in ("hits", "alignment", "uniformity", "offset")}
+        rows[name]["tail"] = np.array([r["tail"] for r in rs])
+    raw = rows["raw pixels"]["hits"].mean()
 
-    print(f"\n{'':24} {'loss (bits)':>18} {'bound (bits)':>18} {'retrieval':>20} {'alignment':>10} {'uniformity':>11} {'offset':>7}"
-          f"   (mean [min, max] over {len(SEEDS)} seeds)")
+    def retrieval_of(name):
+        return interval(rows[name]["hits"])
+
+    print(f"\n{'':24} {'loss (bits)':>22} {'bound (bits)':>22} {'retrieval':>24} {'alignment':>22} {'uniformity':>22} {'offset':>22}"
+          f"   (mean [95% bootstrap interval], {len(SEEDS)} seeds x {len(test)} queries)")
     for name, r in rows.items():
-        cells, note = ["", ""], None
+        cells = ["", ""]
         if name.startswith("InfoNCE"):
             n = int(name.split("= ")[1])
-            loss = np.array([x["loss"] for x in groups[name]])
-            assert loss.min() >= 0 and (np.log2(n) - loss).max() <= np.log2(n)  # the bound can never exceed log2 N
-            cells = [fmt(loss, ".2f"), fmt(np.log2(n) - loss, ".2f")]
+            cells = [fmt(r["tail"], ".2f"), fmt(np.log2(n) - r["tail"], ".2f")]
+            assert r["tail"].min() >= 0 and (np.log2(n) - r["tail"].mean(1)).max() <= np.log2(n)  # the bound can never exceed log2 N
+        print(f"{name:24} {cells[0]:>22} {cells[1]:>22} {fmt(r['hits'], '.1%'):>24} {fmt(r['alignment'], '.2f'):>22} "
+              f"{fmt(r['uniformity'], '.2f'):>22} {(fmt(r['offset'], '.2f') if 'offset' in r else ''):>22}")
+        if name.startswith("InfoNCE"):
             held = np.array([x["heldout"] for x in groups[name]])
-            note = (f"{'':24} bound on held-out images: {np.log2(n) - held.mean():.2f} bits "
-                    f"(differs from the training bound by {abs(held.mean() - loss.mean()):.2f})")
-        print(f"{name:24} {cells[0]:>18} {cells[1]:>18} {fmt(r['retrieval'], '.1%'):>20} "
-              f"{np.mean(r['alignment']):>10.2f} {np.mean(r['uniformity']):>11.2f} {(f"{np.mean(r['offset']):.2f}" if 'offset' in r else ''):>7}")
-        if note:
-            print(note)
-    # With the largest batch, every seed beats the raw pixels (the claim of the section).
-    assert min(rows[f"InfoNCE, N = {BATCHES[-1]}"]["retrieval"]) > raw
+            print(f"{'':24} bound on held-out images: {np.log2(n) - held.mean():.2f} bits "
+                  f"(differs from the training bound by {abs(held.mean() - r['tail'].mean()):.2f})")
+    # The methods are scored on the same 597 queries, so their difference with the raw pixels is bootstrapped on pairs, which is tighter
+    # than comparing two separate intervals.
+    print("\nretrieval minus raw pixels (percentage points, paired 95% bootstrap interval):")
+    for name, r in rows.items():
+        if name != "raw pixels":
+            mean, low, high = interval(r["hits"].astype(float) - rows["raw pixels"]["hits"])
+            print(f"{name:24} {100 * mean:+.1f} [{100 * low:+.1f}, {100 * high:+.1f}]")
+    # With the largest batch, every seed beats the raw pixels (the claim of the section), and the 95% interval of the mean excludes it.
+    largest = rows[f"InfoNCE, N = {BATCHES[-1]}"]["hits"]
+    assert largest.mean(1).min() > raw and retrieval_of(f"InfoNCE, N = {BATCHES[-1]}")[1] > interval(rows["raw pixels"]["hits"])[2]
 
-    # Figure 1: (a) the bound against log2 N, under its cap; (b) the retrieval against the batch size.
+    # Figure 1: (a) the bound against log2 N, under its cap; (b) the retrieval against the batch size. Error bars and bands: 95% intervals.
     FIGURES.mkdir(parents=True, exist_ok=True)
     logs = np.log2(BATCHES)
-    bound = np.array([[np.log2(n) - x["loss"] for x in groups[f"InfoNCE, N = {n}"]] for n in BATCHES])
-    found = np.array([rows[f"InfoNCE, N = {n}"]["retrieval"] for n in BATCHES])
+    bound = [interval(np.log2(n) - rows[f"InfoNCE, N = {n}"]["tail"]) for n in BATCHES]
+    found = [retrieval_of(f"InfoNCE, N = {n}") for n in BATCHES]
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6.4, 2.6))
     ax1.plot([0, 7.5], [0, 7.5], "--", color="gray", linewidth=0.8, label=r"cap $\log_2 N$")
-    ax1.errorbar(logs, bound.mean(1), [bound.mean(1) - bound.min(1), bound.max(1) - bound.mean(1)], marker="o", markersize=3,
-                 linewidth=1, color="C3", label=r"bound $\log_2 N - \ell_N$")
+    mean, low, high = np.array(bound).T
+    ax1.errorbar(logs, mean, [mean - low, high - mean], marker="o", markersize=3, linewidth=1, capsize=2, color="C3",
+                 label=r"bound $\log_2 N - \ell_N$")
     ax1.set(xlabel=r"$\log_2 N$ (bits)", ylabel="bits", title="(a) the bound under its cap")
     ax1.legend(fontsize=6)
-    ax2.errorbar(BATCHES, found.mean(1), [found.mean(1) - found.min(1), found.max(1) - found.mean(1)], marker="o", markersize=3,
-                 linewidth=1, color="C3", label="InfoNCE")
-    for name, color in (("raw pixels", "C0"), (f"PCA, {DIM} dimensions", "C2")):
-        ax2.axhline(rows[name]["retrieval"][0], color=color, linewidth=0.8, linestyle=":", label=name)
-    ax2.axhline(np.mean(rows["predict the other view"]["retrieval"]), color="C1", linewidth=0.8, linestyle="--",
-                label="predict the other view")
+    mean, low, high = np.array(found).T
+    ax2.errorbar(BATCHES, mean, [mean - low, high - mean], marker="o", markersize=3, linewidth=1, capsize=2, color="C3", label="InfoNCE")
+    for name, color, style in (("raw pixels", "C0", ":"), (f"PCA, {DIM} dimensions", "C2", ":"), ("predict the other view", "C1", "--")):
+        mean, low, high = retrieval_of(name)
+        ax2.axhline(mean, color=color, linewidth=0.8, linestyle=style, label=name)
+        ax2.axhspan(low, high, color=color, alpha=0.15, linewidth=0)
     ax2.set(xscale="log", xlabel="batch size $N$", ylabel="retrieval of the other view", title="(b) retrieval")
     ax2.set_xticks(BATCHES, [str(n) for n in BATCHES])
     ax2.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
