@@ -1,5 +1,5 @@
 # SKELETON: not implemented, skipped by `make test-code` (see notes/ideas.qmd, idea 13).
-"""Learning by Predicting Embeddings: a joint-embedding predictive model on the toy of Learning by Contrast.
+"""Learning by Predicting Embeddings: a joint-embedding predictive model on the toy of Learning by Contrast: Anything.
 
 Same data, split, augmentation, dimension and measures as contrast_digits_infonce.py, which is imported, not copied.
 

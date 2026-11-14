@@ -40,22 +40,33 @@ def loss(e: np.ndarray, v: np.ndarray) -> float:
     return float(-(counts * log_softmax(e @ v.T)).sum() / n)
 
 
-def train(args: tuple[int, int]) -> tuple[np.ndarray, np.ndarray]:
+def sgd_step(e: np.ndarray, v: np.ndarray, words: np.ndarray, neighbours: np.ndarray, eta: float) -> None:
+    """One step of size eta against the gradient of the summed loss of the pairs (words[i], neighbours[i])."""
+    e_w = e[words]
+    q = np.exp(log_softmax(e_w @ v.T))  # Q(. | w) for each pair
+    q[np.arange(len(neighbours)), neighbours] -= 1  # Q(c' | w) - delta_{c'c}
+    np.add.at(e, words, -eta * (q @ v))  # dl/de_w = sum_c' (Q(c' | w) - delta_{c'c}) v_c'
+    v -= eta * (q.T @ e_w)  # dl/dv_c' = (Q(c' | w) - delta_{c'c}) e_w, summed over the pairs
+
+
+def train_curve(seed: int, d: int, checkpoints: tuple = ()) -> tuple[np.ndarray, np.ndarray, list]:
     """Plain SGD: at each iteration draw one sentence at random, with repetition, and take one step of size eta
-    against the gradient of the loss of its pairs; eta decreases linearly from LEARNING_RATE to 0."""
-    seed, d = args
+    against the gradient of the loss of its pairs; eta decreases linearly from LEARNING_RATE to 0.
+    Returns e, v and the loss (nats per pair, whole corpus) after each iteration number listed in `checkpoints`."""
     rng = np.random.default_rng(seed)
     e = 0.1 * rng.standard_normal((len(vocab), d))
     v = 0.1 * rng.standard_normal((len(vocab), d))
-    for t, s in enumerate(rng.integers(len(SENTENCES), size=ITERATIONS)):
-        words, neighbours = SENTENCE_PAIRS[s]
-        eta = LEARNING_RATE * (1 - t / ITERATIONS)
-        e_w = e[words]
-        q = np.exp(log_softmax(e_w @ v.T))  # Q(. | w) for each pair of the sentence
-        q[np.arange(len(neighbours)), neighbours] -= 1  # Q(c' | w) - delta_{c'c}
-        np.add.at(e, words, -eta * (q @ v))  # dl/de_w = sum_c' (Q(c' | w) - delta_{c'c}) v_c'
-        v -= eta * (q.T @ e_w)  # dl/dv_c' = (Q(c' | w) - delta_{c'c}) e_w, summed over the pairs
-    return e, v
+    curve = []
+    for t, s in enumerate(rng.integers(len(SENTENCES), size=ITERATIONS), start=1):
+        sgd_step(e, v, *SENTENCE_PAIRS[s], LEARNING_RATE * (1 - (t - 1) / ITERATIONS))
+        if t in checkpoints:
+            curve.append(loss(e, v))
+    return e, v, curve
+
+
+def train(args: tuple[int, int]) -> tuple[np.ndarray, np.ndarray]:
+    """The trained vectors of train_curve for (seed, d)."""
+    return train_curve(*args)[:2]
 
 
 def cos(e: np.ndarray, a: str, b: str) -> float:

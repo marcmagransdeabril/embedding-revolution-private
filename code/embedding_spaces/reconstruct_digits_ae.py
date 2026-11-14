@@ -1,10 +1,10 @@
-"""Learning by Reconstruction: the toy of Learning by Contrast, with autoencoders instead of InfoNCE.
+"""Learning by Reconstruction: the toy of Learning by Contrast: Anything, with autoencoders instead of InfoNCE.
 
 The data (the 8x8 digits, 1,200 training and 597 held-out images), the augmentation (a shift of at most one pixel and Gaussian noise
 of 0.15), the 16-dimensional code, the Adam settings, the two fixed held-out views and every measure are those of
 contrast_digits_infonce.py, which is imported and not copied. Six reconstructive models, five seeds each:
 
-  predict the other view   the model of Learning by Contrast: encoder 64 -> 128 -> 16, linear read-out of the 16 coordinates (imported)
+  predict the other view   the model of Learning by Contrast: Anything: encoder 64 -> 128 -> 16, linear read-out of the 16 coordinates (imported)
   linear AE, same view     64 -> 16 -> 64, no nonlinearity, input and target the same augmented view (the Eckart-Young case)
   linear AE, other view    the same, the target is the other augmented view of the image
   AE, other view           64 -> 128 -> 16 -> 128 -> 64, the target is the other view (the 'predict' model with a nonlinear decoder)

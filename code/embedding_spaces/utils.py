@@ -110,6 +110,18 @@ def truncated_svd(m: np.ndarray, d: int) -> np.ndarray:
     return u[:, :d] * s[:d]
 
 
+def bootstrap_interval(x: np.ndarray, resamples: int = 5000, level: float = 0.95, seed: int = 12345) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Mean over the first axis of x (the runs: seeds) and the percentile-bootstrap interval of that mean, resampling the runs
+    with replacement, elementwise over the other axes. With five runs the interval is a guide to the size of the noise, narrow
+    rather than exact."""
+    x = np.asarray(x, dtype=float)
+    pick = np.random.default_rng(seed).integers(0, len(x), (resamples, len(x)))
+    means = x[pick].mean(axis=1)  # (resamples, ...)
+    tail = 100 * (1 - level) / 2
+    low, high = np.percentile(means, [tail, 100 - tail], axis=0)
+    return x.mean(axis=0), low, high
+
+
 def cosine(u: np.ndarray, v: np.ndarray) -> float:
     """Cosine of the angle between u and v (0 if one of them is the zero vector)."""
     n = np.linalg.norm(u) * np.linalg.norm(v)

@@ -1,4 +1,4 @@
-"""Learning by Contrast, question 3: InfoNCE on images, with no vocabulary and no labels.
+"""Learning by Contrast: Anything, question 3: InfoNCE on images, with no vocabulary and no labels.
 
 The images are the 8x8 digits bundled with scikit-learn. A positive pair is two augmented views of the same image (a shift of
 at most one pixel and Gaussian noise), the negatives are the other images of the batch. A small encoder (64 -> 128 -> 16, ReLU)
