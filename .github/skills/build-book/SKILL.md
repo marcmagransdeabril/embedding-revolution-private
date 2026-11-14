@@ -138,6 +138,12 @@ Audits `index.qmd` and all chapter `.qmd` files for structural correctness:
 9. **Flat sections**: no heading deeper than `##` outside code fences (warning); see "Sections are flat" below.
 10. **Section length**: no numbered section of 8 pages or more, about 3,200 words of running text (warning, to discuss with the author); see "Sections are less than 8 pages" below.
 
+### 5. `check_pdf_overflow.py` — Overflow Check (runs at the end of `make pdf`)
+LaTeX only warns (`Overfull \hbox`) about a display formula, a table or a line wider than the text block, and still writes the PDF. `_quarto.yml` sets `latex-clean: false` for the pdf format so that the LaTeX log (`index.log`, git-ignored) is kept, and `make pdf` ends with this script (also `make check-overflow`), which **fails the build on any overflow above 5 pt** (the outer margin is 54 pt; smaller ones, such as the page numbers of the table of contents, are invisible). It reports the size, the page and the start of the line.
+- A display formula that is too wide: split it with `\begin{aligned} ... \\ ... \end{aligned}` (one relation per line), never with `\qquad` on one line.
+- A table that is too wide: Pandoc takes the column widths from the number of dashes of the separator row when a row is longer than 72 characters, so give the first column and the wide columns more dashes (`|:----------|:----:|`), and shorten the headers.
+- An inline formula that is too wide (a long tuple): move it to a display.
+
 ---
 
 ## Chapter Authoring Guide

@@ -16,7 +16,7 @@ CODE_SKELETONS := $(shell grep -l '^\# SKELETON' $(wildcard code/*/*.py) 2>/dev/
 CODE_SCRIPTS := $(filter-out $(CODE_HELPERS) $(CODE_SKELETONS),$(wildcard code/*/*.py))
 CODE_STAMPS  := $(CODE_SCRIPTS:code/%.py=.code-tests/%.ok)
 
-.PHONY: help all book pdf html epub diagrams sync-chapters sync-solutions test-code validate validate-citations status durability check preview clean
+.PHONY: help all book pdf check-overflow html epub diagrams sync-chapters sync-solutions test-code validate validate-citations status durability check preview clean
 
 # Default target
 all: book
@@ -28,7 +28,8 @@ help:
 	@echo " make book              - Run code tests, then build HTML and PDF book (O'Reilly 7in x 9.1875in)"
 	@echo " make diagrams          - Compile the TikZ diagrams in diagrams/*/*.tex to PDF (PDF book) and PNG (HTML, EPUB)"
 	@echo " make test-code         - Run the solution scripts in code/ that changed since their last pass"
-	@echo " make pdf               - Build PDF book (O'Reilly 7in x 9.1875in)"
+	@echo " make pdf               - Build PDF book (O'Reilly 7in x 9.1875in); fails if a formula, table or line sticks out of the text block"
+	@echo " make check-overflow    - Check the LaTeX log of the last PDF build for such overflows"
 	@echo " make html              - Build interactive multi-page HTML book"
 	@echo " make epub              - Build EPUB 3 ebook"
 	@echo " make sync-chapters     - Auto-discover chapters/*.qmd and update _quarto.yml"
@@ -110,7 +111,15 @@ endef
 
 pdf: diagrams sync-chapters sync-solutions
 	@echo "==> Building PDF Book (O'Reilly Format 7in x 9.1875in)..."
+	@rm -f index.log
 	$(call render,pdf)
+	@$(MAKE) --no-print-directory check-overflow
+
+# LaTeX only warns (`Overfull \hbox`) about a formula, a table or a line wider than the text block, and the PDF is written anyway.
+# `latex-clean: false` in _quarto.yml keeps the log, and the script fails the build on an overflow above 5pt (about the margin).
+check-overflow:
+	@echo "==> Checking the PDF for formulas, tables and lines that stick out of the text block..."
+	@$(VENV_PYTHON) .github/skills/build-book/scripts/check_pdf_overflow.py
 
 html: diagrams sync-chapters sync-solutions
 	@echo "==> Building Multi-Page HTML Book..."
@@ -127,5 +136,5 @@ preview: sync-solutions
 clean:
 	@echo "==> Cleaning build artifacts..."
 	@rm -rf _book _freeze .quarto .code-tests
-	@rm -f index.tex index.pdf chapters/*.html chapters/*.tex
+	@rm -f index.tex index.pdf index.log index.aux index.toc The-Embedding-Revolution.tex chapters/*.html chapters/*.tex
 	@echo "==> Clean complete."

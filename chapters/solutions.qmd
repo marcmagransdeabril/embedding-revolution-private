@@ -177,7 +177,16 @@ solutions there; `make validate` fails if this file is out of date.
         print(sigmoid(x @ train(x)).round(3))  # probability for each of the five words
     ```
 
-    For `dawn`, `dusk`, `king`, `queen` and `xqzv` the script gives the probabilities $(0.996, \mathbf{0.5}, 0.004, 0.004, \mathbf{0.5})$ with one-hot inputs and $(0.997, \mathbf{0.984}, 0.001, 0.001, \mathbf{0.812})$ with dense inputs, after 500 passes with a learning rate of 0.5. The exact values depend on these choices. Without a bias the training data are separable, so the weights keep growing and the probabilities keep moving towards 0 or 1 the longer we train, but the pattern of the answers does not change. With one-hot vectors the weights $w_{\text{dusk}}$ and $w_{\text{xqzv}}$ never move from 0, since no training example has a 1 in those coordinates, so the model has learned nothing about them and answers $\sigma(0) = 0.5$ for both. With dense vectors the model learns a positive weight on "time of day" and negative ones on "person" and "royal", and `dusk` inherits the answer because it shares the first feature with `dawn`. This is transfer: what is learned about one word moves to the words that are close to it. The price is that the same mechanism acts on `xqzv`, which means nothing. Its noise vector projects onto the learned weights and the model answers $0.812$, an arbitrary value with no more meaning than the noise. Transfer is only as good as the vectors, which is why the rest of the chapter is about where they come from.
+    For `dawn`, `dusk`, `king`, `queen` and `xqzv` the script gives the probabilities, after 500 passes with a learning rate of 0.5,
+
+    $$
+    \begin{aligned}
+    \text{one-hot inputs:} \quad & (0.996,\ \mathbf{0.5},\ 0.004,\ 0.004,\ \mathbf{0.5}), \\
+    \text{dense inputs:} \quad & (0.997,\ \mathbf{0.984},\ 0.001,\ 0.001,\ \mathbf{0.812}).
+    \end{aligned}
+    $$
+
+    The exact values depend on these choices. Without a bias the training data are separable, so the weights keep growing and the probabilities keep moving towards 0 or 1 the longer we train, but the pattern of the answers does not change. With one-hot vectors the weights $w_{\text{dusk}}$ and $w_{\text{xqzv}}$ never move from 0, since no training example has a 1 in those coordinates, so the model has learned nothing about them and answers $\sigma(0) = 0.5$ for both. With dense vectors the model learns a positive weight on "time of day" and negative ones on "person" and "royal", and `dusk` inherits the answer because it shares the first feature with `dawn`. This is transfer: what is learned about one word moves to the words that are close to it. The price is that the same mechanism acts on `xqzv`, which means nothing. Its noise vector projects onto the learned weights and the model answers $0.812$, an arbitrary value with no more meaning than the noise. Transfer is only as good as the vectors, which is why the rest of the chapter is about where they come from.
 
 11. Relabelling the words permutes the rows of the matrix of vectors, and the distances between the new rows are those of the old ones with their labels permuted. The script `onehot_renaming.py` loops over `itertools.permutations(range(5))` and confirms that `distances(E[list(perm)])` equals `distances(E)` for all 120 of them. This holds in general. A permutation of the coordinates of $\mathbb{R}^{|\mathcal{V}|}$ is an isometry, and permuting the words of a one-hot basis is the same as permuting the coordinates. In the dense table, exchanging `dawn` and `king` changes the distance between `dawn` and `dusk` from $0.80$ to $1.85$, because `dawn` now has the vector of a king. The one-hot geometry cannot tell a correct assignment of words from a scrambled one, so it contains no information about which word is which except for identity. It is the geometry of alpha-equivalence, in which `customer_balance` and `x7` are interchangeable. A representation that can contain meaning must be sensitive to this exchange, since the words keep their use while their vectors are swapped, and `dawn` still appears with `breaks`, not with `wears`.
 
@@ -283,7 +292,7 @@ solutions there; `make validate` fails if this file is out of date.
 5. The script `counting_eckart_young.py` computes the error and checks the identity with `np.isclose`, and compares it with the projection $\mathbf{Q}\mathbf{Q}^\top\mathbf{M}$ onto 1,000 random $d$-dimensional subspaces ($\mathbf{Q}$ comes from a QR decomposition of a Gaussian matrix):
 
     | $d$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
-    |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    |:----------------------|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
     | $\|\mathbf{M}-\mathbf{M}_d\|_F$ | 11.93 | 10.74 | 9.56 | 8.24 | 7.05 | 6.13 | 5.07 | 3.86 |
     | best random subspace | 12.31 | 11.60 | 11.18 | 10.48 | 9.85 | 9.33 | 8.65 | 7.97 |
     | cosine(`dawn`, `dusk`) | 1.000 | 0.999 | 0.997 | 0.997 | 0.997 | 0.478 | 0.103 | 0.041 |

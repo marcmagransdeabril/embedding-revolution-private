@@ -60,6 +60,8 @@ format:
     - filters/book-typography.lua
   pdf:
     output-file: The-Embedding-Revolution.pdf
+    latex-clean: false
+    keep-tex: true
     documentclass: scrbook
     classoption:
     - openany

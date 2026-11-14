@@ -16,3 +16,8 @@ diagrams/**/*.log
 
 /.luarc.json
 .code-tests/
+
+# LaTeX intermediates kept by `latex-clean: false` (the log is read by make check-overflow)
+/index.aux
+/index.log
+/index.toc

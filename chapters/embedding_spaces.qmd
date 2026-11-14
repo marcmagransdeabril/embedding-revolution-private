@@ -231,7 +231,7 @@ This is the first embedding in this book computed from a real text rather than w
 19. The script `counting_eckart_young.py` computes the error and checks the identity with `np.isclose`, and compares it with the projection $\mathbf{Q}\mathbf{Q}^\top\mathbf{M}$ onto 1,000 random $d$-dimensional subspaces ($\mathbf{Q}$ comes from a QR decomposition of a Gaussian matrix):
 
     | $d$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
-    |:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+    |:----------------------|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
     | $\|\mathbf{M}-\mathbf{M}_d\|_F$ | 11.93 | 10.74 | 9.56 | 8.24 | 7.05 | 6.13 | 5.07 | 3.86 |
     | best random subspace | 12.31 | 11.60 | 11.18 | 10.48 | 9.85 | 9.33 | 8.65 | 7.97 |
     | cosine(`dawn`, `dusk`) | 1.000 | 0.999 | 0.997 | 0.997 | 0.997 | 0.478 | 0.103 | 0.041 |
@@ -297,13 +297,17 @@ $$
 $$
 4. The scores depend on the vectors through $x_{wk} = \sum_j (\mathbf{e}_w)_j (\mathbf{v}_k)_j$, which is linear in each vector, so $\partial x_{wk} / \partial \mathbf{e}_w = \mathbf{v}_k$ and $\partial x_{wk} / \partial \mathbf{v}_{c'} = \delta_{kc'}\,\mathbf{e}_w$. The vector $\mathbf{v}_{c'}$ takes part in the score of $c'$ and in no other. Since $\ell$ depends on the vectors only through the scores, the chain rule gives $\partial \ell / \partial \boldsymbol{\theta} = \sum_{k} (\partial \ell / \partial x_{wk})\,(\partial x_{wk} / \partial \boldsymbol{\theta})$ for any parameter vector $\boldsymbol{\theta}$. The vector $\mathbf{v}_{c'}$ affects a single score, so the sum collapses to the term $k = c'$. The vector $\mathbf{e}_w$ affects every score, so all the terms survive, and the delta keeps only $k = c$ in the second part:
 $$
-\frac{\partial \ell}{\partial \mathbf{v}_{c'}} = \bigl(Q(c' \mid w) - \delta_{c'c}\bigr)\,\mathbf{e}_w, \qquad
-\frac{\partial \ell}{\partial \mathbf{e}_w} = \sum_{k} \bigl(Q(k \mid w) - \delta_{kc}\bigr)\,\mathbf{v}_k = -\mathbf{v}_c + \sum_{k} Q(k \mid w)\,\mathbf{v}_k.
+\begin{aligned}
+\frac{\partial \ell}{\partial \mathbf{v}_{c'}} &= \bigl(Q(c' \mid w) - \delta_{c'c}\bigr)\,\mathbf{e}_w, \\
+\frac{\partial \ell}{\partial \mathbf{e}_w} &= \sum_{k} \bigl(Q(k \mid w) - \delta_{kc}\bigr)\,\mathbf{v}_k = -\mathbf{v}_c + \sum_{k} Q(k \mid w)\,\mathbf{v}_k.
+\end{aligned}
 $$
 5. A gradient descent step with learning rate $\eta$ moves every vector against its gradient:
 $$
-\mathbf{e}_w \leftarrow \mathbf{e}_w + \eta\Bigl(\mathbf{v}_c - \sum_{k} Q(k \mid w)\,\mathbf{v}_k\Bigr), \qquad
-\mathbf{v}_{c'} \leftarrow \mathbf{v}_{c'} - \eta\,\bigl(Q(c' \mid w) - \delta_{c'c}\bigr)\,\mathbf{e}_w \quad \text{for every } c' \in \mathcal{V}.
+\begin{aligned}
+\mathbf{e}_w &\leftarrow \mathbf{e}_w + \eta\Bigl(\mathbf{v}_c - \sum_{k} Q(k \mid w)\,\mathbf{v}_k\Bigr), \\
+\mathbf{v}_{c'} &\leftarrow \mathbf{v}_{c'} - \eta\,\bigl(Q(c' \mid w) - \delta_{c'c}\bigr)\,\mathbf{e}_w \quad \text{for every } c' \in \mathcal{V}.
+\end{aligned}
 $$
 
 The derivatives with respect to all the scores add up to $1 - 1 = 0$, as they must, because adding a constant to every score leaves $Q$ unchanged (and properly normalized). Gradient descent then raises the score of the observed neighbour in proportion to the probability that the model failed to give it, and lowers the scores of the others in proportion to the probability that the model gave them.
@@ -660,7 +664,7 @@ This is again an instance of the same pattern: a cheaper objective per step reac
 A small experiment, at a toy scale, checks these claims on a signal with no vocabulary. The images are the 8×8 digits bundled with scikit-learn. A positive pair is two augmented views of the same image (a shift of at most one pixel and Gaussian noise), the negatives are the other images of the batch, and a small encoder (the one of @fig-encoder-mlp) is trained with InfoNCE and no labels, for the batch sizes $N = 2, 8, 32$ and $128$ and five seeds each. It is compared with raw pixels, with a PCA of the same dimension, and with the same encoder trained to predict the pixels of the other view with a squared error (a model with a linear decoder, the simplest of the reconstructive models, which Learning by Reconstruction takes up below). The embeddings are judged by retrieval, the fraction of held-out images whose other view is the nearest of all the held-out views, and not by label accuracy. It asks whether the bound rises and the vectors spread out as $N$ grows, and whether this beats predicting the pixels. @tbl-contrast-digits gives the results, @fig-contrast-bound draws the bound under its cap $\log_2 N$, and @fig-contrast-cosines draws the cosines between views. Exercise 3 below reproduces them.
 
 | | loss (bits) | bound (bits) | retrieval | alignment | uniformity | offset |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|
+|:------------|:--------:|:--------:|:----------:|:---------:|:---------:|:------:|
 | raw pixels | | | 11.1% [8.5, 13.6] | 0.76 | −1.62 | |
 | PCA, 16 dimensions | | | 10.2% [7.9, 12.7] | 1.44 | −2.81 | |
 | predict the other view | | | 13.9% [12.2, 15.4] | 0.03 | −0.28 | 0.96 |
