@@ -100,7 +100,7 @@ SECTION_WORD_LIMIT = 3200  # 8 printed pages at the ~400 words per page of the O
 
 def validate_section_length(path: Path, text: str) -> list[ValidationIssue]:
     """Warn on a numbered section longer than SECTION_WORD_LIMIT words. A section is less than 8 pages, read in one sitting; one that is longer is discussed with the author, not cut by the tool. The count is of
-    the running text: it leaves out code, display math, callouts, questions and answers, which are not part of the reading."""
+    the running text: it leaves out code, display math, callouts, questions, answers, figures, tables and their captions: only the words of uninterrupted attention count."""
     issues: list[ValidationIssue] = []
     lines = text.splitlines()
     heads = [i for i, ln in enumerate(lines) if re.match(r"^## \S", ln)]
@@ -123,6 +123,8 @@ def validate_section_length(path: Path, text: str) -> list[ValidationIssue]:
                     depth += 1
             elif re.match(r"^:::+\s*\{[^}]*\.(callout[\w-]*|questions|answers)\b", stripped):
                 depth, skipping = 1, True
+            elif re.match(r"^(!\[|\||: )", stripped):
+                continue  # a figure and its caption, a table row, a table caption: the eye leaves the running text
             else:
                 kept.append(ln)
         words = len(" ".join(kept).split())
