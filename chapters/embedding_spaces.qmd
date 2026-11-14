@@ -456,7 +456,7 @@ $$
 
 where $\sigma(t) = 1/(1+e^{-t})$ is the *logistic function*. The logistic function appears because $e^{\lambda_c}$ is the odds of a real pair against a noise pair. Notice that $\ln(k P_n(c))$ plays the role that $\ln P(c)$ played before, a log-frequency that is subtracted from the score, with the difference that here it is known, since we chose $P_n$, and it need not be learned. Also notice that the sum over the vocabulary is gone. A candidate is judged against the noise probability of itself alone, and not against all the others.
 
-*The loss.* The labels give a likelihood to maximize, as in the box on cross-entropy, now with two outcomes. The question is a classifier: for each candidate the model gives probability $\sigma(\lambda)$ to the label 1 and $1 - \sigma(\lambda)$ to the label 0. It gives probability $\sigma(\lambda_c)$ to the label 1 of the real pair and $1 - \sigma(\lambda_{c'_i})$ to the label 0 of each noise pair. Taking the $k+1$ labels as independent, which is what defines the loss, the probability that the model gives to all of them is
+*The loss.* The real/noise labels give a likelihood to maximize, as in the box on cross-entropy, now with two outcomes. It is a binary classification problem. For each candidate the model gives probability $\sigma(\lambda)$ to the label 1 and $1 - \sigma(\lambda)$ to the label 0. It gives probability $\sigma(\lambda_c)$ to the label 1 of the real pair and $1 - \sigma(\lambda_{c'_i})$ to the label 0 of each noise pair. Taking the $k+1$ labels as independent, which is what defines the loss, the probability that the model gives to all of them is
 
 $$
 \sigma(\lambda_c)\prod_{i=1}^{k}\bigl(1 - \sigma(\lambda_{c'_i})\bigr).
@@ -470,7 +470,7 @@ $$
 
 which involves $k+1$ vectors $\mathbf{v}$ and the vector $\mathbf{e}_w$, whatever the size of the vocabulary.
 
-*The gradient.* The chain rule goes as in step 4 of the box on cross-entropy, with a simpler first link. The derivative of the logistic function is $\sigma'(t) = \sigma(t)\bigl(1-\sigma(t)\bigr)$, so $\frac{d}{dt}\bigl(-\ln\sigma(t)\bigr) = -\bigl(1-\sigma(t)\bigr) = \sigma(t) - 1$ and $\frac{d}{dt}\bigl(-\ln(1-\sigma(t))\bigr) = \sigma(t)$. In both cases the derivative with respect to a score is *what the model predicted minus what happened*, $\sigma(t) - \text{label}$, as it was for the softmax, $Q(c' \mid w) - \delta_{c'c}$. The scores are still dot products, so $\partial \lambda_c / \partial \mathbf{v}_c = \mathbf{e}_w$ and $\partial \lambda_c / \partial \mathbf{e}_w = \mathbf{v}_c$, and differentiating the loss with respect to the embeddings yields the following gradients:
+*The gradient.* Differentiating the loss with respect to the embeddings yields the following gradients:
 
 $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{v}_c} = \bigl(\sigma(\lambda_c)-1\bigr)\,\mathbf{e}_w,
