@@ -209,7 +209,7 @@ if __name__ == "__main__":
     FIGURES.mkdir(parents=True, exist_ok=True)
     fig, ax = plt.subplots(figsize=(4.6, 3.0))
     for k, name in enumerate(n for n in names if not n.startswith("InfoNCE")):
-        ax.scatter([r["err_clean"] for r in by[name]], [r["retrieval"] for r in by[name]], s=14, color=f"C{k}", label=name)
+        ax.scatter([r["err_clean"] for r in by[name]], [r["retrieval"].mean() for r in by[name]], s=14, color=f"C{k}", label=name)
     ax.axhline(np.mean([r["retrieval"] for r in i]), color="C3", linewidth=0.8, linestyle="--", label="InfoNCE, N = 128 (no decoder)")
     ax.set(xlabel="held-out squared error to the clean image, per pixel", ylabel="retrieval of the other view")
     ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
