@@ -428,11 +428,25 @@ We build the loss in four steps: a model, the question it answers, a loss functi
 
 *The model.* The previous section kept the score $s_c = \langle \mathbf{e}_w, \mathbf{v}_c \rangle$ of each neighbour and turned the exponentials of the scores into probabilities by dividing by their sum over the vocabulary. Here we keep the score and drop the division. The model for the probability of a neighbour is the unnormalized $e^{s_c}$, which costs one dot product. This model is not a probability distribution yet, since its values over the vocabulary do not add up to one for $w$. But the vectors have room to learn the missing normalization. If every $\mathbf{v}_c$ has an extra coordinate equal to 1, then $\mathbf{e}_w$ has a coordinate that adds a constant $a_w$ to all the scores of the word $w$, and it can take the value $-\ln \sum_{c'} e^{s_{c'}}$ that the softmax computed by brute force. Whether training finds it is decided below.
 
-*The question.* Each real pair $(w,c)$ of the text comes with $k$ noise neighbours $c'_1,\dots,c'_k$, drawn independently from a noise distribution $P_n$ that we can sample and evaluate, for example the frequency of the words in the text. We label the real pair 1 and the $k$ noise pairs 0, so that one candidate in $k+1$ is real. A candidate $c$ for the word $w$ is real with weight $1 \cdot P(c \mid w)$ and noise with weight $k \cdot P_n(c)$, and by Bayes' rule the probability that it is real is
+*The question.* Each real pair $(w,c)$ of the text comes with $k$ noise neighbours $c'_1,\dots,c'_k$, drawn independently from a noise distribution $P_n$ that we can sample and evaluate, for example the frequency of the words in the text. We label the real pair 1 and the $k$ noise pairs 0, so that one candidate in $k+1$ is real. Pick one of the $k+1$ candidates at random. It is the real one with probability $1/(k+1)$ and a noise one with probability $k/(k+1)$. If it is real, the word is distributed as $P(\cdot \mid w)$, and if it is noise, as $P_n$. So, for a given word $w$, the probability of picking the label real and the word $c$ is
 
 $$
-P(\text{real} \mid w,c) = \frac{P(c \mid w)}{P(c \mid w) + k\,P_n(c)}.
+P(\text{real}, w, c) = P(w)\,\frac{1}{k+1}\,P(c \mid w),
 $$
+
+the probability of the word times that of the label times that of the candidate given the label. The probability of picking the label noise and the word $c$ is
+
+$$
+P(\text{noise}, w, c) = P(w)\,\frac{k}{k+1}\,P_n(c).
+$$
+
+By Bayes' rule, the probability that a candidate $c$ is real is the probability of the pair with the label real over that of the pair with either label,
+
+$$
+P(\text{real} \mid w,c) = \frac{P(\text{real},w,c)}{P(w,c)} = \frac{P(\text{real},w,c)}{P(\text{real},w,c) + P(\text{noise},w,c)} = \frac{P(c \mid w)}{P(c \mid w) + k\,P_n(c)},
+$$
+
+since the factor $P(w)/(k+1)$ cancels. 
 
 Replacing $P(c \mid w)$ by the model $e^{s_c}$ and dividing the numerator and the denominator by $e^{s_c}$,
 
@@ -442,7 +456,13 @@ $$
 
 where $\sigma(t) = 1/(1+e^{-t})$ is the *logistic function*. The logistic function appears because $e^{\lambda_c}$ is the odds of a real pair against a noise pair. Notice that $\ln(k P_n(c))$ plays the role that $\ln P(c)$ played before, a log-frequency that is subtracted from the score, with the difference that here it is known, since we chose $P_n$, and it need not be learned. Also notice that the sum over the vocabulary is gone. A candidate is judged against the noise probability of itself alone, and not against all the others.
 
-*The loss.* The labels give a likelihood to maximize, as in the box on cross-entropy, now with two outcomes. The model gives probability $\sigma(\lambda_c)$ to the label 1 of the real pair and $1 - \sigma(\lambda_{c'_i})$ to the label 0 of each noise pair. Minus the logarithm of the probability of all the labels is the loss of the pair,
+*The loss.* The labels give a likelihood to maximize, as in the box on cross-entropy, now with two outcomes. The question is a classifier: for each candidate the model gives probability $\sigma(\lambda)$ to the label 1 and $1 - \sigma(\lambda)$ to the label 0. It gives probability $\sigma(\lambda_c)$ to the label 1 of the real pair and $1 - \sigma(\lambda_{c'_i})$ to the label 0 of each noise pair. Taking the $k+1$ labels as independent, which is what defines the loss, the probability that the model gives to all of them is
+
+$$
+\sigma(\lambda_c)\prod_{i=1}^{k}\bigl(1 - \sigma(\lambda_{c'_i})\bigr).
+$$
+
+Maximizing this product is minimizing minus its logarithm, which turns the product into a sum. This is the loss of the pair,
 
 $$
 \ell_{w,c} = -\ln \sigma(\lambda_c) - \sum_{i=1}^{k} \ln\bigl(1 - \sigma(\lambda_{c'_i})\bigr),
@@ -460,7 +480,7 @@ $$
 \frac{\partial \ell_{w,c}}{\partial \mathbf{e}_w} = \bigl(\sigma(\lambda_c)-1\bigr)\,\mathbf{v}_c + \sum_{i=1}^{k} \sigma(\lambda_{c'_i})\,\mathbf{v}_{c'_i}.
 $$
 
-*(Note: If $c = c'_i$ for any $i$, the gradients for that vector sum together).*
+In these gradients $\lambda_c$ is, up to the dot product, a constant: $\lambda_c = \langle \mathbf{e}_w, \mathbf{v}_c \rangle - \ln\bigl(k\,P_n(c)\bigr)$. The term $\ln(k\,P_n(c))$ does not depend on $\mathbf{e}_w$ or $\mathbf{v}_c$, so it disappears when we differentiate, and it enters the gradients only as a number inside $\sigma(\lambda_c)$. The noise distribution $P_n$ is a design choice. It sets the initial effort, since to evaluate $P_n(c)$ it has to be estimated, for example from the frequencies of the words in the text, before training. It also affects the performance of the algorithm, because it decides which noise words are drawn and how informative they are: Mikolov et al. found that the unigram distribution raised to the power $3/4$ outperformed the unigram and the uniform distributions [@mikolov2013distributed].
 
 Compare these gradients with those of the softmax. The descent step on $\mathbf{e}_w$ is again a pull towards the observed neighbour, with weight $1 - \sigma(\lambda_c)$, the probability that the model failed to give to the pair being real, and a push away from the noise neighbours, each with weight $\sigma(\lambda_{c'_i})$, the probability that the model gave to a noise pair being real. The softmax pushed away from $\sum_{k'} Q(k' \mid w)\,\mathbf{v}_{k'}$, the average of the vectors of the whole vocabulary under the model, which needs all of them. Here the average is replaced by the $k$ noise vectors that happened to be drawn, which is a sample of it. Only $k+1$ rows of $\mathbf{V}$ change at each step, not $|\mathcal{V}|$. There is also a difference. The derivatives of the softmax with respect to the scores add up to zero, since adding a constant to all the scores changes nothing. Here they add up to $(\sigma(\lambda_c) - 1) + \sum_i \sigma(\lambda_{c'_i})$, which is not zero in general, because each candidate is judged on its own and raising all the scores together is no longer free. This is the mechanism by which the normalization is learned. A word whose scores are too high is told so by the noise pairs, and one whose scores are too low by the real pairs.
 
