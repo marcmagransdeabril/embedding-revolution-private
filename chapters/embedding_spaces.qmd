@@ -729,13 +729,7 @@ The price of dropping negatives is collapse. If every input is mapped to the sam
 
 {{< pagebreak >}}
 
-## Further Reading {.unnumbered}
 
-Counting, predicting and contrasting are not unrelated techniques but convergent estimators of the same co-occurrence statistics. @arora2016latent develops the latent-variable argument for why PMI-based factorization and log-bilinear regression agree, and @pennington2014glove derives the GloVe objective in full. The Prologue states the pattern that this chapter traces from counting to predicting to contrasting. For the PCA and SVD material of "From Counting to Geometry", @hastie2009elements (Section 14.5) is a standard textbook treatment, and @eckart1936approximation is the original proof that truncating the SVD gives the best low-rank approximation. The argument about embedding dimensionality in @sec-ch-curse-of-dimensionality rests on the Johnson–Lindenstrauss lemma [@johnson1984extensions], which bounds how much a point set can be projected into lower dimensions while approximately preserving pairwise distances.
 
-## References {.unnumbered}
-
-::: {#refs}
-:::
 
 
