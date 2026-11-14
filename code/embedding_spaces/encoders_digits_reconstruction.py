@@ -18,8 +18,8 @@ and, for question 3, the first two with a code of 2, 4, 8, 32 and 64 coordinates
 References, not trained: the mean image, and the PCA with the same number of components (the best linear code, Eckart-Young).
 
 Also printed: the number of parameters and the training error. Saves ../../figures/embedding_spaces/encoders_digits_reconstruction.png:
-one training image and one held-out image of each digit (the first of each in the data), and their reconstructions from 16 numbers by
-the autoencoders with one and two hidden layers and by the PCA (the first seed).
+one held-out image of each digit (the first of each in the data), and its reconstructions from 16 numbers by the autoencoders with one and
+two hidden layers and by the PCA (the first seed).
 """
 from concurrent.futures import ProcessPoolExecutor
 import os
@@ -214,36 +214,19 @@ if __name__ == "__main__":
     assert errors["one hidden layer"].mean() < 0.5 * errors["mean image"].mean()
     assert base.interval(errors["one hidden layer"] - errors[f"PCA, {DIM} components"])[2] < 0
 
-    # Figure: one held-out image of each digit, and its reconstruction from 16 numbers.
+    # Figure: one held-out image of each digit (the first of each in the data), and its reconstruction from 16 numbers.
     base.FIGURES.mkdir(parents=True, exist_ok=True)
-    # Top block: training images (the autoencoder and the PCA were fitted on them). Bottom block: held-out images (never seen in fitting).
-    pca_train = mean_image + (X_TRAIN - mean_image) @ vt[:DIM].T @ vt[:DIM]
-    blocks = [
-        ("training", X_TRAIN, base.labels_train, "out_train", pca_train),
-        ("held-out", X_TEST, base.labels_test, "out", pca_out),
-    ]
-    # One thin row above each block holds its title; the blocks share the columns (one digit per column).
-    fig = plt.figure(figsize=(6.4, 5.0))
-    grid = fig.add_gridspec(10, 10, height_ratios=[0.45, 1, 1, 1, 1, 0.45, 1, 1, 1, 1], hspace=0.08, wspace=0.08)
-    for b, (kind, images, labels, key, pca_images) in enumerate(blocks):
-        top = 5 * b
-        title_ax = fig.add_subplot(grid[top, :])
-        title_ax.axis("off")
-        title_ax.text(0.5, 0.2, f"{kind} images" + (" (red frame): never used to fit anything" if kind == "held-out" else ": used to fit the models"),
-                      ha="center", va="center", fontsize=8, weight="bold", color="tab:red" if kind == "held-out" else "black")
-        picks = [int(np.argmax(labels == digit)) for digit in range(10)]
-        rows = [(f"{kind} image", images), ("one hidden layer", by["one hidden layer"][0][key]),
-                ("two hidden layers", by["two hidden layers"][0][key]), (f"PCA, {DIM}", pca_images)]
-        for r, (title, imgs) in enumerate(rows):
-            for c, i in enumerate(picks):
-                ax = fig.add_subplot(grid[top + 1 + r, c])
-                ax.imshow(np.clip(imgs[i], 0, 1).reshape(8, 8), cmap="gray_r", vmin=0, vmax=1)
-                ax.set_xticks([])
-                ax.set_yticks([])
-                if kind == "held-out":
-                    for spine in ax.spines.values():
-                        spine.set_edgecolor("tab:red")
-                if c == 0:
-                    ax.set_ylabel(title, rotation=0, ha="right", va="center", fontsize=7)
+    picks = [int(np.argmax(base.labels_test == digit)) for digit in range(10)]
+    rows = [("held-out image", X_TEST), ("one hidden layer", by["one hidden layer"][0]["out"]),
+            ("two hidden layers", by["two hidden layers"][0]["out"]), (f"PCA, {DIM}", pca_out)]
+    fig, axes = plt.subplots(len(rows), len(picks), figsize=(6.4, 2.8), gridspec_kw=dict(hspace=0.08, wspace=0.08))
+    for r, (title, imgs) in enumerate(rows):
+        for c, i in enumerate(picks):
+            ax = axes[r, c]
+            ax.imshow(np.clip(imgs[i], 0, 1).reshape(8, 8), cmap="gray_r", vmin=0, vmax=1)
+            ax.set_xticks([])
+            ax.set_yticks([])
+            if c == 0:
+                ax.set_ylabel(title, rotation=0, ha="right", va="center", fontsize=7)
     fig.savefig(base.FIGURES / "encoders_digits_reconstruction.png", dpi=300, bbox_inches="tight")
     print(f"\nsaved {(base.FIGURES / 'encoders_digits_reconstruction.png').resolve()}")
