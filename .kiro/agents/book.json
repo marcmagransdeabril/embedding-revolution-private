@@ -1,0 +1,19 @@
+{
+  "name": "book",
+  "description": "Default book-writing agent: loads the repo skills and gates git commits on a review-doc pass over changed tests.",
+  "prompt": null,
+  "tools": ["*"],
+  "resources": [
+    "file://README.md",
+    "skill://.github/skills/*/SKILL.md"
+  ],
+  "hooks": {
+    "preToolUse": [
+      {
+        "matcher": "shell",
+        "command": "python3 .kiro/hooks/review_gate.py",
+        "timeout_ms": 10000
+      }
+    ]
+  }
+}
