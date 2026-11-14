@@ -159,14 +159,14 @@ if __name__ == "__main__":
 
     # The final loss against K: the same optimum, a different noise around it.
     print(f"\nfinal loss against K (bits per pair, mean [95% interval] over the seeds; softmax {soft_mean[-1]:.4f}, floor "
-          f"{H_COND / LN2:.4f}), and the normalization |log2 Z| of the scores at the end")
+          f"{H_COND / LN2:.4f}), and the sum of the exponentials of the scores at the end")
     at_1e4 = int(np.argmax(t >= 10**4))
     for k in KS:
         c = np.array([run[3] for run in nce[k]])
         m, lo, hi = bootstrap_interval(c[:, -1, 0])
-        z, zlo, zhi = bootstrap_interval(c[:, -1, 1])
+        z, zlo, zhi = bootstrap_interval(c[:, -1, 2])
         m4, lo4, hi4 = bootstrap_interval(c[:, at_1e4, 0])
-        print(f"K = {k:>2}: {m:.4f} [{lo:.4f}, {hi:.4f}]   |log2 Z| {z:.4f} [{zlo:.4f}, {zhi:.4f}]   rows of V per pair {k + 1}   "
+        print(f"K = {k:>2}: {m:.4f} [{lo:.4f}, {hi:.4f}]   sum of exponentials {z:.4f} [{zlo:.4f}, {zhi:.4f}]   rows of V per pair {k + 1}   "
               f"loss at {t[at_1e4]:,} iterations {m4:.4f} [{lo4:.4f}, {hi4:.4f}]")
 
     # The PMI matrices (clipped at 0, like the PPMI): mean and width of the 95% interval over the seeds.
