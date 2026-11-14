@@ -424,7 +424,7 @@ In the previous section the cost was in the denominator of the softmax function 
 
 Noise-contrastive estimation (NCE) avoids computing the normalization over the whole vocabulary. Instead, it learns by contrasting observed data against a small random sample of noise pairs. Rather than approximating the full softmax denominator directly—which would yield a biased Monte Carlo estimate of the log-partition function—NCE reformulates the problem as a binary logistic regression, asking: "Is $(w,c)$ a pair from the real text, or one drawn from a noise distribution?" The two possibilities are normalized against each other, not against the entire vocabulary.
 
-We build the loss in the same three steps as in Learning by Prediction: a model, a function to descend, and its gradient.
+We build the loss in four steps: a model, the question it answers, a loss function to descend, and its gradient.
 
 *The model.* The previous section kept the score $s_c = \langle \mathbf{e}_w, \mathbf{v}_c \rangle$ of each neighbour and turned the exponentials of the scores into probabilities by dividing by their sum over the vocabulary. Here we keep the score and drop the division. The model for the probability of a neighbour is the unnormalized $e^{s_c}$, which costs one dot product. This model is not a probability distribution yet, since its values over the vocabulary do not add up to one for $w$. But the vectors have room to learn the missing normalization. If every $\mathbf{v}_c$ has an extra coordinate equal to 1, then $\mathbf{e}_w$ has a coordinate that adds a constant $a_w$ to all the scores of the word $w$, and it can take the value $-\ln \sum_{c'} e^{s_{c'}}$ that the softmax computed by brute force. Whether training finds it is decided below.
 
