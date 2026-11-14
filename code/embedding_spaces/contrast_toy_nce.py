@@ -77,6 +77,11 @@ def log2_normalizer(s: np.ndarray) -> float:
     return float(np.sum(p_w * np.abs(np.log(np.exp(s).sum(1))) / LN2))
 
 
+def normalizer(s: np.ndarray) -> float:
+    """Mean over the words (weighted by their frequency) of sum_c exp(s_wc): one if the scores are self-normalized."""
+    return float(np.sum(p_w * np.exp(s).sum(1)))
+
+
 def train_nce(args: tuple[int, int]):
     """NCE with K noise neighbours per pair. Returns the vectors and, at each checkpoint, (loss, normalizer) as above."""
     seed, k = args
@@ -92,7 +97,7 @@ def train_nce(args: tuple[int, int]):
         nce_step(e, v, a, words, neighbours, noise, log_kpn, LEARNING_RATE * (1 - (t - 1) / ITERATIONS))
         if t in CHECKPOINTS:
             sc = scores(e, v, a)
-            curve.append((softmax_loss(sc), log2_normalizer(sc)))
+            curve.append((softmax_loss(sc), log2_normalizer(sc), normalizer(sc)))
     return e, v, a, np.array(curve)
 
 
@@ -141,11 +146,12 @@ if __name__ == "__main__":
     soft_mean, soft_low, soft_high = bootstrap_interval(soft_curve)
     loss_mean, loss_low, loss_high = bootstrap_interval(nce_curve[:, :, 0])
     norm_mean, norm_low, norm_high = bootstrap_interval(nce_curve[:, :, 1])
+    z_mean, z_low, z_high = bootstrap_interval(nce_curve[:, :, 2])
     print("loss (bits per pair) of the softmax over the whole vocabulary, mean [95% interval] over the seeds")
-    print(f"{'iterations':>10} {'prediction':>24} {'contrast':>24} {'|log2 Z| contrast':>22}")
+    print(f"{'iterations':>10} {'prediction':>24} {'contrast':>24} {'|log2 Z| contrast':>22} {'Z contrast':>22}")
     for i in sorted({*range(0, len(t), 3), len(t) - 1}):
         print(f"{t[i]:>10,} {soft_mean[i]:>8.4f} [{soft_low[i]:.4f}, {soft_high[i]:.4f}] "
-              f"{loss_mean[i]:>8.4f} [{loss_low[i]:.4f}, {loss_high[i]:.4f}] {norm_mean[i]:>8.4f} [{norm_low[i]:.4f}, {norm_high[i]:.4f}]")
+              f"{loss_mean[i]:>8.4f} [{loss_low[i]:.4f}, {loss_high[i]:.4f}] {norm_mean[i]:>8.4f} [{norm_low[i]:.4f}, {norm_high[i]:.4f}] {z_mean[i]:>8.4f} [{z_low[i]:.4f}, {z_high[i]:.4f}]")
     plateau = (t >= 10**3) & (t <= 3 * 10**5)  # while the step size is still large
     print(f"mean over the checkpoints between 10^3 and 3 x 10^5 iterations: prediction {soft_mean[plateau].mean():.3f}, "
           f"contrast {loss_mean[plateau].mean():.3f} bits; mean width of the 95% interval {np.mean(soft_high[plateau] - soft_low[plateau]):.3f} "
@@ -203,9 +209,10 @@ if __name__ == "__main__":
     ax1.axhline(H_COND / LN2, color="gray", linestyle="--", linewidth=0.8, label=r"$H(C \mid W)$")
     ax1.set(xscale="log", xlabel="iterations", ylabel="loss of the softmax (bits per pair)", title="(a) loss")
     ax1.legend(fontsize=6)
-    ax2.plot(t, norm_mean, color="C3", linewidth=1)
-    ax2.fill_between(t, norm_low, norm_high, color="C3", alpha=0.25, linewidth=0)
-    ax2.set(xscale="log", yscale="log", xlabel="iterations", ylabel=r"$|\log_2 \sum_c e^{s_{wc}}|$ (bits)", title="(b) normalization of NCE")
+    ax2.plot(t, z_mean, color="C3", linewidth=1)
+    ax2.fill_between(t, z_low, z_high, color="C3", alpha=0.25, linewidth=0)
+    ax2.axhline(1, color="gray", linestyle="--", linewidth=0.8)
+    ax2.set(xscale="log", xlabel="iterations", ylabel=r"$\sum_c e^{s_{wc}}$", title="(b) normalization of NCE")
     for ax in (ax1, ax2):
         ax.tick_params(labelsize=7)
         ax.title.set_fontsize(8)
