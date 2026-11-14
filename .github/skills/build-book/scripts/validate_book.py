@@ -81,6 +81,58 @@ def validate_chapter_references(path: Path, lines: list[str]) -> list[Validation
     return issues
 
 
+def validate_flat_sections(path: Path, lines: list[str]) -> list[ValidationIssue]:
+    """Warn on a heading deeper than level 2 outside code fences: the sections of the book are flat."""
+    issues: list[ValidationIssue] = []
+    in_fence = False
+    for idx, line in enumerate(lines, start=1):
+        if line.startswith("```"):
+            in_fence = not in_fence
+        elif not in_fence and re.match(r"^#{3,} \S", line):
+            issues.append(ValidationIssue(
+                path, idx, "WARNING",
+                "heading deeper than '##': sections are flat, split the section or use italic lead-ins"))
+    return issues
+
+
+SECTION_WORD_LIMIT = 3200  # 8 printed pages at the ~400 words per page of the O'Reilly trim size
+
+
+def validate_section_length(path: Path, text: str) -> list[ValidationIssue]:
+    """Warn on a numbered section longer than SECTION_WORD_LIMIT words. A section is less than 8 pages, read in one sitting; one that is longer is discussed with the author, not cut by the tool. The count is of
+    the running text: it leaves out code, display math, callouts, questions and answers, which are not part of the reading."""
+    issues: list[ValidationIssue] = []
+    lines = text.splitlines()
+    heads = [i for i, ln in enumerate(lines) if re.match(r"^## \S", ln)]
+    for n, start in enumerate(heads):
+        head = lines[start]
+        if ".unnumbered" in head:
+            continue
+        body = "\n".join(lines[start + 1:heads[n + 1] if n + 1 < len(heads) else len(lines)])
+        body = re.sub(r"```.*?```", "", body, flags=re.S)
+        body = re.sub(r"\$\$.*?\$\$", "", body, flags=re.S)
+        kept: list[str] = []
+        depth, skipping = 0, False  # depth of the divs opened inside a skipped (callout, questions, answers) block
+        for ln in body.splitlines():
+            stripped = ln.strip()
+            if skipping:
+                if stripped == ":::":
+                    depth -= 1
+                    skipping = depth > 0
+                elif stripped.startswith(":::"):
+                    depth += 1
+            elif re.match(r"^:::+\s*\{[^}]*\.(callout[\w-]*|questions|answers)\b", stripped):
+                depth, skipping = 1, True
+            else:
+                kept.append(ln)
+        words = len(" ".join(kept).split())
+        if words > SECTION_WORD_LIMIT:
+            issues.append(ValidationIssue(
+                path, start + 1, "WARNING",
+                f"section of about {words:,} words of running text (about {words / 400:.1f} pages): a section is less than 8 pages; discuss it with the author (split, trim or keep)"))
+    return issues
+
+
 def validate_frontmatter(path: Path, text: str) -> list[ValidationIssue]:
     """Check YAML frontmatter if present."""
     issues: list[ValidationIssue] = []
@@ -557,6 +609,9 @@ def validate_qmd_file(path: Path, citations: bool = True, strict: bool = False) 
     issues.extend(validate_section_breaks(path, lines))
     if LINT_LITERAL_CHAPTERS:
         issues.extend(validate_chapter_references(path, lines))
+        if path != INDEX_QMD:  # the front matter pages (prologue, notation, roadmap) are not chapters
+            issues.extend(validate_flat_sections(path, lines))
+            issues.extend(validate_section_length(path, text))
     if citations:
         issues.extend(validate_citations(path, text, strict=strict))
 

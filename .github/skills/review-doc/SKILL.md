@@ -65,7 +65,7 @@ Evaluate empirical and logical claims strictly independent of prose length, rhet
 ## Checks
 
 ### 1. Structure
-Sections present, ordered, and labelled per the book's skeleton. Flag deviations; never restructure silently.
+Sections present, ordered, and labelled per the book's skeleton. Flag deviations; never restructure silently. **Sections are flat**: a chapter has `##` sections and nothing below them. Report every `###` or deeper heading as a deviation (`should-fix`), with the suggestion to split the section or to use paragraph order and italic lead-ins; do not flatten it without the author's approval (it moves text). **Sections are less than 8 pages**, to be read in one sitting (under about 3,200 words of running text at about 400 words a page; callouts, questions, answers, code and display math are not counted). A section of 8 pages or more is raised as a question for the author, with the count and, if useful, where it could be split (a split gives each part its own questions, answers, hand-off and status tag); it is not a `should-fix` and is never cut or split without the author's decision. Stubs and plans are exempt. `validate_book.py` gives the word count.
 
 ### 2. Style
 - Tone, register, and difficulty consistent with the rest of the book. Flag only real inconsistencies with the surrounding chapters or style guide; do not push the text toward a different voice.
