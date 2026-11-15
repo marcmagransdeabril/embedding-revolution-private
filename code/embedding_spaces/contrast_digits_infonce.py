@@ -2,9 +2,9 @@
 
 The images are the 8x8 digits bundled with scikit-learn. A positive pair is two augmented views of the same image (a shift of
 at most one pixel and Gaussian noise), the negatives are the other images of the batch. A small encoder (64 -> 128 -> 16, ReLU)
-is trained in numpy with the InfoNCE loss on unit-norm outputs, for several batch sizes N and several seeds. The notation is the one
-of the chapter: column vectors, weights W_l of shape (outputs, inputs) (so a batch, one image per row, is x @ W.T), the encoders f_x
-and f_y (here the same network), the pre-normalization code z and the unit vectors e_i = f_x(x_i), v_j = f_y(y_j). The same encoder is
+is trained in PyTorch (float64) with the InfoNCE loss on unit-norm outputs, for several batch sizes N and several seeds: the backward
+pass is `loss.backward()` and the update is `torch.optim.Adam`. The notation is the one of the chapter: the encoders f_x and f_y (here the
+same network), the pre-normalization code z and the unit vectors e_i = f_x(x_i), v_j = f_y(y_j). The same encoder is
 also trained to predict the pixels of the other view with a squared error, through the same 16-dimensional bottleneck.
 Every number is a mean with a 95% bootstrap interval over the seeds and the held-out queries.
 We report, for each embedding and for raw pixels and a PCA of the same dimension, how often the other view of a held-out image is
@@ -16,7 +16,7 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 import os
 
-# The matrices are tiny: one BLAS thread per process is faster than many, and the runs are spread over the cores.
+# The matrices are tiny: one thread per process is faster than many, and the runs are spread over the cores.
 for var in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ[var] = "1"
 
@@ -25,8 +25,11 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
+import torch.nn.functional as F
 from sklearn.datasets import load_digits
 from sklearn.neighbors import KNeighborsClassifier
+from torch import nn
 
 BATCHES, SEEDS, STEPS = [2, 8, 32, 128], range(5), 2000
 BOOTSTRAP = 5000  # resamples of the percentile bootstrap behind every 95% interval
@@ -34,6 +37,8 @@ PREDICTOR_BATCH = 128  # the predictor has no negatives, so the batch size only 
 DIM, HIDDEN, TAU, NOISE, LEARNING_RATE, TAIL = 16, 128, 0.2, 0.15, 1e-3, 200  # TAIL: last steps averaged for the loss
 LN2 = float(np.log(2))  # training uses natural logarithms (nats); the results are reported in bits = nats / ln 2
 FIGURES = Path("../../figures/embedding_spaces")
+torch.set_num_threads(1)
+torch.set_default_dtype(torch.float64)
 
 digits = load_digits()
 images = digits.data.reshape(-1, 8, 8) / 16.0
@@ -52,82 +57,56 @@ def augment(x: np.ndarray, rng: np.random.Generator) -> np.ndarray:
     return np.clip(shifted + NOISE * rng.standard_normal(shifted.shape), 0, 1).reshape(n, 64)
 
 
-def forward(params: dict, x: np.ndarray):
-    """Encoder, for a batch with one image per row: h = relu(W1 x + b1), z = W2 h + b2. Returns the unit-norm vectors z / ||z||
-    and what backward needs."""
-    h = np.maximum(0, x @ params["W1"].T + params["b1"])
-    z = h @ params["W2"].T + params["b2"]
-    norm = np.linalg.norm(z, axis=1, keepdims=True)
-    return z / norm, (x, h, z, norm)
+def linear(n_in: int, n_out: int, rng: np.random.Generator) -> nn.Linear:
+    """A layer W x + b with Gaussian weights of standard deviation 1/sqrt(n_in) and zero biases. The numpy draws, in the (inputs, outputs)
+    layout and transposed, so that every seed starts from the same numbers."""
+    layer = nn.Linear(n_in, n_out)
+    layer.weight.data = torch.tensor((rng.standard_normal((n_in, n_out)) / np.sqrt(n_in)).T)
+    layer.bias.data.zero_()
+    return layer
 
 
-def backward_encoder(params: dict, grads: dict, cache, dz: np.ndarray) -> None:
-    """Add to `grads` the gradient of the encoder parameters, given dL/dz."""
-    x, h, _, _ = cache
-    dh = (dz @ params["W2"]) * (h > 0)  # delta_1 = (W2^T delta_2) * 1[p_1 > 0], one row per image
-    grads["W2"] += dz.T @ h  # dL/dW_l = delta_l a_{l-1}^T, summed over the images
-    grads["b2"] += dz.sum(0)
-    grads["W1"] += dh.T @ x
-    grads["b1"] += dh.sum(0)
+def encoder(rng: np.random.Generator) -> nn.Sequential:
+    """The encoder of the chapter, before the normalization: h = relu(W1 x + b1), z = W2 h + b2. A batch has one image per row."""
+    return nn.Sequential(linear(64, HIDDEN, rng), nn.ReLU(), linear(HIDDEN, DIM, rng))
 
 
-def infonce(params: dict, x: np.ndarray, y: np.ndarray):
-    """InfoNCE of the views x (anchors) and y (candidates): the j-th candidate is the positive of the i-th anchor when j = i.
+def fit(modules: list, batch_loss, steps: int, batch: int, rng: np.random.Generator) -> np.ndarray:
+    """Adam for `steps` steps on batches of `batch` training images; `batch_loss(x, rng)` is the loss of a batch. Returns every loss."""
+    optimizer = torch.optim.Adam([p for m in modules for p in m.parameters()], lr=LEARNING_RATE)
+    losses = []
+    for _ in range(steps):
+        loss = batch_loss(train[rng.choice(len(train), batch, replace=False)], rng)
+        optimizer.zero_grad()
+        loss.backward()  # backpropagation: the gradient of every weight
+        optimizer.step()
+        losses.append(loss.item())
+    return np.array(losses)
 
-    Returns the loss in nats and its gradients. With the unit vectors e_i = f_x(x_i), v_j = f_y(y_j) (rows of e and v) and the scores
-    S_ij = <e_i, v_j> / tau, the loss is the softmax cross-entropy of picking the diagonal, so dL/dS = (softmax(S) - I) / N,
-    the same 'predicted minus observed' as in Learning by Prediction.
+
+def infonce(f: nn.Module, x: np.ndarray, y: np.ndarray) -> torch.Tensor:
+    """InfoNCE of the views x (anchors) and y (candidates), in nats: the j-th candidate is the positive of the i-th anchor when j = i.
+
+    With the unit vectors e_i = f(x_i), v_j = f(y_j) (rows of e and v) and the scores S_ij = <e_i, v_j> / tau, the loss is the softmax
+    cross-entropy of picking the diagonal, whose gradient with respect to S is (softmax(S) - I) / N, the same 'predicted minus observed'
+    as in Learning by Prediction.
     """
-    n = len(x)
-    (e, cache_x), (v, cache_y) = forward(params, x), forward(params, y)
-    scores = e @ v.T / TAU
-    scores -= scores.max(1, keepdims=True)
-    log_q = scores - np.log(np.exp(scores).sum(1, keepdims=True))
-    loss = -np.mean(np.diag(log_q))
-    dscores = np.exp(log_q)
-    dscores[np.arange(n), np.arange(n)] -= 1
-    dscores /= n
-    grads = {k: np.zeros_like(v) for k, v in params.items()}
-    for g, cache, u in ((dscores @ v / TAU, cache_x, e), (dscores.T @ e / TAU, cache_y, v)):  # g = dL/de_i, then dL/dv_j
-        norm = cache[3]
-        backward_encoder(params, grads, cache, (g - u * (u * g).sum(1, keepdims=True)) / norm)  # through z / ||z||
-    return loss, grads
-
-
-def predictor_loss(params: dict, x: np.ndarray, y: np.ndarray):
-    """Squared error per pixel between the pixels of the other view y and a linear read-out W3 z + b3 of the 16 coordinates z of x."""
-    _, cache = forward(params, x)
-    z = cache[2]
-    error = z @ params["W3"].T + params["b3"] - y
-    loss = np.mean(error ** 2)
-    grads = {k: np.zeros_like(v) for k, v in params.items()}
-    dpred = 2 * error / error.size
-    grads["W3"], grads["b3"] = dpred.T @ z, dpred.sum(0)
-    backward_encoder(params, grads, cache, dpred @ params["W3"])
-    return loss, grads
+    e, v = (F.normalize(f(torch.tensor(view)), dim=1) for view in (x, y))
+    return F.cross_entropy(e @ v.T / TAU, torch.arange(len(x)))
 
 
 def train_encoder(kind: str, batch: int, seed: int):
-    """Train with Adam for STEPS steps on batches of `batch` training images. Returns the parameters and the final loss."""
+    """Train for STEPS steps on batches of `batch` training images. Returns the encoder, the linear read-out to the 64 pixels of the other
+    view (None for InfoNCE) and the last TAIL losses."""
     rng = np.random.default_rng(seed)
-    # W_l has shape (outputs, inputs); the draws are those of the (inputs, outputs) layout, transposed, so every seed starts from the same numbers.
-    params = {"W1": (rng.standard_normal((64, HIDDEN)) / 8).T, "b1": np.zeros(HIDDEN),
-              "W2": (rng.standard_normal((HIDDEN, DIM)) / np.sqrt(HIDDEN)).T, "b2": np.zeros(DIM)}
-    if kind == "predict":
-        params |= {"W3": (rng.standard_normal((DIM, 64)) / np.sqrt(DIM)).T, "b3": np.zeros(64)}
-    loss_fn = infonce if kind == "infonce" else predictor_loss
-    m = {k: np.zeros_like(v) for k, v in params.items()}
-    v = {k: np.zeros_like(p) for k, p in params.items()}
-    losses = []
-    for t in range(1, STEPS + 1):
-        x = train[rng.choice(len(train), batch, replace=False)]
-        loss, grads = loss_fn(params, augment(x, rng), augment(x, rng))
-        losses.append(loss)
-        for k in params:
-            m[k] = 0.9 * m[k] + 0.1 * grads[k]
-            v[k] = 0.999 * v[k] + 0.001 * grads[k] ** 2
-            params[k] -= LEARNING_RATE * (m[k] / (1 - 0.9 ** t)) / (np.sqrt(v[k] / (1 - 0.999 ** t)) + 1e-8)
-    return params, np.array(losses[-TAIL:])
+    f = encoder(rng)
+    head = linear(DIM, 64, rng) if kind == "predict" else None  # the pixels of the other view from the 16 coordinates
+    if kind == "infonce":
+        loss = lambda x, rng: infonce(f, augment(x, rng), augment(x, rng))
+    else:
+        loss = lambda x, rng: F.mse_loss(head(f(torch.tensor(augment(x, rng)))), torch.tensor(augment(x, rng)))
+    losses = fit([f] + ([head] if head else []), loss, STEPS, batch, rng)
+    return f, head, losses[-TAIL:]
 
 
 def unit(x: np.ndarray) -> np.ndarray:
@@ -162,21 +141,23 @@ def cosines(a: np.ndarray, b: np.ndarray):
     return np.diag(c), c[~np.eye(len(c), dtype=bool)]
 
 
-def heldout_loss(params: dict, batch: int, seed: int, batches: int = 100) -> float:
+def heldout_loss(f: nn.Module, batch: int, seed: int, batches: int = 100) -> float:
     """InfoNCE loss (nats) on batches of held-out images with fresh augmentations, so the bound does not rely on training images."""
     rng = np.random.default_rng(1000 + seed)
-    return float(np.mean([infonce(params, augment(x, rng), augment(x, rng))[0]
-                          for x in (test[rng.choice(len(test), batch, replace=False)] for _ in range(batches))]))
+    with torch.no_grad():
+        return float(np.mean([infonce(f, augment(x, rng), augment(x, rng)).item()
+                              for x in (test[rng.choice(len(test), batch, replace=False)] for _ in range(batches))]))
 
 
 def run(job):
     kind, batch, seed = job
-    params, tail = train_encoder(kind, batch, seed)
-    loss = float(tail.mean())
-    za, zb = (forward(params, view)[1][2] for view in (VIEW_A, VIEW_B))  # z, before the normalization
+    f, _, tail = train_encoder(kind, batch, seed)
+    with torch.no_grad():
+        za, zb = (f(torch.tensor(view)).numpy() for view in (VIEW_A, VIEW_B))  # z, before the normalization
     z = np.concatenate([za, zb])
+    loss = float(tail.mean())
     return dict(kind=kind, batch=batch, seed=seed, loss=loss / LN2 if kind == "infonce" else loss,
-                heldout=heldout_loss(params, batch, seed) / LN2 if kind == "infonce" else None,
+                heldout=heldout_loss(f, batch, seed) / LN2 if kind == "infonce" else None,
                 hits=retrieval(za, zb), tail=tail / LN2 if kind == "infonce" else tail, alignment=alignment(za, zb), uniformity=uniformity(za),
                 offset=float(np.linalg.norm(z.mean(0)) / np.linalg.norm(z, axis=1).mean()),  # length of the mean vector / mean length
                 views=(za, zb) if seed == 0 else None)

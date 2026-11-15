@@ -2,7 +2,8 @@
 
 The data (the 8x8 digits, 1,200 training and 597 held-out images), the augmentation (a shift of at most one pixel and Gaussian noise
 of 0.15), the 16-dimensional code, the Adam settings, the two fixed held-out views and every measure are those of
-contrast_digits_infonce.py, which is imported and not copied. Six reconstructive models, five seeds each:
+contrast_digits_infonce.py, which is imported and not copied (so are the PyTorch training loop and the initial weights). Six
+reconstructive models, five seeds each:
 
   predict the other view   the model of Learning by Contrast: Anything: encoder 64 -> 128 -> 16, linear read-out of the 16 coordinates (imported)
   linear AE, same view     64 -> 16 -> 64, no nonlinearity, input and target the same augmented view (the Eckart-Young case)
@@ -40,8 +41,11 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
+import torch.nn.functional as F
+from torch import nn
 
-import contrast_digits_infonce as base  # data, augmentation, encoder, measures, Adam settings
+import contrast_digits_infonce as base  # data, augmentation, encoder, training loop, measures, Adam settings
 
 DIM, HIDDEN, STEPS, BATCH, SEEDS = base.DIM, base.HIDDEN, base.STEPS, base.PREDICTOR_BATCH, base.SEEDS
 LINEAR_STEPS = 10 * STEPS  # Adam finds the principal subspace of a linear autoencoder slowly; the Eckart-Young check needs the optimum
@@ -57,68 +61,37 @@ MODELS = {
 }
 
 
-def encode(params: dict, x: np.ndarray, arch: str):
-    """The 16 coordinates z of x, and what backward needs."""
+def autoencoder(arch: str, rng: np.random.Generator) -> nn.Sequential:
+    """64 -> 16 -> 64 without any nonlinearity (linear), or 64 -> 128 -> 16 -> 128 -> 64 with a ReLU after each hidden layer (nonlinear)."""
     if arch == "linear":
-        return x @ params["W1"].T + params["b1"], (x,)
-    cache = base.forward(params, x)[1]
-    return cache[2], cache
+        return nn.Sequential(base.linear(64, DIM, rng), base.linear(DIM, 64, rng))
+    return nn.Sequential(base.encoder(rng), base.linear(DIM, HIDDEN, rng), nn.ReLU(), base.linear(HIDDEN, 64, rng))
 
 
-def decode(params: dict, z: np.ndarray, arch: str):
-    """The 64 pixels reconstructed from z, and what backward needs."""
-    if arch == "linear":
-        return z @ params["W2"].T + params["b2"], (z,)
-    h = np.maximum(0, z @ params["W3"].T + params["b3"])
-    return h @ params["W4"].T + params["b4"], (z, h)
+def encode(model: nn.Sequential, x: np.ndarray) -> np.ndarray:
+    """The 16 coordinates z of the images x (one per row): the output of the first half of the autoencoder."""
+    with torch.no_grad():
+        return model[0](torch.tensor(x)).numpy()
 
 
-def reconstruction_loss(params: dict, arch: str, a: np.ndarray, target: np.ndarray):
-    """Squared error per pixel between the reconstruction of a and the target, and its gradients."""
-    z, enc_cache = encode(params, a, arch)
-    out, dec_cache = decode(params, z, arch)
-    error = out - target
-    loss = float(np.mean(error ** 2))
-    grads = {k: np.zeros_like(v) for k, v in params.items()}
-    dout = 2 * error / error.size
-    if arch == "linear":
-        grads["W2"], grads["b2"] = dout.T @ z, dout.sum(0)
-        dz = dout @ params["W2"]
-        grads["W1"], grads["b1"] = dz.T @ a, dz.sum(0)
-    else:
-        _, h = dec_cache
-        grads["W4"], grads["b4"] = dout.T @ h, dout.sum(0)
-        dpre = (dout @ params["W4"]) * (h > 0)
-        grads["W3"], grads["b3"] = dpre.T @ z, dpre.sum(0)
-        base.backward_encoder(params, grads, enc_cache, dpre @ params["W3"])
-    return loss, grads
+def decode(model: nn.Sequential, z: np.ndarray) -> np.ndarray:
+    """The 64 pixels reconstructed from the coordinates z."""
+    with torch.no_grad():
+        return model[1:](torch.tensor(z)).numpy()
 
 
 def train(model: str, seed: int):
     """Adam on batches of BATCH training images, as train_encoder of contrast_digits_infonce.py (LINEAR_STEPS steps for the linear models)."""
     arch, source, target_kind = MODELS[model]
     rng = np.random.default_rng(seed)
-    if arch == "linear":
-        # W_l has shape (outputs, inputs); the draws are those of the (inputs, outputs) layout, transposed (the same numbers per seed).
-        params = {"W1": (rng.standard_normal((64, DIM)) / 8).T, "b1": np.zeros(DIM),
-                  "W2": (rng.standard_normal((DIM, 64)) / np.sqrt(DIM)).T, "b2": np.zeros(64)}
-    else:
-        params = {"W1": (rng.standard_normal((64, HIDDEN)) / 8).T, "b1": np.zeros(HIDDEN),
-                  "W2": (rng.standard_normal((HIDDEN, DIM)) / np.sqrt(HIDDEN)).T, "b2": np.zeros(DIM),
-                  "W3": (rng.standard_normal((DIM, HIDDEN)) / np.sqrt(DIM)).T, "b3": np.zeros(HIDDEN),
-                  "W4": (rng.standard_normal((HIDDEN, 64)) / np.sqrt(HIDDEN)).T, "b4": np.zeros(64)}
-    m = {k: np.zeros_like(v) for k, v in params.items()}
-    v = {k: np.zeros_like(p) for k, p in params.items()}
-    for t in range(1, (LINEAR_STEPS if arch == "linear" else STEPS) + 1):
-        x = base.train[rng.choice(len(base.train), BATCH, replace=False)]
+    ae = autoencoder(arch, rng)
+
+    def loss(x, rng):
         views = {"a": base.augment(x, rng), "c": base.augment(x, rng), "x": x.reshape(len(x), 64)}
-        target = views["a"] if target_kind == "a" else views[target_kind]
-        _, grads = reconstruction_loss(params, arch, views["a"], target)
-        for k in params:
-            m[k] = 0.9 * m[k] + 0.1 * grads[k]
-            v[k] = 0.999 * v[k] + 0.001 * grads[k] ** 2
-            params[k] -= base.LEARNING_RATE * (m[k] / (1 - 0.9 ** t)) / (np.sqrt(v[k] / (1 - 0.999 ** t)) + 1e-8)
-    return params, arch
+        return F.mse_loss(ae(torch.tensor(views["a"])), torch.tensor(views[target_kind]))  # squared error per pixel
+
+    base.fit([ae], loss, LINEAR_STEPS if arch == "linear" else STEPS, BATCH, rng)
+    return ae
 
 
 def effective_rank(z: np.ndarray) -> float:
@@ -145,19 +118,18 @@ def measures(z_a: np.ndarray, z_b: np.ndarray, out_a=None) -> dict:
 
 def run(job):
     model, seed = job
-    if model == "predict the other view":
-        params, _ = base.train_encoder("predict", BATCH, seed)
-        z_a, z_b = (base.forward(params, view)[1][2] for view in (base.VIEW_A, base.VIEW_B))
-        return dict(model=model, seed=seed, **measures(z_a, z_b, z_a @ params["W3"].T + params["b3"]))
-    if model == "InfoNCE, N = 128":
-        params, _ = base.train_encoder("infonce", 128, seed)
-        z_a, z_b = (base.forward(params, view)[1][2] for view in (base.VIEW_A, base.VIEW_B))
-        return dict(model=model, seed=seed, **measures(z_a, z_b))
-    params, arch = train(model, seed)
-    z_a, z_b = encode(params, base.VIEW_A, arch)[0], encode(params, base.VIEW_B, arch)[0]
-    row = dict(model=model, seed=seed, **measures(z_a, z_b, decode(params, z_a, arch)[0]))
+    if model in ("predict the other view", "InfoNCE, N = 128"):
+        kind, batch = ("predict", BATCH) if model.startswith("predict") else ("infonce", 128)
+        f, head, _ = base.train_encoder(kind, batch, seed)
+        with torch.no_grad():
+            z_a, z_b = (f(torch.tensor(view)) for view in (base.VIEW_A, base.VIEW_B))
+            out = head(z_a).numpy() if head else None
+        return dict(model=model, seed=seed, **measures(z_a.numpy(), z_b.numpy(), out))
+    ae = train(model, seed)
+    z_a, z_b = encode(ae, base.VIEW_A), encode(ae, base.VIEW_B)
+    row = dict(model=model, seed=seed, **measures(z_a, z_b, decode(ae, z_a)))
     if model == "linear AE, same view":
-        row["decoder"] = params["W2"].T  # (16, 64): the rows span the decoder's subspace of pixel space
+        row["decoder"] = ae[1].weight.detach().numpy().T  # (16, 64): the rows span the decoder's subspace of pixel space
     return row
 
 
