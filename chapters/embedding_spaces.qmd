@@ -601,18 +601,18 @@ $$
 \hat{\mathbf{x}} = \mathbf{x}_{K+1},
 $$
 
-and the goal is the loss $L = \frac{1}{D}\lVert\mathbf{x} - \hat{\mathbf{x}}\rVert^2$. Write $\mathbf{r}_\ell = \partial L/\partial\mathbf{x}_\ell$ for the derivative of the loss with respect to the output of layer $\ell-1$, the *error* that arrives at layer $\ell$, written as a column vector. We go from the output to the input, as in the scalar example, and the autoencoder is the case $K = 4$, with $D = 64$. First, the derivative with respect to the output, one entry per pixel:
+and the goal is the loss $L = \frac{1}{D}\lVert\mathbf{x} - \hat{\mathbf{x}}\rVert^2$. Write $\mathbf{r}_\ell = \partial L/\partial\mathbf{x}_\ell$ for the derivative of the loss with respect to the output of layer $\ell-1$, the *error* that arrives at layer $\ell$, a column vector, so that $\mathbf{r}^\top$ is the row that multiplies a Jacobian. We go from the output to the input, as in the scalar example, and the autoencoder is the case $K = 4$, with $D = 64$. First, the derivative with respect to the output, one entry per pixel:
 
 $$
 \mathbf{r}_{K+1} = \frac{\partial L}{\partial\hat{\mathbf{x}}} = \frac{2}{D}(\hat{\mathbf{x}} - \mathbf{x}),
 $$
 
-once more "what the model predicted minus what happened". Then, for $\ell = K, K-1, \dots, 1$, the layer $\ell$ reaches $L$ only through $\mathbf{x}_{\ell+1}$, so the chain rule gives two derivatives, in terms of the Jacobians of $f_\ell$ with respect to its parameters and with respect to its input (the matrices of its partial derivatives), transposed:
+once more "what the model predicted minus what happened". Then, for $\ell = K, K-1, \dots, 1$, the layer $\ell$ reaches $L$ only through $\mathbf{x}_{\ell+1}$, so the chain rule gives two derivatives, in the same order as in the scalar example, the error that arrives from above times the derivative of $f_\ell$ (its Jacobian, the matrix of its partial derivatives) with respect to its parameters and with respect to its input:
 
 $$
-\frac{\partial L}{\partial\boldsymbol{\theta}_\ell} = \Bigl(\frac{\partial f_\ell}{\partial\boldsymbol{\theta}_\ell}\Bigr)^{\!\top}\mathbf{r}_{\ell+1},
+\frac{\partial L}{\partial\boldsymbol{\theta}_\ell} = \mathbf{r}_{\ell+1}^\top\,\frac{\partial f_\ell}{\partial\boldsymbol{\theta}_\ell},
 \qquad
-\mathbf{r}_\ell = \Bigl(\frac{\partial f_\ell}{\partial\mathbf{x}_\ell}\Bigr)^{\!\top}\mathbf{r}_{\ell+1}.
+\mathbf{r}_\ell^\top = \mathbf{r}_{\ell+1}^\top\,\frac{\partial f_\ell}{\partial\mathbf{x}_\ell}.
 $$
 
 The first is the gradient of the parameters of the layer, and the second is the error that goes down to the layer below, where the same two formulas are applied again recursively until reaching the first layer.
