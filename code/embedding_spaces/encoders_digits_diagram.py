@@ -13,6 +13,7 @@ The .inc is committed, like the figures, so that `make diagrams` does not need t
 from pathlib import Path
 
 import numpy as np
+import torch
 
 import encoders_digits_reconstruction as rec
 
@@ -21,11 +22,11 @@ DIAGRAMS = Path("../../diagrams/embedding_spaces")
 
 if __name__ == "__main__":
     result = rec.train(("autoencoder", 0))
-    params, relu = result["params"], rec.layers(rec.MODELS["autoencoder"][0], False)
+    model = result["model"]  # Linear, ReLU, Linear (the encoder), then Linear, ReLU, Linear (the decoder)
     i = int(np.argmax(rec.base.labels_test == DIGIT))
     x = rec.X_TEST[i][None]
-    out, acts = rec.forward(params, relu, x)
-    code, x_hat = acts[2][0], out[0]  # acts[0] is the input, acts[2] the output of the layer that writes the 16 coordinates
+    with torch.no_grad():
+        code, x_hat = model[:3](torch.tensor(x))[0].numpy(), model(torch.tensor(x))[0].numpy()
     squared = (x_hat - x[0]) ** 2
     loss = float(squared.mean())
     assert np.isclose(loss, result["test"][i]), "the example is not the held-out image of the trained network"
