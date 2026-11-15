@@ -6,13 +6,13 @@ status: idea
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
-## Representing Graphs in Vector Spaces
+## Representing Graphs in Vector Spaces {#sec-representing-graphs-vector-spaces}
 *Graph Neural Networks (GNNs) and Message Passing architectures.*
 
-## What a Relation Can Be
+## What a Relation Can Be {#sec-what-relation-can-be}
 *Symmetric, antisymmetric, inverse, and compositional relations, and the algebra each one needs.*
 
-## Knowledge Graph Embeddings, as a Historical Sequence
+## Knowledge Graph Embeddings, as a Historical Sequence {#sec-knowledge-graph-embeddings-historical}
 *Each model fixes a relation pattern that the previous one could not express.*
 
 ### Translational Models (TransE)
@@ -23,8 +23,8 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ### Rotational Models (RotatE)
 *Relations as rotations in the complex plane ($\mathbb{C}^D$).*
 
-## Graph Databases vs. Vector Databases
+## Graph Databases vs. Vector Databases {#sec-graph-databases-vs-vector}
 *The convergence of discrete graph topology and continuous latent coordinates.*
 
-## Arrows That Point One Way
+## Arrows That Point One Way {#sec-arrows-that-point-one}
 *Plan (1 page). Findings: which relation patterns (symmetric, antisymmetric, inverse, compositional) each knowledge-graph model can and cannot express, in the order in which each fixed what the previous one could not: translation, bilinear products, rotation. Achieved for the representation of meaning: difference as a relation (@sec-prop-difference), with a direction for each relation. Computation: whether embeddings learned from data make explicit graph structure unnecessary, or graph and vector converge into one system, read from cost per query and quality at matched data, dated. Evidence at scale: re-evaluations in which older knowledge-graph models match newer ones once they are trained with equal tuning are reported (from memory, unchecked: Ruffinelli et al. 2020), the same lesson as the comparison of counting and predicting in @sec-ch-embedding-spaces, and the chapter says what a new model has to show against a tuned baseline. Smoke test: TransE, DistMult, ComplEx and RotatE on a toy graph with one relation of each pattern, where a model that cannot express a pattern must fail on it, a check with an analytic answer (TransE is in references/). Still out of reach: a pairwise edge cannot express a relation among three or more things, and the prerequisite order of a subject is a graph that a space has to recover (the dependency question of the critical literacy test). Multi-way interactions are taken up in @sec-ch-topological-deep-learning.*

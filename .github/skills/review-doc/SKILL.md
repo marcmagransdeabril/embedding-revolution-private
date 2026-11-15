@@ -90,6 +90,7 @@ Sections present, ordered, and labelled per the book's skeleton. Flag deviations
 - Every section/figure/table reference resolves to an existing target.
 - Forward references in future tense, backward references in past tense.
 - A reference to a distant figure or table also names its section, so the reader knows where to look.
+- **Every chapter and every section has an anchor.** Each `#` and `##` heading carries an explicit `{#sec-...}` identifier (chapters `sec-ch-<name>`, sections `sec-<short-name>`; keep any class, e.g. `{#sec-x .provisional}`), unique across the book, lowercase with hyphens, and stable under retitling. A heading without one is `should-fix`, because other chapters and the roadmap cannot point at it. Grep `^#{1,2} ` lines lacking `{#` in the unit. Adding the anchor is the smallest edit, and it is applied directly (Change policy, syntax) after checking that no other file already uses the same id. Sections that are stubs or plans are included.
 - Citations (`@citekey`) are *not* cross-references and are governed entirely by §6 below — do not double-report a citation issue under both tiers.
 
 ### 5. Figures and diagrams

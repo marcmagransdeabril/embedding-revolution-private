@@ -8,20 +8,20 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 
 *This chapter is the remedy for two things: the hallucination of the generative models of @sec-ch-generative-spaces and @sec-ch-contextual-vectors, and the external-consistency question of the critical literacy test (checking claims against verified sources). Both are the same operation seen from two sides: grounding generation, and checking a text, by retrieving from outside the model. It has limits of its own, which the sections below state.*
 
-## From Exact to Approximate Search
+## From Exact to Approximate Search {#sec-from-exact-approximate-search}
 *Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*
 
-## What a Fixed-Dimension Dot Product Can Express
+## What a Fixed-Dimension Dot Product Can Express {#sec-what-fixed-dimension-dot}
 *Where the dot product comes from: a dual encoder trained with the contrastive loss of @sec-ch-embedding-spaces, in which a question and the passage that answers it are a positive pair and the other passages of the batch are the negatives [@karpukhin2020dense, Section 3.2]. The structural limit: how many distinct rankings and subsets a query vector of dimension $d$ can realize, and what that means for negation, conjunction, and multi-hop queries.*
 
-## Retrieval-Augmented Generation
+## Retrieval-Augmented Generation {#sec-retrieval-augmented-generation}
 *Bridging parametric model memory with external latent storage, told as the answer of the 2020s.*
 
-## Hybrid Search & Multi-Vector Alignments
+## Hybrid Search & Multi-Vector Alignments {#sec-hybrid-search-multi-vector}
 *Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item. The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-multimodal-embeddings are practical problems.*
 
-## Negation, Multi-Hop Reasoning, and Hallucination (a dated case study)
+## Negation, Multi-Hop Reasoning, and Hallucination (a dated case study) {#sec-negation-multi-hop-reasoning}
 *How retrieval systems behaved, what followed, and why the structural limit remains.*
 
-## Remembering Is Not Knowing
+## Remembering Is Not Knowing {#sec-remembering-knowing}
 *Plan (1 page). Findings: why distance concentration forces approximate search, what a fixed-dimension dot product can and cannot rank, and how retrieval-augmented generation behaved on negation, conjunction and multi-hop questions, told as a dated case study. Achieved for the representation of meaning: nearness (@sec-prop-nearness) at the scale of billions, and a memory outside the weights that grounds generation in text that can be checked. Computation: search can be paid once in training and amortized into the weights, or paid at every query, the same trade as for reasoning in @sec-ch-contextual-vectors. Parametric memory is the amortized side, retrieval and agentic search the per-query side, and which is cheaper depends on the difficulty of the question and the compute available [@snell2024scaling; @jones2021scaling]. Whether long contexts and agentic search absorb retrieval, or external memory survives on cost, is open and dated. Evidence at scale: benchmark comparisons of approximate-search indexes and of dense against lexical retrieval exist (from memory, to be checked: ANN-Benchmarks and BEIR), and the dense-retrieval paper held in references/ (Karpukhin et al.) is the authors' own comparison. Smoke tests: recall against query time of exact and approximate search on random and on clustered vectors, which shows distance concentration directly, and a count of the rankings that a query vector of dimension 2 and 3 can realize over a small set of items. Still out of reach: a retrieved passage is not a checked claim, and one vector per item cannot negate or chain. Checking a text against verified sources is the external-consistency question of the critical literacy test, and keeping the structure of a subject is taken up by the extensions that follow, beginning with curvature in @sec-ch-tangent-spaces-geodesics.*

@@ -1,11 +1,11 @@
-# Welcome & Overview {.unnumbered}
+# Welcome & Overview {#sec-ch-index .unnumbered}
 
 > *"You shall know a word by the company it keeps."*  
 > — John Rupert Firth (1957)
 
 {{< pagebreak >}}
 
-## Prologue: The Geometry of Meaning {.unnumbered}
+## Prologue: The Geometry of Meaning {#sec-prologue-geometry-meaning .unnumbered}
 
 ### Realizing a Word is a Coordinate
 
@@ -84,7 +84,7 @@ Navigating this counter-intuitive landscape requires a toolkit that blends linea
 
 {{< pagebreak >}}
 
-## Disclaimer {.unnumbered}
+## Disclaimer {#sec-disclaimer .unnumbered}
 
 The mathematics presented in this book, and the historical arguments that connect it, are meant to last: Shannon's entropy, Rice's theorem, and concentration of measure will not change with the next model release. Descriptions of specific systems, software libraries, API interfaces, model sizes, and benchmark numbers, by contrast, are a snapshot of the state of artificial intelligence, geometric deep learning, and neurosymbolic computing as of 2026. They are written as dated history wherever possible, so that they remain true as a record of what was done even when they are no longer current.
 
@@ -92,7 +92,7 @@ All code examples, mathematical proofs, and architectural blueprints are provide
 
 {{< pagebreak >}}
 
-## Acknowledgments {.unnumbered}
+## Acknowledgments {#sec-acknowledgments .unnumbered}
 
 This book is the fruit of years of technical exploration, computational experiments, and late-night philosophical debates on the nature of information, geometry, and cognition. 
 
@@ -100,7 +100,7 @@ I would like to express my deepest gratitude to the researchers, mathematicians,
 
 {{< pagebreak >}}
 
-## Book Architecture & Master Roadmap {.unnumbered}
+## Book Architecture & Master Roadmap {#sec-book-architecture-master-roadmap .unnumbered}
 
 This book is organized into three interconnected parts. Part I starts with what meaning looks like once it becomes geometry, shows why high-dimensional vectors can hold it, and builds such vectors from what Shannon and Chomsky left out, symbols with no interior. Part II asks what a vector space can carry beyond similarity (symmetry, curvature, relations, topology, logic, composition, alignment between spaces, and several senses in one space) and what each addition costs. Part III, the Epilogue, starts from the limits that remain and asks what other fields have said about them. Every chapter is built around a question that will outlast any model: a theorem, a counting argument, or a historical debate. The methods that explored it are told as history.
 
@@ -144,7 +144,7 @@ Part III is the Epilogue alone, for now. It starts from the limits that the exte
 
 {{< pagebreak >}}
 
-## Mathematical Notation & Conventions {.unnumbered}
+## Mathematical Notation & Conventions {#sec-mathematical-notation-conventions .unnumbered}
 
 Throughout this book, we adopt standard mathematical notation:
 
@@ -163,7 +163,7 @@ Throughout this book, we adopt standard mathematical notation:
 
 {{< pagebreak >}}
 
-## Code & Computational Environment {.unnumbered}
+## Code & Computational Environment {#sec-code-computational-environment .unnumbered}
 
 All code examples in this book are executable Python scripts and Jupyter notebooks using the project virtual environment (`.venv`). 
 

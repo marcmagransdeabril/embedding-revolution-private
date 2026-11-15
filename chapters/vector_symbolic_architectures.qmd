@@ -7,10 +7,10 @@ open: "Thin evidence, and overlap. The held sources are a survey (Kleyko et al.)
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
-## Near-Orthogonality as a Resource
+## Near-Orthogonality as a Resource {#sec-near-orthogonality-resource}
 *The payoff of @sec-ch-curse-of-dimensionality, representing concepts directly in 10,000-dimensional hypervectors.*
 
-## Algebraic Operations on Thoughts
+## Algebraic Operations on Thoughts {#sec-algebraic-operations-thoughts}
 
 ### Bundling ($+$)
 *Superposition and set representation. Bundling is commutative, like Chomsky's Merge (1995), the single operation of the Minimalist Program, which builds the unordered set $\{a, b\}$; in both, order and hierarchy must come from somewhere else, binding and permutation here and labelling there.*
@@ -21,8 +21,8 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ### Permutation ($\Pi$)
 *Sequence ordering and hierarchical encoding.*
 
-## Associative Clean-Up Memories & Capacity Bounds
+## Associative Clean-Up Memories & Capacity Bounds {#sec-associative-clean-up-memories}
 *Theoretical bounds on robust concept retrieval without weight retraining, and the relation to attention as associative memory.*
 
-## Which Red, Which Ball
+## Which Red, Which Ball {#sec-which-red-which-ball}
 *Plan (1 page). Findings: what bundling, binding and permutation can express in hypervectors of ten thousand dimensions, how clean-up memories recover a stored concept, and the capacity bounds that say how many can be bundled. Achieved for the representation of meaning: meanings that combine without losing track of which belongs to which (@sec-prop-combine). Partial answer to the dog test: modality as a role, so that a photograph, a bark and a gait can be bundled and still told apart. Computation: capacity grows with dimension, and dimension is cheap; when a hyperdimensional encoding beats a learned one is read from capacity per dimension, cost per operation and accuracy at matched compute. Evidence at scale: the capacity bounds are theorems (structural). A comparison with learned encoders at scale is not held or known, and the chapter says so. Smoke test: bundle $k$ random hypervectors for increasing $k$ and $d$ and check the measured accuracy of retrieval against the capacity formula, then bind roles to fillers and unbind, as an exercise with `numpy` that can fail if the formula is wrong. Still out of reach: an algebra can bind, but whether composition is systematic is another question (@sec-ch-neurosymbolic-integration).*

@@ -6,31 +6,31 @@ status: idea
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
-## The Systematicity Challenge
+## The Systematicity Challenge {#sec-systematicity-challenge}
 *Fodor and Pylyshyn's argument that thought is compositional, the connectionist replies, and the staircase of @sec-ch-symbols-without-interior revisited: which steps can a vector system climb? Cross-modal models give a concrete test: image-text models that retrieve a "dog" and a "man" but confuse "dog bites man" with "man bites dog".*
 
-## The Poverty of the Stimulus
+## The Poverty of the Stimulus {#sec-poverty-stimulus}
 *Chomsky's argument (1965, 1980) that children receive too little data to learn grammar unless much of it is innate, the question of how much must be built in, in the vocabulary of linguistics, with recursion as the core of the language faculty (Hauser, Chomsky, and Fitch, 2002). Told as a historical sequence on the standard example, structure-dependent question formation ("Is the man who is tall happy?"): sequential networks generalize linearly and only tree-structured ones hierarchically (2020); vanilla transformers learn the hierarchical rule long after in-domain accuracy saturates, "structural grokking" (2023); GPT-2 learns humanly impossible languages less easily than possible ones, against Chomsky's claim (2024); and the BabyLM challenge (2023) sets the budget at the fewer than 100 million words a child hears by age 13.*
 
-## Bridging Connectionism and Logic
+## Bridging Connectionism and Logic {#sec-bridging-connectionism-logic}
 *Differentiable reasoning over structured knowledge.*
 
-## Logic Tensor Networks (LTN)
+## Logic Tensor Networks (LTN) {#sec-logic-tensor-networks}
 *Translating first-order logic into continuous real-valued constraints via fuzzy logic t-norms.*
 
-## Smolensky's Tensor Product Representations (TPR)
+## Smolensky's Tensor Product Representations (TPR) {#sec-smolensky-tensor-product-representations}
 *The foundational algebra for binding variable roles to continuous fillers.*
 
-## Emergent Symbolic Structure
+## Emergent Symbolic Structure {#sec-emergent-symbolic-structure}
 *How trained networks come to show compositional role-filler structure, with the DISCOVER framework as one recent instance.*
 
-## Neural Theorem Proving
+## Neural Theorem Proving {#sec-neural-theorem-proving}
 *Searching discrete proof trees along continuous latent trajectories.*
 
-## Reaching "False"
+## Reaching "False" {#sec-reaching-false}
 *Falsehood is not the absence of truth: it is a conclusion, reached from ground truth and common sense, and it must be told from ignorance. Three verdicts: entailed, refuted (the negation is entailed), undetermined. Test (internal consistency in the critical literacy test): given premises and rules, does a representation return all three, or does it collapse "refuted" and "undetermined" into one low score? Geometric hypothesis to test: if a concept is a region or subspace, entailment is containment, exclusion is disjointness (orthogonality for subspaces), and partial overlap is undetermined; chains such as $A \subseteq B$ and $B \perp C$ then give $A \perp C$ without any rule. What geometry may not reach: uniqueness constraints ("a country has one capital") and rules with variables, which need binding (@sec-ch-vector-symbolic-architectures) or an external reasoner. Common sense is defeasible, so a conclusion of falsehood drawn from it is too. Whether the closed-world default (what is not derivable is false) or the open-world one (it is unknown) is assumed changes the verdict, and the test states which.*
 
 Sources (first pass, none yet in `references.bib`; read before citing). Reiter on the closed-world assumption and default logic; Belnap's four-valued logic; order embeddings (Vendrov et al. 2016) and box embeddings for containment; logic tensor networks for truth degrees; three-way reasoning benchmarks with an "unknown" answer (ProofWriter, FOLIO), and NLI with its neutral class. All from memory, to be checked.
 
-## Parts That Know Their Place
+## Parts That Know Their Place {#sec-parts-that-know-their}
 *Plan (1 page). Findings: what the connectionist replies to the systematicity challenge achieved, where logic tensor networks and tensor product representations put the roles and the fillers, and what emergent symbolic structure and neural theorem proving show, and whether a representation can reach a verdict of "false" by derivation and keep it apart from "unknown". Achieved for the representation of meaning: meanings that combine systematically, or the places where they still do not (@sec-prop-combine). Computation: do networks acquire systematic composition from data and scale, or must it be built in? Read from what the data could have supplied and what the architecture builds in, dated. Evidence at scale: the studies of the poverty-of-the-stimulus section are mostly the authors' own (GPT-2 in the impossible-languages study), and the BabyLM challenge is a shared benchmark and so closer to a comparison. The chapter states the class of each. Smoke test: a small model trained on a bracket language or on structure-dependent question formation, tested on depths held out, which can fail. Still out of reach: so far one space at a time, while the dog arrives through several (@sec-ch-cross-domain-transfer).*

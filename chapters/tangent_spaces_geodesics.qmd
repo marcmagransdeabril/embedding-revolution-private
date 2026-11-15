@@ -7,23 +7,23 @@ open: "Thin evidence for the hyperbolic section. The held sources are the author
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
-## The Erlangen Programme for Deep Learning
+## The Erlangen Programme for Deep Learning {#sec-erlangen-programme-deep-learning}
 *What is a representation invariant to? Symmetries, invariances, and equivariances.*
 
-## The Symmetries of Each Sense
+## The Symmetries of Each Sense {#sec-symmetries-each-sense}
 *Images vary by translation and viewpoint, audio by time shift, pitch, and speaker, video by motion, and text by none of these. A shared semantic space can be seen as a quotient by the nuisance symmetries of each modality: the same dog from any angle, in any voice.*
 
-## Tangent Spaces and Geodesics
+## Tangent Spaces and Geodesics {#sec-tangent-spaces-geodesics}
 *Parallel transport, Riemannian metrics, and semantic interpolation along curves. A static thing is a point and an event is a curve, so a running dog is a trajectory whose tangent vector is its motion; a plan is a curve too, and so is an argument if reasoning can stay in the space (@sec-ch-contextual-vectors), though a sampled argument is one draw from a distribution of curves, not a geodesic, since nothing guarantees that a single path converges on the answer. The geometry of this section is the vocabulary for both, developed for planning in @sec-ch-multimodal-embeddings. The metric that a decoder pulls back onto its code space, and the geodesics of that metric, are introduced in @sec-ch-generative-spaces and used here.*
 
-## Lie Groups and Continuous Symmetries
+## Lie Groups and Continuous Symmetries {#sec-lie-groups-continuous-symmetries}
 *$SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE), a structure that was adopted at scale.*
 
 ## Hyperbolic Latent Spaces {#sec-hyperbolic-spaces}
 *Why negative curvature suits trees (volume grows exponentially with radius), and the Poincaré ball and Lorentz hyperboloid models for embedding trees and hierarchical taxonomies with arbitrarily low distortion in few dimensions, against the dimension cost of doing the same in flat space.*
 
-## Gauge Equivariance
+## Gauge Equivariance {#sec-gauge-equivariance}
 *When coordinate frames depend on local manifold position.*
 
-## The Shape of a Tree
+## The Shape of a Tree {#sec-shape-tree}
 *Plan (1 page). Findings: what a representation is invariant to, how a static thing is a point and an event a curve, and where negative curvature helps: trees embed with low distortion in few dimensions, against the dimension cost of flat space. Achieved for the representation of meaning: meaning that survives symmetries (@sec-prop-invariance) and moves along paths (@sec-prop-paths), and hierarchies that fit as regions. Computation: some symmetries are absorbed by data and augmentation, and some survive because they are cheap, as convolution and rotary position embeddings did; whether hyperbolic geometry earns its cost beyond trees is read from its cost per step and its gain at matched dimension and compute, dated. Evidence at scale: for hyperbolic space, the authors' own results only; for rotary position embeddings, adoption at scale shows that they are cheap and does not show that they are better than learned positions, and an ablation is to be found (from memory, unchecked: the RoFormer paper). Smoke test: embed a small balanced tree in the plane and in a Poincaré disc, and compare the distortion of the tree distances, which has an analytic answer for the tree. Still out of reach: a hierarchy of definitions in which one idea has several parents is a graph and not a tree, so hyperbolic space holds the tree part only. Relations are the next step (@sec-ch-graph-embeddings).*

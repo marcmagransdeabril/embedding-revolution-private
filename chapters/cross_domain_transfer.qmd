@@ -6,23 +6,23 @@ status: idea
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
-## Gauge Freedom
+## Gauge Freedom {#sec-gauge-freedom}
 *A trained space is determined only up to an isometry, the relabelling invariance of @sec-ch-symbols-without-interior seen from the other side, so comparing two spaces is a geometric problem.*
 
-## Aligning Two Spaces
+## Aligning Two Spaces {#sec-aligning-two-spaces}
 *Canonical correlation analysis (Hotelling, 1936), orthogonal Procrustes, and Mikolov's 2013 linear map between the embedding spaces of two languages: the classical, linear forms of alignment, and the precursors of the contrastive alignment of @sec-ch-multimodal-embeddings.*
 
-## Optimal Transport & Wasserstein Distances
+## Optimal Transport & Wasserstein Distances {#sec-optimal-transport-wasserstein-distances}
 *Monge-Kantorovich formulations for transporting probability mass across latent manifolds.*
 
-## Domain Adaptation & Distribution Alignment
+## Domain Adaptation & Distribution Alignment {#sec-domain-adaptation-distribution-alignment}
 *Maximum Mean Discrepancy (MMD) and adversarial manifold alignment.*
 
-## Zero-Shot Cross-Domain Transfer
+## Zero-Shot Cross-Domain Transfer {#sec-zero-shot-cross-domain}
 *Transfer through aligned spaces, and the evidence for and against representational convergence across models.*
 
-## Principles and Parameters
+## Principles and Parameters {#sec-principles-parameters}
 *Chomsky's picture (1981) of languages as one shared core with a few switches, read geometrically: multilingual models encode grammatical relations in a subspace shared across languages, with directions specific to each (2020), the same shared-plus-specific structure as the concept subspaces of @sec-ch-complex-plane-quantum-logic.*
 
-## Same Map, Different North
+## Same Map, Different North {#sec-same-map-different-north}
 *Plan (1 page). Findings: a trained space is fixed only up to an isometry, so comparing two is a geometric problem, and the classical alignments, optimal transport, domain adaptation and zero-shot transfer each answer a version of it. Achieved for the representation of meaning: what is real is the arrangement (@sec-prop-arrangement), and spaces trained apart can be compared through it. Computation: does scale make independently trained spaces more alike, and if so, what is left for alignment to do? Read from the evidence for and against representational convergence, dated. That hypothesis is contested, so the chapter attributes it with its test and what the test found, and names which evidence is independent of its proponents. Smoke test: train two seeds of the predictor of @sec-ch-embedding-spaces, align them by orthogonal Procrustes and check that the cosines survive (the answer to exercise 3 of Learning by Prediction found the first within 3% of the second after the best rotation). Still out of reach: aligning two spaces from paired examples is one problem, and aligning two systems of communication with no parallel data and no way to check the result is another, the universal translator of the Epilogue. Joining the senses in one space is the next step (@sec-ch-multimodal-embeddings).*

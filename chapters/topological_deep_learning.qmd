@@ -7,17 +7,17 @@ open: "Thin evidence. The framework paper held in references/ (Hajij et al.) is 
 
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
-## What Pairwise Structure Cannot Express
+## What Pairwise Structure Cannot Express {#sec-what-pairwise-structure-cannot}
 *Moving beyond pairwise edges to simplicial complexes, cell complexes, and Combinatorial Complexes (CCs).*
 
-## Topological Cochains & Boundary Operators
+## Topological Cochains & Boundary Operators {#sec-topological-cochains-boundary-operators}
 *Modeling multi-way interactions, flows, faces, and higher-order cavities.*
 
-## Hodge Theory & Topological Message Passing
+## Hodge Theory & Topological Message Passing {#sec-hodge-theory-topological-message}
 *Decomposing flows into gradient, curl, and harmonic parts, and learning representations on manifolds with topological holes.*
 
-## Measuring the Shape of a Representation
+## Measuring the Shape of a Representation {#sec-measuring-shape-representation}
 *Persistent homology in latent spaces, with barcodes and persistence diagrams as tools to test the manifold hypothesis of @sec-ch-curse-of-dimensionality.*
 
-## More Than Pairs
+## More Than Pairs {#sec-more-than-pairs}
 *Plan (1 page). Findings: what simplicial and cell complexes, boundary operators and the Hodge decomposition express that edges cannot, and what persistent homology says about the manifold hypothesis of @sec-ch-curse-of-dimensionality. Achieved for the representation of meaning: structure among many things at once, and regions with holes (@sec-prop-region). Computation: the cost of moving from graphs to complexes is combinatorial, which the framework paper itself lists first among its limits; which parts earn that cost at scale, and which are mainly tools for analysis, is read from cost per step and from what the results teach. Evidence at scale: none independent held or known (the paper's own comparisons are on four datasets, one of them a graph-classification benchmark). The chapter says so, and says what each result would have to show to move the reading. Smoke test: compute the Hodge decomposition of a flow on a small simplicial complex with `numpy` and check that the gradient, curl and harmonic parts are orthogonal and sum to the flow, and that the number of harmonic components equals the first Betti number, which is an analytic ground truth. Still out of reach: a complex records who belongs with whom, not what follows from what, so similarity is still not a logic (@sec-ch-complex-plane-quantum-logic).*
