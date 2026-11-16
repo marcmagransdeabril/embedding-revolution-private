@@ -14,7 +14,7 @@ reconstructive models, five seeds each:
 
 For each: the held-out squared error per pixel against the other view and against the clean image, the retrieval of the other view
 among the held-out views, alignment, uniformity, offset (as in contrast_digits_infonce.py) and the effective rank of the codes (the
-exponential of the entropy of the normalized singular values of the centred held-out codes). The InfoNCE encoder with N = 128 is run
+exponential of the entropy of the normalized singular values of the centred held-out codes). The InfoNCE encoder with k = 127 (batches of 128) is run
 as a reference row (it has no decoder).
 
 The linear autoencoders are trained for 20,000 steps and the others for 2,000, the length of the contrast script: Adam needs the
@@ -118,7 +118,7 @@ def measures(z_a: np.ndarray, z_b: np.ndarray, out_a=None) -> dict:
 
 def run(job):
     model, seed = job
-    if model in ("predict the other view", "InfoNCE, N = 128"):
+    if model in ("predict the other view", "InfoNCE, k = 127"):
         kind, batch = ("predict", BATCH) if model.startswith("predict") else ("infonce", 128)
         f, head, _ = base.train_encoder(kind, batch, seed)
         with torch.no_grad():
@@ -134,7 +134,7 @@ def run(job):
 
 
 if __name__ == "__main__":
-    names = ["predict the other view", *MODELS, "InfoNCE, N = 128"]
+    names = ["predict the other view", *MODELS, "InfoNCE, k = 127"]
     with ProcessPoolExecutor() as pool:
         results = list(pool.map(run, [(name, seed) for name in names for seed in SEEDS]))
     by = {name: [r for r in results if r["model"] == name] for name in names}
@@ -155,7 +155,7 @@ if __name__ == "__main__":
               f"{col('uniformity').mean():>11.2f} {col('offset').mean():>7.2f} {col('rank').mean():>9.1f}")
 
     # The 'predict' and InfoNCE rows are the rows of the contrast script (same seeds, same code).
-    p, i = by["predict the other view"], by["InfoNCE, N = 128"]
+    p, i = by["predict the other view"], by["InfoNCE, k = 127"]
     assert round(np.mean([r["retrieval"] for r in p]) * 100, 1) == 13.9, "the predict row no longer matches the contrast script"
     assert round(np.mean([r["retrieval"] for r in i]) * 100, 1) == 39.1, "the InfoNCE row no longer matches the contrast script"
     assert round(np.mean([r["offset"] for r in p]), 2) == 0.96 and round(np.mean([r["alignment"] for r in p]), 2) == 0.03
@@ -183,7 +183,7 @@ if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(4.6, 3.0))
     for k, name in enumerate(n for n in names if not n.startswith("InfoNCE")):
         ax.scatter([r["err_clean"] for r in by[name]], [r["retrieval"].mean() for r in by[name]], s=14, color=f"C{k}", label=name)
-    ax.axhline(np.mean([r["retrieval"] for r in i]), color="C3", linewidth=0.8, linestyle="--", label="InfoNCE, N = 128 (no decoder)")
+    ax.axhline(np.mean([r["retrieval"] for r in i]), color="C3", linewidth=0.8, linestyle="--", label="InfoNCE, k = 127 (no decoder)")
     ax.set(xlabel="held-out squared error to the clean image, per pixel", ylabel="retrieval of the other view")
     ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
     ax.legend(fontsize=6)

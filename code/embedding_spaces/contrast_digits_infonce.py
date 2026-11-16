@@ -2,14 +2,14 @@
 
 The images are the 8x8 digits bundled with scikit-learn. A positive pair is two augmented views of the same image (a shift of
 at most one pixel and Gaussian noise), the negatives are the other images of the batch. A small encoder (64 -> 128 -> 16, ReLU)
-is trained in PyTorch (float64) with the InfoNCE loss on unit-norm outputs, for several batch sizes N and several seeds: the backward
+is trained in PyTorch (float64) with the InfoNCE loss on unit-norm outputs, for several numbers k of alternatives per positive (batches of k + 1 pairs) and several seeds: the backward
 pass is `loss.backward()` and the update is `torch.optim.Adam`. The notation is the one of the chapter: the encoders f_x and f_y (here the
 same network), the pre-normalization code z and the unit vectors e_i = f_x(x_i), v_j = f_y(y_j). The same encoder is
 also trained to predict the pixels of the other view with a squared error, through the same 16-dimensional bottleneck.
 Every number is a mean with a 95% bootstrap interval over the seeds and the held-out queries.
 We report, for each embedding and for raw pixels and a PCA of the same dimension, how often the other view of a held-out image is
 the nearest of all the held-out views (retrieval, after centring the vectors), the alignment and the uniformity of Wang and Isola, and, for InfoNCE, the loss and
-the bound log2 N - loss on the mutual information between the two views. Saves the two figures used in the chapter to
+the bound log2(k + 1) - loss on the mutual information between the two views. Saves the two figures used in the chapter to
 ../../figures/embedding_spaces/contrast_digits_bound.png and contrast_digits_cosines.png.
 """
 from concurrent.futures import ProcessPoolExecutor
@@ -31,7 +31,8 @@ from sklearn.datasets import load_digits
 from sklearn.neighbors import KNeighborsClassifier
 from torch import nn
 
-BATCHES, SEEDS, STEPS = [2, 8, 32, 128], range(5), 2000
+ALTERNATIVES, SEEDS, STEPS = [1, 7, 31, 127], range(5), 2000  # k, the alternatives of each positive: a batch has k + 1 pairs
+BATCHES = [k + 1 for k in ALTERNATIVES]
 BOOTSTRAP = 5000  # resamples of the percentile bootstrap behind every 95% interval
 PREDICTOR_BATCH = 128  # the predictor has no negatives, so the batch size only sets how many images it sees per step
 DIM, HIDDEN, TAU, NOISE, LEARNING_RATE, TAIL = 16, 128, 0.2, 0.15, 1e-3, 200  # TAIL: last steps averaged for the loss
@@ -89,7 +90,7 @@ def infonce(f: nn.Module, x: np.ndarray, y: np.ndarray) -> torch.Tensor:
 
     With the unit vectors e_i = f(x_i), v_j = f(y_j) (rows of e and v) and the scores S_ij = <e_i, v_j> / tau, the loss is the average of
     the softmax cross-entropy of picking the diagonal in each row (which y goes with x_i) and in each column (which x goes with y_j), whose
-    gradient with respect to S is (softmax_rows(S) + softmax_columns(S) - 2 I) / (2N), the same 'predicted minus observed' as in
+    gradient with respect to S is (softmax_rows(S) + softmax_columns(S) - 2 I) / (2 (k + 1)), the same 'predicted minus observed' as in
     Learning by Prediction.
     """
     e, v = (F.normalize(f(torch.tensor(view)), dim=1) for view in (x, y))
@@ -208,7 +209,7 @@ if __name__ == "__main__":
     rows = {name: dict(hits=retrieval(a, b)[None], alignment=[alignment(a, b)], uniformity=[uniformity(a)])
             for name, (a, b) in baselines.items()}
     groups = {"predict the other view": [r for r in results if r["kind"] == "predict"]}
-    groups |= {f"InfoNCE, N = {n}": [r for r in results if r["kind"] == "infonce" and r["batch"] == n] for n in BATCHES}
+    groups |= {f"InfoNCE, k = {n - 1}": [r for r in results if r["kind"] == "infonce" and r["batch"] == n] for n in BATCHES}
     for name, rs in groups.items():
         rows[name] = {k: np.array([r[k] for r in rs]) for k in ("hits", "alignment", "uniformity", "offset")}
         rows[name]["tail"] = np.array([r["tail"] for r in rs])
@@ -222,9 +223,9 @@ if __name__ == "__main__":
     for name, r in rows.items():
         cells = ["", ""]
         if name.startswith("InfoNCE"):
-            n = int(name.split("= ")[1])
+            n = int(name.split("= ")[1]) + 1  # the batch size k + 1
             cells = [fmt(r["tail"], ".2f"), fmt(np.log2(n) - r["tail"], ".2f")]
-            assert r["tail"].min() >= 0 and (np.log2(n) - r["tail"].mean(1)).max() <= np.log2(n)  # the bound can never exceed log2 N
+            assert r["tail"].min() >= 0 and (np.log2(n) - r["tail"].mean(1)).max() <= np.log2(n)  # the bound can never exceed log2(k + 1)
         print(f"{name:24} {cells[0]:>22} {cells[1]:>22} {fmt(r['hits'], '.1%'):>24} {fmt(r['alignment'], '.2f'):>22} "
               f"{fmt(r['uniformity'], '.2f'):>22} {(fmt(r['offset'], '.2f') if 'offset' in r else ''):>22}")
         if name.startswith("InfoNCE"):
@@ -239,29 +240,29 @@ if __name__ == "__main__":
             mean, low, high = interval(r["hits"].astype(float) - rows["raw pixels"]["hits"])
             print(f"{name:24} {100 * mean:+.1f} [{100 * low:+.1f}, {100 * high:+.1f}]")
     # With the largest batch, every seed beats the raw pixels (the claim of the section), and the 95% interval of the mean excludes it.
-    largest = rows[f"InfoNCE, N = {BATCHES[-1]}"]["hits"]
-    assert largest.mean(1).min() > raw and retrieval_of(f"InfoNCE, N = {BATCHES[-1]}")[1] > interval(rows["raw pixels"]["hits"])[2]
+    largest = rows[f"InfoNCE, k = {ALTERNATIVES[-1]}"]["hits"]
+    assert largest.mean(1).min() > raw and retrieval_of(f"InfoNCE, k = {ALTERNATIVES[-1]}")[1] > interval(rows["raw pixels"]["hits"])[2]
 
-    # Figure 1: (a) the bound against log2 N, under its cap; (b) the retrieval against the batch size. Error bars and bands: 95% intervals.
+    # Figure 1: (a) the bound against log2(k + 1), under its cap; (b) the retrieval against k. Error bars and bands: 95% intervals.
     FIGURES.mkdir(parents=True, exist_ok=True)
     logs = np.log2(BATCHES)
-    bound = [interval(np.log2(n) - rows[f"InfoNCE, N = {n}"]["tail"]) for n in BATCHES]
-    found = [retrieval_of(f"InfoNCE, N = {n}") for n in BATCHES]
+    bound = [interval(np.log2(n) - rows[f"InfoNCE, k = {n - 1}"]["tail"]) for n in BATCHES]
+    found = [retrieval_of(f"InfoNCE, k = {k}") for k in ALTERNATIVES]
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6.4, 2.6))
-    ax1.plot([0, 7.5], [0, 7.5], "--", color="gray", linewidth=0.8, label=r"cap $\log_2 N$")
+    ax1.plot([0, 7.5], [0, 7.5], "--", color="gray", linewidth=0.8, label=r"cap $\log_2(k+1)$")
     mean, low, high = np.array(bound).T
     ax1.errorbar(logs, mean, [mean - low, high - mean], marker="o", markersize=3, linewidth=1, capsize=2, color="C3",
-                 label=r"bound $\log_2 N - \ell_N$")
-    ax1.set(xlabel=r"$\log_2 N$ (bits)", ylabel="bits", title="(a) the bound under its cap")
+                 label=r"bound $\log_2(k+1) - \ell_k$")
+    ax1.set(xlabel=r"$\log_2(k+1)$ (bits)", ylabel="bits", title="(a) the bound under its cap")
     ax1.legend(fontsize=6)
     mean, low, high = np.array(found).T
-    ax2.errorbar(BATCHES, mean, [mean - low, high - mean], marker="o", markersize=3, linewidth=1, capsize=2, color="C3", label="InfoNCE")
+    ax2.errorbar(ALTERNATIVES, mean, [mean - low, high - mean], marker="o", markersize=3, linewidth=1, capsize=2, color="C3", label="InfoNCE")
     for name, color, style in (("raw pixels", "C0", ":"), (f"PCA, {DIM} dimensions", "C2", ":"), ("predict the other view", "C1", "--")):
         mean, low, high = retrieval_of(name)
         ax2.axhline(mean, color=color, linewidth=0.8, linestyle=style, label=name)
         ax2.axhspan(low, high, color=color, alpha=0.15, linewidth=0)
-    ax2.set(xscale="log", xlabel="batch size $N$", ylabel="retrieval of the other view", title="(b) retrieval")
-    ax2.set_xticks(BATCHES, [str(n) for n in BATCHES])
+    ax2.set(xscale="log", xlabel="alternatives $k$", ylabel="retrieval of the other view", title="(b) retrieval")
+    ax2.set_xticks(ALTERNATIVES, [str(k) for k in ALTERNATIVES])
     ax2.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0, decimals=0))
     ax2.legend(fontsize=6)
     for ax in (ax1, ax2):
@@ -275,7 +276,7 @@ if __name__ == "__main__":
     # Figure 2: cosines between the held-out views, of the same image (positives) and of different images (negatives).
     seed0 = {r["kind"] + str(r["batch"]): r["views"] for r in results if r["seed"] == 0}
     panels = [("(a) raw pixels", baselines["raw pixels"]), ("(b) predict the other view", seed0["predict128"]),
-              ("(c) InfoNCE, $N=2$", seed0["infonce2"]), ("(d) InfoNCE, $N=128$", seed0["infonce128"])]
+              ("(c) InfoNCE, $k=1$", seed0["infonce2"]), ("(d) InfoNCE, $k=127$", seed0["infonce128"])]
     fig, axes = plt.subplots(1, 4, figsize=(6.4, 2.2), sharex=True, sharey=True)
     for ax, (title, (a, b)) in zip(axes, panels):
         positive, negative = cosines(a, b)
