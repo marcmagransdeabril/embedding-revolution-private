@@ -18,8 +18,11 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ## Two Routes to One Space {#sec-two-routes-one-space}
 *Separate encoders aligned by a contrastive loss versus a single transformer over interleaved tokens (@sec-ch-contextual-vectors), with post-hoc alignment (@sec-ch-cross-domain-transfer) as a third, and what each route keeps and loses.*
 
+## A Toy Alignment: Digits and Their Names {#sec-toy-digits-names}
+*Plan (1–2 pages). The first multimodal experiment, moved from the InfoNCE section of @sec-ch-embedding-spaces. Images of the 8×8 digits on one side, with the encoder of that chapter, and the number words "zero" to "nine" on the other, as one-hot vectors followed by a linear map (a lookup table), with the same symmetric InfoNCE loss and two different encoders. The result is the 10×10 matrix of cosines between the mean image vector of each digit and the ten word vectors, and top-1 accuracy of the image against the words. With only $m = 10$ kinds of positive the batch must have $k \ll m$: random batches against batches with one image per word ($k = 9$), and $k = 127$ as the counter-example, where about 13 alternatives share the label of the anchor, the loss cannot go below its floor and the bound is capped at $\log_2 10 = 3.3$ bits.*
+
 ## What a Shared Space Loses {#sec-what-shared-space-loses}
-*A contrastive objective keeps what the views share and discards what is specific to one of them, and the InfoNCE estimate of mutual information cannot exceed $\log N$ for $N$ examples per batch. The fur texture of the dog is not in its bark.*
+*A contrastive objective keeps what the views share and discards what is specific to one of them, and the InfoNCE estimate of mutual information cannot exceed $\log_2(k+1)$ for $k$ alternatives per positive. The fur texture of the dog is not in its bark.*
 
 ## The Modality Gap {#sec-modality-gap}
 *Why embeddings of different modalities occupy separate cones even after contrastive training, its relation to the anisotropy of @sec-ch-embedding-spaces and the hubness of Chapters [-@sec-ch-curse-of-dimensionality] and [-@sec-ch-vector-databases], and what it means for the claim of a "single" space.*
