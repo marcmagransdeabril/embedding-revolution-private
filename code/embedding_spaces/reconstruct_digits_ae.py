@@ -157,7 +157,7 @@ if __name__ == "__main__":
     # The 'predict' and InfoNCE rows are the rows of the contrast script (same seeds, same code).
     p, i = by["predict the other view"], by["InfoNCE, N = 128"]
     assert round(np.mean([r["retrieval"] for r in p]) * 100, 1) == 13.9, "the predict row no longer matches the contrast script"
-    assert round(np.mean([r["retrieval"] for r in i]) * 100, 1) == 38.8, "the InfoNCE row no longer matches the contrast script"
+    assert round(np.mean([r["retrieval"] for r in i]) * 100, 1) == 39.1, "the InfoNCE row no longer matches the contrast script"
     assert round(np.mean([r["offset"] for r in p]), 2) == 0.96 and round(np.mean([r["alignment"] for r in p]), 2) == 0.03
 
     # Eckart-Young: the linear autoencoder of the same view reaches the error of the PCA of the same dimension. The PCA is that of the

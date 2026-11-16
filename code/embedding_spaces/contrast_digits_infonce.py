@@ -85,14 +85,17 @@ def fit(modules: list, batch_loss, steps: int, batch: int, rng: np.random.Genera
 
 
 def infonce(f: nn.Module, x: np.ndarray, y: np.ndarray) -> torch.Tensor:
-    """InfoNCE of the views x (anchors) and y (candidates), in nats: the j-th candidate is the positive of the i-th anchor when j = i.
+    """Symmetric InfoNCE of the views x and y, in nats: the i-th y is the positive of the i-th x and the other way round.
 
-    With the unit vectors e_i = f(x_i), v_j = f(y_j) (rows of e and v) and the scores S_ij = <e_i, v_j> / tau, the loss is the softmax
-    cross-entropy of picking the diagonal, whose gradient with respect to S is (softmax(S) - I) / N, the same 'predicted minus observed'
-    as in Learning by Prediction.
+    With the unit vectors e_i = f(x_i), v_j = f(y_j) (rows of e and v) and the scores S_ij = <e_i, v_j> / tau, the loss is the average of
+    the softmax cross-entropy of picking the diagonal in each row (which y goes with x_i) and in each column (which x goes with y_j), whose
+    gradient with respect to S is (softmax_rows(S) + softmax_columns(S) - 2 I) / (2N), the same 'predicted minus observed' as in
+    Learning by Prediction.
     """
     e, v = (F.normalize(f(torch.tensor(view)), dim=1) for view in (x, y))
-    return F.cross_entropy(e @ v.T / TAU, torch.arange(len(x)))
+    scores = e @ v.T / TAU
+    target = torch.arange(len(x))
+    return (F.cross_entropy(scores, target) + F.cross_entropy(scores.T, target)) / 2
 
 
 def train_encoder(kind: str, batch: int, seed: int):
