@@ -165,8 +165,8 @@ Still open:
 
 ## 11. Next steps (proposal)
 
-1. Verify the benchmark and paper leads for Chapter 4 (open the PDFs in `references/`, download missing ones with `ground-truth-review`), and fill items 2, 3 and 5 for it first. Not in `references/` on 2026-11-17 (nothing downloaded yet, pending the go-ahead to touch the repo):
-   - Papers: Landauer and Dumais 1997 (in `references.bib` as `landauer1997solution`, no PDF), the SimLex-999 paper, and the papers of WordSim-353, MEN, BLESS and BATS.
+1. Verify the benchmark and paper leads for Chapter 4 (open the PDFs in `references/`, download missing ones with `ground-truth-review`), and fill items 2, 3 and 5 for it first. State on 2026-11-17:
+   - Papers downloaded and checked against their titles: SimLex-999 (`hill2015simlex`), Agirre et al. 2009 on the similarity and relatedness subsets of WordSim-353 (`agirre2009study`), BLESS (`baroni2011how`) and BATS (`gladkova2016analogy`). To add by hand (publisher sites block scripts): Landauer and Dumais 1997 (`landauer1997solution`), MEN (Bruni et al. 2014), the original WordSim-353 paper (Finkelstein et al. 2002) and Rubenstein and Goodenough 1965. None of the downloaded papers has been read beyond the abstracts and the pages quoted in `ideas.qmd`, idea 18.
    - Data: SimLex-999, WordSim-353, MEN, BLESS, BATS, text8. Record each URL, version and checksum in the fetch script; datasets that are large are not committed (Constraints, section 8 of this note).
 2. Prototype chapter 4 words: SimLex-999 and analogy scores for SVD-PPMI and SGNS on Pride and Prejudice and on text8, next to the one-hot floor (chance) and first-order counts.
 3. Prototype chapter 4 digits: kNN and linear probe accuracy of AE, contrastive and PCA codes on digits, then MNIST and USPS as the shift.
