@@ -692,7 +692,7 @@ $$
 \ell_k = \frac{1}{k+1}\sum_{i=1}^{k+1} \Bigl(-s_{ii} + \ln \sum_{j=1}^{k+1} e^{s_{ij}}\Bigr).
 $$
 
-Each term is the loss $-\ln Q = -s + \ln \sum e^{s}$ of @sec-learning-prediction, with the sum over the candidates of the batch and not over a vocabulary. It is the InfoNCE of the original paper, where a context scores $k+1$ candidates [@oord2018representation, Section 2.3]. Training uses natural logarithms, so the loss is in nats, and dividing by $\ln 2$ gives the bits of the bound below.
+Each term is the loss $-\ln Q = -s + \ln \sum e^{s}$ of @sec-learning-prediction, with the sum over the candidates of the batch and not over a vocabulary.
 
 *The gradient.* As in Learning by Prediction, the derivative with respect to a score is what the model predicted minus what happened,
 
