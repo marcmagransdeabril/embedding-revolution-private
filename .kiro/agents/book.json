@@ -2,18 +2,40 @@
   "name": "book",
   "description": "Default book-writing agent: loads the repo skills and, after book changes are committed, asks for a review-doc pass on those changes.",
   "prompt": null,
-  "tools": ["*"],
+  "tools": [
+    "*"
+  ],
   "resources": [
     "file://README.md",
     "skill://.github/skills/*/SKILL.md"
   ],
-  "hooks": {
-    "preToolUse": [
+  "hooks": [
+    {
+      "name": "preToolUse-0",
+      "trigger": "preToolUse",
+      "matcher": "shell",
+      "action": {
+        "type": "command",
+        "command": "python3 .kiro/hooks/review_gate.py"
+      },
+      "timeout": 10
+    }
+  ],
+  "allowedTools": [],
+  "permissions": {
+    "rules": [
       {
-        "matcher": "shell",
-        "command": "python3 .kiro/hooks/review_gate.py",
-        "timeout_ms": 10000
+        "capability": "fs_read",
+        "match": [
+          "./**"
+        ],
+        "effect": "allow"
       }
     ]
+  },
+  "kiroUpgrade": {
+    "revision": 3,
+    "fingerprint": "sha256:53485b83033feeca6eef5146947afb0a808af8f1edf32dcd3c32d91ae5103545",
+    "source": "sha256:9f4380b40a02b1ce00798891e377478fc7d18b12c5aa1c1c592523954c650a30"
   }
 }
