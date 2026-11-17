@@ -2,7 +2,15 @@
 
 This file is idea 17 of [ideas.qmd](ideas.qmd); the Epilogue points to it from the section *Language, Thought and Translation*. Its sibling, idea 16 (how to embed the meaning of the formal sciences), is in [formal_sciences_meaning.md](formal_sciences_meaning.md). The two ideas share a testbed and a few sources but ask different questions. Two parts below, still called branches in the older entries. Iterate here before anything goes into a chapter or the roadmap in `index.qmd`.
 
-Nothing below has been checked against `references/`. Claims about the literature are from search snippets or from memory and are marked (`[verify]`, "memory", or "found" with its limits in each section).
+The iterations are kept in the order they were written. Iteration 5 checks iterations 1 to 4 against the sources held in `references/` (block "Ideas 16 and 17" of `references.bib`) and corrects them; where an earlier line was wrong it now says so and points to the correction. Start with the summary below.
+
+## Current state (2026-11-17)
+
+- **The question is old.** Ashby (1956, chapter 6, "The Black Box") posed it with a box "that has just fallen from a Flying Saucer" and answered that experiments identify a mechanism only "up to an isomorphism"; his example is a mechanical oscillator that no test can tell from an RLC circuit. Jonas and Kording (2017) gave the modern version and proposed the processor as a testbed for methods that do not exist yet.
+- **What is understanding.** Three formal answers are in hand: isomorphism of the canonical representation (Ashby), causal abstraction that commutes with interventions (Beckers and Halpern; Geiger et al.), and minimal interventions that reach a target behavior (Gurushankar and Grover 2021, undecidable in general by reduction to Rice's theorem). The idea should choose among them.
+- **Limits, in two families.** Limits of finite or passive data, which access relaxes (Moore; Gold on positive data; nonlinear ICA and Locatello et al. for a learner that only observes; the causal hierarchy). Limits of equivalence, which access does not relax (Ashby's isomorphism; non-unique explanations, Meloux et al. 2025 and Marom et al. 2009; Rice).
+- **What is new here.** Not the testbed idea (Jonas and Kording) nor benchmarks with known ground truth and budgeted experiments (Geng et al. 2025; LUCA 2026). New: observation without the domain's variables, a ladder of heterogeneous systems, module discovery, scoring against an equivalence class, and the axis of access (passive, intervention, replay, trace).
+- **First experiment.** Ashby's isomorphic oscillators (mechanical and electrical), with a chemical one added, behind a neutral observation interface: does a learned representation of behavior place them together, and does it keep apart systems that differ only under intervention?
 
 ---
 
@@ -53,7 +61,7 @@ A simulator whose raw observables carry no domain semantics, so the learner has 
 
 Jonas & Kording show that the standard neuroscience toolkit (lesions, tuning curves, spike-word statistics, correlation) is applied *to a system whose answer we know* and fails to recover it. The deeper point is that neuroscience does not usually try to understand the brain as an alien computing mechanism. It runs descriptive analyses and hopes structure emerges. The implied question is whether there is a method that actually can do the job.
 
-(Source: `tmp/new_references/chip.pdf`; I have read the first part only, up to the LFP section.)
+(Source: `jonas2017could`, read in full on 2026-11-17. The "deeper point" above is our reading; the paper's own argument is that methods should be checked on man-made systems first, and it proposes the processor as a testbed, p. 16. See iteration 5, A1 and A2.)
 
 ### What would an actual method need to do?
 
@@ -93,8 +101,8 @@ Branch 1 designs the *testbed* (hide the human vocabulary). Branch 2 defines the
 ## Next iteration
 
 - [ ] Decide the first minimal testbed (proposal: a lattice-based or ODE-based simulator plus one SPICE-like circuit family, both exposed through the neutral interface).
-- [ ] Read the remainder of Jonas & Kording and extract what they say they would do differently.
-- [ ] Collect `[verify]` references into `tmp/new_references/` and check them against the ground-truth index.
+- [x] Read the remainder of Jonas & Kording and extract what they say they would do differently. (done 2026-11-17, iteration 5)
+- [x] Collect `[verify]` references into `tmp/new_references/` and check them against the ground-truth index. (done 2026-11-17, iteration 5)
 
 ---
 
@@ -148,7 +156,7 @@ Method and limits: about a dozen web searches; I read abstracts and snippets onl
 **A1. The negative result and its follow-up (the premise)**
 
 - Jonas & Kording, "Could a neuroscientist understand a microprocessor?", PLoS Comput Biol 13(1):e1005268, 2017 (preprint bioRxiv 2016). Found. Abstract: methods "reveal interesting structure in the data but do not meaningfully describe the hierarchy of information processing". I have read only the first part of the preprint (`tmp/new_references/chip.pdf`).
-- Jonas & Kording, "Automatic discovery of cell types and microcircuitry from neural connectomics", arXiv 1407.4137 (eLife 2015, memory). Found. Unsupervised, run on the connectome (the wiring), and the abstract says it "automatically discovers the structure of a microprocessor". Closest precedent for unsupervised module discovery, but it takes the netlist as input and does not use activity or probing.
+- Jonas & Kording, "Automatic discovery of cell types and microcircuitry from neural connectomics", arXiv 1407.4137 (eLife 4:e04250, 2015). Found; the result is narrower than the arXiv abstract (iteration 5, A3). Unsupervised, run on the connectome (the wiring), and the abstract says it "automatically discovers the structure of a microprocessor". Closest precedent for unsupervised module discovery, but it takes the netlist as input and does not use activity or probing.
 - Lazebnik, "Can a biologist fix a radio?", Cancer Cell 2002. Cited by the paper. Source of the "can you fix it" criterion of understanding.
 
 **A2. Active experimentation and equation discovery**
@@ -167,8 +175,8 @@ Method and limits: about a dozen web searches; I read abstracts and snippets onl
 
 - Filan et al., "Neural networks are surprisingly modular" (arXiv 2003.04881) and "Clusterability in neural networks" (arXiv 2103.03386). Found. Define a module as strongly internally connected and weakly externally connected, and show that trained networks are more clusterable than random ones. Works on the weights (structure), as in the netlist case.
 - Conmy et al., "Towards automated circuit discovery for mechanistic interpretability" (ACDC), arXiv 2304.14997. Found. Activation patching to find the subgraph responsible for a behavior. The behavior, dataset and metric are chosen by the researcher, i.e. the function is given and the circuit is found.
-- Gate-level netlist reverse engineering in hardware security: GNN-RE (Alrahis et al., IEEE TCAD), ReIGNN (arXiv 2112.00806), GAMORA (arXiv 2303.08256). Found. Identify module boundaries and classify sub-circuits by function in netlists, GAMORA to 33 million nodes. They appear to be trained on labelled designs (supervised) [verify], and they work on structure, not on dynamics. This is the nearest existing engineering analogue of the proxy problem, and it is almost unknown outside hardware security.
-- Hanson & Crutchfield, "The attractor-basin portrait of a cellular automaton", J Stat Phys 1992; Crutchfield & Hanson, "Computational mechanics of cellular automata" and "Turbulent pattern bases for cellular automata"; Crutchfield, Hanson & others on automated pattern detection (arXiv cs/0410017). Found. Identify the dominant regular domain of a CA, build a filter that locates defects, classify the particles, and derive an equation of motion for them: a description of the CA's "intrinsic computation" from space-time data. **Directly relevant to the CA testbed.** To check how automatic the procedure is.
+- Gate-level netlist reverse engineering in hardware security: GNN-RE (Alrahis et al., IEEE TCAD), ReIGNN (arXiv 2112.00806), GAMORA (arXiv 2303.08256). Found. Identify module boundaries and classify sub-circuits by function in netlists, GAMORA to 33 million nodes. They are trained on labelled designs (supervised; checked in iteration 5, A10), and they work on structure, not on dynamics. This is the nearest existing engineering analogue of the proxy problem, and it is almost unknown outside hardware security.
+- Hanson & Crutchfield, "The attractor-basin portrait of a cellular automaton", J Stat Phys 1992; Crutchfield & Hanson, "Computational mechanics of cellular automata" and "Turbulent pattern bases for cellular automata"; Crutchfield, Hanson & others on automated pattern detection (arXiv cs/0410017). Found. Identify the dominant regular domain of a CA, build a filter that locates defects, classify the particles, and derive an equation of motion for them: a description of the CA's "intrinsic computation" from space-time data. **Directly relevant to the CA testbed.** Partly by hand: domains are found by inspection in simple cases, by ε-machine reconstruction in complex ones (iteration 5, A11).
 
 **A5. Causal abstraction: the formal test of a high-level explanation**
 
@@ -179,7 +187,7 @@ Method and limits: about a dozen web searches; I read abstracts and snippets onl
 **A6. Behavior learned without understanding; how to test for understanding**
 
 - Clemens, "Learning device models with recurrent neural networks", arXiv 1805.07869 (2018). Found. RNNs imitate devices from input-output observation, up to a 16550 UART. Prediction without explanation.
-- Weiss, Goldberg & Yahav, extracting automata from RNNs with L* (arXiv 1711.09576; authors from memory). Found. Query-based extraction of a minimal automaton from a black box. Finite-state only.
+- Weiss, Goldberg & Yahav, extracting automata from RNNs with L* (ICML 2018, arXiv 1711.09576). Found. Query-based extraction of a minimal automaton from a black box. Finite-state only.
 - Vafa et al., "Evaluating the world model implicit in a generative model", NeurIPS 2024, arXiv 2406.03689. Found. Metrics from the Myhill-Nerode theorem (sequence compression and distinction) show models can do well on their task and still hold an incoherent world model. A ready-made test of "does the model hold the right state structure".
 - Vafa et al., "What has a foundation model found? Using inductive bias to probe for world models", arXiv 2507.06952. Found. Models trained on orbital trajectories "consistently fail to apply Newtonian mechanics when adapted to new physics tasks"; they behave as if they use task-specific heuristics. Evidence for the book that good prediction in a physics simulator does not imply recovery of the law.
 
@@ -201,7 +209,7 @@ Separate abilities, each already done somewhere:
 | Verify an explanation | Causal abstraction (Geiger, Beckers-Halpern) | A hypothesis is supplied |
 | Test for a coherent world model | Vafa et al. | A known ground-truth automaton |
 
-Not found in this search: a single method that starts from neutral observations of a heterogeneous system, chooses its own probes, discovers the variables and the modules, and labels their function, scored against a known design hierarchy. That is the combination the proxy problem asks for. The claim is "not found in about a dozen searches", which is not the same as "does not exist"; before writing it in the book it needs a proper search (e.g. "reverse engineering" + "circuit" + "unsupervised", "automated scientific discovery" + "system identification", "compositional" + "program synthesis from traces").
+Superseded by iteration 5, B4 (benchmarks with known ground truth exist). Not found in this search: a single method that starts from neutral observations of a heterogeneous system, chooses its own probes, discovers the variables and the modules, and labels their function, scored against a known design hierarchy. That is the combination the proxy problem asks for. The claim is "not found in about a dozen searches", which is not the same as "does not exist"; before writing it in the book it needs a proper search (e.g. "reverse engineering" + "circuit" + "unsupervised", "automated scientific discovery" + "system identification", "compositional" + "program synthesis from traces").
 
 Theory that bounds what any method can do:
 - Rice's theorem (already in `symbols_without_interior.qmd`): no general procedure decides a non-trivial semantic property of an arbitrary program. Function can be recovered for restricted classes only.
@@ -240,9 +248,9 @@ Risks to flag:
 
 ### D. Next steps
 
-- [ ] Download the found papers into `tmp/new_references/` and run the ground-truth review on them (priority: Locatello 2019, Bongard & Lipson 2007, Geiger et al. 2023, Vafa et al. 2024/2025, Crutchfield-Hanson CA papers, GNN-RE).
+- [x] Download the found papers into `tmp/new_references/` and run the ground-truth review on them (priority: Locatello 2019, Bongard & Lipson 2007, Geiger et al. 2023, Vafa et al. 2024/2025, Crutchfield-Hanson CA papers, GNN-RE). (done 2026-11-17, except Bongard & Lipson, PDF not obtainable)
 - [ ] Do a focused search for the combination in section B.
-- [ ] Read the rest of Jonas & Kording (LFP, dimensionality reduction, Granger causality, discussion).
+- [x] Read the rest of Jonas & Kording (LFP, dimensionality reduction, Granger causality, discussion). (done 2026-11-17, iteration 5)
 - [ ] Decide placement (Epilogue thought experiment vs. chapter) and the first testbed.
 
 ---
@@ -272,12 +280,12 @@ Memory only, not searched: structural identifiability in system identification (
 
 ### B. What these results say, grouped
 
-1. **Equivalence-class limits.** Input-output behavior fixes a system only up to an equivalence class (Moore; realization theory; causal abstraction; non-identifiable circuits). "The function" must be defined modulo that class. This is not a failure of the learner. It also means a benchmark must score a recovered explanation against the *class* of faithful explanations, not against the designer's one hierarchy.
-2. **Prior-dependence limits.** Gold, no free lunch, nonlinear ICA and Locatello et al. say that induction from passive unlabelled data needs a bias. "From first principles" cannot mean "without a prior"; it means a declared prior. Candidate priors that suit mechanisms: simplicity (short description), modularity (weak coupling between parts), sparsity of interactions, independence of causal mechanisms (Scholkopf et al.). Each should be stated and tested, since a method that "discovers" modules under a modularity prior has not shown modules exist.
-3. **Observation-regime limits.** The same class of systems can be unlearnable from passive data and learnable with interventions or traces (causal hierarchy; Gold with traces). The proxy problem sits at the favorable end (unlimited probes, internal state visible). This makes it a fair test: failure there is not a data limit (Jonas & Kording's point), it is a method limit or a prior limit.
+1. **Equivalence-class limits.** Input-output behavior fixes a system only up to an equivalence class (Ashby 1956; realization theory; causal abstraction; non-identifiable circuits). "The function" must be defined modulo that class. This is not a failure of the learner. It also means a benchmark must score a recovered explanation against the *class* of faithful explanations, not against the designer's one hierarchy.
+2. **Prior-dependence limits** (Moore's finite-experiment theorem belongs here too, iteration 5, A4). Gold, no free lunch, nonlinear ICA and Locatello et al. say that induction from passive unlabelled data needs a bias. "From first principles" cannot mean "without a prior"; it means a declared prior. Candidate priors that suit mechanisms: simplicity (short description), modularity (weak coupling between parts), sparsity of interactions, independence of causal mechanisms (Scholkopf et al.). Each should be stated and tested, since a method that "discovers" modules under a modularity prior has not shown modules exist.
+3. **Observation-regime limits.** The same class of systems can be unlearnable from passive data and learnable with interventions or traces (causal hierarchy; Gold with traces). The proxy problem sits at the favorable end (unlimited probes, internal state visible, replay). A failure there is not a limit of the amount of data; Jonas & Kording showed that for passive recordings, and did not test active probing (iteration 5, A1). It would be a limit of the method or of the prior.
 4. **Computability limits.** Rice's theorem rules out a general method for arbitrary programs; the claim to test is that a method works for a declared class (bounded size, a given substrate, a hierarchy of modules).
 
-What I did not find: a theorem that covers the whole proxy problem (neutral observations of a heterogeneous mechanism, chosen probes, discovery of variables, modules and function). The pieces above bound each ability separately. The positive results (traces, interventions, auxiliary variables) suggest where progress is possible: more access, not more passive data.
+Corrected in iteration 5, B2 (Gurushankar & Grover prove undecidability for one formalization). Original text: what I did not find was a theorem that covers the whole proxy problem (neutral observations of a heterogeneous mechanism, chosen probes, discovery of variables, modules and function). The pieces above bound each ability separately. The positive results (traces, interventions, auxiliary variables) suggest where progress is possible: more access, not more passive data.
 
 ### C. Consequences for the experiment design
 
@@ -289,8 +297,8 @@ What I did not find: a theorem that covers the whole proxy problem (neutral obse
 
 ### D. Next steps (additions)
 
-- [ ] Read the primary sources of the table, in this order: Moore 1956, Gold 1967, Locatello et al. 2019, the Ibeling-Icard and Xia et al. causal hierarchy papers, Meloux et al. 2025, the ICLR 2026 trace paper.
-- [ ] Check the memory-only items before they are cited.
+- [x] Read the primary sources of the table, in this order: Moore 1956, Gold 1967, Locatello et al. 2019, the Ibeling-Icard and Xia et al. causal hierarchy papers, Meloux et al. 2025, the ICLR 2026 trace paper. (done 2026-11-17 for all held sources; Moore and Gold only through secondary sources)
+- [x] Check the memory-only items before they are cited. (done 2026-11-17, iteration 5)
 
 ---
 

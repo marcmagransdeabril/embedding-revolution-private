@@ -2,11 +2,11 @@
 
 This file is idea 16 of [ideas.qmd](ideas.qmd). Its sibling, idea 17 (given a physical system, can we understand its function?), is in [function_of_physical_systems.md](function_of_physical_systems.md).
 
-Seeded on 2026-11-17 from a conversation. No literature review has been done for this idea; the statements below are my reading, from memory, and none is checked against `references/`.
+Seeded on 2026-11-17 from a conversation. The article was read in full and Ashby's chapter on isomorphic systems was checked (see Review, at the end); the avenues below have had no literature review yet and are my reading, from memory.
 
 ## Trigger
 
-An article, "Chemistry is actually geometry" (chillphysicsenjoyer.substack.com, 2026-11-16), introduces Feinberg's chemical reaction network theory: the qualitative behavior of a reaction network (oscillation, multistability, robustness) can be predicted from structure (the stoichiometric subspace, the deficiency, the linkage classes) with few or no rate constants. I read the article only up to its section on representing chemical systems; the page was truncated.
+An article, "Chemistry is actually geometry" (chillphysicsenjoyer.substack.com, 2026-11-16), introduces Feinberg's chemical reaction network theory up to the deficiency zero theorem: from structure alone (the stoichiometric subspace, the linkage classes, and the deficiency, an integer), the theorem rules out multiple positive equilibria and positive oscillations for a class of networks, for every value of the rate constants. It rules behavior out; it does not predict oscillations (corrected 2026-11-17; see Review).
 
 The author's observation: the same move applies to all sciences, and the geometry need not be the point. The point is meaning. Physics, mathematics, chemistry and engineering each keep their meaning in artifacts (Lean, SPICE, VHDL, AutoCAD, Simulink, reaction networks). How should a machine represent it?
 
