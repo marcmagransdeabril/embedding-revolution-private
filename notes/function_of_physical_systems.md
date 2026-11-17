@@ -10,7 +10,7 @@ The iterations are kept in the order they were written. Iteration 5 checks itera
 - **What is understanding.** Three formal answers are in hand: isomorphism of the canonical representation (Ashby), causal abstraction that commutes with interventions (Beckers and Halpern; Geiger et al.), and minimal interventions that reach a target behavior (Gurushankar and Grover 2021, undecidable in general by reduction to Rice's theorem). The idea should choose among them.
 - **Limits, in two families.** Limits of finite or passive data, which access relaxes (Moore; Gold on positive data; nonlinear ICA and Locatello et al. for a learner that only observes; the causal hierarchy). Limits of equivalence, which access does not relax (Ashby's isomorphism; non-unique explanations, Meloux et al. 2025 and Marom et al. 2009; Rice).
 - **What is new here.** Not the testbed idea (Jonas and Kording) nor benchmarks with known ground truth and budgeted experiments (Geng et al. 2025; LUCA 2026). New: observation without the domain's variables, a ladder of heterogeneous systems, module discovery, scoring against an equivalence class, and the axis of access (passive, intervention, replay, trace).
-- **First experiment.** Ashby's isomorphic oscillators (mechanical and electrical), with a chemical one added, behind a neutral observation interface: does a learned representation of behavior place them together, and does it keep apart systems that differ only under intervention?
+- **First experiment** (iteration 6). A functional autoencoder, trained without labels to predict how a system answers new inputs, on mechanical and electrical oscillators isomorphic by construction (Ashby) and a matched chemical-electrical nonlinear pair; then a contrastive stage that pairs one family across substrates and tests transfer to families never paired. The literature shows generalization within a family and, with a shared prior and a few examples, across related laws; nothing found on contrastive pairing across substrates.
 
 ---
 
@@ -355,3 +355,52 @@ So the "not found" of iteration 3 B needs narrowing: benchmarks with known groun
 - [ ] Read Ashby chapter 6 to the end (6/9 to 6/20: homomorphisms and the lattice of simplifications, which is the coarse-graining of causal abstraction) and S.13/15 (how much information a Black Box can give).
 - [ ] Find an open copy of Moore 1956 and of Gold 1967, or ask the author for them.
 - [ ] Decide the definition of understanding (C, first bullet) before the testbed.
+
+---
+
+## Iteration 6 (2026-11-17): a functional autoencoder with a contrastive stage
+
+Proposed by the author after iteration 5; kept out of the written chapters, which stay with established results. Status: idea, a smoke test to design, not a claim.
+
+### A. The design
+
+The book already has a hand-built version: question 14 of `symbols_without_interior.qmd` (`rice_behavioural_embedding.py`) represents five programs by their outputs on probe inputs, so two sorting algorithms land together and `sort_unless_huge` lands with them because no probe reaches a list of 1,000 items. This design learns the behavior vector instead of fixing it, and moves from programs to physical systems.
+
+1. **Systems.** Families in several substrates, built so that some members are isomorphic by construction (Ashby's spring, wheel and viscous trough against a series RLC circuit, 6/8), others agree only after linearization, and others share only a qualitative behavior. Chemistry enters through nonlinear oscillators (the Brusselator, say) matched to a nonlinear circuit (a van der Pol oscillator), since a deficiency-zero weakly reversible network cannot oscillate at all (idea 16). That gives a ladder: exact isomorphism, matched linearization, same qualitative behavior.
+2. **Observation.** Each system shows only anonymous input and output channels, without names or units, with time and amplitude rescaled. Ashby matched L, R and C to the spring, the wheel and the friction "though not respectively"; the scaling decides whether a slow and a fast oscillator count as one function or two, and has to be chosen before the experiment.
+3. **Stage 1, functional autoencoder, no labels.** An encoder reads a few probe experiments (an input signal and the response) and gives a code z; a decoder gets z and a new input and predicts the response. Good prediction means z holds the input-output map. The substrate is never given. Test: do isomorphic systems of different substrates get nearby codes without any pairing signal? This is the result that would say function is recoverable from behavior without supervision.
+4. **Stage 2, contrast (InfoNCE, as in `embedding_spaces.qmd`).** Positives are the same function in two substrates; negatives are other functions. Because the pairs supply the equivalence, finding them together afterwards shows nothing. The test is transfer: pair only one family (oscillators), then ask whether families never paired (filters, integrators, a bistable switch) still meet across substrates. If they do, the model learned an invariance to substrate; if not, it learned a list of pairs.
+5. **Hard negatives.** Pairs that agree under small inputs and differ under large ones, and pairs that differ only under an internal intervention: the `sort_unless_huge` trap for physical systems.
+6. **Access as a variable.** Input-output probes only, then internal interventions, then replay. By Ashby, probes alone cannot separate isomorphic systems, so any further separation must appear only with more access.
+7. **Baselines.** The hand-built behavior vector (raw responses to fixed probes, as in question 14) and a classical second-order transfer-function fit. A learned code that beats neither adds nothing at this scale.
+8. **Scale.** A smoke test with numpy simulations of three or four families. It can falsify and illustrate; it cannot rank methods.
+
+Reading of the outcomes: codes that meet without labels say function is recoverable from behavior up to equivalence; codes that meet only after pairing and do not transfer say the "meaning" was supplied by the pairs. Either is a finding. A pass says the code captures behavior up to equivalence, not purpose.
+
+### B. Does the literature show this kind of architecture generalizing?
+
+Checked on 2026-11-17 against abstracts and the pages named; all PDFs held (block "Ideas 16 and 17" of `references.bib`). Short answer: within a family of systems, yes; to related laws after a few examples, sometimes; zero-shot to unrelated laws, rarely and mostly as the authors' own claim; across substrates with contrastive pairing, nothing found.
+
+| Kind of generalization | Evidence | Source and scope |
+|---|---|---|
+| New parameters of the same law | Yes. A context vector learned per environment conditions a dynamics model; new environments adapt fast, and the system parameters can be read from the context vectors "with minimal supervision". The authors' motivation states the baseline failure: data-driven models "fail to generalize to unseen systems that share the same general dynamics". | `kirchmeyer2022generalizing` (CoDA, ICML 2022), p. 1 |
+| Zero-shot within a learned space of dynamics | Yes, inside the span. Function encoders represent a system as coefficients on learned basis functions, found by an inner product at run time; a larger amount of data is needed to learn the space than a single function. Nothing is claimed outside the span. | `ingebrand2024zeroshot`, pp. 1, 5 and 9 |
+| Identification of the dynamics in latent space | Yes, for one system with guarantees. Contrastive learning identifies linear, switching linear and non-linear dynamics under a non-linear observation, with theoretical guarantees; symmetric encoders cannot identify non-trivial dynamics. This is the strongest support for stage 2 as system identification, but it is not transfer across systems. | `laiz2025selfsupervised` (ICLR 2025), pp. 1 and 8 |
+| Across different physical laws, with adaptation | Partly. A graph network meta-trained on several Hamiltonian systems (mass-spring, pendulum, Hénon-Heiles, magnetic mirror) adapts with few examples to a held-out one and to further unseen systems (2D harmonic oscillator, Kepler). The shared prior is the Hamiltonian form, and adaptation uses a few target examples. | `song2024towards` (ICLR 2024), pp. 1, 8 and 14 |
+| Across different laws, in context | Partly. A small transformer trained to forecast one dynamical system forecasts another without retraining, with an early trade-off between in- and out-of-distribution performance; the mechanism is a transfer-operator strategy (delay embedding, invariant sets). | `bao2026transformers` (preprint), p. 1 |
+| New PDEs after pretraining | Authors' claim, with fine-tuning. Poseidon, pretrained on fluid dynamics, "generalizes very well to new physics that is not seen during pretraining" on 15 downstream tasks, fine-tuned with 1 to 128 task trajectories. | `herde2024poseidon`, pp. 1 and 59 |
+| Prediction against recovery of the law | Against. Foundation models trained on orbits "consistently fail to apply Newtonian mechanics" on new tasks. | `vafa2025what`, p. 1 |
+| Theory of out-of-distribution generalization | Against generalization without a commitment. From one training window the process that extrapolates correctly is not identifiable; a structural commitment (features, labels, model class) decides out-of-distribution behavior while leaving in-distribution performance unchanged. | `aguilar2026does` (NeurIPS 2026), p. 1 |
+| Mapping between different physics | Found by search, not held: paired diffusion and wave fields mapped by neural operators, with a strong asymmetry in accuracy by direction. | Zhu, Lecompagnon & Ziegler, arXiv 2609.16853 (preprint) |
+
+What this says for the design:
+
+- Stage 1 is close to CoDA and function encoders, which work within a family. The new part is the substrate change, and Ashby's isomorphism says an ideal behavior encoder must put isomorphic systems together, since nothing in their behavior separates them. So within an isomorphism class the experiment tests the encoder, not a hypothesis about the world. The open question is the step between families.
+- The step between families is where the evidence is thin: one positive line under a shared Hamiltonian prior with adaptation (Song & Jeong), one in-context result on small transformers (Bao et al.), one fine-tuned foundation model (Poseidon, authors' claim), and theory (Aguilar et al.) plus a negative result (Vafa et al.) that say the outcome is fixed by the inductive bias, not by the data. The stage 2 transfer test is therefore informative in both directions.
+- No source found pairs systems across substrates contrastively and tests transfer to unpaired families. Search before claiming it: "contrastive" + "analogous systems" + "mechanical electrical"; "behavioral equivalence" + "representation learning" + "dynamical systems"; "function encoder" + "cross-domain"; bond graphs + learning.
+
+### C. Next steps
+
+- [ ] Write the numpy simulators (spring and RLC, isomorphic by construction) behind the neutral interface, and the hand-built behavior-vector baseline.
+- [ ] Fix the scaling convention (A.2) and the access levels (A.6) before training anything.
+- [ ] Run the search queries of B.
