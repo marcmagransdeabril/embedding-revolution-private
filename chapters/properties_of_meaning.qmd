@@ -1,11 +1,15 @@
 ---
-status: definitive
-open: "The list of properties is open. It grows and changes as the field does, and some members are known to experts the author has not met. Add, merge or drop one when a chapter needs it or an expert points to it. A property earns its place by being tested by a chapter and sourced by someone other than the author."
+status: provisional
+open: "The list of properties is open. It grows and changes as the field does, and some members are known to experts the author has not met. Add, merge or drop one when a chapter needs it or an expert points to it. A property earns its place by being sourced in the literature by someone other than the author, with the sceptics read, and then by being tested by a later chapter. Without the first it is dropped to notes/ideas.qmd."
 ---
 
 # The Properties of Meaning as Geometry {#sec-ch-properties-of-meaning}
 
-This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that later chapters can already cross-reference its sections. It is a catalog: each section states one property that meaning acquires once it becomes position in a space, in the plain language of distance and direction, and points forward to the chapters that earn it. Each section also carries a first-pass line of sources, to be pruned when the chapter is written.
+This chapter is a literature survey, not an experiment, and it is still being written. Its outline follows the roadmap in [index.qmd](../index.qmd). It is a catalog: each section states one property that meaning acquires once it becomes position in a space, in the plain language of distance and direction, and asks one question of the literature, whether the property has been shown to exist, by whom, and against what objections. A property that the literature does not support is unlikely to exist, and is dropped to `notes/ideas.qmd` with the reason. A property that survives is handed forward.
+
+The chapter does not test anything itself, because testing needs the algorithms (counting, prediction, contrast, reconstruction, latent prediction), and those are built in @sec-ch-embedding-spaces and the chapters after it. From the fourth chapter on, each chapter takes the properties it bears on and shows how a method achieves one, or how to test whether it does, on its own corpus and code (for example `The Geometry of Meaning` and `Where a Single Vector Strains` in @sec-ch-embedding-spaces). Those sections are the tests; this chapter keeps the claims and the evidence. Each section carries a first-pass line of sources, to be pruned when the chapter is finished.
+
+Status. `provisional` means the sources and the sceptics are collected but not yet checked against `references/` for every property; it becomes `definitive` when each property states what the literature supports, who disputes it, and which later chapter tests it.
 
 ## Nearness Is Likeness {#sec-prop-nearness}
 *Things that mean alike sit close together, and things that mean differently sit far apart.*

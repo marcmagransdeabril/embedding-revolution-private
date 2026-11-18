@@ -16,6 +16,7 @@ book:
   - index.qmd
   - part: Vectors as Meaning
     chapters:
+    - chapters/tests_of_meaning.qmd
     - chapters/properties_of_meaning.qmd
     - chapters/curse_of_dimensionality.qmd
     - chapters/symbols_without_interior.qmd

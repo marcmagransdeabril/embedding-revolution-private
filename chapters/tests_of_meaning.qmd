@@ -1,0 +1,94 @@
+---
+status: provisional
+open: "The list of tests, their rungs and the scorecard are open. They grow and change as the book does. Add a test, a rung or a probe when a chapter reaches something that no existing rung describes; rename, merge or drop one when the evidence says it does not separate anything. A test earns its place by having a probe that can fail, a baseline, and a source other than the author."
+---
+
+# The Tests of Meaning {#sec-ch-tests-of-meaning}
+
+This chapter is a stub that is meant to grow. It holds the thought experiments that the Prologue and the Epilogue use to ask whether a space holds meaning, in one place and in one format, so that every later chapter can say which test it touches and how far it gets. Each section states one test: the question, what it varies, who or what can judge a pass, and a ladder of rungs from a case a laptop can run to one nobody can yet run. It does not run anything itself. The properties that a space is expected to have, and what the literature says about them, are in @sec-ch-properties-of-meaning; the algorithms that build spaces start in @sec-ch-embedding-spaces; the chapters from there on take the rungs they can reach.
+
+Three words are used with a fixed meaning.
+
+- A *probe* is a function from a frozen representation to an answer that a human, a dataset or a checker can judge, with a metric, a baseline and a stated shift. One probe has one script and one number.
+- A *rung* is a probe of a given difficulty on one test. A chapter takes the highest rung its structure can reach, or says that none applies. It does not bend its content to reach one.
+- A *verdict* is *supported*, *qualified*, *contested* or *untested*, always with the date and the model family, because claims about model behaviour age (@sec-promises-keep-tests).
+
+The tests are of different kinds, and the differences matter more than the list. They differ in what they vary (channel, scale, language, system), in who can judge (a child, a checker, nobody), and in whether failing is informative. The tests are not assigned to chapters. A chapter reports a partial answer when it has one, in its closing section, and the Epilogue collects them.
+
+## The Dog Test {#sec-test-dog}
+*One concept, several senses: does the photograph of a dog, the word, the sound of its bark and the video of its run land in the same neighbourhood, and far from a cat or a car?*
+
+Varies the channel (horizontal). A human can judge it. A failure is informative. Stated in the Prologue; the property it asks for is @sec-prop-senses, and the literature on it is mixed: coarse structure is shared, and a fine-grained shared representation has not been shown.
+
+Rungs (first draft, to be verified and refined):
+
+0. Text only: does "dog" sit near "puppy", "bark" and "wolf", and far from "car" and "doorbell"?
+1. Image and text in one space (a CLIP-type model): retrieval in both directions, and the size of the modality gap.
+2. Audio with image and text: the bark.
+3. Video or motion: the gait.
+4. Held-out concepts (zero-shot), and what the shared space loses of what is specific to each channel.
+
+Expected reach: chapters 4 to 6 reach rung 0; @sec-ch-multimodal-embeddings reaches 1 to 4.
+
+## The Critical Literacy Test {#sec-test-critical-literacy .idea}
+*One text, several scales: what must a representation keep of a word, a paragraph, a chapter and a book for answers about it to survive without the text?*
+
+Varies the scale (vertical). A checker can judge it, and a contradiction can be planted. Stated in the Prologue as a first draft, with four kinds of question: granularity (Shannon's rate against distortion), dependency (an order of definitions, a graph and not a tree), internal consistency, and agreement with the world. The risk to design out is contamination: a correct answer may come from the memory of a model that has read the book, not from the representation. Use texts the model cannot have seen, such as chapters of this book, or planted contradictions in synthetic documents.
+
+Rungs (first draft):
+
+0. Reconstruction at a rate: how much of each level survives.
+1. Recovery of the dependency order on a graph of definitions.
+2. Detection of a planted contradiction.
+3. A three-way verdict (entails, refutes, undetermined).
+4. Checks against an external source.
+
+Expected reach: @sec-ch-embedding-spaces reaches 0, and shows that nearness does not detect consistency; later chapters take 1 to 4 where their structure allows (@sec-ch-graph-embeddings, @sec-ch-vector-databases, @sec-ch-neurosymbolic-integration).
+
+## The Universal Translator {#sec-test-translator .idea}
+*Two spaces, no dictionary: can the structure of one be mapped onto the structure of the other from the relations alone?*
+
+Varies the language, or the species (lateral). There may be no judge and no ground truth. The test is asymmetric: a pass is informative, a failure is not, because the spaces may differ for reasons that say nothing about meaning. It needs calibration on two human languages before any other case is claimed. Stated in the Epilogue (idea 15 of `notes/ideas.qmd`); the property it rests on is @sec-prop-arrangement and the symmetries of @sec-prop-invariance.
+
+Rungs (first draft):
+
+0. Calibration on two human languages with no dictionary, and with a small seed dictionary, against a random rotation as the null.
+1. Recovery of structure beyond the words (relations, not points).
+2. A test of order (a shuffled text as the control).
+3. Later rungs are speculative and are not listed until the earlier ones have results.
+
+Expected reach: @sec-ch-cross-domain-transfer reaches 0.
+
+## The Alien Technology Test {#sec-test-alien .idea}
+*A system whose function is unknown: can its function be recovered, up to isomorphism, from its behaviour alone?*
+
+Varies the system (what is embedded is a behaviour, not a text). It is Ashby's black box. No judge, and a failure says little. It stays a calibrated ladder, not a score, and it is a notes-only idea for now (`function_of_physical_systems.md`, ideas 16 and 17).
+
+Rungs (first draft):
+
+0. Ashby's isomorphic oscillators embedded by their responses to common inputs: do isomorphic systems land together?
+1. Transfer to families that were not seen.
+2. Later rungs are speculative and are not listed until the earlier ones have results.
+
+Expected reach: @sec-ch-cross-domain-transfer reaches 0, as a toy and flagged as a smoke test.
+
+## Scorecard {#sec-tests-scorecard}
+
+One row per chapter and test, filled as chapters are written. The table has no total, because a profile across tests and rungs is not an average (a chapter can reach the dog test and have nothing to say on the others).
+
+| Chapter | Test | Rung | Probe | Literature (same approach) | Ours (smoke) | Verdict | Date, model family |
+|---|---|---|---|---|---|---|---|
+| (none yet) | | | | | | | |
+
+Rules for adding a row.
+
+- The benchmark follows the question of the chapter, and the table may say "no honest probe" for a chapter.
+- The number that matters is the literature number for the same approach; ours is a smoke test, run on a laptop, which can fail and cannot rank methods at scale.
+- Fix the probe and the literature row before writing the chapter, and record failures. A chapter written to hit a rung stops testing anything.
+- Sceptics are part of the row, with their sources (@sec-ch-properties-of-meaning collects them for the properties).
+
+## Promises to Keep {#sec-promises-keep-tests}
+
+*Shelf life.* The verdicts are dated, because findings about model behaviour age (see @sec-promises-keep). A probe is written to be rerun on a newer model, and the change in its number is itself a measurement of the shelf life of the claim.
+
+*Plan (half a page).* Findings: four tests, each with a question, what it varies, who can judge, and a first ladder. Achieved: none yet; the chapter states the tests and does not run them. Out of reach: the upper rungs of all four, and any test with no judge. Next: the properties that a space is expected to have, and the literature on each (@sec-ch-properties-of-meaning).
