@@ -32,6 +32,11 @@ MASTER_PARTS = [
         "part": "Vectors as Meaning",
         "chapters": [
             {
+                "num": 0,
+                "title": "The Tests of Meaning",
+                "patterns": ["tests_of_meaning"],
+            },
+            {
                 "num": 1,
                 "title": "The Properties of Meaning as Geometry",
                 "patterns": ["properties_of_meaning", "properties", "meaning_geometry", "01_", "chapter1"],
@@ -66,6 +71,11 @@ MASTER_PARTS = [
     {
         "part": "Representation Extensions",
         "chapters": [
+            {
+                "num": 6.5,
+                "title": "Meaning Is Likeness: Nearness Across Levels",
+                "patterns": ["meaning_as_likeness"],
+            },
             {
                 "num": 7,
                 "title": "Vector Databases, RAG, and the Limits of Single-Vector Retrieval",

@@ -16,7 +16,7 @@ Status. `provisional` means the sources and the sceptics are collected but not y
 
 Figure (planned): a small map in which "dog", "puppy", and "wolf" cluster, while "car" and "doorbell" sit far away.
 
-Earned in @sec-ch-embedding-spaces (where the distances come from), @sec-ch-curse-of-dimensionality (why distance still works in many dimensions), and @sec-ch-vector-databases (search by nearness).
+Tested in @sec-ch-meaning-as-likeness, level by level and loss by loss. Earned in @sec-ch-embedding-spaces (where the distances come from), @sec-ch-curse-of-dimensionality (why distance still works in many dimensions), and @sec-ch-vector-databases (search by nearness).
 
 Sources (first pass). The distributional idea that likeness of meaning shows as likeness of company [@harris1954distributional; @firth1957synopsis]; the first vector spaces built from counts [@deerwester1990indexing; @lund1996producing]; generalization that falls off with distance in a psychological space [@shepard1987toward]; meanings as points in a space of quality dimensions [@gardenfors2000conceptual]. Two caveats: human similarity judgements are not always symmetric or metric [@tversky1977features], and in some trained spaces all vectors share a large common direction, so that raw nearness is relative to the space (@sec-ch-embedding-spaces).
 
