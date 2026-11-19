@@ -122,6 +122,26 @@ TODO
 ### 3.9 Meaning survives symmetries
 TODO. Sceptics: none found yet.
 
+### 3.1c Comparing two spaces: a geometry ladder (leads, 2026-11)
+
+Context: section "Many Runs, Many Spaces" of `chapters/meaning_as_likeness.qmd`. The claim to test is **geometric**, not topological (author): what should survive a change of seed, algorithm or data is the local metric structure, who is near whom and by how much relative to the neighbours. Topology is the weaker invariant: a homeomorphism may reorder neighbours at any finite scale, so agreement of topology does not say that nearness agrees. Topological tools are kept as a diagnostic of the global side.
+
+Ladder, from weakest to strongest (each rung asks more than the one before; the null is the same statistic between two seeds, plan "Many Runs, Many Spaces"):
+- G1, neighbour ranks. Whether the k nearest neighbours of a point in one space are the neighbours in the other: trustworthiness and continuity (Venna and Kaski), the co-ranking matrix with neighbourhood intrusions and extrusions (Lee and Verleysen, "quality assessment of nonlinear dimensionality reduction based on K-ary neighborhoods"). Rank-based, local, invariant to any monotone rescaling of each space.
+- G2, local relative distances. Rank correlation of the distances inside each point's neighbourhood, after normalising by the point's own nearest-neighbour distance (the local scaling that UMAP uses, to be read). This is the "local relative distances" of the author.
+- G3, global metric. Departure from isometry between the two metric spaces without any coordinates: the Gromov-Wasserstein distance (Memoli 2011), plus Procrustes and CKA (Kornblith 2019, held). Needs the absolute distances.
+- G4, diagnostic only. Order-based topology: clique topology (Giusti et al. 2015), which depends only on the ordering of the entries of a matrix and is invariant to nonlinear monotone transformations; and Representation Topology Divergence (Barannikov et al. 2022), the multi-scale topological dissimilarity of two point clouds with a one-to-one correspondence, which may lie in different ambient spaces. They say whether loops and voids agree, not whether nearness agrees.
+
+Reading of the result: agreement at G1 and G2 with disagreement at G3 is the "locally similar, globally different" case (same charts, different gluing, or only that local neighbourhoods are easy to match); G4 is what could tell which. Without G4, the note does not claim to separate the two.
+
+Provenance. Found by web search, title and abstract level only; not downloaded, not read at page level, not in `references/` or `references.bib`:
+- Giusti, Pastalkova, Curto, Itskov, "Clique topology reveals intrinsic geometric structure in neural correlations", PNAS 112(44), 2015 (arXiv 1502.06172). Abstract: features invariant under nonlinear monotone transformations, depending only on the relative ordering of matrix entries.
+- Barannikov et al., "Representation Topology Divergence: a Method for Comparing Neural Network Representations" (arXiv 2201.00058). Abstract: multi-scale topology dissimilarity between two point clouds of equal size with a one-to-one correspondence, possibly in different ambient spaces. A 2026 follow-up (arXiv 2606.06342) criticises RTD for asymmetry and for scores that depend on sample size; to be read before RTD is used.
+- Memoli, "Gromov-Wasserstein distances and the metric approach to object matching", Found. Comput. Math. 2011. Abstract: objects as metric measure spaces, a distance based on mass transportation.
+- Venna and Kaski (trustworthiness and continuity) and Lee and Verleysen (co-ranking matrix, K-ary neighbourhoods), found as titles and abstracts; the exact references are to be fixed when downloaded.
+Not yet searched: the stability of persistence diagrams (bottleneck distance bounded by the Gromov-Hausdorff distance), which I cited from memory in the discussion and which must be read before it enters the text.
+Next: download these into `references/`, add them to `references.bib`, read the pages that define each statistic, and write each rung's statistic, null and threshold as for 3.1.
+
 ## 4. Reading
 
 - Schnabel 2015 (`references/2015_schnabel_evaluation_methods_unsupervised_word_embeddings.pdf`): TODO, not yet used.
