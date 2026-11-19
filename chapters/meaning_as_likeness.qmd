@@ -4,9 +4,13 @@ status: idea
 
 # Meaning Is Likeness: Nearness Across Levels {#sec-ch-meaning-as-likeness}
 
-The last chapter ended with a table of one-hot symbols in which every pair of words is equally far apart, so that no pair is nearer than another, and with the Rice's theorem putting exact meaning out of reach. What is left is a graded distance. This chapter asks what the learned graded distances are worth as likeness of meaning.
+The last chapter ended with a table of one-hot symbols in which every pair of words is equally far apart, so that no pair is nearer than another, and with Rice's theorem putting exact meaning out of reach. What is left is a graded nearness. This chapter asks what learned nearness is worth as a likeness of meaning.
 
-Is likeness of meaning representable as a distance between vectors? We will seet how things with similar meaning are represented as vectors that sit close together irrespective if they are words, phrases, sounds, or images. The `dog`, the `puppy`, the `wolf`, their tails and their images and sounds are all points in some space, and their nearness reflects some notion of likeness. Surprisingly, this simple geometric idea is reproduced across different modalities and models, capturing in some way the same geometry of meaning.
+Is likeness of meaning representable as a distance between vectors? Alike things should sit near each other and different things far apart, whether they are words, phrases, sounds, images or clips: `dog` near `puppy`, less near `wolf`, far from `car`. But "alike" is not a single relation, but multiple. Similarity, relatedness, and association are different interpreations of likeness, but the space between them is to become its judge. 
+
+Nearness is also partly made by the loss function used to optimize the models. Sometimes it is put there by construction, as with an image and its caption, and sometimes it shows up without being asked for. We look at neighbours first, then measure them against an impartial judge and the null hypothesis, level by level and loss by loss. 
+
+Finally, we will ask which nearness survives a change of seed, algorithm and data, and where near is not alike.
 
 
 ## What Is Likeness in Meaning? {#sec-likeness-which}
