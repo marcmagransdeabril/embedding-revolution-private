@@ -7,7 +7,7 @@ status: idea
 This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.qmd) and exists so that other chapters can already cross-reference its sections.
 
 ## From Word Vectors to Contextual Vectors {#sec-from-word-vectors-contextual}
-*Why the vector of a word must depend on its sentence, and what transformers compute.*
+*Why the vector of a word must depend on its sentence, and what transformers compute. Harris already sets homonymy aside from his classification of words by environment (p. 157) and holds that the correlation between language and meaning "is much greater when we consider connected discourse" (p. 152) [@harris1954distributional]; a contextual vector is the distributional description taken to the environment of one occurrence, so that a polysemous word has as many regions as it has distinct environments, not one point. His further remark that a discourse has its own substitution sets and subdomains, which hold only inside it (p. 160), is an untested reading for a per-document subspace; it is kept in the Epilogue (@sec-meaning-difference-company).*
 
 ## Attention as Similarity-Weighted Retrieval {#sec-attention-similarity-weighted-retrieval}
 *The dot-product machinery of retrieval (@sec-ch-vector-databases) inside the model, and its link to associative memory: the Hopfield network stores patterns as energy minima and recalls one by descent [@hopfield1982neural], with about $0.15N$ patterns held by $N$ units, and its continuous version has the attention update as its update rule [@ramsauer2021hopfield].*
