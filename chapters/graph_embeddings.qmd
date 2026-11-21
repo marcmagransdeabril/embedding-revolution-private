@@ -10,7 +10,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Graph Neural Networks (GNNs) and Message Passing architectures.*
 
 ## What a Relation Can Be {#sec-what-relation-can-be}
-*Symmetric, antisymmetric, inverse, and compositional relations, and the algebra each one needs.*
+*Symmetric, antisymmetric, inverse, and compositional relations, and the algebra each one needs. A relation between things is not the only asymmetry: the likeness of two things is itself directional in human judgement [@tversky1977features] (@sec-likeness-not-distance), which a symmetric score cannot say and which the asymmetric relations of this section are the machinery to express.*
 
 ## Knowledge Graph Embeddings, as a Historical Sequence {#sec-knowledge-graph-embeddings-historical}
 *Each model fixes a relation pattern that the previous one could not express.*
