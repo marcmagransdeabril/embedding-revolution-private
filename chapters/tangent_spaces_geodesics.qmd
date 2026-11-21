@@ -24,6 +24,8 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ## Hyperbolic Latent Spaces {#sec-hyperbolic-spaces}
 *Why negative curvature suits trees (volume grows exponentially with radius), and the Poincaré ball and Lorentz hyperboloid models for embedding trees and hierarchical taxonomies with arbitrarily low distortion in few dimensions, against the dimension cost of doing the same in flat space.*
 
+*Hierarchy has other encodings, compared by the likeness each defines in @sec-likeness-other-objects: box embeddings, where "dog" is inside "mammal" and the overlap $\mathrm{Vol}(A \cap B)/\mathrm{Vol}(B)$ reads as $P(A \mid B)$ (Vilnis et al., ACL 2018, to add), and Gaussian embeddings, where breadth is covariance [@vilnis2015word]. Containment is asymmetric; hyperbolic distance is not, so the two answer different questions ("is it inside" and "how general is it"), which is to be tested on one hierarchy.*
+
 ## Gauge Equivariance {#sec-gauge-equivariance}
 *When coordinate frames depend on local manifold position.*
 

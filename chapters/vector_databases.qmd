@@ -20,7 +20,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 *Bridging parametric model memory with external latent storage, told as the answer of the 2020s.*
 
 ## Hybrid Search & Multi-Vector Alignments {#sec-hybrid-search-multi-vector}
-*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item. The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-multimodal-embeddings are practical problems.*
+*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item: likeness there is an alignment, the sum over query tokens of the best match among document tokens (Khattab and Zaharia, SIGIR 2020, to add), which is asymmetric and not a distance (@sec-likeness-other-objects). The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-multimodal-embeddings are practical problems.*
 
 ## Negation, Multi-Hop Reasoning, and Hallucination (a dated case study) {#sec-negation-multi-hop-reasoning}
 *How retrieval systems behaved, what followed, and why the structural limit remains.*

@@ -21,7 +21,7 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ### Bilinear & Multiplicative Models (DistMult, ComplEx)
 
 ### Rotational Models (RotatE)
-*Relations as rotations in the complex plane ($\mathbb{C}^D$).*
+*Relations as rotations in the complex plane ($\mathbb{C}^D$).* *Likeness here is defined modulo an operator, $\mathbf{t} \approx \mathbf{h} \circ \mathbf{r}$: two pairs are analogous if the same rotation maps both (Sun et al., ICLR 2019, to add), and Paris and France are related without being alike (@sec-likeness-other-objects).*
 
 ## Graph Databases vs. Vector Databases {#sec-graph-databases-vs-vector}
 *The convergence of discrete graph topology and continuous latent coordinates.*
