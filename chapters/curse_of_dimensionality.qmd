@@ -31,6 +31,8 @@ This chapter is a stub. Its outline follows the roadmap in [index.qmd](../index.
 ## The Manifold Hypothesis {#sec-manifold-hypothesis}
 *Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$): images of an object that can only shift and rotate lie on a three-dimensional manifold, whatever the number of pixels [@bishop2024deep]. @sec-ch-topological-deep-learning tests the hypothesis with persistent homology [@chung2021neural].*
 
+*One manifold or several? A single intrinsic dimension for a whole dataset is an idealisation. If the data are a union of pieces of different dimension and curvature (a stratified space), then a fixed radius means different things in different pieces: it covers a tight neighbourhood in a dense, low-dimensional piece and many unrelated points in a sparse, high-dimensional one, and distance concentration (@sec-concentration-measure) sets in earlier where the local dimension is higher. The estimate of local intrinsic dimension from the ratio of distances to the first two neighbours (Facco et al. 2017, to add) is the check, and a map of it over a trained space is the test; no result for embedding spaces is held in `references/`, so the claim is an idea until one is read. Consequence taken up elsewhere: a global similarity threshold has no fixed meaning (@sec-reading-nearness-correctly).*
+
 ## An Aside on Optimization {#sec-aside-optimization}
 *Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, their ratio to local minima growing exponentially with dimension [@dauphin2014identifying], and what overparameterization changes. This concerns parameter space, not embedding space.*
 
