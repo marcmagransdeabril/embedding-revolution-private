@@ -1,4 +1,4 @@
-# Ground-truth pass: chapters/likeness_as_nearness.qmd (first section, judges, objectives, questions)
+# Ground-truth pass: chapters/meaning_as_likeness.qmd (first section, judges, objectives, questions)
 
 Run on 2026-11-22 with the page index of `references/` (PDF page numbers of the extraction; the printed pages cited in the chapter were checked against page headers where the PDF carries them: Harris 156–157 and 152 = PDF 11, 12, 7; Firth p. 11 = PDF 7; Quine 1951 p. 38 = PDF 20; Ramsey pp. 157 and 170 = PDF 5 and 18; Goodman p. 443 = PDF 7; Quine 1960 pp. 33, 46–47, 65–66 = PDF 64, 77–78, 97, offset 31; Kripke pp. 84, 89, 96, 97 = PDF 92, 97, 104, 105, offset 8; Kaplan pp. 504–505 = PDF 13–14; Wittgenstein by section; Frege has no printed pages in the PDF).
 

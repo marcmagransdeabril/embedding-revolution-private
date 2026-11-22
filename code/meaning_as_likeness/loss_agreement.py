@@ -1,5 +1,5 @@
 # SKELETON: written, not yet run together with the author (the experiments of phase one are run step by step); `make test-code` skips it.
-"""Goal 1 of the chapter "Likeness as Nearness" (section "The Loss Decides What Is Near"): does the loss decide which likeness is near?
+"""Goal 1 of the chapter "Meaning as Likeness" (section "The Loss Decides What Is Near"): does the loss decide which likeness is near?
 
 Three losses (SVD of PPMI, SGNS, GloVe) on one text, against two judges of likeness on the same 999 word pairs of SimLex-999, the
 similarity rating and the strength of free association (USF), and against the 353 pairs of WordSim-353; the unreduced PPMI rows are the
@@ -7,7 +7,7 @@ null, the agreement between raters is the ceiling, and three seeds give the nois
 the three losses agree with each other, they agree with the judge of association more than with the judge of similarity, and all stay
 below the ceiling. Also run: the same comparison for growing amounts of text (counting model only), since "use" is a claim about quantity.
 Prints the numbers and a verdict for each part of the expectation, saves results/loss_agreement.json and
-figures/likeness_as_nearness/loss_agreement.png.
+figures/meaning_as_likeness/loss_agreement.png.
 """
 from __future__ import annotations
 

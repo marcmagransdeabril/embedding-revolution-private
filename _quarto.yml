@@ -17,7 +17,7 @@ book:
   - chapters/symbols_without_interior.qmd
   - chapters/tests_of_meaning.qmd
   - chapters/properties_of_meaning.qmd
-  - chapters/likeness_as_nearness.qmd
+  - chapters/meaning_as_likeness.qmd
   - chapters/meaning_as_difference.qmd
   - chapters/meaning_as_direction.qmd
   - chapters/meaning_as_region.qmd

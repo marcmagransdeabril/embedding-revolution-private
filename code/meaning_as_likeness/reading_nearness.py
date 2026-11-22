@@ -1,5 +1,5 @@
 # SKELETON: written, not yet run together with the author (the experiments of phase one are run step by step); `make test-code` skips it.
-"""Method and goal 3 of the chapter "Likeness as Nearness" (section "Reading Nearness Correctly").
+"""Method and goal 3 of the chapter "Meaning as Likeness" (section "Reading Nearness Correctly").
 
 Method. A raw cosine mixes likeness with the mean vector of the space, with a few dominant directions and with the frequency of the words.
 Expectation: centring on the mean and removing the top directions raise the correlation with the judge and lower the correlation with
@@ -7,7 +7,7 @@ frequency, against a shuffled-label null and a random-vector null, with a bootst
 Goal 3. A family is a connected set and not a ball: (a) among the neighbours of a word, pairs that are not neighbours of each other are
 common (a chain), and the cosine of two neighbours is about the product of their cosines to the word, as if they shared only its direction;
 (b) a fixed radius means a different judged likeness in a dense region than in a sparse one, so the rank of the neighbour is the safer measure.
-Prints the numbers and a verdict, saves results/reading_nearness.json and figures/likeness_as_nearness/reading_nearness.png.
+Prints the numbers and a verdict, saves results/reading_nearness.json and figures/meaning_as_likeness/reading_nearness.png.
 """
 from __future__ import annotations
 

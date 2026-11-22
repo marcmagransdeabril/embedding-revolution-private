@@ -31,7 +31,7 @@ def test_chapters_follow_the_order_of_the_roadmap_whichever_of_them_exist():
 def test_the_introduction_comes_first_then_the_summary_then_the_properties_then_the_epilogue():
     order = sync_chapters.ORDER
     assert order[:3] == ["symbols_without_interior", "tests_of_meaning", "properties_of_meaning"]
-    assert order[3] == "likeness_as_nearness" and order[-1] == "epilogue"
+    assert order[3] == "meaning_as_likeness" and order[-1] == "epilogue"
 
 
 def test_the_dimensionality_chapter_is_an_appendix_and_the_solutions_close_the_book():

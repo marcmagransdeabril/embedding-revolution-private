@@ -1,4 +1,4 @@
-"""Shared helpers for the scripts of the chapter "Likeness as Nearness": pinned downloads, the training text (text8), the judges
+"""Shared helpers for the scripts of the chapter "Meaning as Likeness": pinned downloads, the training text (text8), the judges
 (SimLex-999 with its association column, WordSim-353 with its raters, the Google analogies), the co-occurrence counts, and the
 statistics that every experiment reports (Spearman correlation, bootstrap over pairs, overlap of nearest neighbours).
 
@@ -194,7 +194,7 @@ def neighbour_overlap(a: np.ndarray, b: np.ndarray) -> np.ndarray:
 # --- the trained spaces (made by train_spaces.py)
 SPACES = CACHE / "spaces"
 RESULTS = Path(__file__).parent / "results"
-FIGURES = Path(__file__).resolve().parents[2] / "figures" / "likeness_as_nearness"
+FIGURES = Path(__file__).resolve().parents[2] / "figures" / "meaning_as_likeness"
 
 
 def cached(stem: str, extension: str) -> Path:
@@ -217,7 +217,7 @@ def load_vocab() -> tuple[list[str], dict[str, int], np.ndarray]:
 
 
 def save_results(name: str, results: dict) -> None:
-    """Keep the numbers of an experiment in code/likeness_as_nearness/results/<name>.json, for the text of the chapter."""
+    """Keep the numbers of an experiment in code/meaning_as_likeness/results/<name>.json, for the text of the chapter."""
     import json
     RESULTS.mkdir(exist_ok=True)
     (RESULTS / f"{name}.json").write_text(json.dumps(results, indent=1, sort_keys=True))

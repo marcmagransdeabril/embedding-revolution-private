@@ -1,4 +1,4 @@
-"""Unit tests of the helpers of the chapter "Likeness as Nearness" (code/likeness_as_nearness/utils.py): each one is small and has a known answer."""
+"""Unit tests of the helpers of the chapter "Meaning as Likeness" (code/meaning_as_likeness/utils.py): each one is small and has a known answer."""
 from __future__ import annotations
 
 import importlib.util
@@ -9,8 +9,8 @@ import pytest
 from scipy import sparse
 
 # Loaded under its own name: every chapter directory has its own `utils`.
-_PATH = Path(__file__).resolve().parents[5] / "code" / "likeness_as_nearness" / "utils.py"
-_spec = importlib.util.spec_from_file_location("likeness_as_nearness_utils", _PATH)
+_PATH = Path(__file__).resolve().parents[5] / "code" / "meaning_as_likeness" / "utils.py"
+_spec = importlib.util.spec_from_file_location("meaning_as_likeness_utils", _PATH)
 utils = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(utils)
 

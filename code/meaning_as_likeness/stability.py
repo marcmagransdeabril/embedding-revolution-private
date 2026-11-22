@@ -1,12 +1,12 @@
 # SKELETON: written, not yet run together with the author (the experiments of phase one are run step by step); `make test-code` skips it.
-"""Goal 5 of the chapter "Likeness as Nearness" (section "Many Runs, Many Spaces"): what survives a change of seed, of loss and of text,
+"""Goal 5 of the chapter "Meaning as Likeness" (section "Many Runs, Many Spaces"): what survives a change of seed, of loss and of text,
 and a part of the text removed?
 
 Expectation (written before the run): seeds differ least, losses more and texts most; removing a part of the text that does not mention a
 word moves its neighbours no more than a change of text does; and only the local neighbourhood survives all of them (the overlap of the
 nearest neighbours is higher than the agreement of the global geometry). The measure is a rotation-invariant one, the overlap of the k nearest
 neighbours of 2,000 words, with the seed gap as the noise floor; the global geometry is the Spearman correlation of the cosines of 200,000
-random pairs. Prints the numbers and verdicts, saves results/stability.json and figures/likeness_as_nearness/stability.png.
+random pairs. Prints the numbers and verdicts, saves results/stability.json and figures/meaning_as_likeness/stability.png.
 """
 from __future__ import annotations
 

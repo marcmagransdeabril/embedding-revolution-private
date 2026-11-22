@@ -5,7 +5,7 @@ open: "The list of tests, their rungs and the scorecard are open. They grow and 
 
 # The Tests of Meaning {#sec-ch-tests-of-meaning}
 
-This chapter is a stub that is meant to grow. It holds the thought experiments that the Prologue and the Epilogue use to ask whether a space holds meaning, in one place and in one format, so that every later chapter can say which test it touches and how far it gets. Each section states one test: the question, what it varies, who or what can judge a pass, and a ladder of rungs from a case a laptop can run to one nobody can yet run. It does not run anything itself. The properties that a space is expected to have, and what the literature says about them, are in @sec-ch-properties-of-meaning; the algorithms that build spaces start in @sec-ch-likeness-as-nearness; the chapters from there on take the rungs they can reach.
+This chapter is a stub that is meant to grow. It holds the thought experiments that the Prologue and the Epilogue use to ask whether a space holds meaning, in one place and in one format, so that every later chapter can say which test it touches and how far it gets. Each section states one test: the question, what it varies, who or what can judge a pass, and a ladder of rungs from a case a laptop can run to one nobody can yet run. It does not run anything itself. The properties that a space is expected to have, and what the literature says about them, are in @sec-ch-properties-of-meaning; the algorithms that build spaces start in @sec-ch-meaning-as-likeness; the chapters from there on take the rungs they can reach.
 
 Three words are used with a fixed meaning.
 
@@ -45,7 +45,7 @@ Rungs (first draft):
 3. A three-way verdict (entails, refutes, undetermined).
 4. Checks against an external source.
 
-Expected reach: @sec-ch-likeness-as-nearness reaches 0, and shows that nearness does not detect consistency; later chapters take 1 to 4 where their structure allows (@sec-ch-meaning-as-difference, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-composition).
+Expected reach: @sec-ch-meaning-as-likeness reaches 0, and shows that nearness does not detect consistency; later chapters take 1 to 4 where their structure allows (@sec-ch-meaning-as-difference, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-composition).
 
 ## The Universal Translator {#sec-test-translator .idea}
 *Two spaces, no dictionary: can the structure of one be mapped onto the structure of the other from the relations alone?*

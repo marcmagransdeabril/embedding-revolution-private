@@ -1,5 +1,5 @@
 # SKELETON: written, not yet run together with the author (the experiments of phase one are run step by step); `make test-code` skips it.
-"""Phase one of the chapter "Likeness as Nearness", step 1: train the spaces that the experiments compare, once, and keep them in `.cache/`.
+"""Phase one of the chapter "Meaning as Likeness", step 1: train the spaces that the experiments compare, once, and keep them in `.cache/`.
 
 One text (text8, 17 million words), one vocabulary (the 30,000 most frequent words), one window (5). Counting (SVD of PPMI), predicting
 (SGNS) and weighted least squares (GloVe) each give 100-dimensional vectors, three seeds each; and, for the stability experiment,

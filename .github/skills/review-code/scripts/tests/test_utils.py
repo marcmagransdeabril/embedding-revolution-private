@@ -1,4 +1,4 @@
-"""Unit tests of the helpers shared by the solution scripts (code/embedding_spaces/utils.py: the objectives): each one is small and has a known answer."""
+"""Unit tests of the helpers shared by the solution scripts (embedding-technologies-stubs/code/embedding_spaces/utils.py, the dissolved chapter on the objectives): each one is small and has a known answer."""
 from __future__ import annotations
 
 import sys

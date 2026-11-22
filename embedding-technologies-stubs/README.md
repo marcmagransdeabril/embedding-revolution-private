@@ -1,12 +1,12 @@
 # Technology chapters of the earlier plan
 
-The book was organized by technologies until 2026-11-22. It is now organized by the properties of meaning (see `index.qmd` and `tmp/plan_properties.md`), and these twelve chapters were moved here with `git mv`, keeping their text, their section identifiers and their history. This directory is not built: `sync_chapters.py` and `validate_book.py` read only `chapters/`. Each property chapter salvaged from them, by copying, the sections it needs (a comment `salvaged from embedding-technologies-stubs/...` marks each one, and the copies keep the identifiers, so that references resolve in the new chapters). A file here is deleted only when nothing in it is left unclaimed, and only with the author's consent. The moved chapters carry the `open:` notes and the status that they had.
+The book was organized by technologies until 2026-11-22. It is now organized by the properties of meaning (see `index.qmd` and `tmp/plan_properties.md`), and these twelve chapters were moved here with `git mv`, keeping their text, their section identifiers and their history. The code, the figures and the diagrams of the dissolved chapter on the anatomy of embedding spaces are here too, in `code/embedding_spaces/`, `figures/embedding_spaces/` and `diagrams/embedding_spaces/` (moved 2026-11-22; the scripts are no longer run by `make test-code` nor the diagram compiled by `make diagrams`). This directory is not built: `sync_chapters.py` and `validate_book.py` read only `chapters/`. Each property chapter salvaged from them, by copying, the sections it needs (a comment `salvaged from embedding-technologies-stubs/...` marks each one, and the copies keep the identifiers, so that references resolve in the new chapters). A file here is deleted only when nothing in it is left unclaimed, and only with the author's consent. The moved chapters carry the `open:` notes and the status that they had.
 
 ## embedding_spaces.qmd
 
 Status when moved: definitive.
 
-Salvaged by: likeness_as_nearness (counting, predicting and contrasting: done in step 2), meaning_as_generation (reconstruction), meaning_across_senses (predicting embeddings, InfoNCE across modalities); the ledger of limits goes to properties_of_meaning.
+Salvaged by: meaning_as_likeness (counting, predicting and contrasting: done in step 2), meaning_as_generation (reconstruction), meaning_across_senses (predicting embeddings, InfoNCE across modalities); the ledger of limits goes to properties_of_meaning.
 
 Not yet claimed: the sections "Encoder/Decoder and the Chain Rule", "Learning by Contrast: Anything" (the digits experiment), "Learning by Predicting Embeddings", "Learning by Reconstruction", "The Geometry of Meaning", "Where a Single Vector Strains" and "A Space That Cannot Yet Say No", and the twelve question blocks with answers (they leave the book with this chapter unless they are salvaged with their sections; the scripts stay in code/embedding_spaces/).
 
@@ -32,7 +32,7 @@ Nothing unclaimed.
 
 Status when moved: idea.
 
-Salvaged by: meaning_and_truth (retrieval-augmented generation, negation and multi-hop, remembering is not knowing), meaning_as_difference (what a fixed-dimension dot product can express), meaning_across_scales (hybrid search and multi-vector), likeness_as_nearness (from exact to approximate search).
+Salvaged by: meaning_and_truth (retrieval-augmented generation, negation and multi-hop, remembering is not knowing), meaning_as_difference (what a fixed-dimension dot product can express), meaning_across_scales (hybrid search and multi-vector), meaning_as_likeness (from exact to approximate search).
 
 Nothing unclaimed.
 

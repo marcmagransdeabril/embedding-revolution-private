@@ -30,7 +30,7 @@ ORDER = [
     "symbols_without_interior",
     "tests_of_meaning",
     "properties_of_meaning",
-    "likeness_as_nearness",
+    "meaning_as_likeness",
     "meaning_as_difference",
     "meaning_as_direction",
     "meaning_as_region",

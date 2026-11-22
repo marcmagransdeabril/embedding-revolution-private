@@ -6,7 +6,7 @@ status: idea
 
 A concept is a region and not a point. A point says where one thing is; the meaning of a word such as "dog" covers many things, some more typical than others, with a boundary that is blurred and members that are held by overlapping resemblances and not by one shared feature. Rosch found that categories have graded membership and a best example [@rosch1975cognitive]; Gärdenfors proposed that concepts are convex regions of quality spaces [@gardenfors2000conceptual]; Wittgenstein's family resemblance says that a family is a connected set and not a ball [@wittgenstein1953philosophical]. The question of this chapter is what shape a concept has in a trained space (a ball, a box, a cone, a subspace, a region of a curved space) and whether any of these beats a point of the same size on a stated judge.
 
-The scope is the extent and the structure of concepts: typicality, hierarchy (a dog is a mammal) and negation as complement. It does not cover the likeness of two points (@sec-ch-likeness-as-nearness), a single quality (@sec-ch-meaning-as-direction), a concept that moves or changes (@sec-ch-meaning-as-path), or the composition of two concepts into a third (@sec-ch-meaning-as-composition).
+The scope is the extent and the structure of concepts: typicality, hierarchy (a dog is a mammal) and negation as complement. It does not cover the likeness of two points (@sec-ch-meaning-as-likeness), a single quality (@sec-ch-meaning-as-direction), a concept that moves or changes (@sec-ch-meaning-as-path), or the composition of two concepts into a third (@sec-ch-meaning-as-composition).
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
@@ -30,7 +30,7 @@ The scope is the extent and the structure of concepts: typicality, hierarchy (a 
 *Plan (about 3 pages). Goal 2. A linear separator of a category against the rest, its accuracy on held-out words, and the same for random categories of the same size; the share of non-members inside the convex hull of the members in a low-dimensional projection. The chain test of the chapter on nearness (neighbours of neighbours) is the family-resemblance counterpart: a concept held by chains is connected and not convex.*
 
 
-<!-- salvaged from embedding-technologies-stubs/likeness_as_nearness.qmd, section sec-likeness-other-objects -->
+<!-- salvaged from embedding-technologies-stubs/meaning_as_likeness.qmd, section sec-likeness-other-objects -->
 ## Changing the Object Changes the Likeness {#sec-likeness-other-objects}
 
 *Plan (1 page, a table and three short paragraphs; the section only states which likeness each representation defines, and the models are taken up in the chapters named, so nothing here is measured). The last section asked whether likeness is a distance. This one asks what happens when the object is not a point. The distributional hypothesis [@harris1954distributional; @firth1957synopsis] says that words in similar contexts are alike, and a point in $\mathbb{R}^d$ with a cosine or a Euclidean distance turns that into proximity. Proximity brings the metric axioms, and the previous section showed that judged likeness breaks them. Each alternative below keeps the distributional idea and changes the object that is learned, or the score that compares two objects, so that one axiom is given up on purpose. The reading is the author's, from a discussion, and each claim of a source is to be read before it is kept.*
