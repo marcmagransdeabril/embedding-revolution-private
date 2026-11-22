@@ -60,7 +60,7 @@ We start with what each philosophical account says about likeness of meaning (@s
 
 ## What Is Likeness in Meaning? {#sec-likeness-which}
 
-The introduction ended with a list of questions, and each of them presupposes an answer to an earlier one: what would it mean for two things to be alike in meaning? Before any space is measured we ask what each philosophical account says a likeness of meaning would have to be, so that every later test has a claim to answer to, and where a vector with a distance has nothing to carry.
+The introduction ended with a list of questions, and each of them presupposes an answer to an earlier one: what would it mean for two things to be alike in meaning? Before any space is measured we should ask what each philosophical account says a likeness of meaning would have to be, so that later we can implement a test to answer if embedding spaces can claim it.
 
 We read each account for the same three things: what it says a likeness of meaning would be, what a vector with a distance can carry of it, and where the vector stops. The accounts are not tested against one another. A theory that a space fits by construction is not supported by the fit, because the loss was made to give it, so the informative cases are the ones where the theory says that something should be missing, and each of them ends in a hand-off to the property that takes over.
 
