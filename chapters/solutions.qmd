@@ -244,17 +244,17 @@ solutions there; `make validate` fails if this file is out of date.
 :::
 
 ::: {.answers ref="meaning_as_likeness"}
-1. The Moon is the reference (the object), the real image in the object glass is the sense, and the image on each observer's retina is the idea. A learned vector is closest to the image in the glass: it is one-sided, since it depends on the corpus, the loss and the seed, and it is shared among all the users of the space. Free association is the retinal image, which is why a judge of association is not a judge of sense.
+1. The Moon is the reference (the object), the real image in the object glass is the sense, and the image on each observer's retina is the idea. A learned vector is closest to the image in the glass. It is one-sided, since it depends on the corpus, the loss and the seed, and it is shared among all the users of the space.
 
 2. Doctor and nurse are both similar and associated; horse and platypus are similar (both animals) and not associated; cradle and baby are associated and not similar; calculus and candy are neither [@turney2010frequency]. The same four cells can be built from the two columns of SimLex-999, the similarity rating and the strength of free association of each pair.
 
-3. Dog and puppy are similar, and therefore also related and associated. Dog and bark are related and associated and not similar, since a bark is not like a dog. Bee and honey are associated, and related, and not similar. Yes: dog and bark, and bee and honey, are related and not similar.
+3. Dog and puppy are similar, and therefore related, and also associated. Dog and bark are related and associated and not similar, since a bark is not like a dog. Bee and honey are associated, and related, and not similar. Yes: dog and bark, and bee and honey, are related and not similar.
 
-4. Disc 1 is (1, 1, 0), disc 2 is (0, 1, 1) and disc 3 is (1, 0, 1). Each pair has a dot product of 1 and a norm of $\sqrt{2}$ for each disc, so every cosine is $1/2$. No axis has a 1 in all three vectors, since each axis is zero in one disc: the discs are alike in pairs and have no colour in common [@goodman1972seven].
+4. Disc 1 is (1, 1, 0), disc 2 is (0, 1, 1) and disc 3 is (1, 0, 1). Each pair has a dot product of 1 and a norm of $\sqrt{2}$ for each disc, so every cosine is $1/2$. No axis has a 1 in all three vectors, since each axis is zero in one disc. In other words, the discs are alike in pairs and have no colour in common [@goodman1972seven].
 
 5. The angle of each pair is $\arccos 0.7 \approx 45.6^\circ$, and the angle between a and c is at most the sum, $91.1^\circ$, so the lowest cosine is $2 \cdot 0.7^2 - 1 = -0.02$, almost orthogonal. Two near steps do not make a near pair, so a fixed radius around a point is not transitive.
 
-6. Both fit the frame, so the test puts them among the words that can stand there and, by company, near each other. It does not say that the two sentences are alike in meaning, since they contradict each other: the test measures which words fit a frame, and not whether the sentence is true [@harris1954distributional, pp. 156–157].
+6. Both fit the frame, so the test puts them among the words that can stand there and, by company, near each other. It does not say that the two sentences are alike in meaning, since they contradict each other. The test measures which words fit a frame, and not whether the sentence is true [@harris1954distributional, pp. 156–157].
 
 7. Build the matrix as in the section on counting, or take the script of the loss section, and rank the other words by the cosine to the query: with unit rows `u`, `np.argsort(-(u @ u[i]))[1:6]`. Draw the words at random and not by hand, and show the failures with the successes. The lists will differ most for rare words, whose counts are small and whose vector is poor, and for words with several senses, where the two models may follow different ones. The differences point to the loss and to the data as the first suspects, which the following sections test one at a time.
 

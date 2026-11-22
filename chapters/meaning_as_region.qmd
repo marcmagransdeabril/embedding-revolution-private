@@ -12,7 +12,7 @@ The scope is the extent and the structure of concepts: typicality, hierarchy (a 
 
 *Goal 1, prototypes and graded membership (Rosch).* The expectation is that the cosine of a word to the centroid of its category correlates with human typicality ratings, against a shuffled-label null. The run needs a typicality norm (Rosch's own, or a later one); the data are to be specified (@sec-reg-prototypes).
 
-*Goal 2, convexity (Gärdenfors).* The expectation is that the members of a category lie in a region that excludes non-members more than a random set of the same size does; the convex hull in a high-dimensional space contains almost everything, so the test must use a low-dimensional subspace or a linear separator. The categories and the test are to be specified (@sec-reg-convex).
+*Goal 2, convexity (Gärdenfors).* The expectation is that the members of a category lie in a region that excludes non-members more than a random set of the same size does; the convex hull in a high-dimensional space contains almost everything, so the test must use a low-dimensional subspace or a linear separator. The categories and the test are to be specified (@sec-reg-convex). *This goal receives Q16 of @sec-likeness-which.*
 
 *Goal 3, hierarchy as containment (Vilnis, Nickel, Tifrea).* The expectation, from the theory, is that a tree embeds with low distortion in a hyperbolic space of a few dimensions and with high distortion in a Euclidean space of the same dimension, and that boxes represent entailment as containment. The run embeds a small tree in both spaces and measures the distortion, which has an analytic answer to check against (@sec-hyperbolic-spaces).
 
