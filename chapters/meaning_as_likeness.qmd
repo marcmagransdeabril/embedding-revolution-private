@@ -34,25 +34,24 @@ and Wittgenstein again [@wittgenstein1953philosophical, §66], who sees in the g
 
 > a complicated network of similarities overlapping and criss-crossing
 
-object that likeness is not a count of shared properties, since things can be alike with nothing in common to all of them (e.g., chess, patience and football are all games, and no one feature runs through all three) and any two things share countless properties until we say in what way they are being compared (by colour, by shape, by use); Kripke in *Naming and Necessity* [@kripke1980naming, p. 84], on the view that a name refers to whatever satisfies the descriptions we attach to it, so that if Schmidt and not Gödel had proved the incompleteness of arithmetic, "Gödel" would refer to Schmidt:
+object that likeness is not a count of shared properties, since things can be alike with nothing in common to all of them (e.g., chess, patience and football are all games, and no one feature runs through all three) and any two things share countless properties until we say in what way they are being compared (by colour, by shape, by use); Kripke in *Naming and Necessity* [@kripke1980naming, p. 84], against the view that a name means the descriptions we attach to it. Suppose all that an ordinary speaker knows of Gödel is that he proved the incompleteness of arithmetic, and that the proof was in fact Schmidt's. Then, on that view:
 
-> But it seems to me that we are not. We simply are not.
+> since the man who discovered the incompleteness of arithmetic is in fact Schmidt, we, when we talk about 'Gödel', are in fact always referring to Schmidt. But it seems to me that we are not. We simply are not.
 
-and Putnam [@putnam1975meaning] say that a name is tied to the thing it names and not to the descriptions we attach to it; Kaplan in "Demonstratives" [@kaplan1989demonstratives]:
+and Putnam [@putnam1975meaning] say that a name is tied to the thing it names, through the chain of speakers who passed it on from the first use, and not to the descriptions we attach to it; Kaplan in "Demonstratives" [@kaplan1989demonstratives]:
 
 > The character of an expression is set by linguistic conventions and, in turn, determines the content of the expression in every context.
 
-says that what a sentence says depends on who says it and where ("I am here now" says something different each time). We will test each of them in this and the following chapters.
+says that what a sentence says depends on who says it and where ("I am here now" says something different each time). 
 
-Current machine learning models have been able to locate words, sounds, and images in an embedding space. Where does that stop? Alike things should sit near each other and different things far apart, whether they are words, phrases, sounds, images or clips: `dog` near `puppy`, less near `wolf`, far from `car`.
+All this example cover different interpretations of meaning, most likely covering different aspects of how likeness can be understood. In this and the following chapters, we will examine how these interpretations manifest in embedding spaces and what they reveal about the nearness of meaning. How many of these senses are captured and which are missed will be a central question throughout the text. 
+
+Current machine learning models have been able to locate words, sounds, and images in an embedding space. Alike things should sit near each other and different things far apart, whether they are words, phrases, sounds, images or clips: `dog` near `puppy`, less near `wolf`, far from `car`.
 
 But "alike" is not a single relation. Similarity, relatedness and association are different readings of likeness. What are we really representing in these spaces?
 
-The goal of this chapter is to find out what nearness in an embedding space can say about likeness of meaning, and to tell apart the nearness that a space was made to show from the nearness that it shows without being asked. Each section below takes one part of that question and opens by saying what we want to check in it: what a likeness of meaning would have to be, which judge goes with which kind of likeness, whether the neighbours look alike to a reader, whether they are only a consequence of the loss, whether the number behind "near" can be trusted, whether likeness is a distance at all, where nearness and likeness part, and how much of all this survives another seed, algorithm or corpus.
+The goal of this chapter is to find out what nearness in an embedding space can say about likeness of meaning. Each section below takes one part of that question and tests it: what a likeness of meaning would have to be, which judge goes with which kind of likeness, whether the neighbours look alike to a reader, whether they are only a consequence of the loss, whether the number behind "near" can be trusted, whether likeness is a distance at all, where nearness and likeness part, and how much of all this survives another seed, algorithm or corpus.
 
-The chapter covers graded likeness of sense and of use: the loss that builds a nearness, how to read it correctly, whether it is a distance at all, how much of it survives another seed, algorithm or corpus, and the first places where near is not alike. It does not cover what a space cannot carry by position alone, and each such limit is a hand-off to a property of its own: that a word's meaning changes with its sentence (context and disambiguation), that a sign refers to something and a sentence is true or false (reference and truth, with hallucination as plausible without being true), how an opposite or a negation is built (difference), how parts make a whole (composition), what a vector of a long text can hold (scale), how nearness is used to produce new meaning (generation) and what a second sense adds (senses). The chapter says where it stops and names the property that takes over, and it does not try to settle those questions.
-
-Nearness is also partly made by the loss function used to optimize the models. Sometimes it is put there by construction, as with an image and its caption, and sometimes it shows up without being asked for; only the second says something about meaning and not about the loss. We look at neighbours first, then measure them against an impartial judge and a null hypothesis, account by account and loss by loss. Behind the word "near" there is a further question, whether likeness is a distance at all: people's judgements of likeness break the axioms that a distance obeys, and a trained space inherits some of those axioms from its score and not from the data (@sec-likeness-not-distance).
 
 ## What Is Likeness in Meaning? {#sec-likeness-which}
 
