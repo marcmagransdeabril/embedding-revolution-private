@@ -82,10 +82,10 @@ Wittgenstein's family resemblance and Goodman's discs both show likeness without
 *Tried in:* @sec-likeness-not-distance.
 :::
 
-Company also has a cost. Harris's substitution test measures which words can stand in the same frame, and "it is not a question of whether the above sentence with lawyer substituted is true or not" [@harris1954distributional, p. 157]. Opposites and negations occur in the same frames as their counterparts, so company puts them near; a measure of semantic distance can even make them "distant in one sense, and yet strongly related semantically and hence close in the other" [@budanitsky2006evaluating].
+Company also has a cost. Harris's substitution test measures which words can stand in the same frame. In his example, *oculist* and *eye-doctor* occur in almost the same environments, while *lawyer* does not: in "I've had my eyes examined by the same oculist for twenty years" an informant may put in *eye-doctor* but in general not *lawyer*, and "it is not a question of whether the above sentence with lawyer substituted is true or not" [@harris1954distributional, pp. 156–157]. The test sees which words fit a frame, not whether the sentence is true. Opposites and negations occur in the same frames as their counterparts ("the water was hot" and "the water was cold" fit the same frame, and contradict each other), so company puts them near; a measure of semantic distance can even make them "distant in one sense, and yet strongly related semantically and hence close in the other" [@budanitsky2006evaluating].
 
 ::: {.test}
-**Q8. Where is near not alike?** Does near imply alike, the converse of Q3? Which neighbours are not alike in meaning, and do opposites and negations sit as near as paraphrases?
+**Q8. What kinds of pair does company put near without likeness?** Of the neighbours that are not alike in meaning, which kinds are systematic (opposites, negations, topical associates, frame-sharing words of another class), how near do they sit compared with paraphrases, and does anything in the space tell them apart?
 
 *Tried in:* @sec-near-not-alike.
 :::
@@ -98,31 +98,31 @@ Quine's holism (1951) says that what meets experience is the whole system of bel
 *Tried in:* @sec-likeness-many-spaces.
 :::
 
-Quine's indeterminacy of translation (1960) goes further: rival manuals can fit all the evidence and still disagree on countless sentences [@quine1960word]. The coordinates of a space are free up to a rotation, which changes the description and leaves every relation unchanged; his thesis would need two spaces that fit the relations equally well and still disagree on held-out neighbours.
+Quine's indeterminacy of translation (1960) goes further. Rival manuals can fit all the evidence and still disagree on countless sentences [@quine1960word]. The coordinates of a space are free up to a rotation, which changes the description and leaves every relation unchanged; his thesis would need two spaces that fit the relations equally well and still disagree on held-out neighbours.
 
 ::: {.test}
 **Q10. Is a space more than its coordinates?** If two spaces differ only by a change of coordinates, do they say the same, and when two spaces agree on every relation, can they still disagree on the neighbours of unseen items?
 
-*Not answerable here, because one space carries no comparison with another. Taken up in:* @sec-ch-meaning-as-arrangement.
+*Not answerable in this chapter, because one space carries no comparison with another. Taken up in:* @sec-ch-meaning-as-arrangement.
 :::
 
-Kaplan (1989) separates the character of an expression, a rule that does not depend on the context, from its content, which is fixed in the context: "I am here now" says something different each time [@kaplan1989demonstratives]. An encoder that takes the text and not the situation of use is on the side of the character.
+Kaplan (1989) separates the character of an expression, a rule that does not depend on the context, from its content, which is fixed in the context: "I am here now" says something different each time [@kaplan1989demonstratives]. An encoder that takes the text and not the situation as input errs on the side of the character.
 
 ::: {.test}
-**Q11. Does the same word keep its meaning when the speaker, the place or the sentence changes?** A vector that does not take the situation of use as input can have one meaning at most.
+**Q11. Does the same word keep its meaning when the speaker, the place or the sentence changes?** A vector that does not take the situation as input can have one meaning at most.
 
-*Not answerable with one vector per item. Taken up in:* @sec-ch-meaning-in-context.
+*Not answerable in this chapter with one vector per item. Taken up in:* @sec-ch-meaning-in-context.
 :::
 
-Kripke (1980) and Putnam (1975) break with the descriptive tradition: a name is tied to its bearer through a chain of speakers and not to the descriptions attached to it [@kripke1980naming], and what a word means is not fixed by what is in the speaker's head [@putnam1975meaning]. A space knows a name only through the words around it. Frege adds that a sense alone is not a truth value, although for Ramsey (1927) "p is true" is simply the same as p [@frege1892sense; @ramsey1927facts].
+For Frege (1892) a name has a sense, which can be a description, and a reference, the thing it names. For example, "Aristotle" can mean "the pupil of Plato and teacher of Alexander the Great" [@frege1892sense]. A space learned from text has only the sense, the words around a name. It may place the name among "Alexander", "Macedon" and "tutor" and still not reach the man. The same holds for sentences. The sense of a sentence can be grasped without knowing whether it is true, so a sense alone does not fix a truth value. For Ramsey (1927) "it is true that p" says no more than p [@ramsey1927facts], so truth is nothing that the words add. A direction that separates true from false sentences may then follow the facts, or only what texts assert: a false claim that is repeated often, such as that we use only a tenth of our brain, is asserted by many texts and may fall on the true side.
 
 ::: {.test}
 **Q12. Does nearness reach the thing named and its truth?** Does a name sit near its bearer or only near the words around it, and does a direction that separates true from false text follow the facts or only what the text asserts?
 
-*Not answerable from text alone. Taken up in:* @sec-ch-meaning-and-truth.
+*Not answerable in this chapter from text alone. Taken up in:* @sec-ch-meaning-and-truth.
 :::
 
-Gärdenfors (2000) places meanings as regions of a space of quality dimensions and not as points [@gardenfors2000conceptual], which matches Wittgenstein's concept "not closed by a frontier" [@wittgenstein1953philosophical, §68].
+Gärdenfors (2000) places meanings as regions of a space of quality dimensions and not as points [@gardenfors2000conceptual]. The quality dimensions of colour are hue, saturation and brightness, and "red" is the region of that space of the shades that we call red, with the clearest red at its centre and orange at its edge, where a shade is more or less red. A point holds one shade, and a region holds the concept and says what is inside. This matches Wittgenstein's concept "not closed by a frontier" [@wittgenstein1953philosophical, §68] when there is no exact shade at which red stops, and a boundary can be drawn for a purpose, but the concept worked before it was drawn.
 
 ::: {.test}
 **Q13. Is a meaning a point?** Does a concept have an extent that a single point cannot hold, and does a region beat a point of the same size on a stated judge?
@@ -130,7 +130,7 @@ Gärdenfors (2000) places meanings as regions of a space of quality dimensions a
 *Taken up in:* @sec-ch-meaning-as-region.
 :::
 
-Last, if symbols need something outside the symbols, a second sense is the first candidate.
+Last, if symbols need something outside the symbols, does a second sense helps to reach what the symbols alone cannot?
 
 ::: {.test}
 **Q14. Does a second sense add meaning?** Does grounding in images, sounds or action bring nearness that text alone does not, beyond what the pairing built in?
