@@ -2,7 +2,7 @@
 
 Copy, verbatim, of the goals block and the plan paragraph that stood at the end of the chapter's opening section (`chapters/meaning_as_likeness.qmd`, before `## What Is Likeness in Meaning?`). Taken out while the chapter is written section by section. Not part of the book.
 
-Note: the account-of-meaning section of the chapter still cites "goal 1", "goal 3", "goal 5", "goal 6", "goal 7" and "goal 8" by number, and `code/meaning_as_likeness/stub_figures.py` and `chapters/meaning_and_truth.qmd` refer to these goals. The numbers are those of this file.
+Note: the chapter no longer cites these goals by number. `chapters/meaning_and_truth.qmd` still says "the first run is the one of the chapter on nearness (its goal on reference)", which is goal 7 here.
 
 *Goals and expectations (the author's, written before any experiment; each is kept or dropped by the run named in its paragraph, and the figures are stubs with invented numbers, marked STUB, until then). There is one goal for each account of meaning that bears on nearness, and a method that all of them share.*
 
