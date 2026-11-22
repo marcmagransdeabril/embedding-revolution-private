@@ -73,8 +73,8 @@ MASTER_PARTS = [
         "chapters": [
             {
                 "num": 6.5,
-                "title": "Meaning Is Likeness: Nearness Across Levels",
-                "patterns": ["meaning_as_likeness"],
+                "title": "Likeness as Nearness: What a Distance Can Carry",
+                "patterns": ["likeness_as_nearness"],
             },
             {
                 "num": 7,

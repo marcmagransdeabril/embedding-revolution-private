@@ -1,11 +1,11 @@
 # SKELETON: written, not yet run together with the author (the experiments of phase one are run step by step); `make test-code` skips it.
-"""Goal 4 of the chapter "Meaning as Likeness" (section "Is Likeness a Distance? Tversky's Three Axioms"): four smoke tests of which axioms of
+"""Goal 4 of the chapter "Likeness as Nearness" (section "Is Likeness a Distance? Tversky's Three Axioms"): four smoke tests of which axioms of
 a distance each score of a trained space keeps, run on the trained spaces and on random vectors of the same dimension.
 
 Expectation (written before the run): Euclidean distance and angle keep all three axioms; the dot product loses constant self-similarity
 (minimality); two towers (the word and the context vectors of SGNS) are asymmetric; and mutual neighbours fall below one even for symmetric
 scores. What is NOT run: the three axioms against human judgements of likeness (Tversky's own data are not held), so this section says what
-a trained score does and not what people do. Prints the numbers, saves results/axioms.json and figures/meaning_as_likeness/axioms.png.
+a trained score does and not what people do. Prints the numbers, saves results/axioms.json and figures/likeness_as_nearness/axioms.png.
 """
 from __future__ import annotations
 

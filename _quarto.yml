@@ -25,7 +25,7 @@ book:
     - chapters/contextual_vectors.qmd
   - part: Representation Extensions
     chapters:
-    - chapters/meaning_as_likeness.qmd
+    - chapters/likeness_as_nearness.qmd
     - chapters/vector_databases.qmd
     - chapters/tangent_spaces_geodesics.qmd
     - chapters/graph_embeddings.qmd

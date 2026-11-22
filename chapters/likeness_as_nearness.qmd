@@ -2,7 +2,7 @@
 status: idea
 ---
 
-# Meaning as Likeness: Nearness Across Levels {#sec-ch-meaning-as-likeness}
+# Likeness as Nearness: What a Distance Can Carry {#sec-ch-likeness-as-nearness}
 
 The last chapter ended with a table of one-hot symbols in which every pair of words is equally far apart, so that no pair is nearer than another, and with Rice's theorem putting exact meaning out of reach. What is left is a graded nearness, but will it work? This chapter asks what learned nearness is worth as a likeness of meaning.
 
@@ -34,7 +34,7 @@ Nearness is also partly made by the loss function used to optimize the models. S
 
 *Goal 9, opposition (the limit of nearness as likeness).* Antonyms and contradictions share their contexts, so the expectation is that antonyms are as near as synonyms, or nearer, and that a sentence is near its own negation as much as a paraphrase is. The run compares antonym pairs and sentence-negation pairs with synonym pairs and paraphrases (@sec-near-not-alike). How an opposite or a negation is built is a hand-off to the chapter on difference.
 
-Goals 1 and 5 also run at the levels of sentences, images, sounds and video where a judge and a null exist, and where they do not the cell is marked untested (@sec-likeness-found). The scripts of the stubs are in `code/meaning_as_likeness/stub_figures.py`, a skeleton that the Makefile does not run.
+Goals 1 and 5 also run at the levels of sentences, images, sounds and video where a judge and a null exist, and where they do not the cell is marked untested (@sec-likeness-found). The scripts of the stubs are in `code/likeness_as_nearness/stub_figures.py`, a skeleton that the Makefile does not run.
 
 *Plan (page budget, about 25 pages in the final form and 40 as the ceiling; the sections are cut to it in the next step). This opening and the goals take about 3 pages; the account of meaning and the judges (@sec-likeness-which, @sec-likeness-judges) about 6; the gallery and CLIP (@sec-gallery-neighbours, @sec-likeness-pairs-senses) about 3; the loss and the reading of nearness (@sec-loss-decides-near, @sec-reading-nearness-correctly) about 5; the axioms and the stability (@sec-likeness-not-distance, @sec-likeness-many-spaces) about 4; where near is not alike (@sec-near-not-alike) about 3; and the closing section about 1. The sections on phrases and sentences (@sec-likeness-phrases-sentences), on images, sounds and video (@sec-likeness-images-sounds-video) and on other objects (@sec-likeness-other-objects) are to leave the chapter, for the chapters on scale, on senses and on the properties that own those objects.*
 
@@ -167,7 +167,7 @@ which touches $k+1$ vectors whatever the size of the vocabulary [@gutmann2010noi
 
 *Expected result: the three bars of each colour are close to each other, the association bars are higher than the similarity bars, and all stay below the ceiling of the human raters.*
 
-![STUB. Expected shape only, invented numbers: Spearman correlation of the cosine of three losses on the same text with a judge of association and a judge of similarity, and the agreement between human raters as the ceiling.](../figures/meaning_as_likeness/stub_loss_agreement.png){#fig-stub-loss-agreement width=70%}
+![STUB. Expected shape only, invented numbers: Spearman correlation of the cosine of three losses on the same text with a judge of association and a judge of similarity, and the agreement between human raters as the ceiling.](../figures/likeness_as_nearness/stub_loss_agreement.png){#fig-stub-loss-agreement width=70%}
 
 ::: {.questions}
 1. Skip-gram with negative sampling uses $k$ noise words for each real pair. Which matrix does it factorize implicitly, and what is the effect of $k$?
@@ -192,9 +192,9 @@ which touches $k+1$ vectors whatever the size of the vocabulary [@gutmann2010noi
 
 *Expected result: correction helps most for the contextual model, where anisotropy is strongest, and little for the static one; if a bar does not rise, the raw nearness was not an artefact there. In the second figure, the likeness of the neighbours falls as the local distance to the $k$-th neighbour grows.*
 
-![STUB. Expected shape only, invented numbers: correlation of the cosine with the judge, raw and after centring and removing the top directions, for three model families, with the shuffled-label null and a bootstrap interval.](../figures/meaning_as_likeness/stub_centring.png){#fig-stub-centring width=70%}
+![STUB. Expected shape only, invented numbers: correlation of the cosine with the judge, raw and after centring and removing the top directions, for three model families, with the shuffled-label null and a bootstrap interval.](../figures/likeness_as_nearness/stub_centring.png){#fig-stub-centring width=70%}
 
-![STUB. Expected shape only, invented points: judged likeness of the neighbours inside a fixed radius $\epsilon$ against the distance to the $k$-th neighbour, one point per query.](../figures/meaning_as_likeness/stub_radius_density.png){#fig-stub-radius-density width=70%}
+![STUB. Expected shape only, invented points: judged likeness of the neighbours inside a fixed radius $\epsilon$ against the distance to the $k$-th neighbour, one point per query.](../figures/likeness_as_nearness/stub_radius_density.png){#fig-stub-radius-density width=70%}
 
 ::: {.questions}
 1. What do centring the vectors and removing their top principal directions change in a cosine, and why can it raise the correlation with a human judge?
@@ -253,7 +253,7 @@ $$S(a,b) = \theta\, f(A \cap B) - \alpha\, f(A - B) - \beta\, f(B - A).$$
 
 *Expected result: (a) a minority of pairs with $\mathbf{a}\cdot\mathbf{b} > \mathbf{a}\cdot\mathbf{a}$ in a trained space and none for random unit vectors; (b) mutual neighbours well above the random baseline and well below 1; (c) a count of triangle violations of $1-\cos$ above zero, the angle having none by construction; (d) an attention head with a large antisymmetric part, which is a property of the weights and not of the data.*
 
-![STUB. Expected shape only, invented numbers: the four smoke tests of this section on a trained space against random vectors of the same dimension.](../figures/meaning_as_likeness/stub_axioms.png){#fig-stub-axioms width=100%}
+![STUB. Expected shape only, invented numbers: the four smoke tests of this section on a trained space against random vectors of the same dimension.](../figures/likeness_as_nearness/stub_axioms.png){#fig-stub-axioms width=100%}
 
 ::: {.questions}
 1. State the three axioms of a distance (the ones that Tversky tests). Which of them does each of these scores keep: Euclidean distance, the angle between vectors, the dot product, one minus the cosine?
@@ -332,7 +332,7 @@ $$S(a,b) = \theta\, f(A \cap B) - \alpha\, f(A - B) - \beta\, f(B - A).$$
 
 *Expected result: the overlap of the nearest neighbours is highest between seeds, lower between algorithms and lowest between corpora, and the algorithm and corpus bars count only where they lie clearly below the seed bar.*
 
-![STUB. Expected shape only, invented numbers: overlap of the 10 nearest neighbours of the same words between two spaces that differ in seed, in algorithm or in corpus, with the seed gap as the noise floor.](../figures/meaning_as_likeness/stub_many_spaces.png){#fig-stub-many-spaces width=70%}
+![STUB. Expected shape only, invented numbers: overlap of the 10 nearest neighbours of the same words between two spaces that differ in seed, in algorithm or in corpus, with the seed gap as the noise floor.](../figures/likeness_as_nearness/stub_many_spaces.png){#fig-stub-many-spaces width=70%}
 
 ::: {.questions}
 1. Why is the overlap of the nearest neighbours a better way to compare two spaces than comparing their coordinates?

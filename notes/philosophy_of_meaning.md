@@ -1,4 +1,4 @@
-# Philosophy of meaning: reading notes moved from `chapters/meaning_as_likeness.qmd`
+# Philosophy of meaning: reading notes moved from `chapters/likeness_as_nearness.qmd`
 
 Moved in full, unedited, from the chapter at the commit that precedes this move (step 2 of `tmp/plan_properties.md`). The chapter keeps, in the section "What Is Likeness in Meaning?", only the claims, quotations and pages that its goals depend on; everything else is here. Page numbers are those of the printed sources unless a note says otherwise. Frege's PDF (`references/1948_frege_sense_reference.pdf`, 15 pages) carries no printed page numbers, and the pages of the printed translation are still to be recorded.
 

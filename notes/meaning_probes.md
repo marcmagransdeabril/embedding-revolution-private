@@ -124,7 +124,7 @@ TODO. Sceptics: none found yet.
 
 ### 3.1c Comparing two spaces: a geometry ladder (leads, 2026-11)
 
-Context: section "Many Runs, Many Spaces" of `chapters/meaning_as_likeness.qmd`. The claim to test is **geometric**, not topological (author): what should survive a change of seed, algorithm or data is the local metric structure, who is near whom and by how much relative to the neighbours. Topology is the weaker invariant: a homeomorphism may reorder neighbours at any finite scale, so agreement of topology does not say that nearness agrees. Topological tools are kept as a diagnostic of the global side.
+Context: section "Many Runs, Many Spaces" of `chapters/likeness_as_nearness.qmd`. The claim to test is **geometric**, not topological (author): what should survive a change of seed, algorithm or data is the local metric structure, who is near whom and by how much relative to the neighbours. Topology is the weaker invariant: a homeomorphism may reorder neighbours at any finite scale, so agreement of topology does not say that nearness agrees. Topological tools are kept as a diagnostic of the global side.
 
 Ladder, from weakest to strongest (each rung asks more than the one before; the null is the same statistic between two seeds, plan "Many Runs, Many Spaces"):
 - G1, neighbour ranks. Whether the k nearest neighbours of a point in one space are the neighbours in the other: trustworthiness and continuity (Venna and Kaski), the co-ranking matrix with neighbourhood intrusions and extrusions (Lee and Verleysen, "quality assessment of nonlinear dimensionality reduction based on K-ary neighborhoods"). Rank-based, local, invariant to any monotone rescaling of each space.

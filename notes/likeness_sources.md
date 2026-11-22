@@ -1,4 +1,4 @@
-# Sources of the judges and of the evaluation of likeness: reading notes moved from `chapters/meaning_as_likeness.qmd`
+# Sources of the judges and of the evaluation of likeness: reading notes moved from `chapters/likeness_as_nearness.qmd`
 
 Moved in full, unedited, from the section "Kinds of Likeness and Where the Judges Come From" (step 2 of `tmp/plan_properties.md`). The chapter keeps the kinds of likeness, the definition of the ceiling and the examples; the statistics of the experiments stay in the sections that run them until their results exist.
 

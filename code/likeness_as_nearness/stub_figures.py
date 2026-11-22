@@ -1,5 +1,5 @@
-# SKELETON: placeholder figures of chapters/meaning_as_likeness.qmd; the numbers are invented to show the expected shape.
-"""Draw the stubs of the figures of the chapter "Meaning Is Likeness". Nothing here is measured: every panel carries
+# SKELETON: placeholder figures of chapters/likeness_as_nearness.qmd; the numbers are invented to show the expected shape.
+"""Draw the stubs of the figures of the chapter "Likeness as Nearness". Nothing here is measured: every panel carries
 the watermark STUB, and each stub is to be replaced by a script that computes the real figure and drops the marker."""
 from pathlib import Path
 
@@ -9,7 +9,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-OUT = Path(__file__).resolve().parents[2] / "figures" / "meaning_as_likeness"
+OUT = Path(__file__).resolve().parents[2] / "figures" / "likeness_as_nearness"
 rng = np.random.default_rng(0)
 
 
