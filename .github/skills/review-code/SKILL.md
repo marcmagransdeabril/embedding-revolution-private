@@ -39,7 +39,7 @@ Scripts are named after the section they belong to (`contrast_*.py`, `counting_*
 
 ## Wiring in the Makefile
 
-- `make test-code` re-runs a script when it changes, when `utils.py` changes, or when a module it imports changes (transitively). The import rules are generated from the `import` statements by `code_deps.py make-deps` into `.code-tests/deps.mk`, which `make` rebuilds by itself. Nothing has to be maintained by hand.
+- `make test-code` re-runs a script when it changes, or when a module it imports changes (transitively; the `utils.py` of its own chapter directory counts only if the script imports it). The import rules are generated from the `import` statements by `code_deps.py make-deps` into `.code-tests/deps.mk`, which `make` rebuilds by itself. Nothing has to be maintained by hand.
 - `make book` runs the unit tests of the helpers first, then the scripts, then renders.
 - Only imports of modules in the same chapter directory are followed.
 - Data files are dependencies too: a file of `code/<chapter>/data/` whose name appears as a string in a script or in a module it imports (`Path(__file__).parent / "data" / "pride_and_prejudice.zip"`) is a prerequisite of that script, so changing the file re-runs it. Keep the file name as a literal string in the code, so that the link can be found.

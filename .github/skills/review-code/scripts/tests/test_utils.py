@@ -1,9 +1,7 @@
-"""Unit tests of the helpers shared by the solution scripts (code/embedding_spaces/utils.py): each one is small and has a known answer."""
+"""Unit tests of the helpers shared by the solution scripts (code/embedding_spaces/utils.py: the objectives): each one is small and has a known answer."""
 from __future__ import annotations
 
 import sys
-from collections import Counter
-from math import log2
 from pathlib import Path
 
 import numpy as np
@@ -12,15 +10,6 @@ import pytest
 UTILS_DIR = Path(__file__).resolve().parents[5] / "code" / "embedding_spaces"
 sys.path.insert(0, str(UTILS_DIR))
 import utils  # noqa: E402
-
-
-def test_entropy_of_fair_coin_and_of_a_certain_outcome():
-    assert utils.entropy(Counter("hhtt")) == pytest.approx(1.0)
-    assert utils.entropy(Counter("hhhh")) == pytest.approx(0.0)
-
-
-def test_entropy_of_uniform_distribution_is_log2_of_its_size():
-    assert utils.entropy(Counter(range(8))) == pytest.approx(log2(8))
 
 
 def test_cooccurrence_is_symmetric_and_counts_neighbours_inside_the_sentence():
@@ -52,11 +41,6 @@ def test_cosine_of_parallel_orthogonal_and_zero_vectors():
     assert utils.cosine(np.array([1.0, 0]), np.array([2.0, 0])) == pytest.approx(1.0)
     assert utils.cosine(np.array([1.0, 0]), np.array([0, 1.0])) == pytest.approx(0.0)
     assert utils.cosine(np.zeros(2), np.array([1.0, 0])) == 0.0
-
-
-def test_distances_is_symmetric_with_zero_diagonal():
-    d = utils.distances(np.array([[0.0, 0], [3, 4]]))
-    assert np.allclose(d, d.T) and d[0, 1] == pytest.approx(5.0) and np.all(np.diag(d) == 0)
 
 
 def test_bootstrap_interval_contains_the_mean_and_is_reproducible():

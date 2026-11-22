@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-# Loaded under its own name: code/embedding_spaces/utils.py is also called `utils`.
+# Loaded under its own name: code/embedding_spaces/utils.py and code/symbols_without_interior/utils.py are also called `utils`.
 _PATH = Path(__file__).resolve().parents[5] / "code" / "properties_of_meaning" / "utils.py"
 _spec = importlib.util.spec_from_file_location("properties_of_meaning_utils", _PATH)
 utils = importlib.util.module_from_spec(_spec)
