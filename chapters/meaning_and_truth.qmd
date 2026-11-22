@@ -38,6 +38,13 @@ The scope is reference and truth. The dependence of a sentence on its situation 
 ## Retrieval-Augmented Generation {#sec-retrieval-augmented-generation}
 *Bridging parametric model memory with external latent storage, told as the answer of the 2020s.*
 
+<!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-from-exact-approximate-search -->
+## Finding Neighbours Among Billions {#sec-from-exact-approximate-search}
+Here we check what exact search costs and what is lost, if anything, when the neighbours are found approximately.
+
+*Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*
+
+
 <!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-negation-multi-hop-reasoning -->
 ## Negation, Multi-Hop Reasoning, and Hallucination (a dated case study) {#sec-negation-multi-hop-reasoning}
 *How retrieval systems behaved, what followed, and why the structural limit remains.*

@@ -4,15 +4,19 @@ status: idea
 
 # Meaning as Likeness: What a Distance Can Carry {#sec-ch-meaning-as-likeness}
 
-The last chapter ended with a table of one-hot symbols in which every pair of words is equally far apart, so that no pair is nearer than another, and with Rice's theorem putting exact meaning out of reach. What is left is a graded nearness, but will it work? This chapter starts with the seemingly simplest of the questions: can nearness in a vector space represent likeness, and so meaning?
+The last chapter ended with a table of one-hot symbols in which every pair of words is equally far apart, so that no pair is nearer than another, and with Rice's theorem putting exact meaning out of reach. What is left is a graded nearness, exactly what current learned embedding spaces provide. But is it working? This chapter starts with the seemingly simplest of the questions: can nearness in a vector space represent likeness, and so meaning?
 
 Current machine learning models have been able to locate words, sounds, and images in an embedding space. Alike things should sit near each other and different things far apart, whether they are words, phrases, sounds, images or clips: `dog` near `puppy`, less near `wolf`, far from `car`.
 
-But "alike" is not a single relation. Similarity, relatedness and association are different readings of likeness. What are we really representing in these spaces?
+But, as we will clarify in the next section in a short review of classic philosophical views, "alike" is not a single relation. Similarity, relatedness, association, and truth are different readings of likeness. What are we really representing in these spaces?
 
 The goal of this chapter is to find out what nearness in an embedding space can say about likeness of meaning, and to tell apart the nearness that the training put there on purpose from the nearness that appeared on its own. An image and its caption are near because the model was trained to pull them together. However, the same training can put together two items that were never paired and still end up near each other. Each section takes one question of that goal.
 
-We start with what likeness of meaning would have to be, and from it we derive the tests that a space can pass or fail (@sec-likeness-which). Then we look, before any statistic, at the nearest neighbours of random words, phrases, sounds and images (@sec-gallery-neighbours), and ask whether an image sitting near its caption in an image-text model says anything about meaning or only about how the model was trained (@sec-likeness-pairs-senses). Next we ask whether the same text gives the same neighbours when the training objective changes (@sec-loss-decides-near), and whether a cosine, as it comes out of a model, can be trusted as a measure of likeness (@sec-reading-nearness-correctly). We then ask whether likeness behaves like a distance, which people's judgements of likeness do not (@sec-likeness-not-distance), and where near things are not alike, such as opposites and negations (@sec-near-not-alike). Last, we measure how much of the nearness changes with the random seed, the algorithm or the text (@sec-likeness-many-spaces), how neighbours can be found among billions of vectors without comparing with all of them (@sec-from-exact-approximate-search), and what the chapter found and what is still out of reach (@sec-likeness-found).
+We start with what likeness of meaning should be, and from it we derive twelve questions to verify and/or refute one aspect of it (@sec-likeness-which). The first seven questions are tried in the sections that follow, in order. Do the nearest neighbours of random words, phrases, sounds and images look alike to a reader (@sec-gallery-neighbours)? Is an image near its caption because the model was trained to pull them together, or was it built in (@sec-likeness-pairs-senses)? Does the same text give the same neighbours when the training objective changes, and do they follow similarity or association (@sec-loss-decides-near)? Can a cosine distance, as it comes out of a model, be trusted as a measure of likeness (@sec-reading-nearness-correctly)? Does likeness behave like a distance, which people's judgements of likeness do not (@sec-likeness-not-distance), and where are near things not alike, such as opposites and negations (@sec-near-not-alike)? How much of the nearness changes with the random seed, the algorithm or the data set used during training (@sec-likeness-many-spaces)? 
+
+The other five questions cannot be answered with one static vector and are handed to other chapters: coordinates (@sec-ch-meaning-as-arrangement), context (@sec-ch-meaning-in-context), reference and truth (@sec-ch-meaning-and-truth), regions (@sec-ch-meaning-as-region) and a second sense (@sec-ch-meaning-across-senses). 
+
+Once the seven questions are answered, the last section will complete the chapter will summarize the findings and discuss  what is still out of reach (@sec-likeness-found).
 
 ## What Is Likeness in Meaning? {#sec-likeness-which}
 
@@ -44,18 +48,18 @@ Harris, Firth and Wittgenstein tie sense to use and company. Harris's measurable
 *Tried in:* @sec-loss-decides-near.
 :::
 
-Wittgenstein also says that the members of a class like the games need share no feature: they form "a complicated network of similarities overlapping and criss-crossing" [@wittgenstein1953philosophical, §66]. Goodman shows why counting shared features cannot define likeness, since any two things share countless properties until we say in which respect they are compared [@goodman1972seven]. In a space this means that nearness need not be transitive, that a concept is not a ball around a prototype, and that a cosine returns a number and not the respect in which two items are alike.
+Wittgenstein also says that the members of a class like the games need share no feature: they form "a complicated network of similarities overlapping and criss-crossing" [@wittgenstein1953philosophical, §66]. Goodman shows why counting shared features cannot define likeness, since any two things share countless properties until we say in which respect they are compared [@goodman1972seven]. In a space this means that a concept is not a ball around a prototype, so a fixed radius is a poor model of it, and that a cosine returns a number and not the respect in which two items are alike.
 
 ::: {.test}
-**T4. Is a raw nearness a measure of likeness?** Before it is corrected for what inflates it, does the number behind "near" follow judged likeness? Is nearness transitive, and does a fixed radius around an item hold a concept?
+**T4. Is a raw nearness a measure of likeness?** Before it is corrected for what inflates it, does the number behind "near" follow judged likeness, and does a fixed radius around an item hold a concept?
 
 *Tried in:* @sec-reading-nearness-correctly.
 :::
 
-Tversky's experiments add that judged likeness is not symmetric and does not obey the triangle inequality, because it weighs common and distinctive features with weights that depend on which item is the subject [@tversky1977features]. Every score of this chapter reads likeness as a distance, so what a space keeps of these properties has to be asked.
+Wittgenstein's family and Goodman's three discs, alike in pairs with no colour common to all three, are also a failure of transitivity [@goodman1972seven]. Tversky's experiments add that judged likeness is not symmetric and does not obey the triangle inequality, because it weighs common and distinctive features with weights that depend on which item is the subject [@tversky1977features]. Every score of this chapter reads likeness as a distance, so what a space keeps of these properties has to be asked.
 
 ::: {.test}
-**T5. Is likeness a distance?** Which of the properties of a distance (identical things at zero distance, symmetry, the triangle inequality) does nearness keep, and which do judgements of likeness break?
+**T5. Is likeness a distance?** Which of the properties of a distance (identical things at zero distance, symmetry, the triangle inequality) does nearness keep, which do judgements of likeness break, and is nearness transitive (if $a$ is near $b$ and $b$ is near $c$, is $a$ near $c$)?
 
 *Tried in:* @sec-likeness-not-distance.
 :::
@@ -373,12 +377,6 @@ Here we check how much of what the previous sections found belongs to the meanin
 
 3. The script `stability.py` takes 2,000 query words and, for each pair of spaces, the share of the $k$ nearest neighbours that they have in common (for $k$ from 1 to 50), averaged over the words: seeds (three seeds of each loss), losses (counting against SGNS against GloVe), texts (the two halves of text8, and the text with 10 per cent of it removed). It also gives the agreement of the global geometry, the Spearman correlation of the cosines of 200,000 random pairs. The seed gap is the floor: a difference between losses or texts counts only if it lies clearly below it. The scripts were written and not yet run together, so the figure of the chapter is still the stub.
 :::
-
-<!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-from-exact-approximate-search -->
-## Finding Neighbours Among Billions {#sec-from-exact-approximate-search}
-Here we check what exact search costs and what is lost, if anything, when the neighbours are found approximately.
-
-*Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*
 
 ## Likeness Found {#sec-likeness-found}
 
