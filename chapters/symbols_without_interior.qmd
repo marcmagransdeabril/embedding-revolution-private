@@ -285,6 +285,8 @@ But why do we need geometry at all to represent meaning? We could keep the symbo
    | `xqzv` | 0.2 | $-0.3$ | 0.1 | 0.3 | $-0.1$ |
 
 3. Relabelling a vocabulary means permuting its words. Check that each of the $5! = 120$ relabellings of the one-hot vectors of @tbl-one-hot leaves the matrix of distances unchanged. Then exchange the labels `dawn` and `king` in the dense table of the previous question, so that each word receives the other's vector, and compare the distance between `dawn` and `dusk` before and after. What does the difference tell you about which of the two representations can contain meaning?
+
+4. Use an open-source tokenizer on a short phrase with punctuation, a long word, a nonsense word and an emoji. Print the tokens next to their numbers. What do the numbers represent with respect to the one-hot vectors of this section? Why is there a token at the end of the phrase, and one at the beginning? What other curious tokens do you observe?
 :::
 
 ::: {.answers}
@@ -351,6 +353,27 @@ But why do we need geometry at all to represent meaning? We could keep the symbo
     The exact values depend on these choices. Without a bias the training data are separable, so the weights keep growing and the probabilities keep moving towards 0 or 1 the longer we train, but the pattern of the answers does not change. With one-hot vectors the weights $w_{\text{dusk}}$ and $w_{\text{xqzv}}$ never move from 0, since no training example has a 1 in those coordinates, so the model has learned nothing about them and answers $\sigma(0) = 0.5$ for both. With dense vectors the model learns a positive weight on "time of day" and negative ones on "person" and "royal", and `dusk` inherits the answer because it shares the first feature with `dawn`. This is transfer: what is learned about one word moves to the words that are close to it. The price is that the same mechanism acts on `xqzv`, which means nothing. Its noise vector projects onto the learned weights and the model answers $0.812$, an arbitrary value with no more meaning than the noise. Transfer is only as good as the vectors, which is why the rest of the chapter is about where they come from.
 
 11. Relabelling the words permutes the rows of the matrix of vectors, and the distances between the new rows are those of the old ones with their labels permuted. The script `onehot_renaming.py` loops over `itertools.permutations(range(5))` and confirms that `distances(E[list(perm)])` equals `distances(E)` for all 120 of them. This holds in general. A permutation of the coordinates of $\mathbb{R}^{|\mathcal{V}|}$ is an isometry, and permuting the words of a one-hot basis is the same as permuting the coordinates. In the dense table, exchanging `dawn` and `king` changes the distance between `dawn` and `dusk` from $0.80$ to $1.85$, because `dawn` now has the vector of a king. The one-hot geometry cannot tell a correct assignment of words from a scrambled one, so it contains no information about which word is which except for identity. It is the geometry of alpha-equivalence, in which `customer_balance` and `x7` are interchangeable. A representation that can contain meaning must be sensitive to this exchange, since the words keep their use while their vectors are swapped, and `dawn` still appears with `breaks`, not with `wears`.
+
+12. The script `onehot_tokenizer.py` pairs `enc.tokens` with `enc.ids`, which have the same length and order (four pairs per row):
+
+    ```
+     [CLS]   101  attack  2886      at  2012    dawn  6440
+         ,  1010      un  4895   ##bel  8671    ##ie  2666
+      ##va  3567   ##bly  6321       .  1012       .  1012
+         .  1012   [UNK]   100       x  1060     ##q  4160
+       ##z  2480     ##v  2615       !   999   [SEP]   102
+    ```
+
+    The numbers are the indices of the one-hot vectors. `dawn` is the entry 6440 of a vocabulary of 30,522, so its vector has a single 1 in that position. Like the order in @tbl-one-hot, the ids are arbitrary: 6440 is no closer to 6441 than to 100. A model uses the id to select a row of $\mathbf{E}$, the product $\mathbf{o}_i^	op \mathbf{E}$ of this section.
+
+    `[CLS]` and `[SEP]` mark the beginning and the end of the phrase. A model receives tensors of a fixed length, so it must know where the symbols stop and the padding starts. In a generative model, stopping becomes one more symbol to predict, with its own probability, like the next word in Shannon's text generation.
+
+    Curious tokens:
+
+    - `unbelievably` splits into five pieces and `xqzv` into four letters. The vocabulary is closed, so an unseen word is spelled with smaller pieces, unlike the toy `xqzv`, which was one symbol.
+    - `##` is part of the name of the entry, not an operator. `bel` (19337) and `##bel` (8671) are unrelated, orthogonal vectors, and 5,828 of the 30,522 entries start with `##`.
+    - The ellipsis is three `.` tokens, and the emoji is `[UNK]`, shared by every character the vocabulary cannot write.
+    - The tokenizer lowercases `Attack`. A cased one gives it another id than `attack`, two orthogonal vectors for one word.
 :::
 
 ::: {.callout-note title="How a model learns: gradient descent"}

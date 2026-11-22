@@ -34,7 +34,7 @@ help:
 	@echo "======================================================================"
 	@echo " The Embedding Revolution - Book Build System"
 	@echo "======================================================================"
-	@echo " make book              - Run code tests, then build HTML and PDF book (O'Reilly 7in x 9.1875in)"
+	@echo " make book              - Run consistency checks and code tests, then build HTML and PDF book (O'Reilly 7in x 9.1875in)"
 	@echo " make diagrams          - Compile the TikZ diagrams in diagrams/*/*.tex to PDF (PDF book) and PNG (HTML, EPUB)"
 	@echo " make check-code        - Unit tests of the shared code helpers, and the allowed-imports and chapter-to-script checks"
 	@echo " make test-code         - Run the solution scripts in code/ that changed since their last pass"
@@ -52,7 +52,9 @@ help:
 	@echo " make clean             - Clean build artifacts (_book, _freeze, .quarto)"
 	@echo "======================================================================"
 
-book: diagrams unit-tests-code test-code sync-chapters sync-solutions html pdf
+# Consistency checks come first: check-code (helper unit tests, allowed imports, chapter-to-script links, Makefile deps), then
+# validate (markdown, math, cross-references, citations) once sync-solutions has regenerated chapters/solutions.qmd.
+book: diagrams check-code test-code sync-chapters sync-solutions validate validate-citations html pdf
 
 # TikZ diagrams: diagrams/<chapter>/<name>.tex -> .pdf (vector, for the PDF book) and .png (300 dpi, for HTML and EPUB)
 # Chapters reference the .pdf; filters/tikz-img.lua swaps it for the .png outside LaTeX.
@@ -75,7 +77,7 @@ diagrams/%.png: diagrams/%.pdf
 unit-tests-code:
 	@$(VENV_PYTHON) -m pytest $(REVIEW_CODE)/tests -q
 
-# Findings about the imports and the links between chapters and scripts (some are notes, so it is not part of `book`).
+# Findings about the imports and the links between chapters and scripts. Part of `book`: any finding stops the build.
 check-code: unit-tests-code
 	@$(VENV_PYTHON) $(REVIEW_CODE)/code_deps.py check
 

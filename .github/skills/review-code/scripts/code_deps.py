@@ -30,6 +30,8 @@ ALLOWED = {"numpy", "matplotlib", "sklearn"}
 ALLOWED.add("torch")
 # scipy: sparse co-occurrence matrices of a 17-million-word text, and the Spearman rank correlation (chapter "Meaning as Likeness").
 ALLOWED.add("scipy")
+# tokenizers: the open-source BERT tokenizer of the exercise on real one-hot indices (chapter "Symbols Without Interior").
+ALLOWED.add("tokenizers")
 STDLIB = set(sys.stdlib_module_names)
 
 
