@@ -20,11 +20,11 @@ Once the seven questions are answered, the last section will complete the chapte
 
 ## What Is Likeness in Meaning? {#sec-likeness-which}
 
-Philosophy has not agreed on what meaning is, but the accounts that bear on nearness each say something that can be asked to a space. Below, each account is stated briefly and is followed by the question it gives. 
+Philosophy has not agreed on what meaning is, but the accounts that bear on nearness each say something that can be asked to a space. Below, each account is stated briefly and is followed by the question it gives.
 
 A test needs a judge, a procedure that fixes which relation is asked about. An informant who substitutes words in a phrase, raters who score similarity or relatedness, or the pairs of a training set can all serve as judges. However, any judge has a performance ceiling as it cannot be more consistent than its own raters. The ceiling of a rated judge is the agreement between its raters (e.g., the mean correlation of one rater with the mean of the others) and not the score of an average test taker, because a method can exceed the latter without reaching the raters.
 
-Likeness of meaning is not a single relation. Frege separates the idea, the private image in our heads; the sense, shared by all who use the sign; and the reference, the object [@frege1892sense]. In his telescope the Moon is the reference, the image in the glass is the sense, and the image on each observer's retina is the idea. The image in the glass "is indeed one-sided and dependent upon the standpoint of observation; but it is still objective, inasmuch as it can be used by several observers", which is what a learned vector is. It depends on the corpus, the loss and the seed, and it is shared among its users. 
+Likeness of meaning is not a single relation. Frege (1892) separates the idea, the private image in our heads; the sense, shared by all who use the sign; and the reference, the object [@frege1892sense]. In his telescope the Moon is the reference, the image in the glass is the sense, and the image on each observer's retina is the idea. The image in the glass "is indeed one-sided and dependent upon the standpoint of observation; but it is still objective, inasmuch as it can be used by several observers", which is what a learned vector is. It depends on the corpus, the loss and the seed, and it is shared among its users. 
 
 Within the sense, the shared meaning, there are still three relations that the word "alike" hides: similarity, a correspondence between properties (dog and puppy); relatedness, the wider notion of which similarity is a special case (dog and bark); and association, a tendency to occur together (bee and honey) [@budanitsky2006evaluating; @turney2010frequency]. The last two relations are independent. A doctor and nurse are similar and associated, horse and platypus are similar and not associated, cradle and baby are associated and not similar, and calculus and candy neither. A reader who judges neighbours has to know which of these relations is being judged.
 
@@ -44,7 +44,7 @@ Once the null hypothesis is understood, the three relations of similarity, relat
 *Tried in:* @sec-likeness-relation-split.
 :::
 
-Goodman points out that a term may apply to things because of the way they were grouped, and not the other way round: the fact that a term applies to certain objects "may itself constitute rather than arise from a particular similarity among those objects" [@goodman1972seven]. Read for a contrastive loss, an image and its caption are near because the training pair says so. Harnad and Bender and Koller go further: symbols may need grounding outside the symbols, and a system trained only on form may have no way to learn meaning [@harnad1990symbol; @bender2020climbing]. Only the nearness that appears unasked is evidence about meaning.
+Goodman (1972) points out that a term may apply to things because of the way they were grouped, and not the other way round: the fact that a term applies to certain objects "may itself constitute rather than arise from a particular similarity among those objects" [@goodman1972seven]. Read for a contrastive loss, an image and its caption are near because the training pair says so. Harnad (1990) and Bender and Koller (2020) go further: symbols may need grounding outside the symbols, and a system trained only on form may have no way to learn meaning [@harnad1990symbol; @bender2020climbing]. Only the nearness that appears unasked is evidence about meaning.
 
 ::: {.test}
 **Q3. Built in or emergent?** When two things of different kinds are near, is it only because training paired them, or are unpaired things near as well?
@@ -52,7 +52,7 @@ Goodman points out that a term may apply to things because of the way they were 
 *Tried in:* @sec-likeness-pairs-senses.
 :::
 
-Harris, Firth and Wittgenstein tie sense to use and company. Harris's measurable claim is that "difference of meaning correlates with difference of distribution" [@harris1954distributional]; Firth takes collocation as one level of meaning, next to the context of situation [@firth1957synopsis]; and Wittgenstein says that the meaning of a word is its use "for a large class of cases—though not for all" [@wittgenstein1953philosophical, §43]. A space built from company is this claim made into a matrix, so the likeness it shows is what the loss was made to give and not a discovery. The informative case is the one where the account says that something is missing.
+Harris, Firth and Wittgenstein tie sense to use and company. Harris's measurable claim (1954) is that "difference of meaning correlates with difference of distribution" [@harris1954distributional]; Firth (1957) takes collocation as one level of meaning, next to the context of situation [@firth1957synopsis]; and Wittgenstein (1953) says that the meaning of a word is its use "for a large class of cases—though not for all" [@wittgenstein1953philosophical, §43]. A space built from company is this claim made into a matrix, so the likeness it shows is what the loss was made to give and not a discovery. The informative case is the one where the account says that something is missing.
 
 ::: {.test}
 **Q4. Does company recover likeness?** If likeness of meaning shows as likeness of company, do spaces made only from company, with different ways of counting it, give the same neighbours, and do they stay below what the judges' own raters agree on?
@@ -68,7 +68,7 @@ Wittgenstein also says that the members of a class like the games need share no 
 *Tried in:* @sec-reading-nearness-correctly.
 :::
 
-Wittgenstein's family and Goodman's three discs, alike in pairs with no colour common to all three, are also a failure of transitivity [@goodman1972seven]. Tversky's experiments add that judged likeness is not symmetric and does not obey the triangle inequality, because it weighs common and distinctive features with weights that depend on which item is the subject [@tversky1977features]. Every score of this chapter reads likeness as a distance, so what a space keeps of these properties has to be asked.
+Wittgenstein's family and Goodman's three discs, alike in pairs with no colour common to all three, are also a failure of transitivity [@goodman1972seven]. Tversky's experiments (1977) add that judged likeness is not symmetric and does not obey the triangle inequality, because it weighs common and distinctive features with weights that depend on which item is the subject [@tversky1977features]. Every score of this chapter reads likeness as a distance, so what a space keeps of these properties has to be asked.
 
 ::: {.test}
 **Q6. Is likeness a distance?** Which of the properties of a distance (identical things at zero distance, symmetry, the triangle inequality) does nearness keep, which do judgements of likeness break, and is nearness transitive (if $a$ is near $b$ and $b$ is near $c$, is $a$ near $c$)?
@@ -84,7 +84,7 @@ Company also has a cost. Harris's substitution test measures which words can sta
 *Tried in:* @sec-near-not-alike.
 :::
 
-Quine's holism says that what meets experience is the whole system of beliefs and not a sentence alone [@quine1951two]. Applied to a space, the position of a word is defined by its relations to all the others, so it should move little when an unrelated part of the web changes.
+Quine's holism (1951) says that what meets experience is the whole system of beliefs and not a sentence alone [@quine1951two]. Applied to a space, the position of a word is defined by its relations to all the others, so it should move little when an unrelated part of the web changes.
 
 ::: {.test}
 **Q8. Does nearness belong to the meaning or to one draw?** How much of the nearness survives another random start, another algorithm, another text, or the removal of a part of the text?
@@ -92,7 +92,7 @@ Quine's holism says that what meets experience is the whole system of beliefs an
 *Tried in:* @sec-likeness-many-spaces.
 :::
 
-Quine's indeterminacy of translation goes further: rival manuals can fit all the evidence and still disagree on countless sentences [@quine1960word]. The coordinates of a space are free up to a rotation, which changes the description and leaves every relation unchanged; his thesis would need two spaces that fit the relations equally well and still disagree on held-out neighbours.
+Quine's indeterminacy of translation (1960) goes further: rival manuals can fit all the evidence and still disagree on countless sentences [@quine1960word]. The coordinates of a space are free up to a rotation, which changes the description and leaves every relation unchanged; his thesis would need two spaces that fit the relations equally well and still disagree on held-out neighbours.
 
 ::: {.test}
 **Q9. Is a space more than its coordinates?** If two spaces differ only by a change of coordinates, do they say the same, and when two spaces agree on every relation, can they still disagree on the neighbours of unseen items?
@@ -100,7 +100,7 @@ Quine's indeterminacy of translation goes further: rival manuals can fit all the
 *Not answerable here, because one space carries no comparison with another. Taken up in:* @sec-ch-meaning-as-arrangement.
 :::
 
-Kaplan separates the character of an expression, a rule that does not depend on the context, from its content, which is fixed in the context: "I am here now" says something different each time [@kaplan1989demonstratives]. An encoder that takes the text and not the situation of use is on the side of the character.
+Kaplan (1989) separates the character of an expression, a rule that does not depend on the context, from its content, which is fixed in the context: "I am here now" says something different each time [@kaplan1989demonstratives]. An encoder that takes the text and not the situation of use is on the side of the character.
 
 ::: {.test}
 **Q10. Does the same word keep its meaning when the speaker, the place or the sentence changes?** A vector that does not take the situation of use as input can have one meaning at most.
@@ -108,7 +108,7 @@ Kaplan separates the character of an expression, a rule that does not depend on 
 *Not answerable with one vector per item. Taken up in:* @sec-ch-meaning-in-context.
 :::
 
-Kripke and Putnam break with the descriptive tradition: a name is tied to its bearer through a chain of speakers and not to the descriptions attached to it [@kripke1980naming], and what a word means is not fixed by what is in the speaker's head [@putnam1975meaning]. A space knows a name only through the words around it. Frege adds that a sense alone is not a truth value, although for Ramsey "p is true" is simply the same as p [@frege1892sense; @ramsey1927facts].
+Kripke (1980) and Putnam (1975) break with the descriptive tradition: a name is tied to its bearer through a chain of speakers and not to the descriptions attached to it [@kripke1980naming], and what a word means is not fixed by what is in the speaker's head [@putnam1975meaning]. A space knows a name only through the words around it. Frege adds that a sense alone is not a truth value, although for Ramsey (1927) "p is true" is simply the same as p [@frege1892sense; @ramsey1927facts].
 
 ::: {.test}
 **Q11. Does nearness reach the thing named and its truth?** Does a name sit near its bearer or only near the words around it, and does a direction that separates true from false text follow the facts or only what the text asserts?
@@ -116,7 +116,7 @@ Kripke and Putnam break with the descriptive tradition: a name is tied to its be
 *Not answerable from text alone. Taken up in:* @sec-ch-meaning-and-truth.
 :::
 
-Gärdenfors places meanings as regions of a space of quality dimensions and not as points [@gardenfors2000conceptual], which matches Wittgenstein's concept "not closed by a frontier" [@wittgenstein1953philosophical, §68].
+Gärdenfors (2000) places meanings as regions of a space of quality dimensions and not as points [@gardenfors2000conceptual], which matches Wittgenstein's concept "not closed by a frontier" [@wittgenstein1953philosophical, §68].
 
 ::: {.test}
 **Q12. Is a meaning a point?** Does a concept have an extent that a single point cannot hold, and does a region beat a point of the same size on a stated judge?
