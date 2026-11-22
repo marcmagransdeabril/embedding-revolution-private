@@ -20,14 +20,16 @@ Once the seven questions are answered, the last section will complete the chapte
 
 ## What Is Likeness in Meaning? {#sec-likeness-which}
 
-Philosophy has not agreed on what meaning is, but the accounts that bear on nearness each say something that a space can be asked about. Below, each account is stated briefly and is followed by the question it gives, in a framed box. The questions name no test, tool or model; each says where the chapter tries to answer it or, when a vector alone cannot, which chapter takes it up.
+Philosophy has not agreed on what meaning is, but the accounts that bear on nearness each say something that can be asked to a space. Below, each account is stated briefly and is followed by the question it gives. 
 
-A test needs a judge, a procedure that fixes which relation is asked about: an informant who substitutes words in a frame (Harris), raters who score similarity or relatedness, or the pairs of a training set. The ceiling of a rated judge is the agreement between its raters (for example, the mean correlation of one rater with the mean of the others) and not the score of an average test taker, because a method can exceed the latter without reaching the raters: Rapp's method scored 92.5 per cent on the TOEFL synonym items against 64.5 per cent for the average applicant [@turney2010frequency]. The judges of each test are described in the section that runs it.
+A test needs a judge, a procedure that fixes which relation is asked about. An informant who substitutes words in a phrase, raters who score similarity or relatedness, or the pairs of a training set can all serve as judges. However, any judge has a performance ceiling as it cannot be more consistent than its own raters. The ceiling of a rated judge is the agreement between its raters (e.g., the mean correlation of one rater with the mean of the others) and not the score of an average test taker, because a method can exceed the latter without reaching the raters.
 
-Likeness of meaning is not one relation. Frege separates the idea, the private image; the sense, shared by all who use the sign; and the reference, the object [@frege1892sense]. In his telescope the Moon is the reference, the real image in the object glass is the sense, and the image on each observer's retina is the idea. The image in the glass "is indeed one-sided and dependent upon the standpoint of observation; but it is still objective, inasmuch as it can be used by several observers", which is what a learned vector is: it depends on the corpus, the loss and the seed, and it is shared among its users. Within the sense there are still three relations that the word "alike" hides: similarity, a correspondence between properties (dog and puppy); relatedness, the wider notion of which similarity is a special case (dog and bark); and association, a tendency to occur together (bee and honey) [@budanitsky2006evaluating; @turney2010frequency]. The last two are independent: doctor and nurse are similar and associated, horse and platypus similar and not associated, cradle and baby associated and not similar, and calculus and candy neither. A reader who judges neighbours has to know which of these relations is being judged.
+Likeness of meaning is not a single relation. Frege separates the idea, the private image in our heads; the sense, shared by all who use the sign; and the reference, the object [@frege1892sense]. In his telescope the Moon is the reference, the image in the glass is the sense, and the image on each observer's retina is the idea. The image in the glass "is indeed one-sided and dependent upon the standpoint of observation; but it is still objective, inasmuch as it can be used by several observers", which is what a learned vector is. It depends on the corpus, the loss and the seed, and it is shared among its users. 
+
+Within the sense, the shared meaning, there are still three relations that the word "alike" hides: similarity, a correspondence between properties (dog and puppy); relatedness, the wider notion of which similarity is a special case (dog and bark); and association, a tendency to occur together (bee and honey) [@budanitsky2006evaluating; @turney2010frequency]. The last two relations are independent. A doctor and nurse are similar and associated, horse and platypus are similar and not associated, cradle and baby are associated and not similar, and calculus and candy neither. A reader who judges neighbours has to know which of these relations is being judged.
 
 ::: {.test}
-**T1. Do the neighbours of random items look alike?** Before any statistic, do the nearest neighbours of randomly drawn words, phrases, sounds and images look alike to a reader, and where do different kinds of space disagree?
+**Q1. Do the neighbours of random items look alike?** Before any statistic, do the nearest neighbours of randomly drawn words, phrases, sounds and images look alike to a reader, and where do different kinds of space disagree?
 
 *Tried in:* @sec-gallery-neighbours.
 :::
@@ -35,7 +37,7 @@ Likeness of meaning is not one relation. Frege separates the idea, the private i
 Goodman points out that a term may apply to things because of the way they were grouped, and not the other way round: the fact that a term applies to certain objects "may itself constitute rather than arise from a particular similarity among those objects" [@goodman1972seven]. Read for a contrastive loss, an image and its caption are near because the training pair says so. Harnad and Bender and Koller go further: symbols may need grounding outside the symbols, and a system trained only on form may have no way to learn meaning [@harnad1990symbol; @bender2020climbing]. Only the nearness that appears unasked is evidence about meaning.
 
 ::: {.test}
-**T2. Built in or emergent?** When two things of different kinds are near, is it only because training paired them, or are unpaired things near as well?
+**Q2. Built in or emergent?** When two things of different kinds are near, is it only because training paired them, or are unpaired things near as well?
 
 *Tried in:* @sec-likeness-pairs-senses.
 :::
@@ -43,7 +45,7 @@ Goodman points out that a term may apply to things because of the way they were 
 Harris, Firth and Wittgenstein tie sense to use and company. Harris's measurable claim is that "difference of meaning correlates with difference of distribution" [@harris1954distributional]; Firth takes collocation as one level of meaning, next to the context of situation [@firth1957synopsis]; and Wittgenstein says that the meaning of a word is its use "for a large class of cases—though not for all" [@wittgenstein1953philosophical, §43]. A space built from company is this claim made into a matrix, so the likeness it shows is what the loss was made to give and not a discovery. The informative case is the one where the account says that something is missing.
 
 ::: {.test}
-**T3. Does company recover likeness?** If likeness of meaning shows as likeness of company, do spaces made only from company, with different ways of counting it, give the same neighbours, and do those neighbours follow judgements of similarity or of association?
+**Q3. Does company recover likeness?** If likeness of meaning shows as likeness of company, do spaces made only from company, with different ways of counting it, give the same neighbours, and do those neighbours follow judgements of similarity or of association?
 
 *Tried in:* @sec-loss-decides-near.
 :::
@@ -51,7 +53,7 @@ Harris, Firth and Wittgenstein tie sense to use and company. Harris's measurable
 Wittgenstein also says that the members of a class like the games need share no feature: they form "a complicated network of similarities overlapping and criss-crossing" [@wittgenstein1953philosophical, §66]. Goodman shows why counting shared features cannot define likeness, since any two things share countless properties until we say in which respect they are compared [@goodman1972seven]. In a space this means that a concept is not a ball around a prototype, so a fixed radius is a poor model of it, and that a cosine returns a number and not the respect in which two items are alike.
 
 ::: {.test}
-**T4. Is a raw nearness a measure of likeness?** Before it is corrected for what inflates it, does the number behind "near" follow judged likeness, and does a fixed radius around an item hold a concept?
+**Q4. Is a raw nearness a measure of likeness?** Before it is corrected for what inflates it, does the number behind "near" follow judged likeness, and does a fixed radius around an item hold a concept?
 
 *Tried in:* @sec-reading-nearness-correctly.
 :::
@@ -59,7 +61,7 @@ Wittgenstein also says that the members of a class like the games need share no 
 Wittgenstein's family and Goodman's three discs, alike in pairs with no colour common to all three, are also a failure of transitivity [@goodman1972seven]. Tversky's experiments add that judged likeness is not symmetric and does not obey the triangle inequality, because it weighs common and distinctive features with weights that depend on which item is the subject [@tversky1977features]. Every score of this chapter reads likeness as a distance, so what a space keeps of these properties has to be asked.
 
 ::: {.test}
-**T5. Is likeness a distance?** Which of the properties of a distance (identical things at zero distance, symmetry, the triangle inequality) does nearness keep, which do judgements of likeness break, and is nearness transitive (if $a$ is near $b$ and $b$ is near $c$, is $a$ near $c$)?
+**Q5. Is likeness a distance?** Which of the properties of a distance (identical things at zero distance, symmetry, the triangle inequality) does nearness keep, which do judgements of likeness break, and is nearness transitive (if $a$ is near $b$ and $b$ is near $c$, is $a$ near $c$)?
 
 *Tried in:* @sec-likeness-not-distance.
 :::
