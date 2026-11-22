@@ -111,7 +111,7 @@ The ceiling of a rated judge is the agreement between its human raters, and it i
 :::
 
 ## One Space for Several Senses: CLIP {#sec-likeness-pairs-senses}
-*A single image-text model, with examples of multimodal likeness: the image of a dog against "dog", "puppy", "wolf", "car" and "doorbell", a caption against the images it retrieves, a sound against its words if an audio-text model is available. An image and its caption are near because the loss pulled them together, and nothing in the loss says that two images, or an unpaired sound and word, are near; the built-in cell and the emergent cell are separated here, since only the emergent one says something about meaning and not about the loss. The modality gap is taken up in @sec-ch-meaning-across-senses [@radford2021learning; @liang2022modalitygap].*
+*A single image-text model, with examples of multimodal likeness: the image of a dog against "dog", "puppy", "wolf", "car" and "doorbell", a caption against the images it retrieves, a sound against its words if an audio-text model is available. An image and its caption are near because the loss pulled them together, and nothing in the loss says that two images, or an unpaired sound and word, are near; the built-in cell and the emergent cell are separated here, since only the emergent one says something about meaning and not about the loss. The model and the modality gap [@radford2021learning; @liang2022modalitygap] are taken up in @sec-ch-meaning-across-senses.*
 
 ::: {.questions}
 1. In a model trained with a contrastive loss on a batch of image-caption pairs, which pairs are pulled together and which are pushed apart? What does the loss say about two images of the same dog?
