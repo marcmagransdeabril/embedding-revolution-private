@@ -41,18 +41,18 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
   - Hewitt 2019: squared L2 distance encodes parse-tree distance, squared norm encodes depth, p. 1.
 -->
 
-*Arc in one paragraph.* The book argued that meaning can be treated as position in a space shaped by company, and that each limit of a single vector is a cost, not an impossibility. Computer science arrived at that idea late. Philosophy, linguistics, psychology, neuroscience, sociology, biology, psychiatry, literature, theology, mathematics, logic, decision theory, and the philosophical traditions of India and China had each reached a version of it before, and each had found, in its own vocabulary, most of the limits in the ledger of @sec-ch-embedding-spaces. The epilogue opens by collecting what the dog test and the critical literacy test of the Prologue found, chapter by chapter. It then reads the book again through those traditions: first what they anticipated, then what they disputed, then what they hold that the book does not yet use. It is more speculative than the rest of the book, and each idea in it starts from a drawback of the existing approaches. It ends with the question of whether a geometry of the known can reach the new.
+*Arc in one paragraph.* The book argued that meaning can be treated as position in a space shaped by company, and that each limit of a single vector is a cost, not an impossibility. Computer science arrived at that idea late. Philosophy, linguistics, psychology, neuroscience, sociology, biology, psychiatry, literature, theology, mathematics, logic, decision theory, and the philosophical traditions of India and China had each reached a version of it before, and each had found, in its own vocabulary, most of the limits in the ledger of @sec-ch-properties-of-meaning. The epilogue opens by collecting what the dog test and the critical literacy test of the Prologue found, chapter by chapter. It then reads the book again through those traditions: first what they anticipated, then what they disputed, then what they hold that the book does not yet use. It is more speculative than the rest of the book, and each idea in it starts from a drawback of the existing approaches. It ends with the question of whether a geometry of the known can reach the new.
 
 ## The Dog Test, Revisited {#sec-dog-test-revisited}
 
-*Plan (1–2 pages).* Restate the test in a paragraph, pointing to the Prologue. Then collect the partial answers that the chapters gave in their closing sections, each with its chapter: what a shared space keeps and loses, the modality gap and the weakness of dynamics (@sec-ch-multimodal-embeddings); the alignment of spaces trained apart (@sec-ch-cross-domain-transfer); the concept as a subspace with directions shared by all modalities and directions specific to each (@sec-ch-complex-plane-quantum-logic); and modality as a role in a bundle of bindings, so that a photograph, a bark and a gait stay distinguishable (@sec-ch-vector-symbolic-architectures). Then the human answer: the concept cell and the hub as the neural version of one place for many senses, and the Umwelt as the reminder that the dog has a space of its own. Conclude that meaning is a relation, not a place: Saussure's differences, Yoneda's lemma, and second-order isomorphism agree that only the pattern of distances is meaningful, which is also why a space is defined only up to an isometry.
+*Plan (1–2 pages).* Restate the test in a paragraph, pointing to the Prologue. Then collect the partial answers that the chapters gave in their closing sections, each with its chapter: what a shared space keeps and loses, the modality gap and the weakness of dynamics (@sec-ch-meaning-across-senses); the alignment of spaces trained apart (@sec-ch-meaning-as-arrangement); the concept as a subspace with directions shared by all modalities and directions specific to each (@sec-ch-meaning-as-region); and modality as a role in a bundle of bindings, so that a photograph, a bark and a gait stay distinguishable (@sec-ch-meaning-as-composition). Then the human answer: the concept cell and the hub as the neural version of one place for many senses, and the Umwelt as the reminder that the dog has a space of its own. Conclude that meaning is a relation, not a place: Saussure's differences, Yoneda's lemma, and second-order isomorphism agree that only the pattern of distances is meaningful, which is also why a space is defined only up to an isometry.
 
 - Claim: the dog test is a transversal goal, and its answer is the set of partial answers, with what each one loses.
-- Hooks: @sec-ch-multimodal-embeddings, @sec-ch-cross-domain-transfer, @sec-ch-complex-plane-quantum-logic, @sec-ch-vector-symbolic-architectures, and the section The Dog Test in the Brain below.
+- Hooks: @sec-ch-meaning-across-senses, @sec-ch-meaning-as-arrangement, @sec-ch-meaning-as-region, @sec-ch-meaning-as-composition, and the section The Dog Test in the Brain below.
 
 ## The Critical Literacy Test, Revisited {#sec-critical-literacy-test-revisited}
 
-*Plan (1–2 pages).* Restate the test in a paragraph, pointing to the Prologue. Then, per kind of question, what the chapters found and whether the representation passed on its own or needed something beside the space (a retrieval step, a verifier). Granularity: retrieval, hyperbolic geometry for trees, and the capacity of a bundle (@sec-ch-vector-databases, @sec-ch-tangent-spaces-geodesics, @sec-ch-vector-symbolic-architectures). Dependency: the graph of prerequisites (@sec-ch-graph-embeddings), and the part of it that is a tree. Internal consistency: negation as the orthogonal complement and the composition of parts (@sec-ch-complex-plane-quantum-logic, @sec-ch-neurosymbolic-integration), and whether a claim can be reached as false by derivation from ground truth and common sense and kept apart from ignorance (entailed, refuted, undetermined; @sec-ch-neurosymbolic-integration). External consistency: retrieval against verified sources (@sec-ch-vector-databases). Then the testbed: what a formalized subject lets one measure, a dependency graph and a checker for the claim that a formal statement follows, and what stays unmeasurable outside mathematics. Last, what stays open, handed to the sections that follow: truth as coherence against correspondence, and the question of what the test is applied to (a single vector, a set of vectors, or a model that reads the text), which the book has not decided.
+*Plan (1–2 pages).* Restate the test in a paragraph, pointing to the Prologue. Then, per kind of question, what the chapters found and whether the representation passed on its own or needed something beside the space (a retrieval step, a verifier). Granularity: retrieval, hyperbolic geometry for trees, and the capacity of a bundle (@sec-ch-meaning-and-truth, @sec-ch-meaning-as-path, @sec-ch-meaning-as-composition). Dependency: the graph of prerequisites (@sec-ch-meaning-as-difference), and the part of it that is a tree. Internal consistency: negation as the orthogonal complement and the composition of parts (@sec-ch-meaning-as-region, @sec-ch-meaning-as-composition), and whether a claim can be reached as false by derivation from ground truth and common sense and kept apart from ignorance (entailed, refuted, undetermined; @sec-ch-meaning-as-composition). External consistency: retrieval against verified sources (@sec-ch-meaning-and-truth). Then the testbed: what a formalized subject lets one measure, a dependency graph and a checker for the claim that a formal statement follows, and what stays unmeasurable outside mathematics. Last, what stays open, handed to the sections that follow: truth as coherence against correspondence, and the question of what the test is applied to (a single vector, a set of vectors, or a model that reads the text), which the book has not decided.
 
 - Claim: whether a representation can carry consistency, or must be checked from outside, is the open question; this section reports what the chapters found and does not assume the answer.
 - Precedent (to verify): theories of truth as coherence and as correspondence, and Tarski on truth in a metalanguage; the section What a System Cannot Say About Itself below.
@@ -77,19 +77,19 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
 
 ## The Perfect Language {#sec-perfect-language}
 
-*Plan (2 pages).* The religious and philosophical dream of a sign that reveals the thing [@eco1995search]: the Adamic language, Kabbalistic gematria (words as numbers, a one-dimensional embedding with hash collisions), Llull's combinatorial wheels, and Wilkins's *Real Character* [@wilkins1668essay], a hand-built hierarchical code in which the spelling of a word is its address in a taxonomy. Borges's essay on Wilkins and the "Chinese encyclopedia" [@borges1964other] is the critique: every hand-made taxonomy is arbitrary. Locke had diagnosed the problem a few years later, in his chapters on the imperfection and abuse of words. Eco's opposition of the dictionary (a tree of definitions) and the encyclopedia (a network without a root) frames the choice between hierarchy and graph that Chapters [-@sec-ch-tangent-spaces-geodesics] and [-@sec-ch-graph-embeddings] make in geometry; the reply from cognitive science is that the form can be learned too (Kemp and Tenenbaum: a tree for living kinds, rings, chains, and grids elsewhere).
+*Plan (2 pages).* The religious and philosophical dream of a sign that reveals the thing [@eco1995search]: the Adamic language, Kabbalistic gematria (words as numbers, a one-dimensional embedding with hash collisions), Llull's combinatorial wheels, and Wilkins's *Real Character* [@wilkins1668essay], a hand-built hierarchical code in which the spelling of a word is its address in a taxonomy. Borges's essay on Wilkins and the "Chinese encyclopedia" [@borges1964other] is the critique: every hand-made taxonomy is arbitrary. Locke had diagnosed the problem a few years later, in his chapters on the imperfection and abuse of words. Eco's opposition of the dictionary (a tree of definitions) and the encyclopedia (a network without a root) frames the choice between hierarchy and graph that Chapters [-@sec-ch-meaning-as-region] and [-@sec-ch-meaning-as-difference] make in geometry; the reply from cognitive science is that the form can be learned too (Kemp and Tenenbaum: a tree for living kinds, rings, chains, and grids elsewhere).
 
 - Claim: the perfect-language tradition is hand-built meaning at the scale of a civilization, the hand-written dense table of @sec-ch-symbols-without-interior at the scale of a civilization, and it failed for the same reason.
 - Precedent: Wilkins's code is a tree address, the discrete ancestor of hyperbolic embeddings of taxonomies.
 - Challenge: Borges, against any fixed set of dimensions of meaning; a tree is a choice, not a given.
-- Hooks: @sec-ch-symbols-without-interior (hand-made dense table), @sec-ch-embedding-spaces (meaning learned from use instead of built in), @sec-ch-tangent-spaces-geodesics (hierarchies).
+- Hooks: @sec-ch-symbols-without-interior (hand-made dense table), @sec-ch-likeness-as-nearness (meaning learned from use instead of built in), @sec-ch-meaning-as-region (hierarchies).
 
 ## Meaning by Difference and by Company {#sec-meaning-difference-company}
 
 *Plan (3 pages).* The relational idea of meaning, in three traditions. Saussure: in language there are only differences, and the value of a sign is its position among the others [@saussure1916cours]. Buddhist *apoha*: a word means by excluding what it is not, "cow" as not non-cow, in Dignaga's theory of word meaning without real universals [@matilal1990word], which is meaning by negatives, the logic of contrastive learning; its counterpart, Bhartrhari's *sphota*, is a meaning-bearer taken as indivisible. Harris's distributional hypothesis [@harris1954distributional], three years before Firth, and the late Wittgenstein's meaning as use. Holism and inferential role (Quine's web of belief, Brandom) are the philosophical form of the same thesis, and Jakobson's two axes of language, similarity and contiguity, are the linguistic one.
 
 - Claim: the core move of the book, a symbol described by its relations to all others, is the structuralist and holist thesis restated in linear algebra.
-- Precedent: Saussure (relational value), apoha (meaning by negatives, InfoNCE), Harris (distribution), Jakobson (substitutability versus association, the `darcy`–`mr` observation of @sec-ch-embedding-spaces).
+- Precedent: Saussure (relational value), apoha (meaning by negatives, InfoNCE), Harris (distribution), Jakobson (substitutability versus association, the `darcy`–`mr` observation of @sec-ch-likeness-as-nearness).
 - Challenge: holism makes meaning unstable under any change of the whole (retraining changes every vector), and Quine's indeterminacy of translation follows; Bhartrhari's indivisible sphota is against meaning built from parts. The sharper form of the challenge is the block of sections after The Mathematics of Meaning, which asks whether relations alone can fix meaning at all.
 - Unused: apoha as the philosophical ancestor of contrastive learning; Jakobson's two axes as a test that distinguishes the two kinds of neighbour.
 - Harris, read at the page (all page numbers are of the printed article): the claim is autonomous, a language is described by the occurrence of its parts relative to one another "without intrusion of other features such as history or meaning" (p. 146), and meaning enters only as a correlate, "difference of meaning correlates with difference of distribution" (p. 156), with the caveat that a word's meaning cannot be defined fully from its co-occurrents (p. 157). The example pair, oculist and eye-doctor, came from Bar-Hillel, who thought such correlates could not be established (p. 156, note); the Challenge above has an ancestor. The likeness scale built on it is used in @sec-likeness-which and the table row in @sec-likeness-which.
@@ -97,8 +97,8 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
     - *Eliciting*: Harris tests whether a rare construction occurs by asking an informant to complete frames, a method of testing and not of waiting for the corpus (pp. 161–162); the modern counterpart would be generating targeted probes for the rare cases of a space and not only scaling the passive corpus.
     - *Segmentation by successor count*: tentative morpheme boundaries are placed where the number of different phonemes that follow the first $n$ rises (§2.2, p. 155), a variety-of-continuations criterion that can be compared with the frequency merges of byte-pair encoding; a comparison on morphologically rich languages is untested.
     - *Ordered, interruptible approximation*: the statements are ordered from the most inclusive sets to the subsidiary corrections, so that the list can be stopped at any point and still be an approximation (p. 147); nested embeddings (a prefix of the coordinates is a coarser embedding) are the same shape, to be compared once that idea is placed in the embedding chapter.
-    - *Converses and discourse-local sets*: pairs such as active and passive, or buy and sell, have regular, partly inverted selections in neighbouring sentences, and a discourse has its own substitution sets and subdomains that hold only inside it (p. 160); both are open as explicit operators or as a low-rank subspace induced per document (@sec-ch-contextual-vectors).
-- Hooks: @sec-ch-embedding-spaces (Counting Company, Learning by Contrast), @sec-ch-cross-domain-transfer (indeterminacy as gauge freedom).
+    - *Converses and discourse-local sets*: pairs such as active and passive, or buy and sell, have regular, partly inverted selections in neighbouring sentences, and a discourse has its own substitution sets and subdomains that hold only inside it (p. 160); both are open as explicit operators or as a low-rank subspace induced per document (@sec-ch-meaning-in-context).
+- Hooks: @sec-ch-likeness-as-nearness (Counting Company, Learning by Contrast), @sec-ch-meaning-as-arrangement (indeterminacy as gauge freedom).
 
 ## Measuring Meaning Before Computers {#sec-measuring-meaning-before-computers}
 
@@ -108,41 +108,41 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
 - Precedent: the term "semantic space" (Osgood), the parallelogram (Rumelhart and Abrahamson, against Mikolov), an exponential similarity kernel (Shepard, against the $\exp(\cos/\tau)$ of InfoNCE).
 - Challenge: Osgood's three dimensions are a summary that loses most of the structure of the space; the biases that implicit-association studies find in trained embeddings are a cost of learning meaning from use.
 - Precedent (Osgood, from the PDF): the correlation of two rating profiles is blind to level, so Love, Affection and Hate can all correlate at 1.00; Osgood replaces it by the Euclidean $D$ and relates the two by $D=\sqrt{2k(1-r)}$ on standardised profiles (pp. 90–91), the cosine-against-distance question of @sec-ch-likeness-as-nearness sixty years early; his split-half distance matrices correlate .98 (p. 144), a human noise floor. Evaluation takes about 70 per cent of the common variance in the first analysis (p. 38), and a deliberately diverse sample of scales needs many more dimensions, which is the "three dimensions lose most of the structure" challenge in his own words.
-- Unused: Shepard's law as a psychological justification of the softmax kernel; the circumplex of affect as a natural case for phase (@sec-ch-complex-plane-quantum-logic); distinctive features in phonology, phonemes as hand-built binary feature vectors decades before word vectors.
-- Hooks: @sec-ch-embedding-spaces (Geometry of Meaning, Learning by Contrast), @sec-ch-complex-plane-quantum-logic.
+- Unused: Shepard's law as a psychological justification of the softmax kernel; the circumplex of affect as a natural case for phase (@sec-ch-meaning-as-region); distinctive features in phonology, phonemes as hand-built binary feature vectors decades before word vectors.
+- Hooks: @sec-ch-likeness-as-nearness (Geometry of Meaning, Learning by Contrast), @sec-ch-meaning-as-region.
 
 ## Where Psychology Said No {#sec-where-psychology-said-no}
 
 *Plan (2–3 pages).* The objections, each mapped to a line of the ledger. Tversky: judged similarity is asymmetric and violates the triangle inequality, so it is not a metric [@tversky1977features]. Goodman: similarity is always similarity in some respect, and concepts are held together by theories, not similarity. Analogy is mapping of relational structure, not vector offsets [@gentner1983structure]. Categories have prototypes and graded membership [@rosch1975cognitive]. The reply from inside psychology: an attention-weighted metric that changes with the task (Nosofsky).
 
 - Claim: every objection is a cost on the ledger, and the reply each time was more structure or a context-dependent metric.
-- Challenge: Tversky → asymmetric relations (@sec-ch-graph-embeddings), and the three axioms that trained scores keep or lose (@sec-likeness-not-distance; since 2025 there is also a differentiable form of his contrast model (Tversky Neural Networks, arXiv 2506.11035, to add), so "not differentiable" is no longer the reply); Goodman and Nosofsky → contextual vectors (@sec-ch-contextual-vectors); Gentner → composition (@sec-ch-neurosymbolic-integration); Rosch → hierarchy (@sec-ch-tangent-spaces-geodesics); Murphy and Medin → similarity is not a logic (@sec-ch-complex-plane-quantum-logic).
-- Hooks: @sec-ch-embedding-spaces (ledger of limits), and the closing section of each chapter.
+- Challenge: Tversky → asymmetric relations (@sec-ch-meaning-as-difference), and the three axioms that trained scores keep or lose (@sec-likeness-not-distance; since 2025 there is also a differentiable form of his contrast model (Tversky Neural Networks, arXiv 2506.11035, to add), so "not differentiable" is no longer the reply); Goodman and Nosofsky → contextual vectors (@sec-ch-meaning-in-context); Gentner → composition (@sec-ch-meaning-as-composition); Rosch → hierarchy (@sec-ch-meaning-as-path); Murphy and Medin → similarity is not a logic (@sec-ch-meaning-as-region).
+- Hooks: @sec-ch-properties-of-meaning (ledger of limits), and the closing section of each chapter.
 
 ## The Brain Also Embeds {#sec-brain-also-embeds}
 
 *Plan (3 pages).* From the cognitive map of rats [@tolman1948cognitive] to place and grid cells, and then to concepts navigated with the same grid code [@constantinescu2016organizing]: reasoning as a trajectory is a claim about brains before it was a claim about models. Language models predict brain responses, with the limits those papers state, and parallel coding directions in hippocampus and prefrontal cortex are the neural form of the analogy parallelogram. Mixed selectivity and sparse coding are the biological precedents of superposition and dictionary learning, and neural manifolds are the precedent of low intrinsic dimension. Comparing spaces by their similarity structure rather than their coordinates is the oldest statement that a space is defined only up to an isometry: second-order isomorphism, and representational similarity analysis [@kriegeskorte2008representational].
 
 - Claim: the brain uses distributed, high-dimensional, low-intrinsic-dimension codes for meaning, and compares across individuals only up to similarity structure.
-- Precedent: grid codes (trajectories, @sec-ch-tangent-spaces-geodesics), parallel coding directions (analogy, @sec-ch-embedding-spaces), mixed selectivity (superposition, @sec-ch-contextual-vectors), neural manifolds (@sec-ch-curse-of-dimensionality), second-order isomorphism (gauge freedom, @sec-ch-cross-domain-transfer), predictive processing (JEPA, Chapters [-@sec-ch-embedding-spaces] and [-@sec-ch-multimodal-embeddings]).
+- Precedent: grid codes (trajectories, @sec-ch-meaning-as-path), parallel coding directions (analogy, @sec-ch-likeness-as-nearness), mixed selectivity (superposition, @sec-ch-meaning-as-direction), neural manifolds (@sec-ch-curse-of-dimensionality), second-order isomorphism (gauge freedom, @sec-ch-meaning-as-arrangement), predictive processing (JEPA, Chapters [-@sec-ch-likeness-as-nearness] and [-@sec-ch-meaning-across-senses]).
 - Challenge: correlation between model and brain is not identity of mechanism; keep the claim at the level of geometry.
 
 ## The Dog Test in the Brain {#sec-dog-test-brain}
 
 *Plan (3 pages).* The Prologue's test has been run on people. Concept cells answer to a photograph, the written name, and the spoken name of the same person [@quiroga2005invariant]. The hub-and-spoke model [@patterson2007where] is the neural version of one hub with many modalities, and semantic dementia, the loss of the hub, removes the concept from every modality at once. Against amodal hubs: perceptual symbol systems and dual coding keep modality-specific content as part of meaning (the fur that is not in the bark). Molyneux's question to Locke, whether a man born blind who gains sight would tell a cube from a globe by sight alone, has been tested on five patients whose sight was restored: within two days they matched objects from touch to vision at near chance (58%), and the three retested improved in as little as five days of ordinary experience, so the link between the senses looks learned rather than innate, with five patients as the caveat [@held2011newly]. This is the training of a contrastive model on paired views in miniature. The grounding debate (Harnad's symbol grounding, Searle's Chinese room, Putnam's "meaning is not in the head") says what a shared space still lacks, and Uexküll's *Umwelt* says the dog lives in its own space of meanings, not ours.
 
-- Claim: a shared space across senses exists in the brain, and so do the costs of @sec-ch-multimodal-embeddings: modality-specific loss and a hub that can be damaged.
+- Claim: a shared space across senses exists in the brain, and so do the costs of @sec-ch-meaning-across-senses: modality-specific loss and a hub that can be damaged.
 - Precedent: concept cells (the dog test), hub-and-spoke (ImageBind), Held et al. (the cross-modal map is learned from paired experience, as CLIP learns it).
 - Challenge: Barsalou and Paivio (the modality gap may be a feature), Putnam and Bender–Koller (grounding needs the world, not more modalities).
 - Unused: the Umwelt as a reversal of the dog test (what is the dog's embedding of us?).
-- Hooks: Prologue, @sec-ch-multimodal-embeddings.
+- Hooks: Prologue, @sec-ch-meaning-across-senses.
 
 ## Life Makes Meaning {#sec-life-makes-meaning}
 
 *Plan (2 pages).* Biology had spaces before it had embeddings: protein sequence space, in which evolution walks between functional neighbours, theoretical morphospace, and D'Arcy Thompson's coordinate transformations between the forms of related species [@thompson1917growth]. What information means in biology [@maynardsmith2000concept]. Meaning from use: signalling games, in which conventions and their information content emerge from repeated interaction [@skyrms2010signals]. Biosemiotics and autopoiesis treat the organism as a maker of meaning.
 
 - Claim: meaning in biology is functional (what a signal does for a living system), which is Weaver's level C, not B.
-- Precedent: protein space (protein language models), Thompson's transformations (diffeomorphisms between forms, @sec-ch-tangent-spaces-geodesics), Skyrms (Shannon plus use yields meaning).
+- Precedent: protein space (protein language models), Thompson's transformations (diffeomorphisms between forms, @sec-ch-meaning-as-path), Skyrms (Shannon plus use yields meaning).
 - Unused: signalling games as a minimal model of how a shared space between two agents emerges; morphospace as an empty-volume argument (most of the space is unrealized, @sec-ch-curse-of-dimensionality).
 
 ## When Meaning Breaks {#sec-when-meaning-breaks}
@@ -151,23 +151,23 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
 
 - Claim: embeddings are already a clinical instrument, which is evidence that the geometry measures something about human meaning; and the pathologies have analogues in the ledger (loosened associations as hubness, aberrant salience as miscalibrated similarity).
 - Challenge: these analogies are suggestive, not mechanistic.
-- Hooks: @sec-ch-embedding-spaces (hubness), @sec-ch-vector-databases (hallucination).
+- Hooks: @sec-ch-likeness-as-nearness (hubness), @sec-ch-meaning-and-truth (hallucination).
 
 ## Literature as a Laboratory of Meaning {#sec-literature-laboratory-meaning}
 
-*Plan (2 pages).* Writers ran the thought experiments first. Swift's engine in Lagado writes books by random combination of words, and its sages carry the things themselves instead of words [@swift1726gulliver]: Shannon's generator and the grounding problem in one chapter. Borges [@borges1962labyrinths]: the Library of Babel is the space of all strings, almost all of it meaningless (the empty volume of @sec-ch-curse-of-dimensionality); Funes remembers everything and therefore cannot think, compression as the condition of generalization (low rank in @sec-ch-embedding-spaces). Metaphor as a mapping between domains [@lakoff1980metaphors] is the literary form of transport between spaces.
+*Plan (2 pages).* Writers ran the thought experiments first. Swift's engine in Lagado writes books by random combination of words, and its sages carry the things themselves instead of words [@swift1726gulliver]: Shannon's generator and the grounding problem in one chapter. Borges [@borges1962labyrinths]: the Library of Babel is the space of all strings, almost all of it meaningless (the empty volume of @sec-ch-curse-of-dimensionality); Funes remembers everything and therefore cannot think, compression as the condition of generalization (low rank in @sec-ch-likeness-as-nearness). Metaphor as a mapping between domains [@lakoff1980metaphors] is the literary form of transport between spaces.
 
 - Claim: literature anticipated both the power and the emptiness of combinatorial meaning.
-- Unused: Funes as the epilogue's image for the low-rank argument; conceptual metaphor as a cross-domain map (@sec-ch-cross-domain-transfer); the hermeneutic circle as the reading of contextual vectors.
-- Hooks: @sec-ch-symbols-without-interior (Shannon's generator), @sec-ch-embedding-spaces (low rank), @sec-ch-curse-of-dimensionality, @sec-ch-contextual-vectors, @sec-ch-cross-domain-transfer.
+- Unused: Funes as the epilogue's image for the low-rank argument; conceptual metaphor as a cross-domain map (@sec-ch-meaning-as-arrangement); the hermeneutic circle as the reading of contextual vectors.
+- Hooks: @sec-ch-symbols-without-interior (Shannon's generator), @sec-ch-likeness-as-nearness (low rank), @sec-ch-curse-of-dimensionality, @sec-ch-meaning-in-context, @sec-ch-meaning-as-arrangement.
 
 ## The Mathematics of Meaning {#sec-mathematics-meaning}
 
 *Plan (2 pages).* The other mathematical tradition, truth-conditional and compositional (Tarski, Montague [@montague1970universal]), against which distributional semantics was defined. Klein's Erlangen programme: a geometry is what its symmetries leave invariant [@klein1893comparative]. Music gives a worked example: a chord is a point of a quotient space, and the resulting orbifold is not Euclidean (Tymoczko). Category theory: the Yoneda lemma says an object is determined by its relations to all others, Firth's slogan as a theorem [@maclane1971categories], and compositional distributional semantics is a functor from grammar to vector spaces (Coecke et al.).
 
-- Claim: the relational thesis has an exact mathematical form (Yoneda), and the compositional tradition supplies what similarity lacks (@sec-ch-neurosymbolic-integration).
-- Unused: Yoneda as the formal statement of "you shall know a word by the company it keeps"; the chord orbifold as a model of how a perceiver abstracts from nuisance symmetries, which is how @sec-ch-tangent-spaces-geodesics describes a shared semantic space.
-- Hooks: @sec-ch-tangent-spaces-geodesics (Erlangen, quotient by nuisance symmetries), @sec-ch-complex-plane-quantum-logic (quantum logic), @sec-ch-neurosymbolic-integration (composition, LTN).
+- Claim: the relational thesis has an exact mathematical form (Yoneda), and the compositional tradition supplies what similarity lacks (@sec-ch-meaning-as-composition).
+- Unused: Yoneda as the formal statement of "you shall know a word by the company it keeps"; the chord orbifold as a model of how a perceiver abstracts from nuisance symmetries, which is how @sec-ch-meaning-as-arrangement describes a shared semantic space.
+- Hooks: @sec-ch-meaning-as-arrangement (Erlangen, quotient by nuisance symmetries), @sec-ch-meaning-as-region (quantum logic), @sec-ch-meaning-as-composition (composition, LTN).
 
 ## Ignoramus et Ignorabimus {#sec-ignoramus-et-ignorabimus}
 
@@ -175,7 +175,7 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
 
 - Claim: "a cost, not an impossibility" is a position in a 150-year argument, and the book should say which side it takes and for which limits.
 - Challenge: the story that Gödel refuted Hilbert's motto the day before is a simplification, since Hilbert's target was the natural sciences and the decidability of mathematical problems; check against a historian before writing it.
-- Hooks: Prologue; @sec-ch-embedding-spaces (ledger of limits).
+- Hooks: Prologue; @sec-ch-properties-of-meaning (ledger of limits).
 
 ## What Finite Data Cannot Fix {#sec-what-finite-data-cannot}
 
@@ -184,8 +184,8 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
 - Claim: "company" is the book's inductive bias, and the ledger of limits lists what that bias leaves out; the limit is a cost under a stated assumption, not an impossibility.
 - Precedent: Hume to Goodman to Kripke, for the same problem posed about prediction, about predicates, and about meaning; Russell's postulate of natural kinds or limited variety is an early statement of the needed bias.
 - Challenge: the no-free-lunch result averages over all possible targets, which is not a world anyone learns in; the section should say what the book assumes about the world instead (the manifold hypothesis of @sec-ch-curse-of-dimensionality).
-- Unused: the poverty of the stimulus (@sec-ch-neurosymbolic-integration) is this problem in linguistics; row R7 (plus and quus, grue) of the three-part plan.
-- Hooks: @sec-ch-curse-of-dimensionality (learning needs structure), @sec-ch-embedding-spaces, @sec-ch-neurosymbolic-integration.
+- Unused: the poverty of the stimulus (@sec-ch-meaning-as-composition) is this problem in linguistics; row R7 (plus and quus, grue) of the three-part plan.
+- Hooks: @sec-ch-curse-of-dimensionality (learning needs structure), @sec-ch-likeness-as-nearness, @sec-ch-meaning-as-composition.
 
 ## Does Structure Fix Meaning? {#sec-does-structure-fix-meaning}
 
@@ -195,7 +195,7 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
 - Precedent for the answer: an anchor outside the space. Lewis's eligibility can be read as the philosophical name of what grounding does (speculation, to check), and the dog test is an anchor.
 - Challenge: Fodor and Lepore against any relational semantics; Davidson and Kuhn pull in opposite directions on whether two spaces can be aligned at all.
 - Unused: rows R2 and R3 of the three-part plan (radical translation, Twin Earth) sit here.
-- Hooks: @sec-ch-cross-domain-transfer (gauge freedom), @sec-ch-multimodal-embeddings (the anchor).
+- Hooks: @sec-ch-meaning-as-arrangement (gauge freedom), @sec-ch-meaning-across-senses (the anchor).
 
 ## What a System Cannot Say About Itself {#sec-what-system-cannot-say}
 
@@ -204,28 +204,28 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
 - Claim: a graded similarity is the book's answer to Rice, and the same pattern predicts that "the set of all meanings" or "the space of all spaces" cannot be a point of any one space (speculation, via Priest's schema).
 - Challenge: Franzén, against loose use of Gödel (the argument from Gödel to the claim that minds are not machines is disputed); the dialetheist conclusion of Priest is a minority position.
 - Unused: the register row for self-reference (a model asked whether its own answer is true); truth probes as a metalanguage in the sense of Tarski.
-- Speculation, a reading and not a finding: the formal counterpart of "false against unknown" is refutable against independent. A statement that is neither provable nor refutable from the axioms is ignorance in principle, and no amount of checking turns it into falsehood; this is the *ignorabimus* of the section Ignoramus et Ignorabimus, and a representation that returns one low score for both has lost the distinction. See the section Reaching "False" in @sec-ch-neurosymbolic-integration.
-- Hooks: @sec-ch-symbols-without-interior (Rice's theorem), @sec-ch-vector-databases (negation, hallucination), @sec-ch-contextual-vectors (truth directions).
+- Speculation, a reading and not a finding: the formal counterpart of "false against unknown" is refutable against independent. A statement that is neither provable nor refutable from the axioms is ignorance in principle, and no amount of checking turns it into falsehood; this is the *ignorabimus* of the section Ignoramus et Ignorabimus, and a representation that returns one low score for both has lost the distinction. See the section Reaching "False" in @sec-ch-meaning-and-truth.
+- Hooks: @sec-ch-symbols-without-interior (Rice's theorem), @sec-ch-meaning-and-truth (negation, hallucination), @sec-ch-meaning-and-truth (truth directions).
 
 ## Compression, Capacity and Learnability {#sec-compression-capacity-learnability}
 
 *Plan (2–3 pages).* The drawback: how many dimensions does meaning need, and what does a fixed dimension lose? Kolmogorov defined the information in an individual object as the length of its shortest program [@kolmogorov1965three]; Solomonoff's universal prediction is optimal and incomputable, and Rissanen's minimum description length prices a model and its fit in the same units. The information bottleneck keeps only what is relevant to a target [@tishby1999information]. The oldest case of a limit paid for with more structure is Minsky and Papert's result that a single-layer perceptron cannot compute parity or connectedness, repaired by a hidden layer [@minsky1969perceptrons]. Learning theory measures capacity (Vapnik and Chervonenkis) and learnability (Valiant).
 
-- Claim: choosing the dimension of an embedding is a code-length trade-off, and the low-rank argument of @sec-ch-embedding-spaces is its working form.
+- Claim: choosing the dimension of an embedding is a code-length trade-off, and the low-rank argument of @sec-ch-likeness-as-nearness is its working form.
 - Precedent: Minsky and Papert as the template of the ledger (limit, remedy, price).
 - Challenge: Kolmogorov complexity is incomputable, so every use of it is an approximation with a stated bias.
-- Hooks: @sec-ch-embedding-spaces (low rank), @sec-ch-vector-symbolic-architectures (capacity bounds), @sec-ch-curse-of-dimensionality.
+- Hooks: @sec-ch-likeness-as-nearness (low rank), @sec-ch-meaning-as-composition (capacity bounds), @sec-ch-curse-of-dimensionality.
 
 ## Deciding Without Knowing the Possibilities {#sec-deciding-without-knowing-possibilities}
 
 *Plan (3 pages).* The drawback: the probabilities of a model sum to one over a list fixed by its training, and the world may hold events outside that list. Three layers, kept apart. Known unknowns are risks one can price; Knight separated measurable risk from unmeasurable uncertainty [@knight1921risk]. Rare events that are seen are the long tail: Mandelbrot's heavy-tailed prices, Taleb's monograph on what goes wrong when thin-tailed statistics meet fat tails [@taleb2020statistical], and Good's missing mass, how much probability the unseen deserves [@good1953population]. Events outside what the system was built on are what Savage's small worlds leave out. Decision rules for ignorance exist (maximin, and maximin over a set of priors, motivated by Ellsberg's finding that people avoid ambiguity in a way no single prior represents), and determinism does not rescue prediction either.
 
 - Claim: the first two layers look like costs (calibration, scale, retrieval); the third is the candidate impossibility, for Hume's reason (see What Finite Data Cannot Fix).
-- Link: the closed list is also why absence is read as falsehood. Under a closed-world default what is not derivable is false; under an open-world one it is unknown. A softmax and a top-$k$ query assume the first without saying so, which is the case against reading a low score as "false" (see Reaching "False" in @sec-ch-neurosymbolic-integration).
+- Link: the closed list is also why absence is read as falsehood. Under a closed-world default what is not derivable is false; under an open-world one it is unknown. A softmax and a top-$k$ query assume the first without saying so, which is the case against reading a low score as "false" (see Reaching "False" in @sec-ch-meaning-and-truth).
 - Speculation, a reading and not a finding: a softmax over a fixed vocabulary is a closed list; a nearest-neighbour query always returns k neighbours, even when nothing relevant exists. A model can represent any string, so its representation is open, while its belief about the world is closed.
 - Challenge: Taleb's monograph is not peer-reviewed and is polemical; take the standard results from Mandelbrot and Embrechts and cite Taleb for the argument.
 - Unused: the connection to Priest's schema, that "the set of all possibilities" is itself a totality (speculation).
-- Hooks: @sec-ch-embedding-spaces (zero counts and unseen pairs in the PMI), @sec-ch-vector-databases (closed-world retrieval), @sec-ch-generative-spaces (sampling and the tails), @sec-ch-complex-plane-quantum-logic (Ellsberg and Allais as the targets of quantum decision models).
+- Hooks: @sec-ch-likeness-as-nearness (zero counts and unseen pairs in the PMI), @sec-ch-meaning-and-truth (closed-world retrieval), @sec-ch-meaning-as-generation (sampling and the tails), @sec-ch-meaning-as-region (Ellsberg and Allais as the targets of quantum decision models).
 
 ## How Reasoners Go Wrong {#sec-how-reasoners-go-wrong}
 
@@ -234,7 +234,7 @@ printed-page locators `[@key, p. N]` for books only when the prose is written; p
 - Claim: for a model, bias is a property of the corpus (what was written, by whom, selected how) and fallacy is a property of use; both are costs of learning meaning from use.
 - Precedent: Bacon's Marketplace for the corpus; Nisbett and Wilson for chain-of-thought faithfulness; Strathern and Campbell for reward hacking.
 - Challenge: the heuristics-and-biases results were measured against norms that Gigerenzer disputes; cite the core experiments of the 1970s and 1980s, not the popular summaries.
-- Hooks: @sec-ch-contextual-vectors (faithfulness, reward hacking), @sec-ch-properties-of-meaning (directions that also carry bias), @sec-ch-vector-databases (selection by top-k), @sec-ch-complex-plane-quantum-logic (the conjunction fallacy and Allais as benchmarks).
+- Hooks: @sec-ch-meaning-in-context (faithfulness, reward hacking), @sec-ch-properties-of-meaning (directions that also carry bias), @sec-ch-meaning-and-truth (selection by top-k), @sec-ch-meaning-as-region (the conjunction fallacy and Allais as benchmarks).
 
 ## Language, Thought and Translation {#sec-language-thought-translation}
 
@@ -248,8 +248,8 @@ A fourth case varies the artifact: not a text, a sense or a species, but a mecha
 
 - Claim: alignment between two spaces is a translation problem with Benjamin's structure, a map toward a target neither space contains, and the gauge freedom is the formal form of that.
 - Challenge: Davidson, in the section Does Structure Fix Meaning?, says total untranslatability is incoherent.
-- Hooks: @sec-ch-cross-domain-transfer (what alignment needs: shared structure, enough data, common ground), @sec-ch-multimodal-embeddings (what a shared space keeps), @sec-ch-neurosymbolic-integration (language of thought).
-- Hooks, fourth case: @sec-ch-contextual-vectors (finding circuits inside a trained model is the same problem with the netlist given), @sec-ch-cross-domain-transfer (do oscillators of different substrates land together?), @sec-ch-neurosymbolic-integration (a simulator or a proof checker as the verifier), @sec-ch-symbols-without-interior (Rice's theorem).
+- Hooks: @sec-ch-meaning-as-arrangement (what alignment needs: shared structure, enough data, common ground), @sec-ch-meaning-across-senses (what a shared space keeps), @sec-ch-meaning-as-composition (language of thought).
+- Hooks, fourth case: @sec-ch-meaning-in-context (finding circuits inside a trained model is the same problem with the netlist given), @sec-ch-meaning-as-arrangement (do oscillators of different substrates land together?), @sec-ch-meaning-as-composition (a simulator or a proof checker as the verifier), @sec-ch-symbols-without-interior (Rice's theorem).
 
 ## Limits That May Not Be Costs {#sec-limits-that-may-be}
 
@@ -257,28 +257,28 @@ A fourth case varies the artifact: not a text, a sense or a species, but a mecha
 
 - Claim: the book models what can be said in terms of relations, and does not claim to cross these boundaries; it should say so explicitly.
 - Challenge to the claim: the dog test does not address experience; the register row for Mary's room and the Chinese room records "no test, and why".
-- Hooks: @sec-ch-multimodal-embeddings (the dog test, grounding), @sec-ch-properties-of-meaning (regions against sharp boundaries).
+- Hooks: @sec-ch-meaning-across-senses (the dog test, grounding), @sec-ch-properties-of-meaning (regions against sharp boundaries).
 
 ## A Ledger of Limits, Revisited {#sec-ledger-limits-revisited}
 
-*Plan (2 pages).* A single table: each limit of the ledger of @sec-ch-embedding-spaces, the tradition outside computer science that met it first, and the verdict of the book (structural, contingent, or open), including the cost of a shared space across senses (modality gap, loss of what is specific to each sense).
+*Plan (2 pages).* A single table: each limit of the ledger of @sec-ch-properties-of-meaning, the tradition outside computer science that met it first, and the verdict of the book (structural, contingent, or open), including the cost of a shared space across senses (modality gap, loss of what is specific to each sense).
 
 | Ledger entry | Chapter | Anticipated by |
 |:---|:---|:---|
-| One vector per word cannot follow its sentence | @sec-ch-contextual-vectors | Frege's context principle (to verify) |
-| No density and no way to check what a sampled point means; plausible is not true | @sec-ch-generative-spaces, @sec-ch-vector-databases | coherence against correspondence in theories of truth (to verify) |
-| Negation and multi-hop queries | @sec-ch-vector-databases | apoha, apophatic theology [@pseudodionysius1987complete] |
-| Hierarchies need curvature or dimensions | @sec-ch-tangent-spaces-geodesics | Wilkins, Collins–Quillian, Rosch, Kemp–Tenenbaum |
-| Asymmetric relations | @sec-ch-graph-embeddings | Tversky |
-| Multi-way interactions | @sec-ch-topological-deep-learning | Peirce's irreducible triad of sign, object, and interpretant [@peirce1931collected] |
-| Similarity is not a logic | @sec-ch-complex-plane-quantum-logic | Goodman, Murphy–Medin, Tarski |
-| Binding | @sec-ch-vector-symbolic-architectures | Jakobson's combination axis, Barsalou |
-| Systematic composition | @sec-ch-neurosymbolic-integration | Montague, Gentner, Chomsky (structure dependence, Merge) |
-| Spaces defined up to isometry | @sec-ch-cross-domain-transfer | Quine, Shepard–Chipman, RSA, Newman, Putnam |
+| One vector per word cannot follow its sentence | @sec-ch-meaning-in-context | Frege's context principle (to verify) |
+| No density and no way to check what a sampled point means; plausible is not true | @sec-ch-meaning-as-generation, @sec-ch-meaning-and-truth | coherence against correspondence in theories of truth (to verify) |
+| Negation and multi-hop queries | @sec-ch-meaning-as-difference | apoha, apophatic theology [@pseudodionysius1987complete] |
+| Hierarchies need curvature or dimensions | @sec-ch-meaning-as-region | Wilkins, Collins–Quillian, Rosch, Kemp–Tenenbaum |
+| Asymmetric relations | @sec-ch-meaning-as-difference | Tversky |
+| Multi-way interactions | @sec-ch-meaning-as-arrangement | Peirce's irreducible triad of sign, object, and interpretant [@peirce1931collected] |
+| Similarity is not a logic | @sec-ch-meaning-as-region | Goodman, Murphy–Medin, Tarski |
+| Binding | @sec-ch-meaning-as-composition | Jakobson's combination axis, Barsalou |
+| Systematic composition | @sec-ch-meaning-as-composition | Montague, Gentner, Chomsky (structure dependence, Merge) |
+| Spaces defined up to isometry | @sec-ch-meaning-as-arrangement | Quine, Shepard–Chipman, RSA, Newman, Putnam |
 | Finite data underdetermine the space | all | Hume, Goodman, Kripke, Wolpert |
-| Unseen events (closed-world top-$k$, missing mass) | @sec-ch-vector-databases | Knight, Savage, Good |
-| Modality gap and modality-specific loss | @sec-ch-multimodal-embeddings | Paivio, Barsalou, hub-and-spoke |
-| A book as one vector keeps neither its parts nor the zoom; parts cannot be checked against each other or against sources | @sec-ch-vector-databases, @sec-ch-tangent-spaces-geodesics, @sec-ch-graph-embeddings, @sec-ch-vector-symbolic-architectures | Funes and the map the size of the empire (Borges), the hermeneutic circle (Gadamer) |
+| Unseen events (closed-world top-$k$, missing mass) | @sec-ch-meaning-and-truth | Knight, Savage, Good |
+| Modality gap and modality-specific loss | @sec-ch-meaning-across-senses | Paivio, Barsalou, hub-and-spoke |
+| A book as one vector keeps neither its parts nor the zoom; parts cannot be checked against each other or against sources | @sec-ch-meaning-and-truth, @sec-ch-meaning-as-path, @sec-ch-meaning-as-difference, @sec-ch-meaning-as-composition | Funes and the map the size of the empire (Borges), the hermeneutic circle (Gadamer) |
 
 : Draft mapping of the ledger to its precedents (to be completed when the chapters are written). {#tbl-ledger-precedents}
 
@@ -288,19 +288,19 @@ A fourth case varies the artifact: not a text, a sense or a species, but a mecha
 
 - Claim: the debate is not settled by performance, because each side measures a different thing: E-language for the models, I-language for Chomsky.
 - Challenge: data efficiency (children learn from fewer than 100 million words), and the hierarchical generalization that sequential networks miss and transformers learn late.
-- Hooks: @sec-ch-symbols-without-interior (the staircase), @sec-ch-contextual-vectors (structural probe), @sec-ch-neurosymbolic-integration (poverty of the stimulus), @sec-ch-multimodal-embeddings (I-language and grounding).
+- Hooks: @sec-ch-symbols-without-interior (the staircase), @sec-ch-meaning-in-context (structural probe), @sec-ch-meaning-as-composition (poverty of the stimulus), @sec-ch-meaning-across-senses (I-language and grounding).
 
 ## Hand-Built Meaning, Four Centuries On {#sec-hand-built-meaning-four}
 
 *Plan (1–2 pages).* The long history of hand-built meaning (Wilkins, Osgood's chosen scales, feature norms) and of meaning learned from use (Harris, Skyrms, LSA), read against one requirement for whatever the book proposes: it must align with computational efficiency and scalability, or say why it need not. This is the one place in the Epilogue that names the bitter lesson [@sutton2019bitter]. The perfect language failed as an engineering project and succeeded as a learned one; what remains hand-built is symmetry, which Klein and the brain's grid code suggest is structural.
 
 - Claim: general methods that keep improving with computation have repeatedly beaten the building-in of what researchers know, and the experiment is four centuries long, not a decade of benchmarks.
-- Hooks: the closing sections of Chapters [-@sec-ch-generative-spaces] to [-@sec-ch-multimodal-embeddings].
-- Open case: reasoning in the space versus in text, applied to computation. Is keeping the steps continuous a durable advantage, or a prior that scaled token-level reasoning absorbs (Chapters [-@sec-ch-contextual-vectors] and [-@sec-ch-multimodal-embeddings])? The cost side: more search means more chances to exploit an imperfect verifier, so the verifier rather than the path may be the bottleneck (sources in @sec-ch-contextual-vectors).
+- Hooks: the closing sections of the property chapters, from [-@sec-ch-meaning-as-difference] to [-@sec-ch-meaning-as-generation].
+- Open case: reasoning in the space versus in text, applied to computation. Is keeping the steps continuous a durable advantage, or a prior that scaled token-level reasoning absorbs (Chapters [-@sec-ch-meaning-in-context] and [-@sec-ch-meaning-across-senses])? The cost side: more search means more chances to exploit an imperfect verifier, so the verifier rather than the path may be the bottleneck (sources in @sec-ch-meaning-in-context).
 
 ## Open Frontiers {#sec-open-frontiers}
 
-*Plan (1–2 pages).* Interpretability, geometric bounds on reasoning, whether a written chain is faithful to the computation behind it (@sec-ch-contextual-vectors), whether reasoning can stay in the space or must keep passing through text (Chapters [-@sec-ch-contextual-vectors] and [-@sec-ch-multimodal-embeddings]), grounding and multimodal composition, and the questions the other disciplines pose that the book leaves open: asymmetric similarity at scale (Tversky), embodiment and action (Varela, Smith–Gasser), the clinical use of semantic geometry (Bedi, Corcoran), and representational alignment between brains and models (RSA).
+*Plan (1–2 pages).* Interpretability, geometric bounds on reasoning, whether a written chain is faithful to the computation behind it (@sec-ch-meaning-in-context), whether reasoning can stay in the space or must keep passing through text (Chapters [-@sec-ch-meaning-in-context] and [-@sec-ch-meaning-across-senses]), grounding and multimodal composition, and the questions the other disciplines pose that the book leaves open: asymmetric similarity at scale (Tversky), embodiment and action (Varela, Smith–Gasser), the clinical use of semantic geometry (Bedi, Corcoran), and representational alignment between brains and models (RSA).
 
 ## Final Geek Musings: Where Does Human Intuition Live in the Latent Space? {#sec-final-geek-musings-where}
 
@@ -312,22 +312,22 @@ A fourth case varies the artifact: not a text, a sense or a species, but a mecha
 
 Findings for other chapters from this literature review (no citations here: the chapters cite when written):
 
-- @sec-ch-embedding-spaces now states the distributional idea ("a word can be known by the company it keeps") without names or citations. Its history, Harris (1954) before Firth (1957), belongs in "Meaning by Difference and by Company" above, which already plans it; @sec-ch-embedding-spaces should not reintroduce the attribution.
-- @sec-ch-embedding-spaces presents the analogy parallelogram through Mikolov et al. 2013; Rumelhart and Abrahamson proposed the parallelogram model of analogy in a psychological space in 1973.
-- The term "semantic space" comes from Osgood 1952, and multidimensional scaling (Torgerson 1952, Shepard 1962) built such spaces from judged distances; worth one sentence in @sec-ch-embedding-spaces.
+- @sec-ch-likeness-as-nearness now states the distributional idea ("a word can be known by the company it keeps") without names or citations. Its history, Harris (1954) before Firth (1957), belongs in "Meaning by Difference and by Company" above, which already plans it; @sec-ch-likeness-as-nearness should not reintroduce the attribution.
+- @sec-ch-likeness-as-nearness presents the analogy parallelogram through Mikolov et al. 2013; Rumelhart and Abrahamson proposed the parallelogram model of analogy in a psychological space in 1973.
+- The term "semantic space" comes from Osgood 1952, and multidimensional scaling (Torgerson 1952, Shepard 1962) built such spaces from judged distances; worth one sentence in @sec-ch-likeness-as-nearness.
 - Word association norms (Kent and Rosanoff 1910) precede Church and Hanks 1990 by eighty years.
-- @sec-ch-cross-domain-transfer (gauge freedom) can cite second-order isomorphism (Shepard 1970) and RSA (Kriegeskorte 2008), and the philosophical statements in Newman 1928, Putnam 1981 and Lewis 1984, with Davidson 1974, Fodor and Lepore 1992 and Kuhn 1962 on whether two schemes can be aligned, and Benjamin 1923 on translation.
-- @sec-ch-multimodal-embeddings (one hub, the dog test) can cite the hub-and-spoke model (Patterson 2007), concept cells (Quiroga 2005), the head-camera study (Vong 2024), the touch-to-vision link learned in days (Held 2011), blind adults inferring appearance from kind (Kim 2019), and a blind child learning visual verbs from their syntactic company (Landau and Gleitman 1985); Nagel 1974 and Jackson 1982 bear on the dog test and the universal translator.
-- @sec-ch-graph-embeddings (asymmetric relations) can cite Tversky 1977 as the empirical case that similarity is not a metric.
-- @sec-ch-tangent-spaces-geodesics can cite Tymoczko 2006 as a worked quotient space (chords modulo octave and order), and Kemp and Tenenbaum 2008 for the choice of form (tree, ring, chain, grid) of a hierarchy.
-- @sec-ch-embedding-spaces (steering, directions as concepts) can cite Kozlowski 2019 and Garg 2018 for cultural dimensions as directions in an embedding space, together with Caliskan 2017.
-- Prologue and @sec-ch-multimodal-embeddings should replace the textual "(Harnad, 1990)" by `[@harnad1990symbol]`.
+- @sec-ch-meaning-as-arrangement (gauge freedom) can cite second-order isomorphism (Shepard 1970) and RSA (Kriegeskorte 2008), and the philosophical statements in Newman 1928, Putnam 1981 and Lewis 1984, with Davidson 1974, Fodor and Lepore 1992 and Kuhn 1962 on whether two schemes can be aligned, and Benjamin 1923 on translation.
+- @sec-ch-meaning-across-senses (one hub, the dog test) can cite the hub-and-spoke model (Patterson 2007), concept cells (Quiroga 2005), the head-camera study (Vong 2024), the touch-to-vision link learned in days (Held 2011), blind adults inferring appearance from kind (Kim 2019), and a blind child learning visual verbs from their syntactic company (Landau and Gleitman 1985); Nagel 1974 and Jackson 1982 bear on the dog test and the universal translator.
+- @sec-ch-meaning-as-difference (asymmetric relations) can cite Tversky 1977 as the empirical case that similarity is not a metric.
+- @sec-ch-meaning-as-path can cite Tymoczko 2006 as a worked quotient space (chords modulo octave and order), and Kemp and Tenenbaum 2008 for the choice of form (tree, ring, chain, grid) of a hierarchy.
+- @sec-ch-likeness-as-nearness (steering, directions as concepts) can cite Kozlowski 2019 and Garg 2018 for cultural dimensions as directions in an embedding space, together with Caliskan 2017.
+- Prologue and @sec-ch-meaning-across-senses should replace the textual "(Harnad, 1990)" by `[@harnad1990symbol]`.
 - @sec-ch-symbols-without-interior: Rice's theorem can be set in its lineage (Gödel, Church, Tarski 1935), with Franzén 2005 as a guard against loose use of Gödel and Priest's inclosure schema as a possible one-paragraph unifier. These chapters change only after a before/after diff is approved (`tmp/three_part_plan.md`).
-- @sec-ch-embedding-spaces (counting): zero counts and unseen pairs in the PMI have an old treatment in Good's missing mass; the chapter has no frequency statistics of language, and Zipf 1949 fits there.
+- @sec-ch-likeness-as-nearness (counting): zero counts and unseen pairs in the PMI have an old treatment in Good's missing mass; the chapter has no frequency statistics of language, and Zipf 1949 fits there.
 - @sec-ch-curse-of-dimensionality: learning needs structure; Mitchell 1980 and Wolpert 1996 state the point as theorems, Vapnik and Chervonenkis 1971 as capacity.
-- @sec-ch-vector-databases: top-$k$ retrieval is a closed-world query (see Deciding Without Knowing the Possibilities); Hempel's raven (1945) is the old case of logically equivalent statements that are not equally near, for negation.
-- @sec-ch-contextual-vectors: Nisbett and Wilson 1977 are the human precedent for the unfaithful chain of thought, and Strathern 1997, Campbell 1979 and Goodhart 1975 give the history of the Goodhart effect it already cites.
-- @sec-ch-complex-plane-quantum-logic: Allais 1953, Ellsberg 1961 and the conjunction fallacy (Tversky and Kahneman 1983) are the benchmarks any quantum decision model is tested on.
+- @sec-ch-meaning-and-truth: top-$k$ retrieval is a closed-world query (see Deciding Without Knowing the Possibilities); Hempel's raven (1945) is the old case of logically equivalent statements that are not equally near, for negation.
+- @sec-ch-meaning-in-context: Nisbett and Wilson 1977 are the human precedent for the unfaithful chain of thought, and Strathern 1997, Campbell 1979 and Goodhart 1975 give the history of the Goodhart effect it already cites.
+- @sec-ch-meaning-as-region: Allais 1953, Ellsberg 1961 and the conjunction fallacy (Tversky and Kahneman 1983) are the benchmarks any quantum decision model is tested on.
 - The longer lists are kept outside the book: `tmp/limits_references.md` (about 130 durable entries, ranked), `tmp/limits_references_raw.md` (the wide net), and `tmp/limits_references.bib` (the entries removed from `references.bib` when this section was cut to at most three citations per section). Metadata for those entries is partly from memory, and nothing has been read.
 
 ## References {.unnumbered}

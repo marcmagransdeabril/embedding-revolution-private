@@ -5,7 +5,7 @@ open: "The list of tests, their rungs and the scorecard are open. They grow and 
 
 # The Tests of Meaning {#sec-ch-tests-of-meaning}
 
-This chapter is a stub that is meant to grow. It holds the thought experiments that the Prologue and the Epilogue use to ask whether a space holds meaning, in one place and in one format, so that every later chapter can say which test it touches and how far it gets. Each section states one test: the question, what it varies, who or what can judge a pass, and a ladder of rungs from a case a laptop can run to one nobody can yet run. It does not run anything itself. The properties that a space is expected to have, and what the literature says about them, are in @sec-ch-properties-of-meaning; the algorithms that build spaces start in @sec-ch-embedding-spaces; the chapters from there on take the rungs they can reach.
+This chapter is a stub that is meant to grow. It holds the thought experiments that the Prologue and the Epilogue use to ask whether a space holds meaning, in one place and in one format, so that every later chapter can say which test it touches and how far it gets. Each section states one test: the question, what it varies, who or what can judge a pass, and a ladder of rungs from a case a laptop can run to one nobody can yet run. It does not run anything itself. The properties that a space is expected to have, and what the literature says about them, are in @sec-ch-properties-of-meaning; the algorithms that build spaces start in @sec-ch-likeness-as-nearness; the chapters from there on take the rungs they can reach.
 
 Three words are used with a fixed meaning.
 
@@ -28,7 +28,7 @@ Rungs (first draft, to be verified and refined):
 3. Video or motion: the gait.
 4. Held-out concepts (zero-shot), and what the shared space loses of what is specific to each channel.
 
-Expected reach: chapters 4 to 6 reach rung 0; @sec-ch-multimodal-embeddings reaches 1 to 4.
+Expected reach: chapters 4 to 6 reach rung 0; @sec-ch-meaning-across-senses reaches 1 to 4.
 
 ## The Critical Literacy Test {#sec-test-critical-literacy .idea}
 *One text, several scales: what must a representation keep of a word, a paragraph, a chapter and a book for answers about it to survive without the text?*
@@ -45,7 +45,7 @@ Rungs (first draft):
 3. A three-way verdict (entails, refutes, undetermined).
 4. Checks against an external source.
 
-Expected reach: @sec-ch-embedding-spaces reaches 0, and shows that nearness does not detect consistency; later chapters take 1 to 4 where their structure allows (@sec-ch-graph-embeddings, @sec-ch-vector-databases, @sec-ch-neurosymbolic-integration).
+Expected reach: @sec-ch-likeness-as-nearness reaches 0, and shows that nearness does not detect consistency; later chapters take 1 to 4 where their structure allows (@sec-ch-meaning-as-difference, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-composition).
 
 ## The Universal Translator {#sec-test-translator .idea}
 *Two spaces, no dictionary: can the structure of one be mapped onto the structure of the other from the relations alone?*
@@ -59,7 +59,7 @@ Rungs (first draft):
 2. A test of order (a shuffled text as the control).
 3. Later rungs are speculative and are not listed until the earlier ones have results.
 
-Expected reach: @sec-ch-cross-domain-transfer reaches 0.
+Expected reach: @sec-ch-meaning-as-arrangement reaches 0.
 
 ## The Alien Technology Test {#sec-test-alien .idea}
 *A system whose function is unknown: can its function be recovered, up to isomorphism, from its behaviour alone?*
@@ -72,7 +72,7 @@ Rungs (first draft):
 1. Transfer to families that were not seen.
 2. Later rungs are speculative and are not listed until the earlier ones have results.
 
-Expected reach: @sec-ch-cross-domain-transfer reaches 0, as a toy and flagged as a smoke test.
+Expected reach: @sec-ch-meaning-as-arrangement reaches 0, as a toy and flagged as a smoke test.
 
 ## Scorecard {#sec-tests-scorecard}
 

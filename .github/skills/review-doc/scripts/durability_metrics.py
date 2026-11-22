@@ -137,7 +137,7 @@ def definitive_text(text: str) -> str:
 
 
 def book_order(root: Path) -> list[str]:
-    """Chapter files in book order, from _quarto.yml (index and solutions excluded)."""
+    """Chapter files in book order, from _quarto.yml: the chapters, then the appendices (index and solutions excluded)."""
     cfg = yaml.safe_load((root / "_quarto.yml").read_text(encoding="utf-8")) or {}
     out: list[str] = []
 
@@ -149,6 +149,7 @@ def book_order(root: Path) -> list[str]:
                 walk(it.get("chapters") or [])
 
     walk(cfg.get("book", {}).get("chapters") or [])
+    walk(cfg.get("book", {}).get("appendices") or [])
     return [f for f in out if f not in ("index.qmd", "chapters/solutions.qmd")]
 
 

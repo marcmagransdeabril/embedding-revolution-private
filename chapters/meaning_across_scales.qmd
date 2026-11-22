@@ -38,11 +38,11 @@ The scope is the size of what is represented. How the parts are combined is the 
 
 <!-- salvaged from embedding-technologies-stubs/contextual_vectors.qmd, section sec-tokenizing-senses -->
 ## Tokenizing the Senses {#sec-tokenizing-senses}
-*Image patches, spectrogram frames, and video tubelets turned into tokens, so that the same attention machinery reads every modality. This is one of two routes to a shared space, a single network over interleaved tokens, compared in @sec-ch-multimodal-embeddings with separate encoders aligned by a contrastive loss.*
+*Image patches, spectrogram frames, and video tubelets turned into tokens, so that the same attention machinery reads every modality. This is one of two routes to a shared space, a single network over interleaved tokens, compared in @sec-ch-meaning-across-senses with separate encoders aligned by a contrastive loss.*
 
 <!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-hybrid-search-multi-vector -->
 ## Hybrid Search & Multi-Vector Alignments {#sec-hybrid-search-multi-vector}
-*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item: likeness there is an alignment, the sum over query tokens of the best match among document tokens (Khattab and Zaharia, SIGIR 2020, to add), which is asymmetric and not a distance (@sec-likeness-other-objects). The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-multimodal-embeddings are practical problems.*
+*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item: likeness there is an alignment, the sum over query tokens of the best match among document tokens (Khattab and Zaharia, SIGIR 2020, to add), which is asymmetric and not a distance (@sec-likeness-other-objects). The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-meaning-across-senses are practical problems.*
 
 ## Technologies That Exploit Scale {#sec-scale-technologies}
 *Plan (about 1 page). Sentence encoders and their training, document embeddings and topic models, multi-vector retrieval, chunking strategies for retrieval-augmented generation, and long-context models as the alternative to pooling. For each: the cost in memory and time against the length, and whether quality at matched tuning supports it. The cost of scale (compute, memory per item, index size at a billion items) is a line in this section and not a chapter.*
