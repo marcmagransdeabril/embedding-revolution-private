@@ -12,7 +12,7 @@ But, as we will clarify in the next section in a short review of classic philoso
 
 The goal of this chapter is to find out what nearness in an embedding space can say about likeness of meaning, and to tell apart the nearness that the training put there on purpose from the nearness that appeared on its own. An image and its caption are near because the model was trained to pull them together. However, the same training can put together two items that were never paired and still end up near each other. Each section takes one question of that goal.
 
-We start with what likeness of meaning should be, and from it we derive twelve questions to verify and/or refute one aspect of it (@sec-likeness-which). The first seven questions are tried in the sections that follow, in order. Do the nearest neighbours of random words, phrases, sounds and images look alike to a reader (@sec-gallery-neighbours)? Is an image near its caption only because the model was trained to pull them together, or is there nearness that was not built in (@sec-likeness-pairs-senses)? Does the same text give the same neighbours when the training objective changes, and do they follow similarity or association (@sec-loss-decides-near)? Can a cosine distance, as it comes out of a model, be trusted as a measure of likeness (@sec-reading-nearness-correctly)? Does likeness behave like a distance, which people's judgements of likeness do not (@sec-likeness-not-distance), and where are near things not alike, such as opposites and negations (@sec-near-not-alike)? How much of the nearness changes with the random seed, the algorithm or the data set used during training (@sec-likeness-many-spaces)?
+We start with what likeness of meaning should be, and from it we derive thirteen questions to verify and/or refute one aspect of it (@sec-likeness-which). The first eight questions are tried in the sections that follow, in order. Do the nearest neighbours of random words, phrases, sounds and images look alike to a reader (@sec-gallery-neighbours)? Does the nearness follow similarity, association or relatedness (@sec-likeness-relation-split)? Is an image near its caption only because the model was trained to pull them together, or is there nearness that was not built in (@sec-likeness-pairs-senses)? Does the same text give the same neighbours when the training objective changes (@sec-loss-decides-near)? Can a cosine distance, as it comes out of a model, be trusted as a measure of likeness (@sec-reading-nearness-correctly)? Does likeness behave like a distance, which people's judgements of likeness do not (@sec-likeness-not-distance), and where are near things not alike, such as opposites and negations (@sec-near-not-alike)? How much of the nearness changes with the random seed, the algorithm or the data set used during training (@sec-likeness-many-spaces)?
 
 The other five questions cannot be answered with one static vector and are handed to other chapters: coordinates (@sec-ch-meaning-as-arrangement), context (@sec-ch-meaning-in-context), reference and truth (@sec-ch-meaning-and-truth), regions (@sec-ch-meaning-as-region) and a second sense (@sec-ch-meaning-across-senses). 
 
@@ -28,16 +28,26 @@ Likeness of meaning is not a single relation. Frege separates the idea, the priv
 
 Within the sense, the shared meaning, there are still three relations that the word "alike" hides: similarity, a correspondence between properties (dog and puppy); relatedness, the wider notion of which similarity is a special case (dog and bark); and association, a tendency to occur together (bee and honey) [@budanitsky2006evaluating; @turney2010frequency]. The last two relations are independent. A doctor and nurse are similar and associated, horse and platypus are similar and not associated, cradle and baby are associated and not similar, and calculus and candy neither. A reader who judges neighbours has to know which of these relations is being judged.
 
+But, before asking any of these questions, we need to understand our null hypothesis:
+
 ::: {.test}
 **Q1. Do the neighbours of random items look alike?** Before any statistic, do the nearest neighbours of randomly drawn words, phrases, sounds and images look alike to a reader, and where do different kinds of space disagree?
 
 *Tried in:* @sec-gallery-neighbours.
 :::
 
+Once the null hypothesis is understood, the three relations of similarity, relatedness and association can be pulled apart, and a space can be asked which of them its nearness follows.
+
+::: {.test}
+**Q2. Similar, related or associated?** If pairs are cut into the four cells of the two independent judges (similar or not, associated or not), does the nearness of a space follow similarity, association, or relatedness, that is, either of the two, and do kinds of space differ?
+
+*Tried in:* @sec-likeness-relation-split.
+:::
+
 Goodman points out that a term may apply to things because of the way they were grouped, and not the other way round: the fact that a term applies to certain objects "may itself constitute rather than arise from a particular similarity among those objects" [@goodman1972seven]. Read for a contrastive loss, an image and its caption are near because the training pair says so. Harnad and Bender and Koller go further: symbols may need grounding outside the symbols, and a system trained only on form may have no way to learn meaning [@harnad1990symbol; @bender2020climbing]. Only the nearness that appears unasked is evidence about meaning.
 
 ::: {.test}
-**Q2. Built in or emergent?** When two things of different kinds are near, is it only because training paired them, or are unpaired things near as well?
+**Q3. Built in or emergent?** When two things of different kinds are near, is it only because training paired them, or are unpaired things near as well?
 
 *Tried in:* @sec-likeness-pairs-senses.
 :::
@@ -45,7 +55,7 @@ Goodman points out that a term may apply to things because of the way they were 
 Harris, Firth and Wittgenstein tie sense to use and company. Harris's measurable claim is that "difference of meaning correlates with difference of distribution" [@harris1954distributional]; Firth takes collocation as one level of meaning, next to the context of situation [@firth1957synopsis]; and Wittgenstein says that the meaning of a word is its use "for a large class of cases—though not for all" [@wittgenstein1953philosophical, §43]. A space built from company is this claim made into a matrix, so the likeness it shows is what the loss was made to give and not a discovery. The informative case is the one where the account says that something is missing.
 
 ::: {.test}
-**Q3. Does company recover likeness?** If likeness of meaning shows as likeness of company, do spaces made only from company, with different ways of counting it, give the same neighbours, and do those neighbours follow judgements of similarity or of association?
+**Q4. Does company recover likeness?** If likeness of meaning shows as likeness of company, do spaces made only from company, with different ways of counting it, give the same neighbours, and do they stay below what the judges' own raters agree on?
 
 *Tried in:* @sec-loss-decides-near.
 :::
@@ -53,7 +63,7 @@ Harris, Firth and Wittgenstein tie sense to use and company. Harris's measurable
 Wittgenstein also says that the members of a class like the games need share no feature: they form "a complicated network of similarities overlapping and criss-crossing" [@wittgenstein1953philosophical, §66]. Goodman shows why counting shared features cannot define likeness, since any two things share countless properties until we say in which respect they are compared [@goodman1972seven]. In a space this means that a concept is not a ball around a prototype, so a fixed radius is a poor model of it, and that a cosine returns a number and not the respect in which two items are alike.
 
 ::: {.test}
-**Q4. Is a raw nearness a measure of likeness?** Before it is corrected for what inflates it, does the number behind "near" follow judged likeness, and does a fixed radius around an item hold a concept?
+**Q5. Is a raw nearness a measure of likeness?** Before it is corrected for what inflates it, does the number behind "near" follow judged likeness, and does a fixed radius around an item hold a concept?
 
 *Tried in:* @sec-reading-nearness-correctly.
 :::
@@ -61,7 +71,7 @@ Wittgenstein also says that the members of a class like the games need share no 
 Wittgenstein's family and Goodman's three discs, alike in pairs with no colour common to all three, are also a failure of transitivity [@goodman1972seven]. Tversky's experiments add that judged likeness is not symmetric and does not obey the triangle inequality, because it weighs common and distinctive features with weights that depend on which item is the subject [@tversky1977features]. Every score of this chapter reads likeness as a distance, so what a space keeps of these properties has to be asked.
 
 ::: {.test}
-**Q5. Is likeness a distance?** Which of the properties of a distance (identical things at zero distance, symmetry, the triangle inequality) does nearness keep, which do judgements of likeness break, and is nearness transitive (if $a$ is near $b$ and $b$ is near $c$, is $a$ near $c$)?
+**Q6. Is likeness a distance?** Which of the properties of a distance (identical things at zero distance, symmetry, the triangle inequality) does nearness keep, which do judgements of likeness break, and is nearness transitive (if $a$ is near $b$ and $b$ is near $c$, is $a$ near $c$)?
 
 *Tried in:* @sec-likeness-not-distance.
 :::
@@ -69,7 +79,7 @@ Wittgenstein's family and Goodman's three discs, alike in pairs with no colour c
 Company also has a cost. Harris's substitution test measures which words can stand in the same frame, and "it is not a question of whether the above sentence with lawyer substituted is true or not" [@harris1954distributional, p. 157]. Opposites and negations occur in the same frames as their counterparts, so company puts them near; a measure of semantic distance can even make them "distant in one sense, and yet strongly related semantically and hence close in the other" [@budanitsky2006evaluating].
 
 ::: {.test}
-**T6. Where is near not alike?** Which neighbours are not alike in meaning, and do opposites and negations sit as near as paraphrases?
+**Q7. Where is near not alike?** Which neighbours are not alike in meaning, and do opposites and negations sit as near as paraphrases?
 
 *Tried in:* @sec-near-not-alike.
 :::
@@ -77,7 +87,7 @@ Company also has a cost. Harris's substitution test measures which words can sta
 Quine's holism says that what meets experience is the whole system of beliefs and not a sentence alone [@quine1951two]. Applied to a space, the position of a word is defined by its relations to all the others, so it should move little when an unrelated part of the web changes.
 
 ::: {.test}
-**T7. Does nearness belong to the meaning or to one draw?** How much of the nearness survives another random start, another algorithm, another text, or the removal of a part of the text?
+**Q8. Does nearness belong to the meaning or to one draw?** How much of the nearness survives another random start, another algorithm, another text, or the removal of a part of the text?
 
 *Tried in:* @sec-likeness-many-spaces.
 :::
@@ -85,7 +95,7 @@ Quine's holism says that what meets experience is the whole system of beliefs an
 Quine's indeterminacy of translation goes further: rival manuals can fit all the evidence and still disagree on countless sentences [@quine1960word]. The coordinates of a space are free up to a rotation, which changes the description and leaves every relation unchanged; his thesis would need two spaces that fit the relations equally well and still disagree on held-out neighbours.
 
 ::: {.test}
-**T8. Is a space more than its coordinates?** If two spaces differ only by a change of coordinates, do they say the same, and when two spaces agree on every relation, can they still disagree on the neighbours of unseen items?
+**Q9. Is a space more than its coordinates?** If two spaces differ only by a change of coordinates, do they say the same, and when two spaces agree on every relation, can they still disagree on the neighbours of unseen items?
 
 *Not answerable here, because one space carries no comparison with another. Taken up in:* @sec-ch-meaning-as-arrangement.
 :::
@@ -93,7 +103,7 @@ Quine's indeterminacy of translation goes further: rival manuals can fit all the
 Kaplan separates the character of an expression, a rule that does not depend on the context, from its content, which is fixed in the context: "I am here now" says something different each time [@kaplan1989demonstratives]. An encoder that takes the text and not the situation of use is on the side of the character.
 
 ::: {.test}
-**T9. Does the same word keep its meaning when the speaker, the place or the sentence changes?** A vector that does not take the situation of use as input can have one meaning at most.
+**Q10. Does the same word keep its meaning when the speaker, the place or the sentence changes?** A vector that does not take the situation of use as input can have one meaning at most.
 
 *Not answerable with one vector per item. Taken up in:* @sec-ch-meaning-in-context.
 :::
@@ -101,7 +111,7 @@ Kaplan separates the character of an expression, a rule that does not depend on 
 Kripke and Putnam break with the descriptive tradition: a name is tied to its bearer through a chain of speakers and not to the descriptions attached to it [@kripke1980naming], and what a word means is not fixed by what is in the speaker's head [@putnam1975meaning]. A space knows a name only through the words around it. Frege adds that a sense alone is not a truth value, although for Ramsey "p is true" is simply the same as p [@frege1892sense; @ramsey1927facts].
 
 ::: {.test}
-**T10. Does nearness reach the thing named and its truth?** Does a name sit near its bearer or only near the words around it, and does a direction that separates true from false text follow the facts or only what the text asserts?
+**Q11. Does nearness reach the thing named and its truth?** Does a name sit near its bearer or only near the words around it, and does a direction that separates true from false text follow the facts or only what the text asserts?
 
 *Not answerable from text alone. Taken up in:* @sec-ch-meaning-and-truth.
 :::
@@ -109,7 +119,7 @@ Kripke and Putnam break with the descriptive tradition: a name is tied to its be
 Gärdenfors places meanings as regions of a space of quality dimensions and not as points [@gardenfors2000conceptual], which matches Wittgenstein's concept "not closed by a frontier" [@wittgenstein1953philosophical, §68].
 
 ::: {.test}
-**T11. Is a meaning a point?** Does a concept have an extent that a single point cannot hold, and does a region beat a point of the same size on a stated judge?
+**Q12. Is a meaning a point?** Does a concept have an extent that a single point cannot hold, and does a region beat a point of the same size on a stated judge?
 
 *Taken up in:* @sec-ch-meaning-as-region.
 :::
@@ -117,7 +127,7 @@ Gärdenfors places meanings as regions of a space of quality dimensions and not 
 Last, if symbols need something outside the symbols, a second sense is the first candidate.
 
 ::: {.test}
-**T12. Does a second sense add meaning?** Does grounding in images, sounds or action bring nearness that text alone does not, beyond what the pairing built in?
+**Q13. Does a second sense add meaning?** Does grounding in images, sounds or action bring nearness that text alone does not, beyond what the pairing built in?
 
 *Taken up in:* @sec-ch-meaning-across-senses.
 :::
@@ -150,6 +160,23 @@ Here we only look. Before any statistic, we check whether the neighbours of rand
 1. Build the matrix as in the section on counting, or take the script of the loss section, and rank the other words by the cosine to the query: with unit rows `u`, `np.argsort(-(u @ u[i]))[1:6]`. Draw the words at random and not by hand, and show the failures with the successes. The lists will differ most for rare words, whose counts are small and whose vector is poor, and for words with several senses, where the two models may follow different ones. The differences point to the loss and to the data as the first suspects, which the following sections test one at a time.
 
 2. The result depends on the words drawn and on the model, so it is a count to be made. Expect many inflected forms and topical associates (bark near dog), some synonyms and hypernyms, and some antonyms, since opposites occur in the same contexts; hot and cold are both kinds of temperature [@turney2010frequency]. The antonyms and the associates are near and not alike, which is the subject of the section on near but not alike.
+:::
+
+## Similar, Related or Associated? {#sec-likeness-relation-split}
+Here we check which of the three relations hidden in "alike" the nearness of a space follows, since a score over all pairs mixes them.
+
+*Words, static, three losses on the same text, and then the other kinds of space: the 999 pairs of SimLex-999 cut into the four cells of its two independent judges, the similarity rating and the strength of free association, taking the top and the bottom third of each (a cut at zero would leave "similar and not associated" almost empty, since the pairs were drawn from free association). The score of a cell is the mean cosine, before and after the part that follows the frequency of the two words is removed, with an interval for the difference between the two single cells. A space of similarity puts the similar-only cell above the associated-only cell, a space of association the reverse, and a space of relatedness puts both above the cell of neither. The same cut is then tried on a sentence, an image and an audio encoder where a judge exists. WordSim-353 mixes the relations and has no split in the pinned file, so it is read as a judge of relatedness only. The judges' own agreement is the ceiling.*
+
+::: {.questions}
+1. Why does a correlation of a cosine with the SimLex similarity rating over all the pairs not say whether the space follows similarity, and what does the cut into four cells add?
+
+2. Cut the pairs of SimLex-999 into the cells of high and low similarity and high and low association (the top and the bottom third of each judge), score each cell by the mean cosine of a space of your choice, and remove the part that follows the log frequency of the words. Which relation does the space follow?
+:::
+
+::: {.answers}
+1. The two judges are correlated (about 0.19 in SimLex-999), so a pair that is similar is often also associated, and a space that follows either relation correlates with both. Only the pairs in which the relations come apart, similar and not associated, and associated and not similar, tell them apart, and the cut into four cells isolates them.
+
+2. The script `relation_split.py` does it for the three losses of the chapter: it ranks the cells by the mean cosine after the fit on the log counts and gives the interval of the difference between the associated-only and the similar-only cell over the pairs. In the first run of the three losses (text8, 100 dimensions, up to two seeds) the order is that of relatedness: the cell of both is high, the cell of neither is low, and the two single cells are in between, with a lean to association whose interval holds zero. The text should state the numbers only after the run is reviewed.
 :::
 
 ## One Space for Several Senses: CLIP {#sec-likeness-pairs-senses}
