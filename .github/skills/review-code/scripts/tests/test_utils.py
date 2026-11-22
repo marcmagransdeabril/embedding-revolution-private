@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-UTILS_DIR = Path(__file__).resolve().parents[5] / "code" / "embedding_spaces"
+UTILS_DIR = Path(__file__).resolve().parents[5] / "embedding-technologies-stubs" / "code" / "embedding_spaces"
 sys.path.insert(0, str(UTILS_DIR))
 import utils  # noqa: E402
 

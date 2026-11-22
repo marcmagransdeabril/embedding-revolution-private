@@ -12,7 +12,7 @@ Lines of exploration that came out of the review of embedding and latent spaces 
 
 How alignment is judged. A *classic* is a source from before 1980 that is held in `references/` and whose page was read. For each idea the classics are listed with what they say and whether they say it *directly* (about this very idea) or *by analogy* (the same principle, another object). Ties are broken mechanically, in this order: direct classics, all classics, sources from 1980 to 2009, oldest source. Levels: **High** is at least one direct classic and one more; **Medium** is one direct classic, or two by analogy; **Mixed** is a classic on each side; **Low** is no direct classic. A classic that points against an idea is reported, not hidden: the idea is then written as a test, not a claim. Alignment says where to look first, not whether the idea is true. Re-sort when evidence changes.
 
-Ideas keep their numbers when others leave, because other files point at them. Idea 2 (reconstruction as an objective) was adopted on 2026-11-11, in the section *Learning by Reconstruction* of the embedding chapter and in the chapter *Latent Spaces from Generative Models*, and is no longer an idea. Idea 3 (the generative tradition of "latent") was adopted in part, the hidden-cause view; what remains is below. Ideas 10 and 11 (adopted and closed) and 13 (a work item) moved on 2026-11-17 to the section *Adopted, closed and work items*, with their numbers, because other files point at them. Chapter numbers in the entries written before that date are those of that morning; the entries added since name the chapters by title.
+Ideas keep their numbers when others leave, because other files point at them. Idea 2 (reconstruction as an objective) was adopted on 2026-11-11, in the section *Learning by Reconstruction* of the embedding chapter and in the chapter *Latent Spaces from Generative Models*, and is no longer an idea. Idea 3 (the generative tradition of "latent") was adopted in part, the hidden-cause view; what remains is below. Idea 13 (a work item) is in the section *Adopted, closed and work items*; ideas 10 and 11 (the Parts of the book and the place of the retrieval chapter) were removed on 2026-11-22 with the Parts, and their numbers are not reused. Chapter numbers in the entries written before that date are those of that morning; the entries added since name the chapters by title.
 
 ### 1. Reasoning in the space as search over alternatives [Gap 9]
 - **Alignment:** High.
@@ -127,30 +127,15 @@ Optional items that were not ranked: the Goldstein et al. 2025 update to "The Br
 
 ### 18. A benchmark per chapter: calibrating each method against the literature and generalization as a fifth question [author, 2026-11-17]
 - **Alignment:** Not yet judged (proposed 2026-11-17, author to confirm). No classic before 1980 has been read for it; the benchmarks and papers it names are younger. Held since 2026-11-17: SimLex-999, Agirre et al. 2009, BLESS, BATS and Levy et al. 2014 and 2015. Not held, to add by hand: Landauer and Dumais 1997, MEN, the original WordSim-353 paper and Rubenstein and Goodenough 1965.
-- **Status:** open idea, not in the roadmap. Only the idea and its notes live on `main`; any change to chapters, scripts or skills that applies it goes on the branch `benchmarks-plan`, so that it can be dropped at any time. The whole plan, with the per-chapter protocol, the chapter audit, the mismatches with the current examples of Chapter 4 and the order of fixes, is in [performance_evaluation.md](performance_evaluation.md); this entry is only the pointer. It was reviewed on 2026-11-17 with `review-doc` (scope: that note, full range; no script run, no PDF opened).
-- **The idea (author):** each section that presents a new method toward the chapter's meaning question shows, after its toy example, the benchmark result of the method, next to the result of the same method at state-of-the-art computing and implementation. The benchmark follows the question of the chapter, not the other way round. Scope starts at Chapter 4.
+- **Status:** open idea, not in the roadmap. Only the idea and its notes live on `main` (the branch `benchmarks-plan` has no commit that `main` lacks). The principles, the per-chapter protocol, the reviewer's checks, the constraints and the risks are in [performance_evaluation.md](performance_evaluation.md), which was trimmed on 2026-11-22 to the properties structure (its audit of the old Chapter 4 and of the stubs was removed); this entry is only the pointer. It was reviewed on 2026-11-17 with `review-doc` (scope: that note, full range; no script run, no PDF opened).
+- **The idea (author):** each section that presents a new method toward the chapter's meaning question shows, after its toy example, the benchmark result of the method, next to the result of the same method at state-of-the-art computing and implementation. The benchmark follows the question of the chapter, not the other way round. Scope: the property chapters, `likeness_as_nearness` first, where the judges, the null and the scale test already apply part of it.
 - **Verdict so far:** none, but the sources now held give three pieces of evidence (page text read on 2026-11-17). SimLex-999 scores similarity and not association, and reports lower scores for LSA, vector-space and neural models on it than on MEN and WordSim-353 (Hill et al. 2015, pp. 1 and 16), a first literature row for the count family. Of the 174 above-median WordSim-353 pairs, 17 are synonyms and 92 are only topically related (Baroni and Lenci 2011, p. 2), which supports choosing the benchmark by the kind of meaning. Agirre et al. 2009 define the similarity and relatedness subsets of WordSim-353 (p. 6), and BATS has 40 relations of 50 pairs in four types (Gladkova et al. 2016, p. 2). None is a result of the book. Chapter 4 can bind only its three definitive sections for now. The decision that results enter the book text departs from §19 of `review-doc` (the pay-off step adds no text), and §17 and §19 would have to change if the plan is adopted.
-- **Where it could connect:** `embedding_spaces` (first, words and digits), then `graph_embeddings`, `cross_domain_transfer`, `vector_databases` and the other Part II chapters as they are written; `review-doc` (§17, §19), `review-code` (shared `utils.py`).
-- **Explore by:** download the data (pinned by URL and checksum, large data not committed; the four papers not held are added by hand), read Levy et al. 2015 and Landauer and Dumais 1997 for the calibration row, then prototype the words benchmark on the three definitive sections of Chapter 4. Look for a classic on evaluation by intrinsic tests (Rubenstein and Goodenough 1965 on synonymy judgments is a lead, not held).
+- **Where it could connect:** `likeness_as_nearness` (first, words and digits), then the other property chapters as they are written (`meaning_as_difference` for opposition and hypernymy, `meaning_as_direction` for analogy, `meaning_across_senses` for retrieval and zero-shot); `review-doc` (§17, §19), `review-code` (shared `utils.py`).
+- **Explore by:** download the data (pinned by URL and checksum, large data not committed; the four papers not held are added by hand), read Levy et al. 2015 and Landauer and Dumais 1997 for the calibration row, then prototype the words benchmark in `likeness_as_nearness`, on the judges that chapter already names. Look for a classic on evaluation by intrinsic tests (Rubenstein and Goodenough 1965 on synonymy judgments is a lead, not held).
 
 ## Adopted, closed and work items
 
-Numbers are kept because other files point at them. Idea 10 and 11 were decided early by the author; idea 13 is a list of experiments to write, not a question.
-
-### 10. Part II as the remedies for the shortcomings of Part I [author, 2026-11-11]
-- **Alignment:** not assessed.
-- **Status:** adopted as the working direction on 2026-11-11, decided early by the author and not at the Part II gate. The book now has three parts (Part I, chapters 1 to 6; Part II, "Representation Extensions", chapters 7 to 15; Part III, the Epilogue). Two transversal tests probe the limits: the dog test (one concept through several senses) and the critical literacy test (one text at several scales, from a word to a book, asking for regeneration and for answers including consequences and contradictions; four kinds of question: granularity, dependency, internal consistency, external consistency). Neither is assigned to chapters: chapters report partial answers in their closing section and the Epilogue collects them. Plan: `tmp/three_part_plan.md`.
-- **The idea (author):** retrieval-augmented generation, whether it uses a vector database, keyword search or web search, keeps the output grounded and so patches hallucination; Part II could be about the shortcomings of the Part I approaches and the approaches that have been tried, successfully, to compensate for them.
-- **What the book already has:** the ledger of limits at the end of the embedding chapter, which states each limit of a single vector as a cost and names the chapter that takes it up. Read that way, every later chapter is already a remedy (structure by design, curvature, relations, topology, binding, composition, alignment), so the idea names Part II after a device the book already uses, and could apply to Parts III and IV as well.
-- **A correction to keep the claim exact:** embedding vectors do not hallucinate; generative models do (the generative chapter), by producing what is plausible without checking it. Retrieval compensates by bringing external text into the context, and the retrieval itself runs on embeddings, with the limit of the dot product that the chapter states. So the retrieval chapter is a remedy for the shortcoming of the generative and contextual chapters, and it has shortcomings of its own.
-- **Explore by:** done for the structure: Part II is titled "Representation Extensions" and its intro says that each chapter opens with the limit it answers, then the remedy and its price. What remains is the review: whether each remedy removes the limit it is presented against is the third question of the pay-off step of the review-doc skill (§19).
-
-### 11. A part for applications, and whether the retrieval chapter belongs in the book [author, 2026-11-11]
-- **Alignment:** not assessed.
-- **The idea (author):** retrieval-augmented generation is an application of embedding and latent spaces, not a fundamental technology, and it is not certain that the chapter on vector databases and RAG should be in the book at all. For the time being it is the first chapter of Part II, so that the contextual-vectors chapter, whose scale test gates Part II, closes Part I.
-- **Options:** (a) a closing part of applications before the epilogue, with the multimodal chapter, which is partly one; (b) it stays in Part II, retitled as a limit and a remedy (idea 10); (c) it is dropped and the book keeps only the ledger entry on the dot product (in the embedding chapter) and a paragraph in the contextual-vectors chapter.
-- **Decision (author, 2026-11-11, applied 2026-11-12): closed with option (b).** RAG stays in Part II as a limit and a remedy: of the hallucination of the generative models, and of the external-consistency kind of question of the critical literacy test. Option (a) is closed too, since every chapter other than the Epilogue is in Part II. Decided early, not at the Part II gate.
-- **Explore by (superseded):** decide at the Part II gate. Moving or dropping it costs nothing in numbering, since every reference is a label; the edits are the table `MASTER_PARTS` in `sync_chapters.py` (and its test), the roadmap, the part intros, the "Next:" lines and the `OPEN` comment of `index.qmd`.
+Numbers are kept because other files point at them. Idea 13 is a list of experiments to write, not a question; the ideas adopted into a chapter of the properties structure (1, 3, 6, 14, 15) are here with the chapter that took them.
 
 ### 13. Experiments still to write for the embedding and generative chapters [own experiment]
 - **Alignment:** not applicable.
@@ -207,17 +192,7 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Why:** an unsourced superlative. Rendle et al. 2020 (p. 1) say embedding-based models "have been the state of the art in collaborative filtering for over a decade", which is about recommenders, not about all uses.
 - **Reopen if:** a survey of industrial uses ranks them.
 
-<!-- Dropped on 2026-11-11 while restructuring the first part of the book (embedding, latent and generative chapters, the split of the old embedding chapter, chapter references by label). Chapters are named by title because their numbers moved. -->
-
-### Put the generative material in the embedding chapter instead of a new chapter
-- **Dropped:** 2026-11-11
-- **Why:** the embedding chapter is `definitive` and long, and its question is how similarity becomes geometry. Reconstruction and generation ask what distance means and whether there is a way back, and the chapter would lose its single thread.
-- **Reopen if:** the generative chapter is under about six pages when it reaches `provisional`; then merge it into the embedding chapter as a further objective, before the ledger.
-
-### Leave the debate between prediction in the space and scaled generative models in the multimodal chapter
-- **Dropped:** 2026-11-11
-- **Why:** the pullback metric (geodesics chapter) and decoding from CLIP (multimodal chapter) need the distinction between maps and distributions, and putting it last in the book introduces it after its first use.
-- **Reopen if:** the debate's home is decided to be the multimodal chapter after all; the distinction itself stays in the generative chapter.
+<!-- Entries below were written on 2026-11-11 while restructuring the first part of the book. On 2026-11-22 those about the placement of sections in the embedding and generative chapters, the Parts, and the renumbering were removed with the structure they concerned (it is in git). -->
 
 ### Title the generative chapter after its methods or a fashion word
 - **Dropped:** 2026-11-11
@@ -228,21 +203,6 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Dropped:** 2026-11-11
 - **Why:** both move fast and sit outside the question; one to two pages of dated history are enough to show that the two kinds of space work together.
 - **Reopen if:** a later chapter needs a mechanism of diffusion (for example its latent geometry) as evidence; put it in that chapter.
-
-### Gate Part II after the scale test of the generative chapter
-- **Dropped:** 2026-11-11
-- **Why:** the Part II question is whether transformers find its structures unaided, and the contextual-vectors chapter answers it; the generative chapter does not.
-- **Reopen if:** the scale test of the generative chapter turns out to decide whether the Part II structures are needed, for example if generation absorbs geometry by design.
-
-### Move "Learning by Predicting Embeddings" (JEPA) from the embedding chapter to the generative chapter
-- **Dropped:** 2026-11-11
-- **Why:** it was a misreading of the author's first answer. The embedding chapter covers the predictive and reconstructive objectives and the generative chapter the generative ones; JEPA is predictive, so it stays, and its debate with scaled generative models is the scale test of the generative chapter, where both are on the table.
-- **Reopen if:** the JEPA section grows until the embedding chapter is unbalanced; then split it out at the end of the embedding chapter, not into the generative chapter.
-
-### Keep the vector-database chapter in Part I because it is already there
-- **Dropped:** 2026-11-11
-- **Why:** it is an application of embedding and latent spaces, not a fundamental technology, and Part I is about what a space is and how it is built. Where it goes is idea 11.
-- **Reopen if:** the later chapters turn out to depend on its limits (the dot product of the ledger) so much that they need it before Part II.
 
 ### Fix "embedding" for the embedding chapter and "latent" for the generative chapter as a rule
 - **Dropped:** 2026-11-11
@@ -258,36 +218,6 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Dropped:** 2026-11-11
 - **Why:** every statement about bounds is from memory. The section stays a stub until the sources are fetched and the pages read.
 - **Reopen if:** never.
-
-### Move "Learning by Reconstruction" to the generative chapter to make the embedding chapter smaller
-- **Dropped:** 2026-11-11
-- **Why:** the split of the old embedding chapter at its seam (Shannon, Chomsky, one-hot symbols and Rice became "Symbols Without Interior") removed 15 pages by itself, and the autoencoder belongs next to the SVD it generalises; moving three pages would not have solved the size.
-- **Reopen if:** the embedding chapter is still too long when its stubs are written.
-
-### Put "Learning by Reconstruction" between prediction and contrast
-- **Dropped:** 2026-11-11
-- **Why:** the contrast section opens from the softmax problem of prediction and reuses its loss, so the maths wants them adjacent. Reconstruction needs the contrast experiment (its `predict` model is the first row of the reconstruction script) and the SVD, and leads to the generative chapter, so it goes last. The order minimising the novelty of each section is counting, prediction, contrast, prediction of embeddings, reconstruction.
-- **Reopen if:** the sections are written and the transitions read better the other way.
-
-### Renumber chapters by hand or by script as the main path
-- **Dropped:** 2026-11-11
-- **Why:** the roadmap expects chapters to be reshaped, merged or dropped, and each change redid about 200 edits. Labels (`@sec-ch-<file-stem>`) make Quarto number the chapters from `_quarto.yml`, and the conversion was checked by a text diff of the renders. A lint warns on a new literal "Chapter N".
-- **Reopen if:** the cross-references fail in an output format and cannot be fixed.
-
-### Leave `durability_metrics.py` unchanged when chapter titles move to headings
-- **Dropped:** 2026-11-11
-- **Why:** it read the roadmap tags only from literal `* **Chapter N:` lines, so `make status` would have stopped checking them without an error. It now reads `@sec-ch-<stem>` too and checks that the roadmap lists the chapters in the order of `_quarto.yml`.
-- **Reopen if:** never.
-
-### Convert `notes/ideas.qmd`, the skills and the README to chapter references
-- **Dropped:** 2026-11-11
-- **Why:** none of them is rendered in the book, so the references would not resolve; dated literal numbers are used there.
-- **Reopen if:** any of them is added to the book.
-
-### Name the file `generative_latent_spaces.qmd`
-- **Dropped:** 2026-11-11
-- **Why:** `sync_chapters.py` matches by substring and the first match wins, so the name would have matched the pattern `latent_spaces` of the embedding chapter and the file would have been placed there. The file is `generative_spaces.qmd`, and a test checks that each chapter is taken for itself.
-- **Reopen if:** matching becomes exact, or the pattern is removed.
 
 ### Rely on Quarto's own cross-references in every page
 - **Dropped:** 2026-11-11
@@ -389,17 +319,10 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 
 From the Lindy review of 2026-11-10 (`tmp/lindy_review.md`, which is gitignored; the chapter numbers in its items are those of that date) and later work. A review (`review-doc` §18) proposes new ones and checks whether the "done" ones really are.
 
-- **Open.** Decide the titles of Chapters 4, 5, 8 and 9 so that they name the question, not the fashion word (RAG, Transformers, Topological Deep Learning, Quantum).
-- **Open.** One home per fast-moving claim. The Prologue and Chapter 1 ask the question and point to Chapter 5 (reasoning in space or in text) and Chapter 13 (JEPA, convergence).
+- **Open.** One home per fast-moving claim. The Prologue and the introduction ask the question and point to `meaning_in_context` (reasoning in space or in text) and `meaning_across_senses` (JEPA, convergence).
 - **Open.** Date every reading that closes a scale test ("on the evidence gathered up to 2026").
-- **Open.** Chapter 1 first-pass sources: prefer older primaries, date each post-2022 item, move the outlier-dimension and quantization details out.
-- **Done (2026-11-17, checked by search).** Date the Goldbach bound in the Rice answer, and replace "over the last few decades" in the Chapter 3 introduction with a date anchor. The bound is dated ("as of 2014") and "over the last few decades" no longer appears in the chapters.
 - **Open.** State N and status of small-study results in the clause that uses them (Held 2011, Vong 2024, clinical studies).
 - **Open.** Expert read-through of the Epilogue (Indian philosophy of language, psychiatry, the Chomsky debate) before publication.
 - **Open.** Back up `references/` and `tmp/` outside the working machine (both are gitignored).
 - **Open.** Delete `filters/book-chapter-refs.lua` when Quarto fixes #14132 (milestone 1.12), after checking with the text diff of the renders (`notes/text_diff.py extract` and `diff`) that nothing else depended on it.
-- **Open.** Re-snapshot the durability metrics (`durability_metrics.py snapshot`) after the author approves the restructuring of 2026-11-11. Until then `make durability` reports `fashion_titles +13/-13`, which is only the change of format of the title lines (from front matter to headings).
-- **Done (2026-11-17, checked by search).** The Further Reading paragraph of the embedding chapter says "The next chapter's argument about embedding dimensionality rests on the Johnson-Lindenstrauss lemma"; the next chapter is now the generative one. Check which chapter it meant and reword. "Lindenstrauss" no longer appears in `embedding_spaces.qmd`.
-- **Done (2026-11-17, checked by search).** The sentence on supervised and metric-learning embeddings in *Learning by Contrast* has a `REVIEW` comment and no source (Hadsell, Chopra and LeCun 2006 and Schroff et al. 2015 are candidates from memory, unchecked): ground-check them or cut the sentence. The sentence, the `REVIEW` comment and the names Hadsell and Schroff are no longer in the chapter or in `references.bib`. If the sentence returns, Tschannen et al. 2020 (held) argue a connection between contrastive methods and deep metric learning.
-- **Done (2026-11-17, checked by search).** Part II still carries the title and intro "Structure in Vector Spaces", which do not describe its first chapter (vector databases and RAG); see ideas 10 and 11. `index.qmd` now titles Part II "Representation Extensions" (idea 11 is closed).
-- **Done.** Pin the Pride and Prejudice corpus (SHA-256 check in `utils.load_book`).
+- **Open.** Re-snapshot the durability metrics (`durability_metrics.py snapshot`) after the author approves the restructuring by properties (`tmp/plan_properties.md`), since the chapter titles and the roadmap have changed.
