@@ -10,7 +10,7 @@ Philosophy has given several answers to what meaning is. For example, Frege in "
 
 > The difference may concern at most the ideas, or the sense but not the reference, or, finally, the reference as well.
 
-sseparates the idea in our heads, the sense that is shared by all who use the sign, and the reference, the object in the world the sign represents (e.g., the Morning Star and the Evening Star are one planet, Venus, presented in two ways, and each of us pictures it differently); Harris in "Distributional Structure" [@harris1954distributional]:
+separates the idea in our heads, the sense that is shared by all who use the sign, and the reference, the object in the world the sign represents (e.g., the Morning Star and the Evening Star are one planet, Venus, presented in two ways, and each of us pictures it differently); Harris in "Distributional Structure" [@harris1954distributional]:
 
 > In other words, difference of meaning correlates with difference of distribution.
 
@@ -22,7 +22,7 @@ and also Wittgenstein in the *Philosophical Investigations* [@wittgenstein1953ph
 
 > for a large class of cases—though not for all—in which we employ the word "meaning" it can be defined thus: the meaning of a word is its use in the language.
 
-say that a sign means what it does through its use and its company, their co-occurrence (e.g., oculist and eye-doctor turn up in nearly the same sentences, oculist and lawyer in very different ones); Quine in "Two Dogmas of Empiricism" [@quine1951two]:
+seem to say that a sign means what it does through its use and its company, their co-occurrence (e.g., oculist and eye-doctor turn up in nearly the same sentences, oculist and lawyer in very different ones); Quine in "Two Dogmas of Empiricism" [@quine1951two]:
 
 > [O]ur statements about the external world face the tribunal of sense experience not individually but only as a corporate body.
 
@@ -36,24 +36,27 @@ and Wittgenstein again [@wittgenstein1953philosophical, §66], who sees in the g
 
 object that likeness is not a count of shared properties, since things can be alike with nothing in common to all of them (e.g., chess, patience and football are all games, and no one feature runs through all three) and any two things share countless properties until we say in what way they are being compared (by colour, by shape, by use); Kripke in *Naming and Necessity* [@kripke1980naming, p. 84], against the view that a name means the descriptions we attach to it. Suppose all that an ordinary speaker knows of Gödel is that he proved the incompleteness of arithmetic, and that the proof was in fact Schmidt's. Then, on that view:
 
-> since the man who discovered the incompleteness of arithmetic is in fact Schmidt, we, when we talk about 'Gödel', are in fact always referring to Schmidt. But it seems to me that we are not. We simply are not.
+> [S]ince the man who discovered the incompleteness of arithmetic is in fact Schmidt, we, when we talk about 'Gödel', are in fact always referring to Schmidt. But it seems to me that we are not. We simply are not.
 
-and Putnam [@putnam1975meaning] say that a name is tied to the thing it names, through the chain of speakers who passed it on from the first use, and not to the descriptions we attach to it; Kaplan in "Demonstratives" [@kaplan1989demonstratives]:
+Kripke goes on to say that a name is tied to the thing it names, through the chain of speakers who passed it on from the first use [@kripke1980naming, p. 96], and not to the descriptions we attach to it; Putnam in "The Meaning of 'Meaning'" [@putnam1975meaning], who imagines a Twin Earth where what looks and tastes like water is not $H_2O$ but another substance, and a man on Earth and his exact duplicate there:
+
+> Oscar~1~ and Oscar~2~ understood the term "water" differently in 1750 although they were in the same psychological state
+
+says that what a word means is not fixed by what is in the speaker's head; Kaplan in "Demonstratives" [@kaplan1989demonstratives]:
 
 > The character of an expression is set by linguistic conventions and, in turn, determines the content of the expression in every context.
 
-says that what a sentence says depends on who says it and where ("I am here now" says something different each time). 
+says that what a sentence says depends on who says it and where ("I am here now" says something different each time).
 
-All this example cover different interpretations of meaning, most likely covering different aspects of how likeness can be understood. In this and the following chapters, we will examine how these interpretations manifest in embedding spaces and what they reveal about the nearness of meaning. How many of these senses are captured and which are missed will be a central question throughout the text. 
+All these examples cover different interpretations of meaning, most likely covering different aspects of how likeness can be understood. In this and the following chapters, we will examine how these interpretations manifest in embedding spaces and what they reveal about the nearness of meaning. How many of these interpretations are captured and which are missed will be a central question throughout the text.
 
 Current machine learning models have been able to locate words, sounds, and images in an embedding space. Alike things should sit near each other and different things far apart, whether they are words, phrases, sounds, images or clips: `dog` near `puppy`, less near `wolf`, far from `car`.
 
 But "alike" is not a single relation. Similarity, relatedness and association are different readings of likeness. What are we really representing in these spaces?
 
-The goal of this chapter is to find out what nearness in an embedding space can say about likeness of meaning, and to tell apart the nearness that the training put there on purpose from the nearness that appeared on its own. An image and its caption are near because the model was trained to pull them together. However, the same training can put together two items that were never paired and still end up near each other. Each section takes one question of that goal. 
+The goal of this chapter is to find out what nearness in an embedding space can say about likeness of meaning, and to tell apart the nearness that the training put there on purpose from the nearness that appeared on its own. An image and its caption are near because the model was trained to pull them together. However, the same training can put together two items that were never paired and still end up near each other. Each section takes one question of that goal.
 
-We start with what philosophical account says about likeness of meaning (@sec-likeness-which) and how it is decided whether a space got them right (@sec-likeness-judges). Then we look, before any statistic, at the nearest neighbours of random words, phrases, sounds and images (@sec-gallery-neighbours), and ask whether an image sitting near its caption in an image-text model says anything about meaning or only about how the model was trained (@sec-likeness-pairs-senses). Next we ask whether the same text gives the same neighbours when the training objective changes (@sec-loss-decides-near), and whether a cosine, as it comes out of a model, can be trusted as a measure of likeness (@sec-reading-nearness-correctly). We then ask whether likeness behaves like a distance, which people's judgements of likeness do not (@sec-likeness-not-distance), and where near things are not alike, such as opposites and negations (@sec-near-not-alike). Last, we measure how much of the nearness changes with the random seed, the algorithm or the text (@sec-likeness-many-spaces), how neighbours can be found among billions of vectors without comparing with all of them (@sec-from-exact-approximate-search), and what the chapter found and what is still out of reach (@sec-likeness-found).
-
+We start with what each philosophical account says about likeness of meaning (@sec-likeness-which) and how it is decided whether a space got it right (@sec-likeness-judges). Then we look, before any statistic, at the nearest neighbours of random words, phrases, sounds and images (@sec-gallery-neighbours), and ask whether an image sitting near its caption in an image-text model says anything about meaning or only about how the model was trained (@sec-likeness-pairs-senses). Next we ask whether the same text gives the same neighbours when the training objective changes (@sec-loss-decides-near), and whether a cosine, as it comes out of a model, can be trusted as a measure of likeness (@sec-reading-nearness-correctly). We then ask whether likeness behaves like a distance, which people's judgements of likeness do not (@sec-likeness-not-distance), and where near things are not alike, such as opposites and negations (@sec-near-not-alike). Last, we measure how much of the nearness changes with the random seed, the algorithm or the text (@sec-likeness-many-spaces), how neighbours can be found among billions of vectors without comparing with all of them (@sec-from-exact-approximate-search), and what the chapter found and what is still out of reach (@sec-likeness-found).
 
 ## What Is Likeness in Meaning? {#sec-likeness-which}
 
