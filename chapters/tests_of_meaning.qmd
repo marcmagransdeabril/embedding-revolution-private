@@ -76,10 +76,10 @@ Expected reach: @sec-ch-meaning-as-arrangement reaches 0, as a toy and flagged a
 
 ## Scorecard {#sec-tests-scorecard}
 
-One row per chapter and test, filled as chapters are written. The table has no total, because a profile across tests and rungs is not an average (a chapter can reach the dog test and have nothing to say on the others).
+One row per chapter and test, filled as chapters are written. *Literature* is the result of the same approach in the literature, *Ours* the smoke test of the chapter, and *Date, model* the date and the model family of the evidence. The table has no total, because a profile across tests and rungs is not an average (a chapter can reach the dog test and have nothing to say on the others).
 
-| Chapter | Test | Rung | Probe | Literature (same approach) | Ours (smoke) | Verdict | Date, model family |
-|---|---|---|---|---|---|---|---|
+| Chapter | Test | Rung | Probe | Literature | Ours | Verdict | Date, model |
+|:------------|:---------|:--------|:------------|:--------------|:-----------|:----------|:--------------|
 | (none yet) | | | | | | | |
 
 Rules for adding a row.

@@ -126,7 +126,16 @@ The ceiling of a rated judge is the agreement between its human raters, and it i
 
 2. In CLIP-like models the image embeddings and the text embeddings occupy separate regions of the space, at arm's length from each other, even when the model is trained to align them. The gap comes from the initialization together with the contrastive loss, and its size changes the behaviour of the model downstream [@liang2022modalitygap].
 
-3. With `transformers`: load `CLIPModel` and `CLIPProcessor`, compute `model.get_image_features(**processor(images=img, return_tensors="pt"))` and `model.get_text_features(**processor(text=["dog", "puppy", "wolf", "car", "doorbell"], return_tensors="pt", padding=True))`, normalise both to unit length and take the dot products. All the cosines are positive and rather close to each other, because of the modality gap, so look at the order and not at the values; "dog" and "puppy" should come first, "wolf" next, and "car" and "doorbell" last. A prompt such as "a photo of a dog" usually works better than the bare word.
+3. With the `transformers` library, load a CLIP model and its processor, encode the image and the texts, normalise both to unit length and take the dot products:
+
+   ```python
+   words = ["dog", "puppy", "wolf", "car", "doorbell"]
+   image = model.get_image_features(**processor(images=img, return_tensors="pt"))
+   text = model.get_text_features(**processor(text=words, return_tensors="pt", padding=True))
+   cosines = (image / image.norm(dim=-1, keepdim=True)) @ (text / text.norm(dim=-1, keepdim=True)).T
+   ```
+
+   All the cosines are positive and rather close to each other, because of the modality gap, so look at the order and not at the values; "dog" and "puppy" should come first, "wolf" next, and "car" and "doorbell" last. A prompt such as "a photo of a dog" usually works better than the bare word.
 :::
 
 ## The Loss Decides What Is Near {#sec-loss-decides-near}
