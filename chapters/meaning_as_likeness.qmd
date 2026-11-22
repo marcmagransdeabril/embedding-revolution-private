@@ -63,19 +63,71 @@ Each account of meaning below is read for the same three things: what it says a 
 
 *What fits, what is missing, what is open.* What fits is the distributional core: Frege's sense, Quine's holism, Wittgenstein's use, Harris's and Firth's company all say that what a sign means is what is around it, and a space built from company is that claim made into a matrix. What is missing is reference. Kripke, Putnam and the Frege of the truth value agree that a sense alone is not knowledge of the world, and a text-only space has only the sense, which is the philosophical form of "near is not alike" (@sec-near-not-alike) and the reason to separate what a space is credited with from what it is trusted for. What is open is whether a text-only space can reach the reference or only a better sense: the claim that separately trained models converge on a shared structure of the world is made [@huh2024platonic], and the reply is that what converges is mostly the local neighbourhood and not the global geometry [@groger2026aristotelian; @koepke2026plato]. Whether grounding in images and action closes the gap is taken up in the chapter on senses; whether a truth direction tracks facts or only what the text asserts, in the chapter on reference and truth.
 
+::: {.questions}
+1. In Frege's telescope, what do the Moon, the real image in the object glass and the image on each observer's retina stand for, and which of them is a learned vector closest to? Why?
+
+2. "You shall know a word by the company it keeps" is often quoted as if company were meaning. What does Firth say in the same passage, and what does Harris claim instead?
+:::
+
+::: {.answers}
+1. The Moon is the reference (the object), the real image in the object glass is the sense, and the image on each observer's retina is the idea. Frege says the image in the glass "is indeed one-sided and dependent upon the standpoint of observation; but it is still objective, inasmuch as it can be used by several observers". A learned vector is closest to the image in the glass. It is one-sided, since it depends on the corpus, the loss and the seed, and it is shared among all the users of the space. Free association is the retinal image, which is why a judge of association is not a judge of sense.
+
+2. Firth's sentence sits in a passage on use, and the next one says that one of the meanings of a word is its habitual collocation with other words, so collocation is one meaning among several. He states meaning at a series of levels (context of situation, collocation, syntax, phonology), and he is not a statistician. Harris makes the measurable claim, that difference of meaning correlates with difference of distribution (oculist and eye-doctor share almost all their environments, oculist and lawyer few), and he adds that he does not claim a full definition of meaning from it. Neither claims that company is meaning.
+:::
+
 ## Kinds of Likeness and Where the Judges Come From {#sec-likeness-judges}
 
 Before any model, what we mean by "alike", with examples a reader can judge: dog and puppy are alike, dog and wolf are alike in a different way, dog and bark are related and not alike, dog and car are not alike, and hot and cold are opposite and in some respects alike. Three relations are mixed in these examples. Similarity is a correspondence between the properties of two words, relatedness is the wider notion of which similarity is a special case (cars and gasoline are more related than cars and bicycles, but the latter pair are more similar), and association is a tendency to occur together (bee and honey) [@budanitsky2006evaluating; @turney2010frequency]. The last two are independent: doctor and nurse are both similar and associated, horse and platypus are similar and not associated, cradle and baby are associated and not similar, and calculus and candy are neither. Relational similarity, between two pairs and not between two words, does not reduce to the first: mason and carpenter are alike, and so are stone and wood, yet mason : glass and carpenter : clay share no relation [@turney2010frequency]. Antonyms are "dissimilar and hence distant in one sense, and yet strongly related semantically and hence close in the other" [@budanitsky2006evaluating], so "near" has two readings even before there is a space, and a benchmark must say what it does with them.
 
-A judge is a procedure that fixes which of these relations is being asked about, and what a space is credited with depends on it. Harris's judge is an informant who substitutes words in a frame, and his ladder of likeness is by overlap of environments: identical throughout (free variants), almost identical except for sentences that contain both (synonyms), some environments shared and some not (different meanings), and never the same (different grammatical classes) [@harris1954distributional, p. 157]. The standard rated judges differ in what the raters were asked. WordSim-353 asked for relatedness, so its confound between relatedness and similarity is in its design [@finkelstein2002placing], and SimLex-999 asked for similarity [@hill2015simlex; @faruqui2016problems]. Budanitsky and Hirst give three ways to evaluate a measure: examine its mathematical properties, which acts "at best as a coarse filter"; compare it with human judgements, the best assessment "by definition" and limited to a few hundred pairs; and measure it in an application [@budanitsky2006evaluating, §3]. This chapter uses all three in that order: the axioms of @sec-likeness-not-distance are the coarse filter, the rated judges are the second, and the retrieval and classification tasks of the later chapters are the third.
+A judge is a procedure that fixes which of these relations is being asked about, and what a space is credited with depends on it. Harris's judge is an informant who substitutes words in a frame, and his ladder of likeness is by overlap of environments: identical throughout (free variants), almost identical except for sentences that contain both (synonyms), some environments shared and some not (different meanings), and never the same (different grammatical classes) [@harris1954distributional, p. 157]. The standard rated judges differ in what the raters were asked. WordSim-353 asked for a "similarity" score on a scale anchored at 0 (totally unrelated) and 10 (very closely related) and told the raters to count antonyms as similar, so its confound between relatedness and similarity is in its design [@finkelstein2002placing], and SimLex-999 asked for similarity proper and carries the strength of free association (USF) of each of its pairs as a separate column [@hill2015simlex; @faruqui2016problems]. Budanitsky and Hirst give three ways to evaluate a measure: examine its mathematical properties, which acts "at best as a coarse filter"; compare it with human judgements, the best assessment "by definition" and limited to a few hundred pairs; and measure it in an application [@budanitsky2006evaluating, §3]. This chapter uses all three in that order: the axioms of @sec-likeness-not-distance are the coarse filter, the rated judges are the second, and the retrieval and classification tasks of the later chapters are the third.
 
 The ceiling of a rated judge is the agreement between its human raters, and it is defined here as the mean correlation of one rater with the mean of the others, not as the score of an average test taker. Resnik replicated the Miller–Charles experiment with ten subjects and obtained 0.8848 [@resnik1995using], an estimate with its own spread and not a constant, and the ways of building the ceiling differ (a rater against the mean, pairwise agreement, split-half), so a result is reported with the one used. A method can exceed an average test taker without reaching the raters: Rapp's method scored 92.5 per cent on the TOEFL synonym items against 64.5 per cent for the average applicant [@turney2010frequency]. The statistics of the judges of each experiment are stated in the section that runs it.
+
+::: {.questions}
+1. Give a pair of words for each of the four cells of similar and not similar, associated and not associated.
+
+2. Why is the ceiling of a judge defined as the agreement between raters and not as the score of an average test taker?
+:::
+
+::: {.answers}
+1. Doctor and nurse are both similar and associated; horse and platypus are similar (both animals) and not associated; cradle and baby are associated and not similar; calculus and candy are neither [@turney2010frequency]. The same four cells can be built from the two columns of SimLex-999, the similarity rating and the strength of free association of each pair.
+
+2. A mean score is a level to compare with and not an upper bound. Rapp's method scored 92.5 per cent on the TOEFL synonym items against 64.5 per cent for the average applicant, so a method can exceed the average test taker without reaching the raters [@turney2010frequency]. What a judge can give is the agreement among the people who built it, for example the mean correlation of one rater with the mean of the others. That number has its own spread, and several ways of computing it exist (a rater against the mean, pairwise, split-half), so a result states which one it uses.
+:::
 
 ## A Gallery of Neighbours {#sec-gallery-neighbours}
 *Several models side by side, with no statistic yet: random words, phrases, chunks of text, sounds and images, and for each the nearest neighbours in a count-based space, a prediction-based space, a sentence encoder, an image encoder and an audio encoder. The examples are drawn at random and not chosen, and the failures are shown with the successes. The reader judges first and the chapter measures afterwards. Where the models disagree, the loss and the data are the first suspects, and the sections that follow take them one at a time.*
 
+::: {.questions}
+1. Take 10 words chosen at random from a vocabulary and list their five nearest neighbours by cosine in a count-based space (the SVD of a PPMI matrix that you build from any text) and in a pretrained prediction-based space (word2vec or GloVe vectors available on the Internet). Where do the lists differ?
+
+2. Classify each neighbour as synonym, hypernym or hyponym, antonym, topical associate, inflected form of the same word, or none of these. Which class is the most frequent, and which are not alike in meaning?
+:::
+
+::: {.answers}
+1. Build the matrix as in the section on counting, or take the script of the loss section, and rank the other words by the cosine to the query: with unit rows `u`, `np.argsort(-(u @ u[i]))[1:6]`. Draw the words at random and not by hand, and show the failures with the successes. The lists will differ most for rare words, whose counts are small and whose vector is poor, and for words with several senses, where the two models may follow different ones. The differences point to the loss and to the data as the first suspects, which the following sections test one at a time.
+
+2. The result depends on the words drawn and on the model, so it is a count to be made. Expect many inflected forms and topical associates (bark near dog), some synonyms and hypernyms, and some antonyms, since opposites occur in the same contexts; hot and cold are both kinds of temperature [@turney2010frequency]. The antonyms and the associates are near and not alike, which is the subject of the section on near but not alike.
+:::
+
 ## One Space for Several Senses: CLIP {#sec-likeness-pairs-senses}
 *A single image-text model, with examples of multimodal likeness: the image of a dog against "dog", "puppy", "wolf", "car" and "doorbell", a caption against the images it retrieves, a sound against its words if an audio-text model is available. An image and its caption are near because the loss pulled them together, and nothing in the loss says that two images, or an unpaired sound and word, are near; the built-in cell and the emergent cell are separated here, since only the emergent one says something about meaning and not about the loss. The modality gap is taken up in @sec-ch-multimodal-embeddings [@radford2021learning; @liang2022modalitygap].*
+
+::: {.questions}
+1. In a model trained with a contrastive loss on a batch of image-caption pairs, which pairs are pulled together and which are pushed apart? What does the loss say about two images of the same dog?
+
+2. What is the modality gap, and where does it come from?
+
+3. With an open image-text model (for example the CLIP model `openai/clip-vit-base-patch32` of the `transformers` library), compute the cosine between the image of a dog and the texts "dog", "puppy", "wolf", "car" and "doorbell". Is the order the one you expected?
+:::
+
+::: {.answers}
+1. The caption of each image (the diagonal of the matrix of scores) is pulled towards it, and the other captions of the batch are pushed away from it, and the same for each caption against the other images. The loss says nothing about two images of the same dog, except that if they are in the same batch with different captions each is pushed from the other's caption. If two images are near, it is an emergent effect of both being near their captions, and only that kind of nearness is evidence about meaning and not about the loss [@radford2021learning].
+
+2. In CLIP-like models the image embeddings and the text embeddings occupy separate regions of the space, at arm's length from each other, even when the model is trained to align them. The gap comes from the initialization together with the contrastive loss, and its size changes the behaviour of the model downstream [@liang2022modalitygap].
+
+3. With `transformers`: load `CLIPModel` and `CLIPProcessor`, compute `model.get_image_features(**processor(images=img, return_tensors="pt"))` and `model.get_text_features(**processor(text=["dog", "puppy", "wolf", "car", "doorbell"], return_tensors="pt", padding=True))`, normalise both to unit length and take the dot products. All the cosines are positive and rather close to each other, because of the modality gap, so look at the order and not at the values; "dog" and "puppy" should come first, "wolf" next, and "car" and "doorbell" last. A prompt such as "a photo of a dog" usually works better than the bare word.
+:::
 
 ## The Loss Decides What Is Near {#sec-loss-decides-near}
 *Words, static: counting (SVD of PPMI), predicting (skip-gram with negative sampling) and weighted least squares on log counts (GloVe) on the same text, the cleanest test of whether nearness survives a change of loss. Each rewards co-occurrence, which is not similarity, so the three agree with a judge of association better than with a judge of similarity. Harris is the origin of the shared idea. For him the distribution of an element is "the sum of all its environments", a pair's co-occurrence is to be stated "in terms of probability, based on the frequency of that occurrence in a sample" (p. 146), and the total restriction on an element is its departure from equiprobability, which is what pointwise mutual information measures. He rejects listing it element by element, since that gives no simple description and does not order the restrictions from larger to smaller, and groups elements into ordered sets instead [@harris1954distributional, pp. 146–147]: the sparse-matrix problem that the SVD and the predictor each solve in a different way. Whether the three count as different families is stated with the limit that they share data and the same distributional idea [@levy2015improving; @mikolov2013efficient; @pennington2014glove; @deerwester1990indexing].*
@@ -117,6 +169,22 @@ which touches $k+1$ vectors whatever the size of the vocabulary [@gutmann2010noi
 
 ![STUB. Expected shape only, invented numbers: Spearman correlation of the cosine of three losses on the same text with a judge of association and a judge of similarity, and the agreement between human raters as the ceiling.](../figures/meaning_as_likeness/stub_loss_agreement.png){#fig-stub-loss-agreement width=70%}
 
+::: {.questions}
+1. Skip-gram with negative sampling uses $k$ noise words for each real pair. Which matrix does it factorize implicitly, and what is the effect of $k$?
+
+2. What is the role of the weight $f(x)$ in the loss of GloVe, and what are its usual parameters?
+
+3. Reproduce @fig-stub-loss-agreement: train the three losses on the same text (for example text8) and compute the Spearman correlation of their cosines with a similarity judge and an association judge on the same word pairs (SimLex-999 and its association column), together with the unreduced PPMI rows as a null.
+:::
+
+::: {.answers}
+1. The word-context matrix of pointwise mutual information, shifted by $\log k$: the optimal dot product between a word vector and a context vector is $\mathrm{PMI}(w,c) - \log k$ [@levy2014neural]. A larger $k$ lowers every entry, so pairs must be more associated than chance to get a positive value, and it works as the shift that the PPMI of the counting model does by cutting at zero.
+
+2. The weight limits the influence of the pairs. A pair that occurs rarely is noisy and gets a small weight, and a pair that occurs very often is not allowed to dominate: $f(x) = \min(1, (x/x_{\max})^{\alpha})$ with $x_{\max} = 100$ and $\alpha = 3/4$ in the authors' experiments [@pennington2014glove]. Without it every pair would count the same in the least-squares sum, whatever the number of times it was seen.
+
+3. The script `loss_agreement.py` computes the figure from the spaces that `train_spaces.py` writes (text8, 30,000 words, window of 5, 100 dimensions, three seeds per loss). The steps are: count and take the PPMI of the pairs; reduce it by SVD; train SGNS and GloVe on the same pairs; score each pair of SimLex-999 by the cosine of its two words; correlate with the similarity column and with the association column (`scipy.stats.spearmanr`); repeat with the cosine of the unreduced PPMI rows; and draw the bars with the spread over the seeds and the agreement of the raters as the ceiling. The scripts were written and not yet run together, so the figure of the chapter is still the stub.
+:::
+
 ## Reading Nearness Correctly {#sec-reading-nearness-correctly}
 *What a raw cosine hides: a common mean vector and a few dominating directions [@mu2018allbutthetop], word frequency [@schnabel2015evaluation], hubs in high dimension [@radovanovic2010hubs], an arbitrary scale for some regularised models [@steck2024cosine], a norm that stops the dot product from giving every vector the same similarity to itself (@sec-likeness-not-distance), and anisotropy in every layer of contextual models [@ethayarajh2019contextual]. For each, a statistic and a null, and what centring changes. The narrow cone has a training-side cause for language models whose output embeddings are tied to the input ones: Gao et al. (2019 [@gao2019representation]) show that likelihood maximisation pushes the embeddings of rare words in a common direction, so that most word embeddings end up in a narrow cone and any two have a large cosine, and they propose a regulariser that widens the aperture (this concerns generation models with tied weights, and is not shown for the encoders used for retrieval). The choice of score is itself a source of bias: Weeds, Weir and McCarthy (2004 [@weeds2004characterising], read in the PDF, cited also by Turney and Pantel §4.4 [@turney2010frequency]) compare similarity measures on 2,000 nouns split into high-frequency and low-frequency targets and find strong tendencies in the frequency of the neighbours they select, in three classes: measures that favour high-frequency neighbours whatever the target (cosine, Jensen–Shannon, $\alpha$-skew and recall), one that favours low-frequency neighbours (precision), and those that choose neighbours of a frequency like the target's (Jaccard, Lin, harmonic mean); and, since recall prefers distributionally more general words and precision more specific ones, the relative values of precision and recall predict the direction of the hyponym–hypernym relation for the 20,415 WordNet pairs among those nouns (the asymmetry of @sec-near-not-alike obtained from the same counts, with the caveat that it is correlated with the frequency of the hypernym). The cosine is thus a high-frequency-sensitive score, and Bullinaria and Levy (2007) found the cosine the best of six measures on four word-similarity tasks. So the frequency statistic of this section is to be reported per score, and not only for the cosine.*
 
@@ -127,6 +195,22 @@ which touches $k+1$ vectors whatever the size of the vocabulary [@gutmann2010noi
 ![STUB. Expected shape only, invented numbers: correlation of the cosine with the judge, raw and after centring and removing the top directions, for three model families, with the shuffled-label null and a bootstrap interval.](../figures/meaning_as_likeness/stub_centring.png){#fig-stub-centring width=70%}
 
 ![STUB. Expected shape only, invented points: judged likeness of the neighbours inside a fixed radius $\epsilon$ against the distance to the $k$-th neighbour, one point per query.](../figures/meaning_as_likeness/stub_radius_density.png){#fig-stub-radius-density width=70%}
+
+::: {.questions}
+1. What do centring the vectors and removing their top principal directions change in a cosine, and why can it raise the correlation with a human judge?
+
+2. Why is the rank of a neighbour a safer measure than a fixed radius?
+
+3. Reproduce @fig-stub-centring and @fig-stub-radius-density: the correlation of the cosine with a judge before and after the correction, with a null, and the judged likeness of the neighbours against the density of the region.
+:::
+
+::: {.answers}
+1. A mean vector and a few dominant directions are shared by all the words of a space, so they add the same component to every cosine: all the cosines become high, and the part that tells the words apart is a small share of the vector. Subtracting the mean and removing the top directions removes that common part [@mu2018allbutthetop]. The correlation with the judge rises if the common part was noise for the judgement, for example when it follows the frequency of the words, and it does not rise if the raw nearness was not an artefact; the test needs a null (the judge with its labels shuffled, random vectors) to say how much of a change is more than chance.
+
+2. A fixed radius $\epsilon$ contains many neighbours in a dense region and few in a sparse one, so the same $\epsilon$ does not mean the same likeness everywhere, and in a sparse region the nearest neighbour may already be far. The rank, the $k$-th nearest, adapts to the density: the $k$ neighbours of a word are the nearest it has, whatever the distance. The price is that the rank is not symmetric (a word can be among the neighbours of another without the reverse) and ignores how far the $k$-th is.
+
+3. The script `reading_nearness.py` does it with the spaces of `train_spaces.py`. For the first figure: score the pairs of the judge by the raw cosine, by the cosine after subtracting the mean and after also removing the first 1, 3 and 10 principal directions (`np.linalg.svd` of the centred matrix), with a bootstrap interval over pairs, the 95th percentile of the correlation with shuffled labels and the same correlation for Gaussian vectors; add the correlation of the cosine with the mean log frequency of the two words. For the second: for each judged pair take the cosine to the 10th neighbour of each word as the density of the region, cut the pairs in three groups of density, and compare in each group the correlation with the judge of the cosine and of the rank. The scripts were written and not yet run together, so the figures of the chapter are still stubs.
+:::
 
 ## Is Likeness a Distance? Tversky's Three Axioms {#sec-likeness-not-distance}
 
@@ -171,6 +255,22 @@ $$S(a,b) = \theta\, f(A \cap B) - \alpha\, f(A - B) - \beta\, f(B - A).$$
 
 ![STUB. Expected shape only, invented numbers: the four smoke tests of this section on a trained space against random vectors of the same dimension.](../figures/meaning_as_likeness/stub_axioms.png){#fig-stub-axioms width=100%}
 
+::: {.questions}
+1. State the three axioms of a distance (the ones that Tversky tests). Which of them does each of these scores keep: Euclidean distance, the angle between vectors, the dot product, one minus the cosine?
+
+2. Give an example of an asymmetric human judgement of likeness from Tversky's experiments.
+
+3. Reproduce @fig-stub-axioms: four smoke tests of the axioms on a trained space against random vectors of the same dimension.
+:::
+
+::: {.answers}
+1. Minimality (the distance of a point to itself is zero and the smallest), symmetry ($d(a,b) = d(b,a)$) and the triangle inequality ($d(a,c) \le d(a,b) + d(b,c)$) [@tversky1977features]. Euclidean distance and the angle (the arccosine of the cosine) keep the three. The dot product is symmetric but not minimal: the dot product of a vector with itself is its squared norm, which varies from word to word, so another word can have a higher dot product with a word than the word has with itself. One minus the cosine is symmetric and minimal but breaks the triangle inequality: for three unit vectors at $0^\circ$, $45^\circ$ and $90^\circ$ in the plane, $1 - \cos 90^\circ = 1$ is larger than $(1 - \cos 45^\circ) + (1 - \cos 45^\circ) \approx 0.59$.
+
+2. Tversky's subjects judged North Korea to be more similar to Red China than Red China to North Korea, and in a forced choice between the two phrasings a large majority chose "North Korea is similar to Red China" and only three chose the reverse [@tversky1977features]. In his contrast model the weights of the features depend on which of the two things is the subject of the comparison, so the less salient is judged more like the more salient than the reverse.
+
+3. The script `axioms.py` runs four tests on SGNS, GloVe and the SVD of PPMI, against Gaussian vectors of the same dimension: (1) minimality, the share of words that have another word with a higher dot product than their own and the variation of the self dot product; (2) symmetry of the two towers of SGNS, the correlation of the score of $(a,b)$ with that of $(b,a)$; (3) the share of random triples that break the triangle inequality for the Euclidean distance, the angle and one minus the cosine; and (4) the share of the ten nearest neighbours that are mutual, with the skewness of how often a word is somebody's neighbour. The scripts were written and not yet run together, so the figure of the chapter is still the stub.
+:::
+
 ## Changing the Object Changes the Likeness {#sec-likeness-other-objects .idea}
 
 *Plan (1 page, a table and three short paragraphs; the section only states which likeness each representation defines, and the models are taken up in the chapters named, so nothing here is measured). The last section asked whether likeness is a distance. This one asks what happens when the object is not a point. The distributional hypothesis [@harris1954distributional; @firth1957synopsis] says that words in similar contexts are alike, and a point in $\mathbb{R}^d$ with a cosine or a Euclidean distance turns that into proximity. Proximity brings the metric axioms, and the previous section showed that judged likeness breaks them. Each alternative below keeps the distributional idea and changes the object that is learned, or the score that compares two objects, so that one axiom is given up on purpose. The reading is the author's, from a discussion, and each claim of a source is to be read before it is kept.*
@@ -209,6 +309,22 @@ $$S(a,b) = \theta\, f(A \cap B) - \alpha\, f(A - B) - \beta\, f(B - A).$$
 
 *Rosch (1975 [@rosch1975cognitive], read in full, *Journal of Experimental Psychology: General* 104) is the psychological source of "graded", and it gives the fourth case a judge. Experiment 1 collected, from 209 native-speaker students on a 7-point scale, the extent to which each of 50 to 60 instances of 10 categories (fruit, bird, vehicle, vegetable, sport, tool, toy, furniture, weapon, clothing) "represents their idea or image of the meaning of the category name", with split-half correlations of .97 or higher and between-coast correlations of .92 or higher (pp. 197–198): a retriever or a German shepherd is a "doggy dog" and a Pekinese a less doggy one. These goodness-of-example norms are far more reliable than the word-similarity ratings of @sec-likeness-judges (κ of .21 to .62 for WordSim-353), and they define a likeness to a category and not between two items, with a built-in direction (the instance to the category name). The test that follows is cheap: the rank correlation between the cosine of an instance and its category name (or the mean of the instances) and the goodness rating, per category, against a shuffled null and a frequency control (typicality and frequency are probably correlated, which is an assumption to check, so frequency is the first confound). The experiments that follow show why the order of the neighbours depends on the category in the context: a category name read just before a pair of physically identical stimuli speeds the "same" response for good members and slows it for poor members (Experiments 2 to 4), the effect is on "the level of meaning" and not on lines and angles (Experiments 5 and 6), and for semantic categories, unlike colour, it is removed by long practice (Experiment 9), so the internal structure is learned and is not fixed by the stimuli. The reading for this chapter is that a graded nearness has a long human precedent, that centrality (the prototype) is a property of the item with respect to a category, and that the prototype pull of the fourth case and the hubs of @sec-reading-nearness-correctly are two views of one asymmetry; whether a hub of a space is a prototype of the category, or only a frequent word, is a test with the same data.*
 
+::: {.questions}
+1. Why are antonyms such as hot and cold near in a space built from the company of words?
+
+2. What do Mohammad and colleagues measure, and what do they find about opposites against near-synonyms and random pairs?
+
+3. In a pretrained space, compare the cosine of five antonym pairs, five synonym pairs and five random pairs, and the cosine of a sentence with its negation and with a paraphrase of it.
+:::
+
+::: {.answers}
+1. Opposites occur in the same contexts: hot and cold are both kinds of temperature, black and white kinds of colour, and a loss that rewards co-occurrence or shared company gives them similar vectors. Turney and Pantel say that antonyms have a high degree of attributional similarity [@turney2010frequency], and for Budanitsky and Hirst they are dissimilar and distant in one sense and strongly related and close in the other [@budanitsky2006evaluating]. Nothing in the loss says that the two are opposite.
+
+2. They measure how strong the distributional similarity (Lin's measure) is between the two words of 1,358 WordNet opposites, of a set of near-synonyms and of random pairs. The average is 0.064 for the opposites, 0.056 for the near-synonyms and 0.036 for random pairs [@mohammad2013computing], so opposites are at least as similar as near-synonyms, and both far above chance.
+
+3. Take static vectors for the words (word2vec or GloVe from the Internet, or the spaces of this chapter) and a sentence encoder for the sentences, such as a MiniLM model of the `transformers` library with the mean of the token vectors as the sentence vector. Typical results: antonyms like hot–cold have a cosine as high as synonyms or higher, well above the random pairs; "the film is good" is as near to "the film is not good" as to "the film is fine", and with some encoders nearer. The answer depends on the model and on how it was trained (a model trained with contradiction pairs as negatives can separate negations), so state the model and look at several pairs and not at one.
+:::
+
 ## Many Runs, Many Spaces {#sec-likeness-many-spaces}
 *This is the global check, and it comes late on purpose: it needs the models, the losses and the statistics of the sections before it. We expect diversity, and the question is what to make of it. A model is one draw from a family of spaces, and three kinds of difference separate two spaces, each with a different reading: (1) the same data, algorithm and compute, with another seed; (2) another algorithm on the same data; (3) another algorithm on other data. Coordinates are not comparable in any of them, because the loss leaves a rotation free (@sec-prop-invariance), so the comparison is of what the coordinates say about nearness: the overlap of the nearest neighbours of each word, the correlation of the two similarity matrices over the same items [@kriegeskorte2008representational], a rotation-invariant similarity of representations [@kornblith2019similarity], or the position of each item relative to a set of anchors [@moschella2023relative]. The order matters. The difference between seeds is the noise floor, the null for the other two: a gap between two algorithms that is not larger than the gap between two seeds says nothing about the algorithms, and the same holds for a gap between two corpora that is smaller than the gap between two algorithms. What survives the three differences is the candidate for a property of meaning and not of a run; what changes with the seed is an accident of one run; what changes with the algorithm but not the data is the loss; what changes with the data is the corpus, its language and its size. Whether separately trained models converge on a shared structure is claimed [@huh2024platonic] and disputed, and what remains after calibration is mostly the local neighbourhoods and not the global geometry [@groger2026aristotelian; @koepke2026plato]. For nearness this is the natural test, since the neighbourhood is the object that the property talks about. The same three differences apply at every level (words, sentences, images, pairs of senses), and a result is stated with the one it was measured under.*
 
@@ -217,6 +333,22 @@ $$S(a,b) = \theta\, f(A \cap B) - \alpha\, f(A - B) - \beta\, f(B - A).$$
 *Expected result: the overlap of the nearest neighbours is highest between seeds, lower between algorithms and lowest between corpora, and the algorithm and corpus bars count only where they lie clearly below the seed bar.*
 
 ![STUB. Expected shape only, invented numbers: overlap of the 10 nearest neighbours of the same words between two spaces that differ in seed, in algorithm or in corpus, with the seed gap as the noise floor.](../figures/meaning_as_likeness/stub_many_spaces.png){#fig-stub-many-spaces width=70%}
+
+::: {.questions}
+1. Why is the overlap of the nearest neighbours a better way to compare two spaces than comparing their coordinates?
+
+2. What do Antoniak and Mimno find about the stability of the nearest neighbours when the training corpus changes a little?
+
+3. Reproduce @fig-stub-many-spaces: the overlap of the 10 nearest neighbours of the same words between two spaces that differ in seed, in loss and in text, with the seed gap as the noise floor.
+:::
+
+::: {.answers}
+1. The coordinates of a space are free up to a rotation, because the loss depends on the vectors only through dot products or cosines, so two spaces that say the same can have unrelated coordinates. The neighbours of a word do not change under a rotation, so their overlap compares what the spaces say about nearness and not how the axes were drawn [@kriegeskorte2008representational; @kornblith2019similarity].
+
+2. They train 50 models per algorithm (LSA, SGNS, GloVe and PPMI-SVD) on the same corpus, on shuffled documents and on a bootstrap sample of the documents. They find that the nearest-neighbour similarities "are highly sensitive to small changes in the training corpus", more so for smaller corpora and for longer documents, with cases of zero overlap in the top 10 between two bootstrap samples; they advise averaging over bootstrap samples and not relying on one model [@antoniak2018evaluating].
+
+3. The script `stability.py` takes 2,000 query words and, for each pair of spaces, the share of the $k$ nearest neighbours that they have in common (for $k$ from 1 to 50), averaged over the words: seeds (three seeds of each loss), losses (counting against SGNS against GloVe), texts (the two halves of text8, and the text with 10 per cent of it removed). It also gives the agreement of the global geometry, the Spearman correlation of the cosines of 200,000 random pairs. The seed gap is the floor: a difference between losses or texts counts only if it lies clearly below it. The scripts were written and not yet run together, so the figure of the chapter is still the stub.
+:::
 
 ## Likeness Found {#sec-likeness-found}
 

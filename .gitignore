@@ -21,3 +21,4 @@ diagrams/**/*.log
 /index.aux
 /index.log
 /index.toc
+code/*/.cache/

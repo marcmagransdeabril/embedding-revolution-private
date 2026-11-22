@@ -28,6 +28,8 @@ CHAPTERS = ROOT / "chapters"
 ALLOWED = {"numpy", "matplotlib", "sklearn"}
 # Deep learning needs torch. Anything else needs a reason: add it here and say why in the script that imports it.
 ALLOWED.add("torch")
+# scipy: sparse co-occurrence matrices of a 17-million-word text, and the Spearman rank correlation (chapter "Meaning as Likeness").
+ALLOWED.add("scipy")
 STDLIB = set(sys.stdlib_module_names)
 
 
