@@ -343,3 +343,27 @@ a.answer-num {
   text-decoration: none;
   color: inherit;
 }
+
+/* Tests of likeness (filters/book-callouts.lua): a framed question, distinct */
+/* from review questions and callouts. */
+div.test {
+  border: 1px solid #555;
+  border-radius: 0;
+  padding: 0.7em 1.1em;
+  margin: 1rem 0;
+  background-color: transparent;
+  break-inside: avoid;
+}
+
+div.test::before {
+  content: "TEST";
+  display: block;
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+  font-size: 0.8em;
+  color: #555;
+}
+
+div.test p {
+  margin: 0.3em 0;
+}

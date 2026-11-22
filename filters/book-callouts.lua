@@ -10,6 +10,14 @@ local function is_html_or_epub()
 end
 
 function Div(el)
+  -- Test of likeness: framed question (see styles); HTML keeps the div class
+  if el.classes:includes("test") and is_latex() then
+    local out = pandoc.List({ pandoc.RawBlock("latex", "\\begin{liketest}") })
+    out:extend(el.content)
+    out:insert(pandoc.RawBlock("latex", "\\end{liketest}"))
+    return out
+  end
+
   -- Check if div is a callout
   local callout_type = nil
   for _, class in ipairs(el.classes) do
