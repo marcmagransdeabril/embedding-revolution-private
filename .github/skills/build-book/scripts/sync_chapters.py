@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Sync Quarto book chapter registry (_quarto.yml) with chapters/ directory.
 
-Discovers existing .qmd files in chapters/, maps them to the canonical
-book outline (Part I, Part II and Part III, which for now holds only the
-Epilogue), and updates _quarto.yml.
+Discovers existing .qmd files in chapters/, puts them in the order of the
+roadmap (a flat list: there are no Parts for the time being, and the appendices
+and the generated solutions close the book), and updates _quarto.yml.
 """
 from __future__ import annotations
 
@@ -23,118 +23,29 @@ INDEX_QMD = REPO_ROOT / "index.qmd"
 # numbered chapter, so it is excluded from discovery and always listed last.
 SOLUTIONS_QMD = CHAPTERS_DIR / "solutions.qmd"
 
-# Canonical master outline from book architecture. Part II keeps the groupings
-# of the former Parts II to IV as comments only, so no chapter moves:
-# grounding and structure by design (7 to 10), logic and composition (11 to 13),
-# alignment and the senses (14, 15).
-MASTER_PARTS = [
-    {
-        "part": "Vectors as Meaning",
-        "chapters": [
-            {
-                "num": 0,
-                "title": "The Tests of Meaning",
-                "patterns": ["tests_of_meaning"],
-            },
-            {
-                "num": 1,
-                "title": "The Properties of Meaning as Geometry",
-                "patterns": ["properties_of_meaning", "properties", "meaning_geometry", "01_", "chapter1"],
-            },
-            {
-                "num": 2,
-                "title": "Why Vectors Work: The Blessing (and Curse) of Dimensionality",
-                "patterns": ["curse_of_dimensionality", "dimensionality", "02_", "high_dim", "chapter2"],
-            },
-            {
-                "num": 3,
-                "title": "Symbols Without Interior",
-                "patterns": ["symbols_without_interior", "interior", "orthogonal_catastrophe", "03_", "chapter3"],
-            },
-            {
-                "num": 4,
-                "title": "The Anatomy of Embedding Spaces",
-                "patterns": ["embedding_spaces", "anatomy", "latent_spaces", "04_", "chapter4"],
-            },
-            {
-                "num": 5,
-                "title": "Latent Spaces from Generative Models",
-                "patterns": ["generative_spaces", "05_", "chapter5"],
-            },
-            {
-                "num": 6,
-                "title": "Contextual Vectors: Attention, Transformers, and Looking Inside",
-                "patterns": ["contextual_vector", "contextual", "attention", "06_", "interpretability", "chapter6"],
-            },
-        ],
-    },
-    {
-        "part": "Representation Extensions",
-        "chapters": [
-            {
-                "num": 6.5,
-                "title": "Likeness as Nearness: What a Distance Can Carry",
-                "patterns": ["likeness_as_nearness"],
-            },
-            {
-                "num": 7,
-                "title": "Vector Databases, RAG, and the Limits of Single-Vector Retrieval",
-                "patterns": ["vector_database", "vector_db", "rag", "07_", "retrieval", "chapter7"],
-            },
-            {
-                "num": 8,
-                "title": "Tangent Spaces, Geodesics, and Geometric Deep Learning",
-                "patterns": ["tangent_space", "geodesic", "geometric_deep_learning", "08_", "hyperbolic", "chapter8"],
-            },
-            {
-                "num": 9,
-                "title": "From Manifolds to Knowledge Graphs: Graph Embeddings and Relational Geometry",
-                "patterns": ["graph_embedding", "knowledge_graph", "09_", "relational_geometry", "chapter9"],
-            },
-            {
-                "num": 10,
-                "title": "Beyond Graphs: Topological Deep Learning",
-                "patterns": ["topological_deep_learning", "topological", "10_", "simplicial", "homology", "chapter10"],
-            },
-            {
-                "num": 11,
-                "title": "The Complex Plane and Quantum Logic: Wave-Nature in Latent Space",
-                "patterns": ["complex_plane", "quantum_logic", "11_", "cvnn", "complex_valued", "chapter11"],
-            },
-            {
-                "num": 12,
-                "title": "Vector Symbolic Architectures and Hyperdimensional Computing",
-                "patterns": ["vector_symbolic", "vsa", "hyperdimensional", "12_", "hdc", "chapter12"],
-            },
-            {
-                "num": 13,
-                "title": "Neuro-Symbolic Integration and Emergent Compositionality",
-                "patterns": ["neuro_symbolic", "neurosymbolic", "13_", "tpr", "ltn", "chapter13"],
-            },
-            {
-                "num": 14,
-                "title": "Cross-Domain Transfer and Optimal Transport",
-                "patterns": ["cross_domain", "optimal_transport", "14_", "wasserstein", "chapter14"],
-            },
-            {
-                "num": 15,
-                "title": "Many Senses, One Space: Multimodal Embeddings",
-                "patterns": ["multimodal", "many_senses", "15_", "chapter15"],
-            },
-        ],
-    },
-    {
-        # Part III is the Epilogue alone, for now (three-part plan, 2026-11-12).
-        "part": "Limits of Meaning Representation",
-        "chapters": [
-            {
-                "num": None,
-                "title": "Epilogue: An Algebra of Thought",
-                "patterns": ["epilogue", "algebra_of_thought"],
-            },
-        ],
-    },
+# Canonical order of the book (the roadmap of index.qmd): the introduction, the summary of the properties, one chapter per property of
+# meaning, the epilogue. There are no Parts for the time being. A chapter is named by its file stem; the identifier of a chapter is
+# `sec-ch-` plus the stem with hyphens, which is the key that the status tooling reads from the roadmap.
+ORDER = [
+    "symbols_without_interior",
+    "tests_of_meaning",
+    "properties_of_meaning",
+    "likeness_as_nearness",
+    "meaning_as_difference",
+    "meaning_as_direction",
+    "meaning_as_region",
+    "meaning_as_path",
+    "meaning_as_composition",
+    "meaning_across_scales",
+    "meaning_across_senses",
+    "meaning_as_arrangement",
+    "meaning_in_context",
+    "meaning_and_truth",
+    "meaning_as_generation",
+    "epilogue",
 ]
+# Appendices follow the chapters; the solutions are generated and always come last.
+APPENDICES = ["curse_of_dimensionality"]
 
 
 def extract_title_from_qmd(qmd_path: Path) -> str:
@@ -161,64 +72,17 @@ def extract_title_from_qmd(qmd_path: Path) -> str:
     return qmd_path.stem.replace("_", " ").title()
 
 
-def match_chapter_to_outline(qmd_file: Path) -> tuple[int, int] | None:
-    """Match a .qmd file to (part_idx, chapter_idx) or None."""
-    stem = qmd_file.stem.lower()
-    title = extract_title_from_qmd(qmd_file).lower()
-
-    for part_idx, part_info in enumerate(MASTER_PARTS):
-        for ch_idx, ch_info in enumerate(part_info["chapters"]):
-            for pat in ch_info["patterns"]:
-                if pat in stem or pat in title:
-                    return (part_idx, ch_idx)
-
-    return None
-
-
-def discover_and_build_chapters_list() -> list[Any]:
-    """Scan chapters/ directory and construct Quarto chapters structure."""
-    discovered_qmds = sorted(p for p in CHAPTERS_DIR.glob("*.qmd") if p != SOLUTIONS_QMD)
-    
-    # Chapters structure starting with index.qmd
-    chapters_struct: list[Any] = ["index.qmd"]
-
-    # Map discovered files to parts
-    part_buckets: dict[int, list[tuple[int, Path]]] = {i: [] for i in range(len(MASTER_PARTS))}
-    unmatched: list[Path] = []
-
-    for qmd in discovered_qmds:
-        matched = match_chapter_to_outline(qmd)
-        if matched is not None:
-            part_idx, ch_idx = matched
-            part_buckets[part_idx].append((ch_idx, qmd))
-        else:
-            unmatched.append(qmd)
-
-    # Assemble populated parts
-    for part_idx, part_info in enumerate(MASTER_PARTS):
-        entries = part_buckets[part_idx]
-        if entries:
-            # Sort by chapter index
-            entries.sort(key=lambda x: x[0])
-            part_chapters = [f"chapters/{path.name}" for _, path in entries]
-            chapters_struct.append({
-                "part": part_info["part"],
-                "chapters": part_chapters,
-            })
-
-    # Add any unmatched chapters
-    if unmatched:
-        unmatched_paths = [f"chapters/{p.name}" for p in sorted(unmatched)]
-        chapters_struct.append({
-            "part": "Additional Chapters",
-            "chapters": unmatched_paths,
-        })
-
-    # Solutions to the review questions always close the book
+def discover_and_build_chapters_list() -> tuple[list[Any], list[str]]:
+    """Scan chapters/ and return the flat list of chapters in the order of the roadmap, and the list of appendices."""
+    stems = {p.stem: p for p in CHAPTERS_DIR.glob("*.qmd") if p != SOLUTIONS_QMD}
+    chapters: list[Any] = ["index.qmd"]
+    chapters += [f"chapters/{stems[s].name}" for s in ORDER if s in stems]
+    # A chapter that is not in the roadmap is listed after the others, so that it is not lost
+    chapters += [f"chapters/{p.name}" for s, p in sorted(stems.items()) if s not in ORDER and s not in APPENDICES]
+    appendices = [f"chapters/{stems[s].name}" for s in APPENDICES if s in stems]
     if SOLUTIONS_QMD.is_file():
-        chapters_struct.append(f"chapters/{SOLUTIONS_QMD.name}")
-
-    return chapters_struct
+        appendices.append(f"chapters/{SOLUTIONS_QMD.name}")
+    return chapters, appendices
 
 
 def sync_quarto_yml(dry_run: bool = False, verbose: bool = False) -> bool:
@@ -230,7 +94,7 @@ def sync_quarto_yml(dry_run: bool = False, verbose: bool = False) -> bool:
     with open(QUARTO_YML, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f) or {}
 
-    new_chapters = discover_and_build_chapters_list()
+    new_chapters, appendices = discover_and_build_chapters_list()
     old_chapters = config.get("book", {}).get("chapters", [])
 
     if verbose:
@@ -241,6 +105,7 @@ def sync_quarto_yml(dry_run: bool = False, verbose: bool = False) -> bool:
         config["book"] = {}
 
     config["book"]["chapters"] = new_chapters
+    config["book"]["appendices"] = appendices
 
     if dry_run:
         print("[Dry Run] Would update _quarto.yml chapters list.")
