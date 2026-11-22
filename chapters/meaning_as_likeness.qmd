@@ -6,7 +6,43 @@ status: idea
 
 The last chapter ended with a table of one-hot symbols in which every pair of words is equally far apart, so that no pair is nearer than another, and with Rice's theorem putting exact meaning out of reach. What is left is a graded nearness, but will it work? This chapter starts with the seemingly simplest of the questions: can nearness in a vector space represent likeness, and so meaning?
 
-Philosophy has given several answers to what meaning is. For example, Frege separates the idea in our heads, the sense that is shared by all who use the sign, and the reference, the object in the world the sign represents (the Morning Star and the Evening Star are one planet, Venus, presented in two ways, and each of us pictures it differently); Harris, Firth and Wittgenstein, that a sign means what it does through its use and its company, their co-occurrence (oculist and eye-doctor turn up in nearly the same sentences, oculist and lawyer in very different ones); Quine, that the sense of a sentence is not something it carries by itself, because what we check against sense experience (what we see, hear and measure) is the whole system of our beliefs and never one sentence alone (an astronomer who finds a planet missing where a theory puts it can revise the theory, the telescope or the arithmetic, and the observation does not say which); Goodman, and Wittgenstein again with his family resemblances, against the idea that likeness is a count of shared properties, that things can be alike with nothing in common to all of them (chess, patience and football are all games, and no one feature runs through all three) and that any two things share countless properties until a respect is fixed; Kripke and Putnam, that a name is tied to the thing it names and not to the descriptions we attach to it ("Gödel" still names Gödel even if the proof we credit to him was someone else's); Kaplan, that what a sentence says depends on who says it and where ("I am here now" says something different each time). We will test each of them in this and the following chapters.
+Philosophy has given several answers to what meaning is. For example, Frege in "Sense and Reference" [@frege1892sense]:
+
+> The difference may concern at most the ideas, or the sense but not the reference, or, finally, the reference as well.
+
+sseparates the idea in our heads, the sense that is shared by all who use the sign, and the reference, the object in the world the sign represents (e.g., the Morning Star and the Evening Star are one planet, Venus, presented in two ways, and each of us pictures it differently); Harris in "Distributional Structure" [@harris1954distributional]:
+
+> In other words, difference of meaning correlates with difference of distribution.
+
+and Firth in "A Synopsis of Linguistic Theory, 1930–1955" [@firth1957synopsis]:
+
+> You shall know a word by the company it keeps!
+
+and also Wittgenstein in the *Philosophical Investigations* [@wittgenstein1953philosophical, §43]:
+
+> for a large class of cases—though not for all—in which we employ the word "meaning" it can be defined thus: the meaning of a word is its use in the language.
+
+say that a sign means what it does through its use and its company, their co-occurrence (e.g., oculist and eye-doctor turn up in nearly the same sentences, oculist and lawyer in very different ones); Quine in "Two Dogmas of Empiricism" [@quine1951two]:
+
+> [O]ur statements about the external world face the tribunal of sense experience not individually but only as a corporate body.
+
+says that the sense of a sentence is not something it carries by itself, because what we check against sense experience (what we see, hear and measure) is the whole system of our beliefs and never one sentence alone (an astronomer who finds a planet missing where a theory puts it can revise the theory, the telescope or the arithmetic, and the observation does not say which); Goodman in "Seven Strictures on Similarity" [@goodman1972seven]:
+
+> Similarity, ever ready to solve philosophical problems and overcome obstacles, is a pretender, an impostor, a quack.
+
+and Wittgenstein again [@wittgenstein1953philosophical, §66], who sees in the games
+
+> a complicated network of similarities overlapping and criss-crossing
+
+object that likeness is not a count of shared properties, since things can be alike with nothing in common to all of them (e.g., chess, patience and football are all games, and no one feature runs through all three) and any two things share countless properties until we say in what way they are being compared (by colour, by shape, by use); Kripke in *Naming and Necessity* [@kripke1980naming, p. 84], on the view that a name refers to whatever satisfies the descriptions we attach to it, so that if Schmidt and not Gödel had proved the incompleteness of arithmetic, "Gödel" would refer to Schmidt:
+
+> But it seems to me that we are not. We simply are not.
+
+and Putnam [@putnam1975meaning] say that a name is tied to the thing it names and not to the descriptions we attach to it; Kaplan in "Demonstratives" [@kaplan1989demonstratives]:
+
+> The character of an expression is set by linguistic conventions and, in turn, determines the content of the expression in every context.
+
+says that what a sentence says depends on who says it and where ("I am here now" says something different each time). We will test each of them in this and the following chapters.
 
 Current machine learning models have been able to locate words, sounds, and images in an embedding space. Where does that stop? Alike things should sit near each other and different things far apart, whether they are words, phrases, sounds, images or clips: `dog` near `puppy`, less near `wolf`, far from `car`.
 
