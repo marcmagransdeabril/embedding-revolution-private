@@ -138,7 +138,7 @@ def test_book_contract_section_covers_continuity_and_thematic_contract():
     job_b = text.split("**Job B", 1)[1].split("**Incremental scope", 1)[0]
     assert "states the bet" not in job_b
     assert "only in the Prologue and the Epilogue" in job_b
-    assert "Part I" in job_b and "Part II" in job_b, "Job B's range is stated in terms of parts, not by number alone"
+    assert "property chapters" in job_b and "Epilogue" in job_b, "Job B's range is stated in terms of the roadmap, not by number alone"
     # Mechanical hints: the allow-list grep and the banned closing titles.
     hints = text.split("**Mechanical hints", 1)[1]
     assert "Sutton" in hints and "Conclusion" in hints and "Summary" in hints and "Scale Test" in hints
@@ -229,7 +229,7 @@ def test_payoff_step_is_a_review_step_that_adds_no_text_and_only_proposes_remova
     assert "§18" in text and "§17" in text
     assert "Scale" in text and "Durability" in text
     assert "Does it solve the limit?" in text
-    assert "Part II" in text and "not Part I" in text
+    assert "property chapters" in text and "not the introduction" in text
     assert "fully, partly or not at all" in text
     assert "valid findings" in text
     assert "Nothing is removed until the author and the reviewer agree" in text

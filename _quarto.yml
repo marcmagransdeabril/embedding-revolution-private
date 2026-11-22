@@ -14,30 +14,36 @@ book:
     right: Marc Magrans de Abril
   chapters:
   - index.qmd
-  - part: Vectors as Meaning
-    chapters:
-    - chapters/tests_of_meaning.qmd
-    - chapters/properties_of_meaning.qmd
-    - chapters/curse_of_dimensionality.qmd
-    - chapters/symbols_without_interior.qmd
-    - chapters/embedding_spaces.qmd
-    - chapters/generative_spaces.qmd
-    - chapters/contextual_vectors.qmd
-  - part: Representation Extensions
-    chapters:
-    - chapters/likeness_as_nearness.qmd
-    - chapters/vector_databases.qmd
-    - chapters/tangent_spaces_geodesics.qmd
-    - chapters/graph_embeddings.qmd
-    - chapters/topological_deep_learning.qmd
-    - chapters/complex_plane_quantum_logic.qmd
-    - chapters/vector_symbolic_architectures.qmd
-    - chapters/neurosymbolic_integration.qmd
-    - chapters/cross_domain_transfer.qmd
-    - chapters/multimodal_embeddings.qmd
-  - part: Limits of Meaning Representation
-    chapters:
-    - chapters/epilogue.qmd
+  - chapters/symbols_without_interior.qmd
+  - chapters/tests_of_meaning.qmd
+  - chapters/properties_of_meaning.qmd
+  - chapters/likeness_as_nearness.qmd
+  - chapters/meaning_as_difference.qmd
+  - chapters/meaning_as_direction.qmd
+  - chapters/meaning_as_region.qmd
+  - chapters/meaning_as_path.qmd
+  - chapters/meaning_as_composition.qmd
+  - chapters/meaning_across_scales.qmd
+  - chapters/meaning_across_senses.qmd
+  - chapters/meaning_as_arrangement.qmd
+  - chapters/meaning_in_context.qmd
+  - chapters/meaning_and_truth.qmd
+  - chapters/meaning_as_generation.qmd
+  - chapters/epilogue.qmd
+  - chapters/complex_plane_quantum_logic.qmd
+  - chapters/contextual_vectors.qmd
+  - chapters/cross_domain_transfer.qmd
+  - chapters/embedding_spaces.qmd
+  - chapters/generative_spaces.qmd
+  - chapters/graph_embeddings.qmd
+  - chapters/multimodal_embeddings.qmd
+  - chapters/neurosymbolic_integration.qmd
+  - chapters/tangent_spaces_geodesics.qmd
+  - chapters/topological_deep_learning.qmd
+  - chapters/vector_databases.qmd
+  - chapters/vector_symbolic_architectures.qmd
+  appendices:
+  - chapters/curse_of_dimensionality.qmd
   - chapters/solutions.qmd
 format:
   html:

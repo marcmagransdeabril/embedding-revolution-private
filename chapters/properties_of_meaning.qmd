@@ -5,11 +5,11 @@ open: "The list of properties is open. It grows and changes as the field does, a
 
 # The Properties of Meaning as Geometry {#sec-ch-properties-of-meaning}
 
-This chapter is a literature survey, not an experiment, and it is still being written. Its outline follows the roadmap in [index.qmd](../index.qmd). It is a catalog: each section states one property that meaning acquires once it becomes position in a space, in the plain language of distance and direction, and asks one question of the literature, whether the property has been shown to exist, by whom, and against what objections. A property that the literature does not support is unlikely to exist, and is dropped to `notes/ideas.qmd` with the reason. A property that survives is handed forward.
+This chapter is the living summary of the book. It is a catalog, and it grows and shrinks as the chapters are written: each section states one property that meaning acquires once it becomes a position in a space, in the plain language of distance and direction, and keeps, for that property, what the literature has shown and by whom, what the sceptics found, and what the chapter that earns it has found, achieved, partial or not. A property that the literature does not support is unlikely to exist, and is dropped to `notes/ideas.qmd` with the reason; a property that survives is handed to its chapter. The chapter sits after the introduction, so before the chapters that it summarizes, and until they are written each section holds a promise and the state of the literature; each entry carries the date of its last update, so that a promise is not mistaken for a result.
 
-The chapter does not test anything itself, because testing needs the algorithms (counting, prediction, contrast, reconstruction, latent prediction), and those are built in @sec-ch-embedding-spaces and the chapters after it. From the fourth chapter on, each chapter takes the properties it bears on and shows how a method achieves one, or how to test whether it does, on its own corpus and code (for example `The Geometry of Meaning` and `Where a Single Vector Strains` in @sec-ch-embedding-spaces). Those sections are the tests; this chapter keeps the claims and the evidence. Each section carries a first-pass line of sources, to be pruned when the chapter is finished.
+The chapter does not test anything itself. Each property chapter takes its property, asks which philosophical accounts of meaning bear on it, and runs the tests on its own corpus and code, with a null and a judge. The earlier plan of the book was organized by technology, and the ledger of limits that closed its chapter on the anatomy of embedding spaces (kept in `embedding-technologies-stubs/`) is one of the sources of this summary: each limit is a cost that one of the property chapters takes up. Each section carries a first-pass line of sources, to be pruned when its chapter is finished.
 
-Status. `provisional` means the sources and the sceptics are collected but not yet checked against `references/` for every property; it becomes `definitive` when each property states what the literature supports, who disputes it, and which later chapter tests it.
+Status. `provisional` means the sources and the sceptics are collected but not yet checked against `references/` for every property; it becomes `definitive` when each property states what the literature supports, who disputes it, and which chapter tests it. There are now thirteen properties: the nine of the first list (nearness, difference, direction, region, paths, combination, senses, arrangement, symmetries) and four that the discussion of the chapters added (scale, context, truth, production).
 
 ## Nearness Is Likeness {#sec-prop-nearness}
 *Things that mean alike sit close together, and things that mean differently sit far apart.*
@@ -131,6 +131,34 @@ Local non-uniformity also limits the global story: anisotropy and intrinsic dime
 Earned in @sec-ch-symbols-without-interior (invariance to relabelling), @sec-ch-tangent-spaces-geodesics (curved space, geodesics, and parallel transport), @sec-ch-topological-deep-learning (the shape of a representation, and which symmetries a training objective leaves intact), and @sec-ch-cross-domain-transfer (aligning two spaces up to a rotation, and comparing them independently of one).
 
 Sources (first pass). Geometry as what survives a group of transformations [@klein1893comparative; @bronstein2021geometric, section 4.5 on gauges and bundles]; comparing representations independently of rotation or invertible linear maps [@kornblith2019similarity]; communicating across latent spaces through relative positions, invariant to isometries and rescalings [@moschella2023relative]; the same models related by an isometry of the underlying manifold, through the pullback metric [@yu2025relative; @arvanitidis2018latent]; an exact rotation symmetry of the residual stream of a transformer, used to compress and quantize [@ashkboos2024slicegpt; @ashkboos2024quarot]; features as nearly orthogonal directions in superposition [@elhage2022toy]; the claim that separate models converge on a shared representation, up to such a map [@huh2024platonic], and its sceptical readings [@groger2026aristotelian; @koepke2026plato]. Local forms: gauge equivariance on manifolds [@cohen2019gauge; @weiler2021coordinate]; parallel transport and holonomy [@needham2021visual]; analogy by parallel transport in hyperbolic space [@tifrea2019poincare; @nickel2017poincare]; invariance to augmentations and its cost [@bardes2022vicreg; @ericsson2021invariance]; variation of anisotropy and intrinsic dimension [@razzhigaev2023shape]. Origin and breaking of the symmetry: factorisation non-uniqueness [@levy2014neural]; implicit bias of gradient descent in matrix factorisation [@gunasekar2017implicit; @arora2019implicit]; privileged bases [@elhage2022toy]; nested embeddings [@kusupati2022matryoshka]; outlier and rogue dimensions [@kovaleva2021bert; @timkey2021rogue; @dettmers2022llmint8]. To add: a classical reference for a configuration being fixed up to rotation by its inner products.
+
+## Meaning Has a Size: From a Word to a Text {#sec-prop-scale}
+*A vector has a fixed size and a text does not, so what a vector keeps of a word, a phrase, a chunk and a document is a question of capacity.*
+
+Earned in @sec-ch-meaning-across-scales. Last update: 2026-11-22, a promise: no chapter text yet.
+
+Sources (first pass). Harris on the dependence of the correlation between structure and meaning on connected discourse [@harris1954distributional]; the weighted average of word vectors as a baseline for sentences [@arora2017simple]; sentence encoders and late interaction [@reimers2019sentence; @khattab2020colbert]. Sceptics and balance: not yet read; no capacity result for fixed-size text vectors is in the collection.
+
+## Meaning Depends on Context {#sec-prop-context}
+*A word does not have one vector: the vector it needs depends on its sentence and, beyond the text, on the situation of use.*
+
+Earned in @sec-ch-meaning-in-context. Last update: 2026-11-22, a promise.
+
+Sources (first pass). Harris on homonymy and connected discourse [@harris1954distributional]; Firth on the context of situation [@firth1957synopsis]; Kaplan on character and content [@kaplan1989demonstratives]; the anisotropy and context-specificity of contextual vectors [@ethayarajh2019contextual]. Sceptics and balance: a contextual vector carries the context that is in the text; the situation of the speaker is not in it.
+
+## Meaning Is Tied to the World, and a Sense Is Not a Truth Value {#sec-prop-truth}
+*A vector gives the sense; whether a name picks out its bearer and whether a sentence is true are further facts, and a model that produces the plausible can produce the false.*
+
+Earned in @sec-ch-meaning-and-truth. Last update: 2026-11-22, a promise.
+
+Sources (first pass). Frege on sense, reference and truth value [@frege1892sense]; Kripke and Putnam on names and natural kinds [@kripke1980naming; @putnam1975meaning]; Ramsey on the redundancy of truth [@ramsey1927facts]; the argument from form [@bender2020climbing]; truth directions and their sceptics [@marks2024geometry; @burns2023discovering; @levinstein2023still; @farquhar2023challenges]. Sceptics and balance: whether a truth direction tracks facts or only what the text asserts is open.
+
+## Meaning Can Be Produced {#sec-prop-produced}
+*A space that can be written to, as well as read, can give a point an object and can reach points that were never said; this is proposed here as a property and is the least supported of the thirteen.*
+
+Earned in @sec-ch-meaning-as-generation. Last update: 2026-11-22, a promise.
+
+Sources (first pass). Generative grammar as the test of a theory of language [@chomsky1957syntactic; @chomsky1965aspects]; latent variable models and the geometry a decoder induces [@arvanitidis2018latent]. Sceptics and balance: nothing is read on creativity or on discovery by embedding; the property is dropped to `notes/ideas.qmd` if the chapter cannot state a test.
 
 ## Promises to Keep {#sec-promises-keep}
 

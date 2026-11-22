@@ -1,0 +1,49 @@
+---
+status: idea
+---
+
+# Meaning as Direction: Qualities You Can Move Along {#sec-ch-meaning-as-direction}
+
+A direction is a meaning you can move along. If a space of meanings has this property, a quality such as sentiment, tense, formality or gender corresponds to a direction, moving along it changes that quality and little else, and the same direction works for many items at once. Osgood's semantic differential gave a space with named axes, evaluation, potency and activity, found by factor analysis of human ratings of concepts on bipolar scales [@osgood1957measurement], and Gärdenfors proposed that meanings are regions of spaces of quality dimensions [@gardenfors2000conceptual]. The axes of a trained space are free up to a rotation, so the question of this chapter is whether the directions that matter can be found in it, whether they are used by the model that has them, and how many there can be.
+
+The scope is one quality for many items. The step between one pair of meanings is the chapter on difference (@sec-ch-meaning-as-difference); the extent of a concept around a direction is the chapter on regions (@sec-ch-meaning-as-region); a direction in time or motion is the chapter on paths (@sec-ch-meaning-as-path); and whether a direction tracks truth or only what is asserted is the chapter on truth (@sec-ch-meaning-and-truth), which uses the tools of this one.
+
+*Goals and expectations (proposed, to be confirmed by the author before any experiment).*
+
+*Goal 1, quality dimensions (Osgood, Gärdenfors).* The expectation is that for some qualities (sentiment, perhaps gender and tense) a direction fitted on labelled words, as the difference of the means of the two classes, ranks held-out words in agreement with a human scale, against a random direction and a shuffled-label null. The run uses a rated lexicon and the spaces of the chapter on nearness (@sec-dir-qualities).
+
+*Goal 2, the linear representation hypothesis (Park and colleagues).* The expectation is that a concept can be a direction both in what a model represents and in how it reads it out, so that moving a representation along the direction changes the model's output in the corresponding way, against a random direction of the same norm. The sceptics find features that are not one-dimensional lines [@engels2025notlinear]. The run needs a small open language model (@sec-dir-used).
+
+*Goal 3, readable is not used (Hewitt and Liang).* A probe can read a direction that the model does not use. The expectation is that probe accuracy alone overstates what is represented, and that the selectivity against a control task (a probe on random labels) separates the two [@hewitt2019control; @belinkov2022probing]. The run is a probe with its control task (@sec-dir-used).
+
+*Goal 4, superposition (Elhage and colleagues).* If a model must store more features than it has dimensions, it can store them as nearly orthogonal directions and pay with interference when several are active. The expectation is that on a toy model with sparse features the number of recovered features grows beyond the dimension as sparsity grows, and that a sparse dictionary (an autoencoder with an overcomplete basis) recovers them [@elhage2022toy; @bricken2023towards]. The run is the toy model, which is cheap (@sec-dir-superposition).
+
+## What the Philosophies Say About Direction {#sec-dir-philosophy}
+*Plan (about 3 pages). Meaning as position on named scales (Osgood [@osgood1957measurement]); meaning as a point in a space of quality dimensions, with a region for each concept [@gardenfors2000conceptual]; the old question of whether a quality is separable from the thing that has it; and what a vector carries of it: a direction is a quality only if the quality varies along it and nothing else does, which is a statement about an intervention and not about a correlation. The origin of the axes (a rotation is free) and the norm (intensity, as Osgood has it, against frequency, as trained spaces tend to have it) are stated here, and the hand-off for what a direction cannot carry (extent, hierarchy) is the chapter on regions.*
+
+## From Qualities to Axes {#sec-dir-qualities}
+*Plan (about 3 pages). Goal 1. A direction from the difference of class means, a ranking of held-out words by projection, the Spearman correlation with the rated scale, and the nulls (a random direction, shuffled labels, a bootstrap over words). Osgood's own ratings give a judge for the norm: whether the length of a vector tracks a judged extremeness.*
+
+## Is the Direction Used? {#sec-dir-used}
+*Plan (about 4 pages). Goals 2 and 3. Steering a small open model along a direction and measuring the change in output against a random direction; a probe with its control task and the selectivity that follows. What these tests cannot say: that the model uses the direction in the way a human reader of the feature name would.*
+
+## Features in Superposition {#sec-dir-superposition}
+*Plan (about 3 pages). Goal 4. A toy model with more sparse features than dimensions, trained to reconstruct them; the phase diagram of which features are stored as a function of sparsity; a sparse dictionary that recovers them. The claim carried to real models (that they store features in superposition) is stated as a hypothesis with the sceptics beside it.*
+
+
+<!-- salvaged from embedding-technologies-stubs/contextual_vectors.qmd, section sec-features-directions -->
+## Features as Directions {#sec-features-directions}
+*The linear representation and superposition hypotheses, stated as claims together with the experiments that test them (probing and steering). Results are told as dated history.*
+
+<!-- salvaged from embedding-technologies-stubs/contextual_vectors.qmd, section sec-sparse-autoencoders-dictionary-learning -->
+## Sparse Autoencoders and Dictionary Learning {#sec-sparse-autoencoders-dictionary-learning}
+*Hand-off from @sec-likeness-other-objects: in an overcomplete sparse basis, likeness can be read as overlap of active features instead of a dense cosine, which interference between superimposed features can distort [@bricken2023towards]. In that paper's one-layer transformer a sparse autoencoder gives features that are more interpretable than neurons, similar across two models (median activation correlation of the closest feature 0.72, against 0.46 for neurons), and that split into finer ones as the dictionary grows from 512 to 4,096 features and beyond; how far this holds for the models of this book is not shown. That features are the circuits of the model is a separate claim, not made there.*
+*An autoencoder (@sec-ch-embedding-spaces) with a sparse code wider than its input, recovering more features than dimensions, which uses the near-orthogonality of @sec-ch-curse-of-dimensionality.*
+
+## Technologies That Exploit Direction {#sec-dir-technologies}
+*Plan (about 1 page). Probing, activation steering and editing, sparse autoencoders and dictionary learning for interpretability, and the use of directions for control of generation. For each: cost, whether it parallelizes, and whether the evidence at scale shows that the direction is used and not only read.*
+
+## A Direction You Can Read and One You Can Use {#sec-dir-closing}
+*Plan (1 page). Findings: which qualities have a direction that generalizes to held-out items, whether moving along it changes the output, and what a probe with its control task says about what is represented against what is used. Achieved for the representation of meaning: directions that carry qualities (@sec-prop-direction), with the conditions. Computation: whether sparse dictionaries scale, and whether the features they find are stable across seeds. Still out of reach: a concept has an extent and a hierarchy, which a direction does not say (@sec-ch-meaning-as-region).*
+
+*Sources and gaps (first pass).* Sourced in `references/`: Osgood, Gärdenfors, the linear representation hypothesis and its sceptics, probes and control tasks, superposition. Not yet read for this chapter: the claims about steering at scale and about the stability of sparse features across seeds.

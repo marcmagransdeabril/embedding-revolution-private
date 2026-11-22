@@ -1,0 +1,85 @@
+---
+status: idea
+---
+
+# Meaning as Composition: How Parts Make a Whole {#sec-ch-meaning-as-composition}
+
+How parts make a whole is the oldest question of the theory of meaning. If the meaning of a sentence is a function of the meanings of its parts and of how they are put together, a space of meanings needs an operation that combines two vectors into one that keeps what was combined, and keeps it apart: "dog bites man" is not "man bites dog", and "red ball" is not "ball red". Fodor and Pylyshyn argued that connectionist networks cannot do this systematically [@fodor1988connectionism]; Smolensky answered with the tensor product, Plate and Kanerva with the holographic and hyperdimensional algebras [@smolensky1990tensor; @plate1995holographic; @kanerva2009hyperdimensional]. The question of this chapter is whether a vector space can carry composition, at what cost in dimension, and whether trained networks find it unaided.
+
+The scope is the combination of meanings into a structure. The nearness of a combination to its parts is the chapter on nearness (@sec-ch-likeness-as-nearness); how a negation enters a combination, the chapter on difference (@sec-ch-meaning-as-difference); the growth of a combination into a long text, the chapter on scales (@sec-ch-meaning-across-scales); and whether a composed claim is true, the chapter on truth (@sec-ch-meaning-and-truth).
+
+*Goals and expectations (proposed, to be confirmed by the author before any experiment).*
+
+*Goal 1, systematicity (Fodor and Pylyshyn).* The expectation is that an average of word vectors cannot tell "dog bites man" from "man bites dog", since it ignores order, and that encoders trained to separate such pairs do so only where they were trained to. The run is the swap test on sentence encoders, in the manner of the Winoground benchmark, where people score near 89 per cent and the best model of the original study 38 [@thrush2022winoground; @yuksekgonul2023bagofwords] (@sec-systematicity-challenge).
+
+*Goal 2, binding and capacity (Plate, Kanerva, Kleyko and colleagues).* In a hyperdimensional algebra, bundling stores several bound pairs in one vector, and unbinding returns a noisy copy of a filler that a cleanup memory corrects. The expectation is that recall falls as the number of bound pairs grows, at a rate set by the dimension, and that the capacity bound of the literature [@clarkson2023capacity; @kleyko2023survey] describes a simulation. The run bundles $n$ pairs in dimensions from $10^3$ to $10^4$ and counts the recovered fillers (@sec-associative-clean-up-memories).
+
+*Goal 3, tensor products (Smolensky).* The tensor product binds exactly with orthogonal roles, at the price of a dimension that is the product of the dimensions of the parts. The expectation is that role-filler structures are recovered without error with orthogonal roles and degrade when roles overlap; the run measures both, and the cost in dimension against the hyperdimensional shortcut (@sec-smolensky-tensor-product-representations).
+
+*Goal 4, emergent structure (Lake and Baroni).* The expectation, from the literature, is that networks trained on a compositional task generalize to new combinations of known parts only partly, and that the failure is larger for systematic recombination than for the training distribution [@lake2018scan]. The run is a toy grammar with held-out combinations (@sec-emergent-symbolic-structure).
+
+## What the Philosophies Say About Composition {#sec-comp-philosophy}
+*Plan (about 3 pages). The principle that the meaning of a whole is a function of the meanings of its parts and their mode of combination, as formalized in Montague's grammar [@montague1970universal], to be read at the page; Fodor and Pylyshyn's systematicity and productivity [@fodor1988connectionism]; the connectionist replies, Smolensky's tensor product and the hyperdimensional algebras [@smolensky1990tensor; @plate1995holographic; @kanerva2009hyperdimensional]; Mitchell and Lapata's additive and multiplicative composition of word vectors [@mitchell2010composition]; and the poverty of the stimulus, which asks how a learner could have found the structure from data. For each: what composition it demands and what a vector carries; where a vector stops is stated and handed on.*
+
+## Does Order Matter? {#sec-comp-order}
+*Plan (about 2 pages). Goal 1. Swap tests on averaged static vectors, on contrastive sentence encoders and on contextual encoders; the baseline of a bag of words; the pairs that differ only in order, and the control of pairs that differ in meaning.*
+
+## How Much Can a Vector Hold? {#sec-comp-capacity}
+*Plan (about 3 pages). Goals 2 and 3. Simulation of binding, bundling and cleanup, the recall curve against the number of pairs and the dimension, the same for the tensor product with its cost in dimension, and the reading of the theoretical bounds from the surveys.*
+
+
+<!-- salvaged from embedding-technologies-stubs/vector_symbolic_architectures.qmd, section sec-near-orthogonality-resource -->
+## Near-Orthogonality as a Resource {#sec-near-orthogonality-resource}
+*The payoff of @sec-ch-curse-of-dimensionality, representing concepts directly in 10,000-dimensional hypervectors.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_symbolic_architectures.qmd, section sec-algebraic-operations-thoughts -->
+## Algebraic Operations on Thoughts {#sec-algebraic-operations-thoughts}
+
+*Bundling ($+$).*
+*Superposition and set representation. Bundling is commutative, like Chomsky's Merge (1995), the single operation of the Minimalist Program, which builds the unordered set $\{a, b\}$; in both, order and hierarchy must come from somewhere else, binding and permutation here and labelling there.*
+
+*Binding ($\odot$ / $\circledast$).*
+*Role-filler pairing and circular convolution. Modality is a natural role: a multimodal percept is the bundle of bindings of a modality with its content, so that a photograph, a bark, and a gait can be superposed in one hypervector and still be told apart.*
+
+*Permutation ($\Pi$).*
+*Sequence ordering and hierarchical encoding.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_symbolic_architectures.qmd, section sec-associative-clean-up-memories -->
+## Associative Clean-Up Memories & Capacity Bounds {#sec-associative-clean-up-memories}
+*Theoretical bounds on robust concept retrieval without weight retraining, and the relation to attention as associative memory. The classical capacity result is Hopfield's, about $0.15N$ random patterns for $N$ units [@hopfield1982neural]; the continuous version is [@ramsauer2021hopfield].*
+
+<!-- salvaged from embedding-technologies-stubs/vector_symbolic_architectures.qmd, section sec-which-red-which-ball -->
+## Which Red, Which Ball {#sec-which-red-which-ball}
+*Plan (1 page). Findings: what bundling, binding and permutation can express in hypervectors of ten thousand dimensions, how clean-up memories recover a stored concept, and the capacity bounds that say how many can be bundled. Achieved for the representation of meaning: meanings that combine without losing track of which belongs to which (@sec-prop-combine). Partial answer to the dog test: modality as a role, so that a photograph, a bark and a gait can be bundled and still told apart. Computation: capacity grows with dimension, and dimension is cheap; when a hyperdimensional encoding beats a learned one is read from capacity per dimension, cost per operation and accuracy at matched compute. Evidence at scale: the capacity bounds are theorems (structural). A comparison with learned encoders at scale is not held or known, and the chapter says so. Smoke test: bundle $k$ random hypervectors for increasing $k$ and $d$ and check the measured accuracy of retrieval against the capacity formula, then bind roles to fillers and unbind, as an exercise with `numpy` that can fail if the formula is wrong. Still out of reach: an algebra can bind, but whether composition is systematic is another question (@sec-ch-neurosymbolic-integration).*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-systematicity-challenge -->
+## The Systematicity Challenge {#sec-systematicity-challenge}
+*Fodor and Pylyshyn's argument that thought is compositional, the connectionist replies, and the staircase of @sec-ch-symbols-without-interior revisited: which steps can a vector system climb? Cross-modal models give a concrete test: image-text models that retrieve a "dog" and a "man" but confuse "dog bites man" with "man bites dog".*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-poverty-stimulus -->
+## The Poverty of the Stimulus {#sec-poverty-stimulus}
+*Chomsky's argument (1965, 1980) that children receive too little data to learn grammar unless much of it is innate, the question of how much must be built in, in the vocabulary of linguistics, with recursion as the core of the language faculty (Hauser, Chomsky, and Fitch, 2002). Told as a historical sequence on the standard example, structure-dependent question formation ("Is the man who is tall happy?"): sequential networks generalize linearly and only tree-structured ones hierarchically (2020); vanilla transformers learn the hierarchical rule long after in-domain accuracy saturates, "structural grokking" (2023); GPT-2 learns humanly impossible languages less easily than possible ones, against Chomsky's claim (2024); and the BabyLM challenge (2023) sets the budget at the fewer than 100 million words a child hears by age 13.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-bridging-connectionism-logic -->
+## Bridging Connectionism and Logic {#sec-bridging-connectionism-logic}
+*Differentiable reasoning over structured knowledge.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-logic-tensor-networks -->
+## Logic Tensor Networks (LTN) {#sec-logic-tensor-networks}
+*Translating first-order logic into continuous real-valued constraints via fuzzy logic t-norms.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-smolensky-tensor-product-representations -->
+## Smolensky's Tensor Product Representations (TPR) {#sec-smolensky-tensor-product-representations}
+*The foundational algebra for binding variable roles to continuous fillers.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-emergent-symbolic-structure -->
+## Emergent Symbolic Structure {#sec-emergent-symbolic-structure}
+*How trained networks come to show compositional role-filler structure, with the DISCOVER framework as one recent instance.*
+
+## Technologies That Exploit Composition {#sec-comp-technologies}
+*Plan (about 1 page). Hyperdimensional computing for low-power classification and memory, tensor-product and logic-tensor models for neuro-symbolic reasoning, and structured encoders. For each: the capacity per dimension, the cost of binding (circular convolution against elementwise product), and whether the gain over an unstructured network holds at matched parameters.*
+
+## Parts That Know Their Place {#sec-parts-that-know-their}
+*Plan (1 page). Findings: what the swap test shows for each kind of encoder, how recall falls with the number of bound pairs and the dimension, and what the connectionist replies to the systematicity challenge achieved. Achieved for the representation of meaning: meanings that combine (@sec-prop-combine), or the places where they still do not. Computation: whether capacity grows with dimension as the bounds say, and what binding costs. Still out of reach: a combination can be a long text (@sec-ch-meaning-across-scales) and a combined claim can be false (@sec-ch-meaning-and-truth).*
+
+*Sources and gaps (first pass).* Sourced in `references/`: the systematicity challenge, the tensor product, the holographic and hyperdimensional algebras, the surveys and capacity bounds, additive composition, Winoground and its follow-up, SCAN. Not yet read for this chapter: Montague at the page; logic tensor networks (no source in the collection); the human and model scores quoted for Winoground are those of the earlier chapter and are to be re-read.
