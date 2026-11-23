@@ -32,6 +32,7 @@ book:
   - chapters/epilogue.qmd
   appendices:
   - chapters/curse_of_dimensionality.qmd
+  - chapters/zoo_of_models.qmd
   - chapters/solutions.qmd
 format:
   html:

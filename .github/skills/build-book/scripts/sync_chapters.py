@@ -45,7 +45,7 @@ ORDER = [
     "epilogue",
 ]
 # Appendices follow the chapters; the solutions are generated and always come last.
-APPENDICES = ["curse_of_dimensionality"]
+APPENDICES = ["curse_of_dimensionality", "zoo_of_models"]
 
 
 def extract_title_from_qmd(qmd_path: Path) -> str:

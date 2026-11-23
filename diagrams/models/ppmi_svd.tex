@@ -1,0 +1,23 @@
+\documentclass[border=4pt]{standalone}
+\input{../preamble.tex}
+\begin{document}
+\begin{tikzpicture}[font=\small]
+  % PPMI matrix M (V x V) ~ U_d Sigma_d V_d^T
+  \node[draw=basis1!60, fill=lightfill, minimum width=2.6cm, minimum height=2.6cm] (M) {$\mathbf{M}$};
+  \node[annotation, above=1pt of M] {PPMI, $|\mathcal{V}|\times|\mathcal{V}|$};
+  \node[right=0.35cm of M] (approx) {$\approx$};
+  \node[draw=basis1!60, fill=highlight!25, minimum width=0.9cm, minimum height=2.6cm, right=0.35cm of approx] (U) {$\mathbf{U}_d$};
+  \node[annotation, above=1pt of U] {$|\mathcal{V}|\times d$};
+  \node[draw=basis1!60, fill=lightfill, minimum width=0.9cm, minimum height=0.9cm, right=0.2cm of U] (S) {$\mathbf{\Sigma}_d$};
+  \node[annotation, above=1pt of S] {$d\times d$};
+  \node[draw=basis1!60, fill=lightfill, minimum width=2.6cm, minimum height=0.9cm, right=0.2cm of S] (Vt) {$\mathbf{V}_d^{\top}$};
+  \node[annotation, above=1pt of Vt] {$d\times|\mathcal{V}|$};
+  % embedding
+  \draw[flow, highlight] (U.south) -- ++(0,-0.8) coordinate (a);
+  \node[draw=highlight, fill=highlight!25, rounded corners=3pt, below=0.8cm of U, minimum width=3.4cm] (E) {$\mathbf{E}=\mathbf{U}_d\,\mathbf{\Sigma}_d^{p}$, one row per word};
+  \node[annotation, below=2pt of E] {$p=\tfrac12$ here; the row of a word is its vector};
+  % geometry
+  \node[annotation, anchor=west, align=left] at ([xshift=0.6cm,yshift=-0.2cm]E.east)
+    {$d$ orthogonal directions that keep\\the most of $\lVert\mathbf{M}\rVert_F$ (Eckart--Young)};
+\end{tikzpicture}
+\end{document}

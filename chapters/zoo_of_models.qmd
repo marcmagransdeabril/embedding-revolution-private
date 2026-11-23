@@ -1,0 +1,54 @@
+---
+status: provisional
+---
+
+# A Zoo of Models {#sec-ch-zoo-of-models}
+
+The chapters name the technologies that build a space of meaning (PPMI-SVD, SGNS, GloVe, and the ones that will follow) and use them as instruments. This appendix describes each one in the same four lines, so that a chapter can point to it instead of explaining it: where it comes from, what it optimizes, what it outputs, and how it was set up in this book. One model takes one page. Notation follows the summary of the book: $\mathcal{V}$ is the vocabulary, $d$ the dimension of the space, $\mathbf{e}$ the vector of the thing looked at and $\mathbf{v}$ that of the candidate.
+
+{{< pagebreak >}}
+
+## PPMI-SVD: Counting, Then Reducing {#sec-zoo-ppmi-svd}
+
+Latent semantic analysis took the singular value decomposition of a term-by-document count matrix to find a few dimensions that keep most of its structure [@deerwester1990indexing]. Replacing the counts by the pointwise mutual information (PMI) of two words, the logarithm of how much more often they occur together than independence predicts [@church1990word], and keeping only its positive part (PPMI), gives the matrix that is reduced here. Reducing it with an exponent on the singular values is the variant studied by Levy and colleagues [@levy2015improving].
+
+Let $\mathbf{M}$ be the $|\mathcal{V}| \times |\mathcal{V}|$ matrix with $M_{ij} = \max(0, \mathrm{PMI}(i, j))$. Where PMI is the pointwise mutual information of words $i$ and $j$, $\mathrm{PMI}(i, j) = \log \frac{P(i, j)}{P(i) P(j)}$.
+
+The truncated singular value decomposition $\mathbf{M} \approx \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$ is the rank-$d$ matrix closest to $\mathbf{M}$ in the Frobenius norm, the square root of the sum of the squares of all the entries, $\lVert \mathbf{A} \rVert_F = \sqrt{\sum_{ij} A_{ij}^2}$, so that the distance between two matrices is the length of their difference when each is read as one long vector [@eckart1936approximation]. Nothing is trained by gradient descent; the criterion is the best low-rank approximation, and it has a closed form.
+
+The descomposition of the matrix gives one vector of dimension $d$ per word, the rows of $\mathbf{E} = \mathbf{U}_d \mathbf{\Sigma}_d^{p}$. The exponent $p$ moves weight between the leading directions and the rest, and $p = \tfrac{1}{2}$ is the usual choice.
+
+![PPMI-SVD. The matrix of positive PMI is approximated by a product of three small matrices, and the rows of $\mathbf{U}_d$ scaled by the singular values are the word vectors.](../diagrams/models/ppmi_svd.pdf){#fig-zoo-ppmi-svd width=90%}
+
+{{< pagebreak >}}
+
+## SGNS: Predicting a Neighbour {#sec-zoo-sgns}
+
+The skip-gram model predicts the words around a word from the word itself [@mikolov2013efficient]. Negative sampling replaces the softmax over the whole vocabulary by a binary decision between a real neighbour and a few words drawn at random, and subsampling drops frequent words from the text [@mikolov2013distributed]. The combination is called skip-gram with negative sampling (SGNS).
+
+For a word $w$ and a context word $c$ that occurs within the window, with $k$ noise words $c_1, \dots, c_k$ drawn from the unigram distribution raised to the power $3/4$, SGNS minimizes
+$$
+-\log \sigma(\mathbf{e}_w^\top \mathbf{v}_c) - \sum_{i=1}^{k} \log \sigma(-\mathbf{e}_w^\top \mathbf{v}_{c_i}),
+$$
+where $\sigma$ is the logistic function. It uses two tables of vectors, one for the word looked at and one for the candidate. At the optimum, the dot product of a pair approaches its PMI minus $\log k$ [@levy2014neural], so SGNS factorizes a shifted PMI matrix without ever building it.
+
+The table $\mathbf{E}$ of word vectors, one row per word; the table of context vectors is normally discarded.
+
+![Skip-gram with negative sampling. A real context is pulled towards the word, and $k$ noise words are pushed away from it.](../diagrams/models/sgns.pdf){#fig-zoo-sgns width=90%}
+
+{{< pagebreak >}}
+
+## GloVe: Fitting the Log of the Counts {#sec-zoo-glove}
+
+GloVe was proposed as a model that keeps the count statistics of the first family and the learned vectors of the second [@pennington2014glove].
+
+Let $X_{ij}$ be the number of times that word $j$ occurs in the context of word $i$. GloVe minimizes a weighted least-squares error between the dot product of two vectors, plus a bias for each, and the logarithm of the count:
+$$
+\sum_{i,j} f(X_{ij}) \left( \mathbf{w}_i^\top \tilde{\mathbf{w}}_j + b_i + \tilde{b}_j - \log X_{ij} \right)^2, \qquad f(x) = \min\!\big((x / x_{\max})^{3/4}, 1\big),
+$$
+with $x_{\max} = 100$. The weight $f$ makes the rarest pairs count less, since their counts are noisy, and caps the weight of the commonest.
+
+Two sets of vectors, $\mathbf{w}_i$ and $\tilde{\mathbf{w}}_j$, which are equivalent when the count matrix is symmetric and differ only by their random initialization [@pennington2014glove].
+
+![GloVe. The dot product of two word vectors plus two biases is fitted to the logarithm of their co-occurrence count, weighted by $f$.](../diagrams/models/glove.pdf){#fig-zoo-glove width=90%}
+
