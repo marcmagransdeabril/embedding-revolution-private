@@ -30,11 +30,6 @@ WS353_URL = "https://gabrilovich.com/resources/data/wordsim353/wordsim353.zip"
 WS353_SHA256 = "4f12a5fe9650184662306f8ae72c7e6bb44c2627e0275e9f9c6eb067e3441a22"
 ANALOGY_URL = "https://raw.githubusercontent.com/tmikolov/word2vec/master/questions-words.txt"
 ANALOGY_SHA256 = "8c29b3332afc46f3fb8be04cb5297bf96f39aa7131272dff57869b4485b22a36"
-# Pretrained GloVe (Wikipedia 2014 + Gigaword 5, 6 billion tokens, 400,000 words), from the Hugging Face copy of the Stanford file because
-# nlp.stanford.edu was unreachable; the size (862,182,753 bytes) is that of the Stanford file. The SHA-256 is that of the first download.
-# It is kept in .cache/, which git ignores: it is never committed.
-GLOVE6B_URL = "https://huggingface.co/stanfordnlp/glove/resolve/main/glove.6B.zip"
-GLOVE6B_SHA256 = "6471382cdd837544bf3ac72497a38715e845897d265b2b424b4761832009c837"
 WORDNET_URL = "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
 WORDNET_SHA256 = "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52"
 
@@ -154,21 +149,6 @@ def ceiling(ratings: np.ndarray) -> tuple[float, float]:
             if both.sum() >= 10:
                 pairwise.append(spearmanr(ratings[both, r], ratings[both, s]).statistic)
     return float(np.mean(one_vs_rest)), float(np.mean(pairwise))
-
-
-def load_glove6b(index: dict[str, int], dim: int = 100) -> tuple[np.ndarray, np.ndarray]:
-    """The pretrained GloVe vectors (`dim` of 50, 100, 200, 300) of the words of `index`, as an array (words x dim), and a boolean array
-    that says which words of the vocabulary the pretrained file has (the other rows are zero and must be left out of every statistic)."""
-    member = "glove.6B.%dd.%s" % (dim, "txt")  # a member of the pinned zip, not a data file of the repository
-    emb = np.zeros((len(index), dim), dtype=np.float32)
-    present = np.zeros(len(index), dtype=bool)
-    with zipfile.ZipFile(fetch(GLOVE6B_URL, GLOVE6B_SHA256)) as z, z.open(member) as f:
-        for line in f:
-            word, _, values = line.decode("utf-8").partition(" ")
-            if word in index:
-                emb[index[word]] = np.array(values.split(), dtype=np.float32)
-                present[index[word]] = True
-    return emb, present
 
 
 def wordnet_pairs(index: dict[str, int]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
