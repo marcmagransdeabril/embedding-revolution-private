@@ -305,6 +305,23 @@ def bootstrap_mean(values: np.ndarray, resamples: int = 1000, seed: int = 0) -> 
     return float(values.mean()), float(low), float(high)
 
 
+def mean_cosine(u: np.ndarray, weights: np.ndarray | None = None) -> float:
+    """Mean cosine over all pairs of distinct words (each weighted by `weights`, default 1) of the unit rows `u`, with no pair scored:
+    with s the weighted sum of the rows, the sum over ordered pairs of distinct words is |s|^2 - sum_i w_i^2 |u_i|^2."""
+    w = np.ones(len(u)) if weights is None else weights.astype(np.float64)
+    s = w @ u
+    return float((s @ s - (w ** 2 * (u * u).sum(axis=1)).sum()) / (w.sum() ** 2 - (w ** 2).sum()))
+
+
+def bootstrap_mean_cosine(u: np.ndarray, resamples: int = 200, seed: int = 0) -> tuple[float, float, float]:
+    """The exact mean cosine of all pairs of the unit rows `u`, and its percentile-bootstrap 95% interval over the words (a resample
+    gives each word a multinomial count; a word drawn twice is not paired with itself), as a vocabulary of other words would change it."""
+    rng = np.random.default_rng(seed)
+    means = [mean_cosine(u, rng.multinomial(len(u), np.full(len(u), 1 / len(u)))) for _ in range(resamples)]
+    low, high = np.percentile(means, [2.5, 97.5])
+    return mean_cosine(u), float(low), float(high)
+
+
 def nearest(emb: np.ndarray, queries: np.ndarray, k: int, chunk: int = 2000) -> np.ndarray:
     """The k nearest neighbours by cosine (the word itself excluded) of each query word, as an array (queries x k)."""
     u = unit(emb)

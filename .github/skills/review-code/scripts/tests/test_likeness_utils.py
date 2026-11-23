@@ -132,3 +132,12 @@ def test_bootstrap_mean_interval_covers_the_mean_and_shrinks_with_more_items():
     m2, l2, h2 = utils.bootstrap_mean(large, 200)
     assert l1 <= m1 <= h1 and l2 <= m2 <= h2 and (h2 - l2) < (h1 - l1) / 5
     assert utils.bootstrap_mean(np.array([1.0, 1.0, 1.0]), 50) == (1.0, 1.0, 1.0)
+
+
+def test_mean_cosine_is_exact_over_all_pairs_and_its_interval_covers_it():
+    rng = np.random.default_rng(0)
+    u = utils.unit(rng.normal(0.3, 1, (60, 5)).astype(np.float32))
+    brute = np.mean([u[i] @ u[j] for i in range(60) for j in range(60) if i != j])
+    assert utils.mean_cosine(u) == pytest.approx(brute, abs=1e-6)
+    mean, low, high = utils.bootstrap_mean_cosine(u, 100)
+    assert low <= mean <= high and mean == pytest.approx(brute, abs=1e-6)

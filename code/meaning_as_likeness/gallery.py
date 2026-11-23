@@ -182,6 +182,8 @@ def analyse_space(name: str, emb: np.ndarray, present: np.ndarray, band, syn, an
     syn, ant = syn[keep_s], ant[keep_a]
     everything, both = pair_histograms(emb, band, covered, present)
     table = auc_table(emb, both, syn, ant, band)
+    baseline = utils.bootstrap_mean_cosine(utils.unit(emb[present].astype(np.float32)))
+    print(f"\n{name}: mean cosine of all {present.sum() * (present.sum() - 1) // 2:,} pairs of words (95% interval over words) {fmt(baseline)}")
     null = shuffled_aucs(emb, everything, syn, ant, present)
     print(f"\n{name}: AUC over {both.sum():,} covered pairs of {present.sum():,} words (95% interval over words); pooled, and within frequency band")
     for contrast in ("synonym_vs_neither", "antonym_vs_neither", "synonym_vs_antonym"):
@@ -191,10 +193,10 @@ def analyse_space(name: str, emb: np.ndarray, present: np.ndarray, band, syn, an
     assert all(0.45 < null[k][0] < 0.55 for k in null), "the shuffled vocabulary must give 0.5"
     if name == "random Gaussian":
         assert 0.45 < table["pooled"]["synonym_vs_neither"][0] < 0.55, "random vectors must give 0.5"
-        return {"auc": table, "shuffled_vocabulary": null}, {"all pairs": everything.sum(axis=0)}
+        return {"auc": table, "shuffled_vocabulary": null, "mean_cosine": baseline}, {"all pairs": everything.sum(axis=0)}
     sb, ab = pair_bins(emb, syn), pair_bins(emb, ant)
     neither = both.sum(axis=0) - np.bincount(sb, minlength=BINS) - np.bincount(ab, minlength=BINS)
-    return {"auc": table, "shuffled_vocabulary": null}, {"synonyms": np.bincount(sb, minlength=BINS), "antonyms": np.bincount(ab, minlength=BINS),
+    return {"auc": table, "shuffled_vocabulary": null, "mean_cosine": baseline}, {"synonyms": np.bincount(sb, minlength=BINS), "antonyms": np.bincount(ab, minlength=BINS),
                                                          "neither (covered words)": neither}
 
 
