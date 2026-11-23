@@ -1,7 +1,8 @@
 """Question Q1 of the chapter "Meaning as Likeness" (section "A Gallery of Neighbours"): do the neighbours of words look alike, and where
 do the spaces disagree? Plan and decisions: tmp/gallery.md.
 
-Spaces: PPMI-SVD, SGNS and GloVe trained on the same text (a difference comes from the loss), and two random models as nulls: Gaussian
+Spaces: PPMI-SVD and SGNS trained on the same text (a difference comes from the loss), pretrained GloVe 6B (a difference with them
+comes from the data and the loss together), and two random models as nulls: Gaussian
 vectors, and each trained space with its words shuffled among its vectors. There is no sampling: every pair of the 30,000-word
 vocabulary (4.5 x 10^8) is scored by cosine, in blocks, and kept as a histogram per cell of ten frequency bands (equal-size bands by
 rank). The judge is WordNet 3.0: a pair is a synonym (shares a synset), an antonym, or neither, and "neither" is taken among the
@@ -13,22 +14,19 @@ with its nearest neighbours in each space and a control row of random words of t
 Expectation (written before the run): the AUC of synonyms is above 0.5 in the three trained spaces and 0.5 in both random models; the
 AUC of antonyms is also above 0.5, since opposites share contexts; the spaces agree on the neighbours of frequent words more than on
 those of rare words. Prints every number and a verdict for each part; saves results/gallery.json and figures/meaning_as_likeness/
-gallery_neighbours.png and gallery_distributions.png.
+gallery_neighbours.png, gallery_distributions.png, gallery_auc.png, gallery_overlap.png and gallery_edit_distance.png (drawn by gallery_figures.py).
 """
 from __future__ import annotations
 
-import textwrap
-
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import numpy as np
 
+import gallery_figures as figures
 import utils
 
-SPACES = {"PPMI-SVD": "ppmi_svd_s0", "SGNS": "sgns_s0", "GloVe": "glove_s0"}
-PRETRAINED = "GloVe 6B"  # same loss as GloVe, 350 times more text: a difference with GloVe comes from the data
+SPACES = {"PPMI-SVD": "ppmi_svd_s0", "SGNS": "sgns_s0"}  # same text, two losses: a difference between them comes from the loss
+PRETRAINED = "GloVe 6B"  # pretrained on 6 billion words (350 times the text) with the GloVe loss: differs in both the loss and the data
+# The GloVe trained on text8 (glove_s0) is left out: its SimLex-999 correlation is 0.09 against 0.27 for the other two and its
+# neighbours are not words that go together, so it measures a training that did not work and not the GloVe loss.
 TRAINED = [*SPACES, PRETRAINED]
 BANDS, BINS, MIN_PAIRS = 10, 2000, 30
 EDIT_PAIRS, SHUFFLES, K = 300_000, 20, 5
@@ -178,45 +176,6 @@ def overlaps(spaces: dict, common: np.ndarray) -> tuple[dict, dict]:
     return neighbours, per_word
 
 
-def draw_gallery(vocab, queries, controls, neighbours, per_word, rule: dict) -> None:
-    names = list(neighbours)
-    fig, ax = plt.subplots(figsize=(16, 6.5))
-    ax.axis("off")
-    columns = ["band", "query"] + names + ["control (random, same band)"]
-    xs = [0.0, 0.035, 0.15, 0.36, 0.57, 0.78]
-    for x, c in zip(xs, columns):
-        ax.text(x, 1.0, c, fontweight="bold", fontsize=8, va="top")
-    for r, q in enumerate(queries):
-        y = 0.94 - r * 0.093
-        mark = {v: k for k, v in rule.items()}.get(int(q), "")
-        cells = [str(r), vocab[q] + (f"\n[{mark}]" if mark else "")]
-        cells += [" ".join(vocab[i] for i in neighbours[n][q]) for n in names] + [" ".join(vocab[i] for i in controls[r])]
-        for k, (x, c) in enumerate(zip(xs, cells)):
-            ax.text(x, y, c if k < 2 else textwrap.fill(c, 34), fontsize=8, va="top")
-    fig.savefig(utils.FIGURES / "gallery_neighbours.png", dpi=200, bbox_inches="tight")
-    plt.close(fig)
-
-
-def draw_distributions(curves: dict, edit: dict, out: dict) -> None:
-    fig, axes = plt.subplots(2, 4, figsize=(16, 6))
-    axes[1][3].axis("off")
-    centres = (np.arange(BINS) + 0.5) / BINS * 2 - 1
-    for ax, (name, c) in zip(axes[0], [(n, c) for n, c in curves.items() if n in TRAINED]):
-        for label, hist in c.items():
-            coarse = hist.reshape(-1, 20).sum(axis=1)  # 100 bins of width 0.02: the classes of a few hundred pairs are too noisy at 2000
-            ax.plot(centres.reshape(-1, 20).mean(axis=1), coarse / coarse.sum() / 0.02, label=label, lw=1.2)
-        ax.set(title=name, xlim=(-0.4, 1), xlabel="cosine", ylabel="density")
-        ax.legend(fontsize=6)
-    axes[1][0].hist(edit["edit"], bins=40, color="grey")
-    axes[1][0].set(title="normalized edit distance, random pairs", xlabel="edit distance")
-    for ax, name in zip(axes[1][1:], ["SGNS", "random Gaussian"]):
-        ax.hist2d(edit["edit"], edit["cosine"][name], bins=40, cmap="Greys", cmin=1)
-        ax.set(title=f"{name}: rho = {edit['rho'][name][0]:.3f}", xlabel="edit distance", ylabel="cosine")
-    fig.tight_layout()
-    fig.savefig(utils.FIGURES / "gallery_distributions.png", dpi=200)
-    plt.close(fig)
-
-
 def analyse_space(name: str, emb: np.ndarray, present: np.ndarray, band, syn, ant, covered) -> tuple[dict, dict]:
     """The AUC tables of one space, with the shuffled-vocabulary null, printed; and the curves to draw."""
     keep_s, keep_a = present[syn].all(axis=1), present[ant].all(axis=1)
@@ -280,7 +239,7 @@ def report_neighbours(spaces: dict, vocab, band, common: np.ndarray, results: di
             "drawn at random": int(np.random.default_rng(1).choice(queries))}
     results["discussed_queries"] = {k: vocab[v] for k, v in rule.items()}
     print("queries discussed in the text: " + ", ".join(f"{k}: {vocab[v]}" for k, v in rule.items()))
-    draw_gallery(vocab, queries, controls, neighbours, per_word, rule)
+    figures.neighbours_gallery(vocab, queries, controls, neighbours, rule)
 
 
 def main() -> None:
@@ -310,8 +269,11 @@ def main() -> None:
     report_cells_and_expectations(results)
     edit = report_edit_distance(spaces, vocab, common, results)
     report_neighbours(spaces, vocab, band, common, results)
-    draw_distributions(curves, edit, results)
     utils.save_results("gallery", results)
+    figures.cosine_by_class({n: curves[n] for n in TRAINED}, (np.arange(BINS) + 0.5) / BINS * 2 - 1)
+    figures.auc_bars(results, TRAINED + ["random Gaussian"])
+    figures.overlap_by_band(results["overlap_per_band"])
+    figures.edit_distance(edit)
 
 
 if __name__ == "__main__":

@@ -218,3 +218,17 @@ div.test {
 div.test p {
   margin: 0.3em 0;
 }
+
+/* The answer to a test of likeness: same frame, grey ground, heavy left rule. */
+div.test-answer {
+  border: 1px solid #555;
+  border-left: 4px solid #555;
+  border-radius: 0;
+  padding: 0.7em 1.1em;
+  margin: 1rem 0;
+  background-color: #f2f2f2;
+}
+
+div.test-answer p {
+  margin: 0.3em 0;
+}
