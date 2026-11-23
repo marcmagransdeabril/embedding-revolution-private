@@ -12,9 +12,9 @@ But, as we will clarify in the next section in a short review of classic philoso
 
 The goal of this chapter is to find out what nearness in an embedding space can say about likeness of meaning, and to tell apart the nearness that the training put there on purpose from the nearness that appeared on its own. Two words that share a window of text are near because the loss pulled them together. However, the same training can put near two words that never occurred together. Each section takes one question of that goal.
 
-We start with what likeness of meaning should be, and from it we derive eighteen questions to verify and/or refute one aspect of it (@sec-likeness-which). The first twelve questions are tried in the sections that follow, in order. Do the nearest neighbours of random words look alike (@sec-gallery-neighbours)? Does the nearness follow similarity, association or relatedness (@sec-likeness-relation-split)? Does the same text give the same neighbours when the training objective changes, does agreement keep growing with more text, and is what sits far below the random pairs also unlike (@sec-loss-decides-near)? Are two words near only because the training text showed them together, or is there nearness that was not built in (@sec-likeness-built-in-emergent)? Can a cosine distance, as it comes out of a model, be trusted as a measure of likeness (@sec-reading-nearness-correctly)? Does likeness behave like a distance, which people's judgements of likeness do not (@sec-likeness-not-distance), and where are near things not alike, such as opposites and negations, and does a sentence move as one of its words is replaced, and are the members of a category near by degrees (@sec-near-not-alike)? How much of the nearness changes with the random seed, the algorithm or the data set used during training (@sec-likeness-many-spaces)?
+We start with what likeness of meaning should be, and from it we derive nineteen questions to verify and/or refute one aspect of it (@sec-likeness-which). The first twelve questions are tried in the sections that follow, in order. Do the nearest neighbours of random words look alike (@sec-gallery-neighbours)? Does the nearness follow similarity, association or relatedness (@sec-likeness-relation-split)? Does the same text give the same neighbours when the training objective changes, does agreement keep growing with more text, and is what sits far below the random pairs also unlike (@sec-loss-decides-near)? Are two words near only because the training text showed them together, or is there nearness that was not built in (@sec-likeness-built-in-emergent)? Can a cosine distance, as it comes out of a model, be trusted as a measure of likeness (@sec-reading-nearness-correctly)? Does likeness behave like a distance, which people's judgements of likeness do not (@sec-likeness-not-distance), and where are near things not alike, such as opposites and negations, and does a sentence move as one of its words is replaced, and are the members of a category near by degrees (@sec-near-not-alike)? How much of the nearness changes with the random seed, the algorithm or the data set used during training (@sec-likeness-many-spaces)?
 
-The other six questions cannot be answered with one static vector and are handed to other chapters: coordinates (@sec-ch-meaning-as-arrangement), context (@sec-ch-meaning-in-context), reference and truth (@sec-ch-meaning-and-truth), regions (@sec-ch-meaning-as-region), a second sense (@sec-ch-meaning-across-senses) and the relation between two near items (@sec-ch-meaning-as-difference).
+The other seven questions cannot be answered with one static vector and are handed to other chapters: coordinates (@sec-ch-meaning-as-arrangement), context (@sec-ch-meaning-in-context), reference and truth (@sec-ch-meaning-and-truth), regions (@sec-ch-meaning-as-region), a second sense (@sec-ch-meaning-across-senses), the relation between two near items (@sec-ch-meaning-as-difference) and the separation of the relations that one nearness mixes (@sec-meaning-meaning).
 
 Once the twelve questions are answered, the last section will complete the chapter, summarizing the findings and discussing what is still out of reach (@sec-likeness-found).
 
@@ -162,14 +162,6 @@ Then, if symbols need something outside the symbols, does a second sense help to
 *See* @sec-ch-meaning-across-senses.
 :::
 
-The neighbours of @sec-gallery-neighbours will show that near words are related in several ways (forms of one word, words of one field, opposites), and a cosine does not say which. This question comes from that evidence and from no philosopher.
-
-::: {.test}
-**Q18. Which relation holds between two near items?** A near pair says that some relation holds. Can a space tell which one exists between two words, sentences, texts, sounds or pictures?
-
-*Not answerable in this chapter, because a distance carries no label for the relation. See* @sec-ch-meaning-as-difference.
-:::
-
 ::: {.questions}
 1. In Frege's telescope, what do the Moon, the real image in the object glass and the image on each observer's retina stand for, and which of them is a learned vector closest to? Why?
 
@@ -226,7 +218,23 @@ We run five tests, one at a time, each answering something the previous one coul
 ::: {.test-answer #a-likeness-1}
 **ANSWER QUESTION 1.** [Q1](#q-likeness-1) asked whether the neighbours of random words look alike to a reader, and where the spaces disagree.
 
-*Yes, for the words that the spaces know well.* The neighbours of random words in the three trained spaces are words that a reader accepts as going with the query, and the neighbours of random words of the same band are not. Against a judge that knows nothing about the spaces, WordNet, the neighbours are far more often linked to the query than random words: an AUC of 0.82 to 0.90 for synonyms and 0.94 to 0.98 for antonyms, against 0.50 for random vectors and for shuffled vocabularies. *But "alike" is not one relation.* The neighbours are forms of the same word, words of the same field, members of the same kind, and opposites, and opposites are nearer than synonyms in about three comparisons out of four. Q2 and Q9 take that up, and Q18 asks whether a space can say which relation holds. *And it fails where words are rare or have two senses.* WordNet covers less than half of the rare words, the neighbours of a polysemous word follow the sense that the corpus favours (`singularities`), and the agreement between spaces falls from 0.49 to 0.19 between the most frequent and the rarest band. *The spaces disagree* by loss, since PPMI-SVD and SGNS agree on less than half of the neighbours of the most frequent words, and by data, since both agree less with GloVe 6B. Those are Q3, Q4 and Q12, and the null that all of them read against is the one measured here.
+*Yes, for the words that the spaces know well.* The neighbours of random words in the three trained spaces are words that a reader accepts as going with the query, and the neighbours of random words of the same band are not. Against a judge that knows nothing about the spaces, WordNet, the neighbours are far more often linked to the query than random words: an AUC of 0.82 to 0.90 for synonyms and 0.94 to 0.98 for antonyms, against 0.50 for random vectors and for shuffled vocabularies. *But "alike" is not one relation.* The neighbours are forms of the same word, words of the same field, members of the same kind, and opposites, and opposites are nearer than synonyms in about three comparisons out of four. Q2 and Q9 take that up, and Q18 and Q19 ask whether a space can say which relation holds and how the relations can be separated. *And it fails where words are rare or have two senses.* WordNet covers less than half of the rare words, the neighbours of a polysemous word follow the sense that the corpus favours (`singularities`), and the agreement between spaces falls from 0.49 to 0.19 between the most frequent and the rarest band. *The spaces disagree* by loss, since PPMI-SVD and SGNS agree on less than half of the neighbours of the most frequent words, and by data, since both agree less with GloVe 6B. Those are Q3, Q4 and Q12, and the null that all of them read against is the one measured here.
+:::
+
+The gallery showed that near words are related in several ways (forms of one word, words of one field, opposites), and a cosine does not say which. This question comes from that evidence and from no philosopher.
+
+::: {.test}
+**Q18. Which relation holds between two near items?** A near pair says that some relation holds. Can a space tell which one exists between two words, sentences, texts, sounds or pictures?
+
+*Not answerable in this chapter, because a distance carries no label for the relation. See* @sec-ch-meaning-as-difference.
+:::
+
+If a cosine does not say which relation holds, can the relations be told apart inside one space? Context is one answer, since a second input can say in which respect two items are compared, but "context" is not yet a precise question with a precise answer.
+
+::: {.test}
+**Q19. How can the relations that a single nearness mixes be disentangled?** Given a space in which near words are similar, associated, opposite or forms of one word, what has to be added (a context, a relation given as input, a separate space for each relation) so that the same pair can be asked about one relation at a time, and does the answer hold for sentences, images and sounds as well as for words?
+
+*Not answerable in this chapter, and the place that answers it is not yet known. The chapters on difference (@sec-ch-meaning-as-difference) and context (@sec-ch-meaning-in-context) may give partial answers; until one does, see the epilogue (@sec-meaning-meaning).*
 :::
 
 ::: {.questions}
