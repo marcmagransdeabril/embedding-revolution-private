@@ -355,15 +355,6 @@ div.test {
   break-inside: avoid;
 }
 
-div.test::before {
-  content: "TEST";
-  display: block;
-  font-variant: small-caps;
-  letter-spacing: 0.08em;
-  font-size: 0.8em;
-  color: #555;
-}
-
 div.test p {
   margin: 0.3em 0;
 }

@@ -270,20 +270,11 @@ solutions there; `make validate` fails if this file is out of date.
 
 13. The script `loss_agreement.py` computes the figure from the spaces that `train_spaces.py` writes (text8, 30,000 words, window of 5, 100 dimensions, three seeds per loss). The steps are: count and take the PPMI of the pairs; reduce it by SVD; train SGNS and GloVe on the same pairs; score each pair of SimLex-999 by the cosine of its two words; correlate with the similarity column and with the association column (`scipy.stats.spearmanr`); repeat with the cosine of the unreduced PPMI rows; and draw the bars with the spread over the seeds and the agreement of the raters as the ceiling. The scripts were written and not yet run together, so the figure of the chapter is still the stub.
 
-14. The caption of each image (the diagonal of the matrix of scores) is pulled towards it, and the other captions of the batch are pushed away from it, and the same for each caption against the other images. The loss says nothing about two images of the same dog, except that if they are in the same batch with different captions each is pushed from the other's caption. If two images are near, it is an emergent effect of both being near their captions, and only that kind of nearness is evidence about meaning and not about the loss [@radford2021learning].
+14. A word is pulled towards the contexts observed with it in the window, and pushed away from contexts sampled at random as negatives. Two synonyms that never share a window are never pulled together directly, and if one is sampled as a negative of the other they are pushed apart. If they end up near, it is because the contexts that pull each of them are alike [@levy2014neural].
 
-15. In CLIP-like models the image embeddings and the text embeddings occupy separate regions of the space, at arm's length from each other, even when the model is trained to align them. The gap comes from the initialization together with the contrastive loss, and its size changes the behaviour of the model downstream [@liang2022modalitygap].
+15. A pair with a positive count is near partly because the loss was given exactly that pair, so the nearness may only repeat the text. A pair with a zero count has no such term, so what remains is shared company, which is what the distributional hypothesis says meaning is. The comparison is confounded by frequency, because a zero count is mostly a property of rare words in a finite corpus, whose vectors are also poorer, and by the judge, since WordNet covers fewer rare words. The pairs are therefore compared inside frequency bands, and the coverage of the judge is reported by cell.
 
-16. With the `transformers` library, load a CLIP model and its processor, encode the image and the texts, normalise both to unit length and take the dot products:
-
-   ```python
-   words = ["dog", "puppy", "wolf", "car", "doorbell"]
-   image = model.get_image_features(**processor(images=img, return_tensors="pt"))
-   text = model.get_text_features(**processor(text=words, return_tensors="pt", padding=True))
-   cosines = (image / image.norm(dim=-1, keepdim=True)) @ (text / text.norm(dim=-1, keepdim=True)).T
-   ```
-
-   All the cosines are positive and rather close to each other, because of the modality gap, so look at the order and not at the values; "dog" and "puppy" should come first, "wolf" next, and "car" and "doorbell" last. A prompt such as "a photo of a dog" usually works better than the bare word.
+16. Count the pairs in a window of 5 over the text, keep a sparse matrix of counts, draw the pairs with the seed of the gallery, label them with the WordNet parser, and compute the area as the probability that a synonym pair has a higher cosine than an unrelated pair of the same cell and band (`scipy.stats.mannwhitneyu`, area equal to U divided by the product of the sizes). The result is a number to be read after the run; the shuffled-vocabulary space must give 0.5.
 
 17. A mean vector and a few dominant directions are shared by all the words of a space, so they add the same component to every cosine: all the cosines become high, and the part that tells the words apart is a small share of the vector. Subtracting the mean and removing the top directions removes that common part [@mu2018allbutthetop]. The correlation with the judge rises if the common part was noise for the judgement, for example when it follows the frequency of the words, and it does not rise if the raw nearness was not an artefact; the test needs a null (the judge with its labels shuffled, random vectors) to say how much of a change is more than chance.
 
@@ -308,4 +299,21 @@ solutions there; `make validate` fails if this file is out of date.
 27. They train 50 models per algorithm (LSA, SGNS, GloVe and PPMI-SVD) on the same corpus, on shuffled documents and on a bootstrap sample of the documents. They find that the nearest-neighbour similarities "are highly sensitive to small changes in the training corpus", more so for smaller corpora and for longer documents, with cases of zero overlap in the top 10 between two bootstrap samples; they advise averaging over bootstrap samples and not relying on one model [@antoniak2018evaluating].
 
 28. The script `stability.py` takes 2,000 query words and, for each pair of spaces, the share of the $k$ nearest neighbours that they have in common (for $k$ from 1 to 50), averaged over the words: seeds (three seeds of each loss), losses (counting against SGNS against GloVe), texts (the two halves of text8, and the text with 10 per cent of it removed). It also gives the agreement of the global geometry, the Spearman correlation of the cosines of 200,000 random pairs. The seed gap is the floor: a difference between losses or texts counts only if it lies clearly below it. The scripts were written and not yet run together, so the figure of the chapter is still the stub.
+:::
+
+::: {.answers ref="meaning_across_senses"}
+1. The caption of each image (the diagonal of the matrix of scores) is pulled towards it, and the other captions of the batch are pushed away from it, and the same for each caption against the other images. The loss says nothing about two images of the same dog, except that if they are in the same batch with different captions each is pushed from the other's caption. If two images are near, it is an emergent effect of both being near their captions, and only that kind of nearness is evidence about meaning and not about the loss [@radford2021learning].
+
+2. In CLIP-like models the image embeddings and the text embeddings occupy separate regions of the space, at arm's length from each other, even when the model is trained to align them. The gap comes from the initialization together with the contrastive loss, and its size changes the behaviour of the model downstream [@liang2022modalitygap].
+
+3. With the `transformers` library, load a CLIP model and its processor, encode the image and the texts, normalise both to unit length and take the dot products:
+
+   ```python
+   words = ["dog", "puppy", "wolf", "car", "doorbell"]
+   image = model.get_image_features(**processor(images=img, return_tensors="pt"))
+   text = model.get_text_features(**processor(text=words, return_tensors="pt", padding=True))
+   cosines = (image / image.norm(dim=-1, keepdim=True)) @ (text / text.norm(dim=-1, keepdim=True)).T
+   ```
+
+   All the cosines are positive and rather close to each other, because of the modality gap, so look at the order and not at the values; "dog" and "puppy" should come first, "wolf" next, and "car" and "doorbell" last. A prompt such as "a photo of a dog" usually works better than the bare word.
 :::
