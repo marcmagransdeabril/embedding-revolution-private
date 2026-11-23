@@ -8,6 +8,8 @@ a mismatch stops the script. The files are kept in `.cache/` next to this file (
 from __future__ import annotations
 
 import hashlib
+import itertools
+import tarfile
 import urllib.request
 import zipfile
 from collections import Counter
@@ -28,10 +30,21 @@ WS353_URL = "https://gabrilovich.com/resources/data/wordsim353/wordsim353.zip"
 WS353_SHA256 = "4f12a5fe9650184662306f8ae72c7e6bb44c2627e0275e9f9c6eb067e3441a22"
 ANALOGY_URL = "https://raw.githubusercontent.com/tmikolov/word2vec/master/questions-words.txt"
 ANALOGY_SHA256 = "8c29b3332afc46f3fb8be04cb5297bf96f39aa7131272dff57869b4485b22a36"
+# Pretrained GloVe (Wikipedia 2014 + Gigaword 5, 6 billion tokens, 400,000 words), from the Hugging Face copy of the Stanford file because
+# nlp.stanford.edu was unreachable; the size (862,182,753 bytes) is that of the Stanford file. The SHA-256 is that of the first download.
+# It is kept in .cache/, which git ignores: it is never committed.
+GLOVE6B_URL = "https://huggingface.co/stanfordnlp/glove/resolve/main/glove.6B.zip"
+GLOVE6B_SHA256 = "6471382cdd837544bf3ac72497a38715e845897d265b2b424b4761832009c837"
+WORDNET_URL = "https://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.gz"
+WORDNET_SHA256 = "640db279c949a88f61f851dd54ebbb22d003f8b90b85267042ef85a3781d3a52"
 
 
 def sha256_of(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    with path.open("rb") as f:  # in blocks: some pinned files are close to a gigabyte
+        for block in iter(lambda: f.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
 
 
 def fetch(url: str, sha256: str) -> Path:
@@ -143,6 +156,118 @@ def ceiling(ratings: np.ndarray) -> tuple[float, float]:
     return float(np.mean(one_vs_rest)), float(np.mean(pairwise))
 
 
+def load_glove6b(index: dict[str, int], dim: int = 100) -> tuple[np.ndarray, np.ndarray]:
+    """The pretrained GloVe vectors (`dim` of 50, 100, 200, 300) of the words of `index`, as an array (words x dim), and a boolean array
+    that says which words of the vocabulary the pretrained file has (the other rows are zero and must be left out of every statistic)."""
+    member = "glove.6B.%dd.%s" % (dim, "txt")  # a member of the pinned zip, not a data file of the repository
+    emb = np.zeros((len(index), dim), dtype=np.float32)
+    present = np.zeros(len(index), dtype=bool)
+    with zipfile.ZipFile(fetch(GLOVE6B_URL, GLOVE6B_SHA256)) as z, z.open(member) as f:
+        for line in f:
+            word, _, values = line.decode("utf-8").partition(" ")
+            if word in index:
+                emb[index[word]] = np.array(values.split(), dtype=np.float32)
+                present[index[word]] = True
+    return emb, present
+
+
+def wordnet_pairs(index: dict[str, int]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """The lexical judge of the chapter: WordNet 3.0 read from its data files (no NLTK), restricted to the words of `index`.
+
+    Returns (synonyms, antonyms, covered): two arrays (n x 2) of word indices i < j, and a boolean array over the vocabulary that
+    says which words are in WordNet at all. Two single words are synonyms if they share a synset, in any sense; they are antonyms if a
+    synset lists one as the lexical antonym ("!" pointer) of the other. Multi-word lemmas never match a vocabulary word. A pair that
+    is both (it happens with polysemous words) counts as a synonym, which is the precedence stated in the plan: synonym before antonym.
+    """
+    kinds = {"noun": "n", "verb": "v", "adj": "a", "adv": "r"}
+    synsets: dict[tuple[str, str], list[str]] = {}
+    rows: dict[str, list[list[str]]] = {}
+    with tarfile.open(fetch(WORDNET_URL, WORDNET_SHA256)) as tar:
+        for kind in kinds:
+            lines = tar.extractfile(f"WordNet-3.0/dict/data.{kind}").read().decode("utf-8").splitlines()
+            rows[kind] = [l.split() for l in lines if not l.startswith("  ")]
+    for kind, fields in rows.items():
+        for f in fields:  # f = offset, file number, type, number of words (hex), then (word, lex id) pairs, then the pointers
+            synsets[(kinds[kind], f[0])] = [f[4 + 2 * i].lower().split("(")[0] for i in range(int(f[3], 16))]
+    synonyms: set[tuple[int, int]] = set()
+    antonyms: set[tuple[int, int]] = set()
+    covered = np.zeros(len(index), dtype=bool)
+    for kind, fields in rows.items():
+        for f in fields:
+            words = synsets[(kinds[kind], f[0])]
+            inside = sorted({index[w] for w in words if w in index})
+            covered[inside] = True
+            synonyms.update(itertools.combinations(inside, 2))
+            at = 4 + 2 * len(words)
+            for k in range(int(f[at])):
+                symbol, offset, pos, source_target = f[at + 1 + 4 * k: at + 5 + 4 * k]
+                source, target = int(source_target[:2], 16), int(source_target[2:], 16)
+                if symbol == "!" and source and target:
+                    a, b = words[source - 1], synsets[("a" if pos == "s" else pos, offset)][target - 1]
+                    if a in index and b in index and a != b:
+                        antonyms.add(tuple(sorted((index[a], index[b]))))
+    antonyms -= synonyms
+    as_array = lambda s: np.array(sorted(s), dtype=np.int32).reshape(-1, 2)
+    return as_array(synonyms), as_array(antonyms), covered
+
+
+def edit_distance(a: str, b: str) -> float:
+    """Levenshtein distance between two words divided by the length of the longer one (0 for equal words, 1 for no letter in common
+    at the same place)."""
+    previous = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        current = [i]
+        for j, cb in enumerate(b, 1):
+            current.append(min(previous[j] + 1, current[j - 1] + 1, previous[j - 1] + (ca != cb)))
+        previous = current
+    return previous[-1] / max(len(a), len(b), 1)
+
+
+def auc_against_histogram(positive_bins: np.ndarray, negative_hist: np.ndarray, weights: np.ndarray | None = None) -> float:
+    """Probability that a positive pair has a higher score than a negative one (ties count one half), when the scores are binned.
+
+    `positive_bins` are the bins of the positive pairs (with their `weights`, 1 if omitted) and `negative_hist` the number of
+    negative pairs in each bin. This is the area under the ROC curve, computed from the histogram of 4.5 x 10^8 negatives that
+    would not fit in memory as scores."""
+    w = np.ones(len(positive_bins)) if weights is None else weights.astype(np.float64)
+    negatives = negative_hist.astype(np.float64)
+    below = np.cumsum(negatives) - negatives
+    return float((w * (below[positive_bins] + 0.5 * negatives[positive_bins])).sum() / (w.sum() * negatives.sum()))
+
+
+def stratified_auc(positive_bins: np.ndarray, positive_cells: np.ndarray, negative_hists: np.ndarray,
+                   weights: np.ndarray | None = None) -> float:
+    """The AUC within strata: the probability that a positive pair is nearer than a negative pair *of the same cell* (ties one half),
+    where `negative_hists` has one histogram per cell. Cells are the frequency bands of the two words, so a pair of frequent words is
+    never compared with a pair of rare ones, whose cosines differ for that reason alone."""
+    w = np.ones(len(positive_bins)) if weights is None else weights.astype(np.float64)
+    negatives = negative_hists.astype(np.float64)
+    below = np.cumsum(negatives, axis=1) - negatives
+    wins = (w * (below[positive_cells, positive_bins] + 0.5 * negatives[positive_cells, positive_bins])).sum()
+    pairs = (np.bincount(positive_cells, weights=w, minlength=len(negatives)) * negatives.sum(axis=1)).sum()
+    return float(wins / pairs)
+
+
+def bootstrap_words_auc(positive_pairs: np.ndarray, positive_bins: np.ndarray, negative_hist: np.ndarray, size: int,
+                        resamples: int = 200, seed: int = 0, positive_cells: np.ndarray | None = None) -> tuple[float, float, float]:
+    """The AUC of `auc_against_histogram` (or, if `positive_cells` is given and `negative_hist` has one histogram per cell, the
+    `stratified_auc`), with a 95% percentile interval from resampling the words: each word is drawn with replacement, and a pair
+    counts as often as the product of the times its two words were drawn. The negatives are not resampled (they are millions and
+    their distribution does not move)."""
+    area = (lambda w: auc_against_histogram(positive_bins, negative_hist, w)) if positive_cells is None else \
+           (lambda w: stratified_auc(positive_bins, positive_cells, negative_hist, w))
+    point = area(None)
+    rng = np.random.default_rng(seed)
+    boots = []
+    for _ in range(resamples):
+        times = np.bincount(rng.integers(0, size, size), minlength=size)
+        w = times[positive_pairs[:, 0]] * times[positive_pairs[:, 1]]
+        if w.sum() > 0:
+            boots.append(area(w))
+    low, high = np.percentile(boots, [2.5, 97.5])
+    return point, float(low), float(high)
+
+
 # --- statistics
 def unit(x: np.ndarray) -> np.ndarray:
     """Rows scaled to length 1 (a zero row stays zero)."""
@@ -170,6 +295,14 @@ def spearman_interval(score: np.ndarray, judge: np.ndarray, resamples: int = 100
         boots.append(spearmanr(score[pick], judge[pick]).statistic)
     low, high = np.nanpercentile(boots, [2.5, 97.5])
     return rho, float(low), float(high)
+
+
+def bootstrap_mean(values: np.ndarray, resamples: int = 1000, seed: int = 0) -> tuple[float, float, float]:
+    """Mean of `values` and its percentile-bootstrap 95% interval over the items (a rate is the mean of a 0/1 array)."""
+    rng = np.random.default_rng(seed)
+    means = [values[rng.integers(0, len(values), len(values))].mean() for _ in range(resamples)]
+    low, high = np.percentile(means, [2.5, 97.5])
+    return float(values.mean()), float(low), float(high)
 
 
 def nearest(emb: np.ndarray, queries: np.ndarray, k: int, chunk: int = 2000) -> np.ndarray:

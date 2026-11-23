@@ -63,3 +63,72 @@ def test_spearman_interval_contains_the_correlation_and_is_reproducible():
     y = x + np.random.default_rng(0).normal(0, 5, 50)
     rho, low, high = utils.spearman_interval(x, y, resamples=200)
     assert low <= rho <= high and utils.spearman_interval(x, y, resamples=200)[1] == low
+
+
+def test_edit_distance_has_known_values():
+    assert utils.edit_distance("kitten", "sitting") == pytest.approx(3 / 7)
+    assert utils.edit_distance("dog", "dog") == 0 and utils.edit_distance("", "ab") == 1
+
+
+def test_auc_from_histogram_matches_the_pairwise_definition():
+    # negatives at scores 0 (x2), 1 (x1), 3 (x1); positives at scores 1 and 2; P(pos > neg) with ties as one half
+    negatives = np.array([2, 1, 0, 1])
+    expected = (np.mean([2 > 0, 2 > 0, 2 > 1, 2 > 3]) + np.mean([1 > 0, 1 > 0, 0.5, 1 > 3])) / 2
+    assert utils.auc_against_histogram(np.array([1, 2]), negatives) == pytest.approx(expected)
+    assert utils.auc_against_histogram(np.array([1, 2]), negatives, np.array([1, 0])) == pytest.approx(np.mean([1, 1, 0.5, 0]))
+
+
+def test_auc_of_scores_with_no_structure_is_one_half():
+    rng = np.random.default_rng(0)
+    negatives = np.bincount(rng.integers(0, 50, 100_000), minlength=50)
+    assert utils.auc_against_histogram(rng.integers(0, 50, 5_000), negatives) == pytest.approx(0.5, abs=0.02)
+
+
+def test_bootstrap_interval_contains_the_point_estimate_and_is_narrow_for_many_pairs():
+    rng = np.random.default_rng(1)
+    pairs = np.sort(rng.integers(0, 200, (3_000, 2)), axis=1)
+    bins = rng.integers(0, 50, 3_000) + 5
+    negatives = np.bincount(rng.integers(0, 50, 100_000), minlength=60)
+    point, low, high = utils.bootstrap_words_auc(pairs, bins, negatives, 200, resamples=50)
+    assert low <= point <= high and high - low < 0.1
+
+
+def test_wordnet_pairs_reads_synonyms_and_antonyms_from_data_files(tmp_path, monkeypatch):
+    import io
+    import tarfile
+    big = "00000001 00 a 02 big 0 large 0 001 ! 00000002 a 0101 | gloss"
+    small = "00000002 00 a 01 small 0 001 ! 00000001 a 0101 | gloss"
+    data = {"noun": "  license line\n", "verb": "", "adv": "", "adj": f"  license line\n{big}\n{small}\n"}
+    path = tmp_path / "wn.tar.gz"
+    with tarfile.open(path, "w:gz") as tar:
+        for kind, text in data.items():
+            blob = text.encode()
+            info = tarfile.TarInfo(f"WordNet-3.0/dict/data.{kind}")
+            info.size = len(blob)
+            tar.addfile(info, io.BytesIO(blob))
+    monkeypatch.setattr(utils, "fetch", lambda url, sha: path)
+    index = {"big": 0, "large": 1, "small": 2, "huge": 3}
+    synonyms, antonyms, covered = utils.wordnet_pairs(index)
+    assert synonyms.tolist() == [[0, 1]]
+    assert antonyms.tolist() == [[0, 2]]  # small is the antonym of big and large is not listed with it: the pointer is word to word
+    assert covered.tolist() == [True, True, True, False]
+
+
+def test_stratified_auc_does_not_compare_across_cells():
+    # cell 0 holds low scores, cell 1 high scores; a positive at bin 1 of cell 0 beats both negatives of its own cell (bins 0, 0)
+    # and would lose to the negatives of cell 1 (bin 3) in a pooled comparison
+    negatives = np.array([[2, 0, 0, 0], [0, 0, 0, 2]])
+    assert utils.stratified_auc(np.array([1]), np.array([0]), negatives) == pytest.approx(1.0)
+    assert utils.auc_against_histogram(np.array([1]), negatives.sum(axis=0)) == pytest.approx(0.5)
+    # a second positive ties with both negatives of cell 1 (one half), weighted 3: (1 x 2 + 3 x 1) / (1 x 2 + 3 x 2) = 5 / 8
+    both = utils.stratified_auc(np.array([1, 3]), np.array([0, 1]), negatives, np.array([1, 3]))
+    assert both == pytest.approx(5 / 8)
+
+
+def test_bootstrap_mean_interval_covers_the_mean_and_shrinks_with_more_items():
+    rng = np.random.default_rng(0)
+    small, large = rng.normal(0, 1, 50), rng.normal(0, 1, 5_000)
+    m1, l1, h1 = utils.bootstrap_mean(small, 200)
+    m2, l2, h2 = utils.bootstrap_mean(large, 200)
+    assert l1 <= m1 <= h1 and l2 <= m2 <= h2 and (h2 - l2) < (h1 - l1) / 5
+    assert utils.bootstrap_mean(np.array([1.0, 1.0, 1.0]), 50) == (1.0, 1.0, 1.0)
