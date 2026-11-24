@@ -219,6 +219,8 @@ The statistic for this third test is the probability that a randomly chosen syno
 
 ![Percentage of the five nearest neighbours that two spaces have in common, in each frequency band (band 0 holds the 3,000 most frequent words, band 9 the 3,000 rarest; the numbers under each band are its range of word ranks, in thousands). Bootstrap 95% interval over words shown.](../figures/meaning_as_likeness/gallery_overlap.png){#fig-gallery-overlap width=100%}
 
+So, we can conclude with an answer to our initial question:
+
 ::: {.test-answer #a-likeness-1}
 **ANSWER [QUESTION 1](#q-likeness-1). Do the neighbours of random words look alike?** 
 
