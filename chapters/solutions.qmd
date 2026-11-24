@@ -256,7 +256,7 @@ solutions there; `make validate` fails if this file is out of date.
 
 6. Both fit the frame, so the test puts them among the words that can stand there and, by company, near each other. It does not say that the two sentences are alike in meaning, since they contradict each other. The test measures which words fit a frame, and not whether the sentence is true [@harris1954distributional].
 
-7. Frequency changes the vector, the norm and the neighbours of a word, so a control of random words of another band would differ for that reason alone. The judge only knows lexical relations: `pianist` near `violin` is "neither" in WordNet and alike to a reader, WordNet labels antonyms and does not decide that they are not alike, and it covers fewer rare words and proper nouns, so "neither" mixes "unrelated" with "not covered".
+7. Frequency changes the vector, the norm and the neighbours of a word, so a control of random words of another band would differ for that reason alone. The judge only knows lexical relations. `pianist` near `violin` is "neither" in WordNet and alike to a reader, WordNet labels antonyms and does not decide that they are not alike, and it covers fewer rare words and proper nouns, so "neither" mixes "unrelated" with "not covered".
 
 8. The result is a number to be read after the run. The area under the curve is the probability that a synonym pair is nearer than a pair of neither, with 0.5 as the null. With the words shuffled among the vectors the area must be 0.5, and a different value would mean a bug in the labels or in the sampling.
 

@@ -42,6 +42,24 @@ def neighbours_gallery(vocab: list[str], queries, controls, neighbours: dict, ru
     save(fig, "gallery_neighbours")
 
 
+def null_distribution(curves: dict, centres: np.ndarray, dim: int) -> None:
+    """Density of the cosine of all pairs of words in each space, against the normal law of two random directions in `dim` dimensions,
+    whose standard deviation is 1 / sqrt(dim). A shuffled space has the same curve as the one it shuffles."""
+    fig, ax = plt.subplots(figsize=(6.5, 2.8))
+    width = 5 * 2 / len(centres)  # bins merged five at a time: the pairs are 4.5 x 10^8, so the curve is smooth
+    x = centres.reshape(-1, 5).mean(axis=1)
+    for name, hist in curves.items():
+        coarse = hist.reshape(-1, 5).sum(axis=1)
+        ax.plot(x, coarse / coarse.sum() / width, label=name, lw=1.2)
+    ax.plot(x, np.exp(-x ** 2 * dim / 2) * np.sqrt(dim / (2 * np.pi)), "k--", lw=0.8, label=f"normal, sd 1/sqrt({dim})")
+    ax.set_xlim(-0.5, 0.8)
+    ax.set_xlabel("cosine of a random pair of words")
+    ax.set_ylabel("density")
+    ax.legend(fontsize=7)
+    fig.tight_layout()
+    save(fig, "gallery_null")
+
+
 def cosine_by_class(curves: dict, centres: np.ndarray) -> None:
     """Density of the cosine of the synonym pairs, the antonym pairs and the pairs of neither, in each trained space."""
     fig, axes = plt.subplots(2, 2, figsize=(6.5, 4.6), sharex=True)

@@ -169,6 +169,13 @@ def overlaps(spaces: dict) -> tuple[dict, dict]:
     return neighbours, per_word
 
 
+def cosine_sd(hist: np.ndarray) -> float:
+    """Standard deviation of the cosine of the pairs counted in a histogram over [-1, 1] (bins of width 2 / BINS, taken at their centre)."""
+    centres = (np.arange(BINS) + 0.5) / BINS * 2 - 1
+    mean = (hist * centres).sum() / hist.sum()
+    return float(np.sqrt((hist * (centres - mean) ** 2).sum() / hist.sum()))
+
+
 def analyse_space(name: str, emb: np.ndarray, band, syn, ant, covered) -> tuple[dict, dict]:
     """The AUC tables of one space, with the shuffled-vocabulary null, printed; and the curves to draw."""
     everything, both = pair_histograms(emb, band, covered)
@@ -182,13 +189,16 @@ def analyse_space(name: str, emb: np.ndarray, band, syn, ant, covered) -> tuple[
     print(f"  shuffled vocabulary ({SHUFFLES} shuffles, mean and widest bootstrap interval): synonyms {fmt(null['synonym_vs_neither'])}, "
           f"antonyms {fmt(null['antonym_vs_neither'])}")
     assert all(0.45 < null[k][0] < 0.55 for k in null), "the shuffled vocabulary must give 0.5"
+    spread = cosine_sd(everything.sum(axis=0))
+    print(f"  standard deviation of the cosine of all pairs: {spread:.3f}")
     if name == "random Gaussian":
         assert 0.45 < table["pooled"]["synonym_vs_neither"][0] < 0.55, "random vectors must give 0.5"
-        return {"auc": table, "shuffled_vocabulary": null, "mean_cosine": baseline}, {"all pairs": everything.sum(axis=0)}
+        return {"auc": table, "shuffled_vocabulary": null, "mean_cosine": baseline, "cosine_sd": spread}, {"all pairs": everything.sum(axis=0)}
     sb, ab = pair_bins(emb, syn), pair_bins(emb, ant)
     neither = both.sum(axis=0) - np.bincount(sb, minlength=BINS) - np.bincount(ab, minlength=BINS)
-    return {"auc": table, "shuffled_vocabulary": null, "mean_cosine": baseline}, {"synonyms": np.bincount(sb, minlength=BINS), "antonyms": np.bincount(ab, minlength=BINS),
-                                                         "neither (covered words)": neither}
+    return ({"auc": table, "shuffled_vocabulary": null, "mean_cosine": baseline, "cosine_sd": spread},
+            {"synonyms": np.bincount(sb, minlength=BINS), "antonyms": np.bincount(ab, minlength=BINS), "neither (covered words)": neither,
+             "all pairs": everything.sum(axis=0)})
 
 
 def report_cells_and_expectations(results: dict) -> None:
@@ -257,7 +267,9 @@ def main() -> None:
     edit = report_edit_distance(spaces, vocab, results)
     report_neighbours(spaces, vocab, band, results)
     utils.save_results("gallery", results)
-    figures.cosine_by_class({n: curves[n] for n in TRAINED}, (np.arange(BINS) + 0.5) / BINS * 2 - 1)
+    centres = (np.arange(BINS) + 0.5) / BINS * 2 - 1
+    figures.null_distribution({n: curves[n]["all pairs"] for n in [*TRAINED, "random Gaussian"]}, centres, spaces["SGNS"].shape[1])
+    figures.cosine_by_class({n: {k: v for k, v in curves[n].items() if k != "all pairs"} for n in TRAINED}, centres)
     figures.auc_bars(results, TRAINED + ["random Gaussian"])
     figures.overlap_by_band(results["overlap_per_band"])
     figures.edit_distance(edit)
