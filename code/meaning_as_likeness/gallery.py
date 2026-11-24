@@ -197,7 +197,7 @@ def report_edit_distance(spaces: dict, vocab, results: dict) -> dict:
     return edit
 
 
-def report_neighbours(spaces: dict, vocab, band, results: dict) -> None:
+def report_neighbours(spaces: dict, vocab, counts: np.ndarray, band, results: dict) -> None:
     trained = {n: spaces[n] for n in TRAINED}
     neighbours, per_word = overlaps(trained)
     results["overlap_per_band"] = {pair: [utils.bootstrap_mean(v[band == b]) for b in range(BANDS)] for pair, v in per_word.items()}
@@ -209,7 +209,7 @@ def report_neighbours(spaces: dict, vocab, band, results: dict) -> None:
             "drawn at random": int(np.random.default_rng(1).choice(queries))}
     results["discussed_queries"] = {k: vocab[v] for k, v in rule.items()}
     print("queries discussed in the text: " + ", ".join(f"{k}: {vocab[v]}" for k, v in rule.items()))
-    figures.neighbours_gallery(vocab, queries, controls, neighbours, rule)
+    figures.neighbours_gallery(vocab, counts, queries, controls, neighbours, rule)
 
 
 def main() -> None:
@@ -232,7 +232,7 @@ def main() -> None:
         results["spaces"][name], curves[name] = analyse_space(name, emb, syn, ant, covered)
     report_expectations(results)
     edit = report_edit_distance(spaces, vocab, results)
-    report_neighbours(spaces, vocab, band, results)
+    report_neighbours(spaces, vocab, counts, band, results)
     utils.save_results("gallery", results)
     centres = (np.arange(BINS) + 0.5) / BINS * 2 - 1
     figures.null_distribution({n: curves[n]["all pairs"] for n in [*TRAINED, "random Gaussian"]}, centres, spaces["SGNS"].shape[1])

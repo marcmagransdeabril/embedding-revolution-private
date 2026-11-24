@@ -23,19 +23,20 @@ def save(fig, name: str) -> None:
     plt.close(fig)
 
 
-def neighbours_gallery(vocab: list[str], queries, controls, neighbours: dict, rule: dict) -> None:
-    """One query per frequency band (0 the most frequent), its five nearest neighbours in each space, and five random words of the band."""
+def neighbours_gallery(vocab: list[str], counts: np.ndarray, queries, controls, neighbours: dict, rule: dict) -> None:
+    """One query per frequency band, from the most frequent to the rarest, with its number of occurrences in the training text, its five
+    nearest neighbours in each space, and five random words of the band."""
     names = list(neighbours)
     fig, ax = plt.subplots(figsize=(6.5, 7.0))
     ax.axis("off")
-    columns = ["query"] + names + ["control: random\nwords of the band"]
+    columns = ["word\n(occurrences)"] + names + ["control: random\nwords of the band"]
     xs = np.linspace(0.0, 0.82, len(columns))
     for x, c in zip(xs, columns):
         ax.text(x, 1.0, c, fontweight="bold", fontsize=6, va="top")
     marks = {v: k for k, v in rule.items()}
     for r, q in enumerate(queries):
         y = 0.94 - r * 0.094
-        cells = [f"{r}  {vocab[q]}" + (f"\n[{marks[int(q)]}]" if int(q) in marks else "")]
+        cells = [f"{vocab[q]}  ({int(counts[q]):,})" + (f"\n[{marks[int(q)]}]" if int(q) in marks else "")]
         cells += [" ".join(vocab[i] for i in neighbours[n][q]) for n in names] + [" ".join(vocab[i] for i in controls[r])]
         for k, (x, c) in enumerate(zip(xs, cells)):
             ax.text(x, y, c if k == 0 else textwrap.fill(c, 17), fontsize=5.6, va="top")
