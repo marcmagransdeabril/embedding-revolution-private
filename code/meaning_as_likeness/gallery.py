@@ -205,8 +205,7 @@ def report_neighbours(spaces: dict, vocab, counts: np.ndarray, band, results: di
         print(f"top-{K} overlap {pair} per band (frequent to rare; bootstrap over words):\n  " + " ".join(fmt(x) for x in per_band))
     queries, controls = displayed_queries(vocab, band)
     mean_overlap = np.mean([v[queries] for v in per_word.values()], axis=0)
-    rule = {"lowest overlap": int(queries[mean_overlap.argmin()]), "highest overlap": int(queries[mean_overlap.argmax()]),
-            "drawn at random": int(np.random.default_rng(1).choice(queries))}
+    rule = {"lowest overlap": int(queries[mean_overlap.argmin()]), "highest overlap": int(queries[mean_overlap.argmax()])}
     results["discussed_queries"] = {k: vocab[v] for k, v in rule.items()}
     print("queries discussed in the text: " + ", ".join(f"{k}: {vocab[v]}" for k, v in rule.items()))
     figures.neighbours_gallery(vocab, counts, queries, controls, neighbours, rule)
