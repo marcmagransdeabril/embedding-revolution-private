@@ -90,19 +90,20 @@ def auc_bars(results: dict, names: list[str]) -> None:
                color="lightgrey" if "random" in name else None, edgecolor="grey" if "random" in name else None)
     ax.axhline(0.5, color="black", lw=0.6, ls="--")
     ax.set_xticks(np.arange(3), [label for _, label in CONTRASTS], fontsize=7)
-    ax.set(ylabel="AUC (0.5 = no difference)", ylim=(0, 1.12))
+    ax.set(ylabel="Probability (0.5 = no difference)", ylim=(0, 1.12))
     ax.legend(fontsize=6, ncol=5, loc="upper center")
     save(fig, "gallery_auc")
 
 
 def overlap_by_band(overlap: dict) -> None:
-    """Mean top-5 overlap of two spaces, band by band from the most frequent to the rarest words, with the bootstrap interval over words."""
+    """Mean top-5 overlap of two spaces as a function of the frequency of the word (the vocabulary cut into ten groups of equal size,
+    from the most frequent to the rarest), with the bootstrap interval over words."""
     fig, ax = plt.subplots(figsize=(6.5, 3.0))
     for (pair, per_band), style in zip(overlap.items(), ["-", "--", "-.", ":", "-", "--"]):
         mean, low, high = (np.array([b[i] for b in per_band]) for i in range(3))
         ax.plot(range(len(mean)), mean, style, lw=1.2, label=pair)
         ax.fill_between(range(len(mean)), low, high, alpha=0.2)
-    ax.set(xlabel="frequency band (0 = most frequent)", ylabel="top-5 overlap")
+    ax.set(xlabel="word frequency (0 = most frequent tenth of the vocabulary)", ylabel="top-5 overlap")
     ax.legend(fontsize=6)
     save(fig, "gallery_overlap")
 
