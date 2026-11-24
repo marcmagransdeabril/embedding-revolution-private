@@ -225,7 +225,7 @@ The statistic for this third test is the probability that a randomly chosen syno
 *Yes, but "alike" is not a single relation expressing similarity, but multiple ones.* 
 :::
 
-The gallery showed that near words are related in several ways, not just as synonyms sharing the meaning (forms of one word, words of one field, opposites). The cosine does not and cannot indicate which relation holds, which leads us to:
+The gallery showed that near words are related in several ways, not just as synonyms sharing the meaning (forms of one word, words of one field, opposites). The cosine does not and cannot indicate which relation holds, which leads us to both the next section and the subsequent discussion on disentangling relations:
 
 ::: {.test}
 **Q18. Which relation holds between two near items?** A near pair says that some relation holds. Can a space tell which relation exists between two words, sentences, texts, sounds or pictures?
