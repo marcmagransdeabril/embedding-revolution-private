@@ -237,7 +237,7 @@ def main() -> None:
     figures.null_distribution({n: curves[n]["all pairs"] for n in [*TRAINED, "random Gaussian"]}, centres, spaces["SGNS"].shape[1])
     figures.cosine_by_class({n: {k: v for k, v in curves[n].items() if k != "all pairs"} for n in TRAINED}, centres)
     figures.auc_bars(results, TRAINED + ["random Gaussian"])
-    figures.overlap_by_band(results["overlap_per_band"])
+    figures.overlap_by_band(results["overlap_per_band"], size)
     figures.edit_distance(edit)
 
 

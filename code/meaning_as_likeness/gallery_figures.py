@@ -95,15 +95,19 @@ def auc_bars(results: dict, names: list[str]) -> None:
     save(fig, "gallery_auc")
 
 
-def overlap_by_band(overlap: dict) -> None:
-    """Mean top-5 overlap of two spaces as a function of the frequency of the word (the vocabulary cut into ten groups of equal size,
-    from the most frequent to the rarest), with the bootstrap interval over words."""
+def overlap_by_band(overlap: dict, size: int) -> None:
+    """Mean percentage of the top-5 neighbours that two spaces have in common in each frequency band (band 0 the most frequent words), as
+    bars with the bootstrap interval over words. The bands are equal slices of `size` words sorted by frequency."""
     fig, ax = plt.subplots(figsize=(6.5, 3.0))
-    for (pair, per_band), style in zip(overlap.items(), ["-", "--", "-.", ":", "-", "--"]):
+    width = 0.8 / len(overlap)
+    for k, (pair, per_band) in enumerate(overlap.items()):
         mean, low, high = (np.array([b[i] for b in per_band]) for i in range(3))
-        ax.plot(range(len(mean)), mean, style, lw=1.2, label=pair)
-        ax.fill_between(range(len(mean)), low, high, alpha=0.2)
-    ax.set(xlabel="word frequency (0 = most frequent tenth of the vocabulary)", ylabel="top-5 overlap")
+        x = np.arange(len(mean)) + (k - (len(overlap) - 1) / 2) * width
+        ax.bar(x, 100 * mean, width * 0.9, yerr=100 * np.array([mean - low, high - mean]), capsize=2, label=pair)
+    step = size // len(mean) // 1000
+    ax.set_xticks(range(len(mean)), [f"{b}\n{b * step}-{(b + 1) * step}k" for b in range(len(mean))], fontsize=7)
+    ax.set(xlabel="frequency band, from the most to the least frequent words",
+           ylabel="Percentage of top-5\nneighbours overlapping")
     ax.legend(fontsize=6)
     save(fig, "gallery_overlap")
 
