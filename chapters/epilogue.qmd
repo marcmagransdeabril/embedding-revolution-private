@@ -1,7 +1,7 @@
 # Epilogue: An Algebra of Thought {#sec-ch-epilogue .unnumbered .idea}
 
 <!-- OPEN: the epilogue is a box of ideas about meaning that no current technology satisfies (author, 2026-11-22). It is reviewed once the property chapters are written; a section whose idea a property chapter carries goes there, and one that cannot say what technology lacks is dropped to notes/ideas.qmd with the reason. The full earlier sketch (the answers of the two tests revisited, the readings through the traditions, the ledger table, the ground-truth list and the review notes) is kept in notes/epilogue_sketch.qmd. -->
-<!-- OPEN: Q19 of @sec-likeness-which (how can the relations that a single nearness mixes be disentangled?) points here until a property chapter answers it; Goal 6 of the chapter on context (@sec-ch-meaning-in-context) and Goal 5 of the chapter on difference (@sec-ch-meaning-as-difference) are the candidates (2026-11-23). -->
+<!-- OPEN: Q19 of @sec-likeness-which (how can the relations that a single nearness mixes be disentangled?) points to Goal 6 of the chapter on context (@sec-ch-meaning-in-context), with Goal 5 of the chapter on difference (@sec-ch-meaning-as-difference) as a partial candidate, and here only if neither answers it (2026-11-23). -->
 
 The chapters before this one ask how far a vector with a distance can carry each property of meaning, and they say where it stops. This epilogue keeps the ideas about meaning that no current technology satisfies: each section states an idea, the tradition that reached it first, and what the technologies of the book lack for it. Nothing here is a result. The sections are short on purpose, and each is a candidate for a chapter, for `notes/ideas.qmd`, or for deletion.
 

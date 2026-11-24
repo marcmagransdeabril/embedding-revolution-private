@@ -215,27 +215,12 @@ def auc_against_histogram(positive_bins: np.ndarray, negative_hist: np.ndarray, 
     return float((w * (below[positive_bins] + 0.5 * negatives[positive_bins])).sum() / (w.sum() * negatives.sum()))
 
 
-def stratified_auc(positive_bins: np.ndarray, positive_cells: np.ndarray, negative_hists: np.ndarray,
-                   weights: np.ndarray | None = None) -> float:
-    """The AUC within strata: the probability that a positive pair is nearer than a negative pair *of the same cell* (ties one half),
-    where `negative_hists` has one histogram per cell. Cells are the frequency bands of the two words, so a pair of frequent words is
-    never compared with a pair of rare ones, whose cosines differ for that reason alone."""
-    w = np.ones(len(positive_bins)) if weights is None else weights.astype(np.float64)
-    negatives = negative_hists.astype(np.float64)
-    below = np.cumsum(negatives, axis=1) - negatives
-    wins = (w * (below[positive_cells, positive_bins] + 0.5 * negatives[positive_cells, positive_bins])).sum()
-    pairs = (np.bincount(positive_cells, weights=w, minlength=len(negatives)) * negatives.sum(axis=1)).sum()
-    return float(wins / pairs)
-
-
 def bootstrap_words_auc(positive_pairs: np.ndarray, positive_bins: np.ndarray, negative_hist: np.ndarray, size: int,
-                        resamples: int = 200, seed: int = 0, positive_cells: np.ndarray | None = None) -> tuple[float, float, float]:
-    """The AUC of `auc_against_histogram` (or, if `positive_cells` is given and `negative_hist` has one histogram per cell, the
-    `stratified_auc`), with a 95% percentile interval from resampling the words: each word is drawn with replacement, and a pair
-    counts as often as the product of the times its two words were drawn. The negatives are not resampled (they are millions and
-    their distribution does not move)."""
-    area = (lambda w: auc_against_histogram(positive_bins, negative_hist, w)) if positive_cells is None else \
-           (lambda w: stratified_auc(positive_bins, positive_cells, negative_hist, w))
+                        resamples: int = 200, seed: int = 0) -> tuple[float, float, float]:
+    """The AUC of `auc_against_histogram`, with a 95% percentile interval from resampling the words: each word is drawn with
+    replacement, and a pair counts as often as the product of the times its two words were drawn. The negatives are not resampled
+    (they are millions and their distribution does not move)."""
+    area = lambda w: auc_against_histogram(positive_bins, negative_hist, w)
     point = area(None)
     rng = np.random.default_rng(seed)
     boots = []

@@ -114,17 +114,6 @@ def test_wordnet_pairs_reads_synonyms_and_antonyms_from_data_files(tmp_path, mon
     assert covered.tolist() == [True, True, True, False]
 
 
-def test_stratified_auc_does_not_compare_across_cells():
-    # cell 0 holds low scores, cell 1 high scores; a positive at bin 1 of cell 0 beats both negatives of its own cell (bins 0, 0)
-    # and would lose to the negatives of cell 1 (bin 3) in a pooled comparison
-    negatives = np.array([[2, 0, 0, 0], [0, 0, 0, 2]])
-    assert utils.stratified_auc(np.array([1]), np.array([0]), negatives) == pytest.approx(1.0)
-    assert utils.auc_against_histogram(np.array([1]), negatives.sum(axis=0)) == pytest.approx(0.5)
-    # a second positive ties with both negatives of cell 1 (one half), weighted 3: (1 x 2 + 3 x 1) / (1 x 2 + 3 x 2) = 5 / 8
-    both = utils.stratified_auc(np.array([1, 3]), np.array([0, 1]), negatives, np.array([1, 3]))
-    assert both == pytest.approx(5 / 8)
-
-
 def test_bootstrap_mean_interval_covers_the_mean_and_shrinks_with_more_items():
     rng = np.random.default_rng(0)
     small, large = rng.normal(0, 1, 50), rng.normal(0, 1, 5_000)

@@ -62,28 +62,27 @@ def null_distribution(curves: dict, centres: np.ndarray, dim: int) -> None:
 
 def cosine_by_class(curves: dict, centres: np.ndarray) -> None:
     """Density of the cosine of the synonym pairs, the antonym pairs and the pairs of neither, in each trained space."""
-    fig, axes = plt.subplots(2, 2, figsize=(6.5, 4.6), sharex=True)
-    for ax, (name, c) in zip(axes.ravel(), curves.items()):
+    fig, axes = plt.subplots(1, len(curves), figsize=(6.5, 2.6), sharex=True)
+    for ax, (name, c) in zip(axes, curves.items()):
         for label, hist in c.items():
             coarse = hist.reshape(-1, 20).sum(axis=1)  # 100 bins of 0.02: the classes of a few hundred pairs are too noisy at 2000 bins
             ax.plot(centres.reshape(-1, 20).mean(axis=1), coarse / coarse.sum() / 0.02, label=label, lw=1.1)
         ax.set_title(name, fontsize=8)
         ax.set_xlim(-0.4, 1)
-    for ax in axes[1]:
+    for ax in axes:
         ax.set_xlabel("cosine")
-    for ax in axes[:, 0]:
-        ax.set_ylabel("density")
-    axes[0][0].legend(fontsize=6)
+    axes[0].set_ylabel("density")
+    axes[0].legend(fontsize=6)
     fig.tight_layout()
     save(fig, "gallery_distributions")
 
 
 def auc_bars(results: dict, names: list[str]) -> None:
-    """The AUC within frequency band of each contrast in each space (bootstrap interval over words), with the random models as nulls."""
+    """The AUC of each contrast in each space (bootstrap interval over words), with the random models as nulls."""
     fig, ax = plt.subplots(figsize=(6.5, 3.3))
     width = 0.8 / len(names)
     for k, name in enumerate(names):
-        row = results["spaces"][name]["auc"]["within_band"]
+        row = results["spaces"][name]["auc"]
         points = np.array([row[c][0] for c, _ in CONTRASTS])
         errors = np.array([[row[c][0] - row[c][1], row[c][2] - row[c][0]] for c, _ in CONTRASTS]).T
         ax.bar(np.arange(3) + (k - (len(names) - 1) / 2) * width, points, width * 0.9, yerr=errors, capsize=1.5, label=name,
