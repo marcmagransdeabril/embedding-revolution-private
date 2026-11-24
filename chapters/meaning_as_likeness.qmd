@@ -217,12 +217,12 @@ The statistic for this thrird test is the probability that a randomly chosen syn
 
 *The fifth and last test is where the spaces disagree.* @fig-gallery-overlap gives, for each frequency band, the percentage of the five nearest neighbours of a word that two spaces have in common. The two spaces agree on 49% [48%, 50%] of the neighbours of the words of band 0, the most frequent, and on 19% [19%, 20%] of those of band 9, the rarest. They agree most where the words are frequent, and the neighbours of rare words depend on the space. Both were trained on the same text, so the difference comes from the models, loss and renadom seed included. How much of it is the loss, and what more text adds, is tested in @sec-loss-decides-near, and how much is the seed in @sec-likeness-many-spaces.
 
-![Percentage of the five nearest neighbours that two spaces have in common, in each frequency band (band 0 holds the 3,000 most frequent words, band 9 the 3,000 rarest). Bootstrap 95% interval over words shown.](../figures/meaning_as_likeness/gallery_overlap.png){#fig-gallery-overlap width=100%}
+![Percentage of the five nearest neighbours that two spaces have in common, in each frequency band (band 0 holds the 3,000 most frequent words, band 9 the 3,000 rarest; the numbers under each band are its range of word ranks, in thousands). Bootstrap 95% interval over words shown.](../figures/meaning_as_likeness/gallery_overlap.png){#fig-gallery-overlap width=100%}
 
 ::: {.test-answer #a-likeness-1}
 **ANSWER [QUESTION 1](#q-likeness-1). Do the neighbours of random words look alike?** 
 
-*Yes, for the words that the spaces know well.* The neighbours of random words in the two trained spaces are words that a reader accepts as going with the query, and the neighbours of random words of the same band are not. Against a judge that knows nothing about the spaces, WordNet, the neighbours are far more often linked to the query than random words: an AUC of 0.82 for synonyms and 0.94 to 0.95 for antonyms, against 0.50 for random vectors and for shuffled vocabularies. *But "alike" is not one relation.* The neighbours are forms of the same word, words of the same field, members of the same kind, and opposites, and opposites are nearer than synonyms in about three comparisons out of four. Q2 and Q9 take that up, and Q18 and Q19 ask whether a space can say which relation holds and how the relations can be separated. *And it fails where words are rare or have two senses.* WordNet covers less than half of the rare words, the neighbours of a polysemous word follow the sense that the corpus favours (`donald`), and the agreement between spaces falls from 49% to 19% between the most frequent and the rarest band. *The spaces disagree* by model, since PPMI-SVD and SGNS, trained on the same text with different losses, agree on less than half of the neighbours of the most frequent words. That is Q3, with Q4 and Q12, and the null that all of them read against is the one measured here.
+*Yes, but "alike" is not a single relation expressing similarity, but multiple ones.* 
 :::
 
 The gallery showed that near words are related in several ways, not just as synonyms sharing the meaning (forms of one word, words of one field, opposites). The cosine does not and cannot indicate which relation holds, which leads us to:
@@ -242,19 +242,19 @@ If a cosine does not say which relation holds, can the relations be disentangled
 :::
 
 ::: {.questions}
-1. Why must the neighbours of a word be compared with random words of the same frequency band before they are called alike, and what does a judge made of WordNet not see?
+1. Why must the neighbours of a word be compared with random words of the same frequency band? 
 
-2. Take all pairs of words of a vocabulary and label them synonym, antonym or neither with WordNet. In which space is a synonym pair most likely to be nearer than a pair of neither, and what does the same measure give when the words are shuffled among the vectors?
+2. What does a judge made of WordNet not see?
 
-3. With seed 0, draw a few words in each of ten frequency bands, list their top-5 neighbours in the PPMI-SVD and SGNS spaces, and print the overlap per band. Which band disagrees most?
+3. Draw a few words at random in each of ten frequency bands, list their top-5 neighbours in the PPMI-SVD and SGNS spaces, and print the overlap per band. Which band disagrees most?
 
 4. Take 100,000 random pairs of words, compute the edit distance between the two words (normalized by the length of the longer one) and the cosine in a space, and correlate them. What do you expect for a space with no structure, and what does a correlation different from it mean? Show the pairs that are close in spelling and have a high cosine.
 :::
 
 ::: {.answers}
-1. Frequency changes the vector, the norm and the neighbours of a word, so a control of random words of another band would differ for that reason alone. The judge only knows lexical relations. `pianist` near `violin` is "neither" in WordNet and alike to a reader, WordNet labels antonyms and does not decide that they are not alike, and it covers fewer rare words and proper nouns, so "neither" mixes "unrelated" with "not covered".
+1. Frequency changes the vector, the norm and the neighbours of a word, so a control of random words of another band would differ for that reason alone. 
 
-2. The result is a number to be read after the run. The area under the curve is the probability that a synonym pair is nearer than a pair of neither, with 0.5 as the null. With the words shuffled among the vectors the area must be 0.5, and a different value would mean a bug in the labels or in the sampling.
+2. The judge only knows lexical relations. `pianist` near `violin` is "neither" in WordNet and alike to a reader, WordNet labels antonyms and does not decide that they are not alike, and it covers fewer rare words and proper nouns, so "neither" mixes "unrelated" with "not covered".
 
 3. Draw the words with `numpy.random.default_rng(0)` inside each band (only for display; the statistics use all pairs), rank the others by cosine as in the loss section, and compute the overlap of the two lists of five. The overlap is largest for frequent words and smallest for rare ones, whose counts are small, but this is to be confirmed by the run.
 
