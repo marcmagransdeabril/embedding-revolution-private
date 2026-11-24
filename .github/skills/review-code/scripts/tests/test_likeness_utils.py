@@ -130,3 +130,45 @@ def test_mean_cosine_is_exact_over_all_pairs_and_its_interval_covers_it():
     assert utils.mean_cosine(u) == pytest.approx(brute, abs=1e-6)
     mean, low, high = utils.bootstrap_mean_cosine(u, 100)
     assert low <= mean <= high and mean == pytest.approx(brute, abs=1e-6)
+
+
+def test_bootstrap_words_point_is_the_unweighted_statistic_and_the_interval_covers_it():
+    rng = np.random.default_rng(1)
+    pairs = rng.integers(0, 200, (500, 2))
+    values = rng.normal(size=500)
+    point, low, high = utils.bootstrap_words(pairs, lambda w: utils.weighted_mean(values, w), resamples=300)
+    assert point == pytest.approx(values.mean())
+    assert low < point < high
+
+
+def test_bootstrap_words_is_wider_when_pairs_share_words():
+    # the same 500 values, attached once to 500 pairs of distinct words and once to pairs drawn from 10 words; when the value of a
+    # pair follows its words, resampling the words moves whole groups of pairs together, so the interval widens
+    rng = np.random.default_rng(2)
+    distinct = np.arange(1000).reshape(500, 2)
+    shared = rng.integers(0, 10, (500, 2))
+    word_effect = rng.normal(size=10)
+    values = word_effect[shared[:, 0]] + word_effect[shared[:, 1]]
+    stat = lambda w: utils.weighted_mean(values, w)
+    _, lo_d, hi_d = utils.bootstrap_words(distinct, stat, resamples=300)
+    _, lo_s, hi_s = utils.bootstrap_words(shared, stat, resamples=300)
+    assert hi_s - lo_s > 2 * (hi_d - lo_d)
+
+
+def test_weighted_mean_and_spearman_repeat_items_by_their_weights():
+    assert utils.weighted_mean(np.array([1.0, 3.0]), np.array([3, 1])) == pytest.approx(1.5)
+    assert np.isnan(utils.weighted_mean(np.array([1.0]), np.array([0])))
+    x = np.array([1.0, 2.0, 3.0, 4.0])
+    assert utils.weighted_spearman(x, x, np.array([1, 2, 0, 1])) == pytest.approx(1.0)
+    assert utils.weighted_spearman(x, -x, np.ones(4, dtype=int)) == pytest.approx(-1.0)
+    assert np.isnan(utils.weighted_spearman(x, x, np.array([1, 1, 0, 0])))
+
+
+def test_weighted_partial_spearman_removes_the_shared_judge():
+    rng = np.random.default_rng(3)
+    z = rng.normal(size=400)
+    x, y = z + 0.3 * rng.normal(size=400), z + 0.3 * rng.normal(size=400)
+    ones = np.ones(400, dtype=int)
+    assert utils.weighted_spearman(x, y, ones) > 0.8  # correlated only through z
+    assert abs(utils.weighted_partial_spearman(x, y, z, ones)) < 0.2
+    assert np.isnan(utils.weighted_partial_spearman(x, y, z, np.array([1, 1] + [0] * 398)))

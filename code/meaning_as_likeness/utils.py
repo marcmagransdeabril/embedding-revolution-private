@@ -270,6 +270,46 @@ def bootstrap_mean(values: np.ndarray, resamples: int = 1000, seed: int = 0) -> 
     return float(values.mean()), float(low), float(high)
 
 
+def bootstrap_words(pairs: np.ndarray, statistic, resamples: int = 1000, seed: int = 0) -> tuple[float, float, float]:
+    """A statistic of judged pairs, and its percentile-bootstrap 95% interval from resampling the words and not the pairs: the words
+    of `pairs` (n x 2) are drawn with replacement, and a pair counts as often as the product of the times its two words were drawn.
+    `statistic` takes these weights (n,) and returns a number; the point estimate is the statistic with every weight 1. A judged set
+    reuses its words across pairs, so resampling the pairs would treat as independent pairs that share a word."""
+    words, inverse = np.unique(pairs, return_inverse=True)
+    inverse = inverse.reshape(pairs.shape)
+    rng = np.random.default_rng(seed)
+    boots = []
+    for _ in range(resamples):
+        times = np.bincount(rng.integers(0, len(words), len(words)), minlength=len(words))
+        value = statistic(times[inverse[:, 0]] * times[inverse[:, 1]])
+        if np.isfinite(value):
+            boots.append(value)
+    low, high = np.percentile(boots, [2.5, 97.5])
+    return float(statistic(np.ones(len(pairs), dtype=int))), float(low), float(high)
+
+
+def weighted_mean(values: np.ndarray, weights: np.ndarray) -> float:
+    """Mean of `values` with integer `weights` (NaN when every weight is zero)."""
+    return float(np.average(values, weights=weights)) if weights.sum() > 0 else float("nan")
+
+
+def weighted_spearman(x: np.ndarray, y: np.ndarray, weights: np.ndarray) -> float:
+    """Spearman correlation of `x` and `y` with each item repeated as often as its integer weight (NaN with fewer than 3 items)."""
+    if weights.sum() < 3:
+        return float("nan")
+    return float(spearmanr(np.repeat(x, weights), np.repeat(y, weights)).statistic)
+
+
+def weighted_partial_spearman(x: np.ndarray, y: np.ndarray, z: np.ndarray, weights: np.ndarray) -> float:
+    """Spearman correlation of `x` and `y` with the rank of `z` held fixed (the first-order partial correlation of the three Spearman
+    correlations), each item repeated as often as its integer weight (NaN with fewer than 3 items)."""
+    if weights.sum() < 3:
+        return float("nan")
+    xs, ys, zs = (np.repeat(v, weights) for v in (x, y, z))
+    r_xy, r_xz, r_yz = (spearmanr(a, b).statistic for a, b in ((xs, ys), (xs, zs), (ys, zs)))
+    return float((r_xy - r_xz * r_yz) / np.sqrt((1 - r_xz**2) * (1 - r_yz**2)))
+
+
 def mean_cosine(u: np.ndarray, weights: np.ndarray | None = None) -> float:
     """Mean cosine over all pairs of distinct words (each weighted by `weights`, default 1) of the unit rows `u`, with no pair scored:
     with s the weighted sum of the rows, the sum over ordered pairs of distinct words is |s|^2 - sum_i w_i^2 |u_i|^2."""
