@@ -4,7 +4,7 @@ relation; this script asks the same of the far end. A relation that nearness doe
 in number); a relation that is over-represented among far pairs is, since it would say that the space pushes it apart.
 
 Spaces and relations are those of relation_collapse.py (PPMI-SVD and SGNS, text8, d = 100, seed 0; the seven relations of WordNet 3.0 with
-their precedence, and the pairs that BATS adds to them, with its encyclopedic family as an eighth relation), and so are the draws of the words for the bootstrap. The null is the
+each pair counted in every relation it holds, and the pairs that BATS adds to them, with its encyclopedic family as an eighth relation), and so are the draws of the words for the bootstrap. The null is the
 cosine of the pairs of two WordNet words, all of them (exact histogram of the 1.6 x 10^8 pairs, as in the gallery). "Far" is cut at three
 places: below zero, below the 5th percentile and below the 1st percentile of the null. A cut puts a pair "below" when its bin is under the
 bin where the cumulative share of the null reaches the quantile (bins are 0.001 wide, so the null share below the cut is printed: it is a

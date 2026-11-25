@@ -192,7 +192,7 @@ def agreement(result: dict) -> dict:
 
 
 def single_label_check(spaces: dict, wordnet: dict, neither: dict, size: int) -> dict:
-    """Test 1 on the WordNet pairs that hold only one of its relations (no precedence needed)."""
+    """Test 1 on the WordNet pairs that hold only one of its relations (each such pair belongs to one relation only)."""
     single = utils.single_label(wordnet, WORDNET, size)
     return {s: {n: as_triple(utils.bootstrap_words_auc(single[n], gallery.pair_bins(emb, single[n]), neither[s], size))
                 for n in WORDNET} | {"pairs": {n: len(single[n]) for n in WORDNET}} for s, emb in spaces.items()}
