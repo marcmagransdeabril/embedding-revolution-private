@@ -151,6 +151,34 @@ def ceiling(ratings: np.ndarray) -> tuple[float, float]:
     return float(np.mean(one_vs_rest)), float(np.mean(pairwise))
 
 
+WORDNET_KINDS = {"noun": "n", "verb": "v", "adj": "a", "adv": "r"}
+
+
+def read_wordnet() -> tuple[dict[tuple[str, str], list[str]], dict[str, list[list[str]]]]:
+    """The data files of WordNet 3.0 (no NLTK): the words of each synset, keyed by (part of speech, offset), and the split lines of
+    each file. A line is the offset, the file number, the type, the number of words (hex), the (word, lex id) pairs, then the pointers."""
+    synsets: dict[tuple[str, str], list[str]] = {}
+    rows: dict[str, list[list[str]]] = {}
+    with tarfile.open(fetch(WORDNET_URL, WORDNET_SHA256)) as tar:
+        for kind in WORDNET_KINDS:
+            lines = tar.extractfile(f"WordNet-3.0/dict/data.{kind}").read().decode("utf-8").splitlines()
+            rows[kind] = [l.split() for l in lines if not l.startswith("  ")]
+    for kind, fields in rows.items():
+        for f in fields:
+            synsets[(WORDNET_KINDS[kind], f[0])] = [f[4 + 2 * i].lower().split("(")[0] for i in range(int(f[3], 16))]
+    return synsets, rows
+
+
+def wordnet_pointers(fields: list[str], words: list[str]):
+    """The pointers of one synset line, as (symbol, target offset, target part of speech, source word, target word number); the
+    source word is None and the target number 0 for a pointer between synsets (a semantic pointer), as against one between words."""
+    at = 4 + 2 * len(words)
+    for k in range(int(fields[at])):
+        symbol, offset, pos, source_target = fields[at + 1 + 4 * k: at + 5 + 4 * k]
+        source, target = int(source_target[:2], 16), int(source_target[2:], 16)
+        yield symbol, offset, "a" if pos == "s" else pos, (words[source - 1] if source else None), target
+
+
 def wordnet_pairs(index: dict[str, int]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """The lexical judge of the chapter: WordNet 3.0 read from its data files (no NLTK), restricted to the words of `index`.
 
@@ -159,16 +187,8 @@ def wordnet_pairs(index: dict[str, int]) -> tuple[np.ndarray, np.ndarray, np.nda
     synset lists one as the lexical antonym ("!" pointer) of the other. Multi-word lemmas never match a vocabulary word. A pair that
     is both (it happens with polysemous words) counts as a synonym, which is the precedence stated in the plan: synonym before antonym.
     """
-    kinds = {"noun": "n", "verb": "v", "adj": "a", "adv": "r"}
-    synsets: dict[tuple[str, str], list[str]] = {}
-    rows: dict[str, list[list[str]]] = {}
-    with tarfile.open(fetch(WORDNET_URL, WORDNET_SHA256)) as tar:
-        for kind in kinds:
-            lines = tar.extractfile(f"WordNet-3.0/dict/data.{kind}").read().decode("utf-8").splitlines()
-            rows[kind] = [l.split() for l in lines if not l.startswith("  ")]
-    for kind, fields in rows.items():
-        for f in fields:  # f = offset, file number, type, number of words (hex), then (word, lex id) pairs, then the pointers
-            synsets[(kinds[kind], f[0])] = [f[4 + 2 * i].lower().split("(")[0] for i in range(int(f[3], 16))]
+    kinds = WORDNET_KINDS
+    synsets, rows = read_wordnet()
     synonyms: set[tuple[int, int]] = set()
     antonyms: set[tuple[int, int]] = set()
     covered = np.zeros(len(index), dtype=bool)
@@ -178,17 +198,163 @@ def wordnet_pairs(index: dict[str, int]) -> tuple[np.ndarray, np.ndarray, np.nda
             inside = sorted({index[w] for w in words if w in index})
             covered[inside] = True
             synonyms.update(itertools.combinations(inside, 2))
-            at = 4 + 2 * len(words)
-            for k in range(int(f[at])):
-                symbol, offset, pos, source_target = f[at + 1 + 4 * k: at + 5 + 4 * k]
-                source, target = int(source_target[:2], 16), int(source_target[2:], 16)
-                if symbol == "!" and source and target:
-                    a, b = words[source - 1], synsets[("a" if pos == "s" else pos, offset)][target - 1]
+            for symbol, offset, pos, a, target in wordnet_pointers(f, words):
+                if symbol == "!" and a is not None and target:
+                    b = synsets[(pos, offset)][target - 1]
                     if a in index and b in index and a != b:
                         antonyms.add(tuple(sorted((index[a], index[b]))))
     antonyms -= synonyms
     as_array = lambda s: np.array(sorted(s), dtype=np.int32).reshape(-1, 2)
     return as_array(synonyms), as_array(antonyms), covered
+
+
+def pair_array(pairs) -> np.ndarray:
+    """A set of unordered word pairs as a sorted array (n x 2) with i < j in each row, self-pairs dropped."""
+    rows = {(min(a, b), max(a, b)) for a, b in pairs if a != b}
+    return np.array(sorted(rows), dtype=np.int32).reshape(-1, 2)
+
+
+# the pointer symbols of WordNet 3.0 (wninput(5WN)) that each relation of Q2 reads; holonyms are the reverse of meronyms and give
+# the same unordered pairs, as hyponyms do for hypernyms
+HYPERNYM_POINTERS = {"@", "@i"}
+MERONYM_POINTERS = {"%m", "%s", "%p", "#m", "#s", "#p"}
+DERIVATION_POINTER = "+"
+# the detachment rules of WordNet's morphy (morphy(7WN)): suffix of the inflected form, ending of the base form
+MORPHY_RULES = {"n": [("s", ""), ("ses", "s"), ("xes", "x"), ("zes", "z"), ("ches", "ch"), ("shes", "sh"), ("men", "man"), ("ies", "y")],
+                "v": [("s", ""), ("ies", "y"), ("es", "e"), ("es", ""), ("ed", "e"), ("ed", ""), ("ing", "e"), ("ing", "")],
+                "a": [("er", ""), ("est", ""), ("er", "e"), ("est", "e")]}
+
+
+def base_forms(word: str, pos: str, lemmas: set[str], exceptions: dict[str, list[str]]) -> set[str]:
+    """The base forms of `word` in one part of speech, as morphy finds them: the irregular forms of the exception list, the word itself
+    if it is a lemma, and every detachment rule whose result is a lemma."""
+    found = {b for b in exceptions.get(word, []) if b in lemmas}
+    if word in lemmas:
+        found.add(word)
+    for suffix, ending in MORPHY_RULES.get(pos, []):
+        if word.endswith(suffix) and len(word) > len(suffix):
+            base = word[: -len(suffix)] + ending
+            if base in lemmas:
+                found.add(base)
+    return found
+
+
+def inflection_pairs(vocab: list[str], lemmas: dict[str, set[str]], exceptions: dict[str, dict[str, list[str]]]) -> np.ndarray:
+    """Pairs of two different words of `vocab` that share a base form in the same part of speech (`walk` and `walked`, `go` and
+    `went`): the inflection judge of Q2. `lemmas` and `exceptions` are by part of speech, as `wordnet_relations` reads them."""
+    groups: dict[tuple[str, str], list[int]] = {}
+    for i, w in enumerate(vocab):
+        for pos in MORPHY_RULES:
+            for base in base_forms(w, pos, lemmas[pos], exceptions[pos]):
+                groups.setdefault((pos, base), []).append(i)
+    return pair_array(p for members in groups.values() for p in itertools.combinations(sorted(set(members)), 2))
+
+
+def wordnet_relations(vocab: list[str]) -> tuple[dict[str, np.ndarray], np.ndarray]:
+    """The relations of Q2 that WordNet 3.0 gives, between words of `vocab`, each as an array (n x 2) of word indices i < j, before any
+    precedence is applied (a pair can be in several):
+
+    synonym (share a synset), antonym ("!" between two words), hypernym (one IS-A step, "@" or "@i" between their synsets), meronym
+    (part, member or substance, "%" or "#"), co-hyponym (synsets with the same direct hypernym), derivation ("+" between two words),
+    inflection (a shared base form, `inflection_pairs`). Also returns the boolean array of the words that WordNet covers."""
+    index = {w: i for i, w in enumerate(vocab)}
+    synsets, rows = read_wordnet()
+    inside = {key: sorted({index[w] for w in words if w in index}) for key, words in synsets.items()}
+    found: dict[str, set] = {name: set() for name in ("synonym", "antonym", "hypernym", "meronym", "co-hyponym", "derivation")}
+    children: dict[tuple[str, str], set[int]] = {}
+    covered = np.zeros(len(vocab), dtype=bool)
+    for kind, fields in rows.items():
+        for f in fields:
+            key = (WORDNET_KINDS[kind], f[0])
+            words, here = synsets[key], inside[key]
+            covered[here] = True
+            found["synonym"].update(itertools.combinations(here, 2))
+            for symbol, offset, pos, a, target in wordnet_pointers(f, words):
+                there = inside[(pos, offset)]
+                if a is not None and target:  # between two words
+                    b = synsets[(pos, offset)][target - 1]
+                    if a in index and b in index:
+                        if symbol == "!":
+                            found["antonym"].add((index[a], index[b]))
+                        elif symbol == DERIVATION_POINTER:
+                            found["derivation"].add((index[a], index[b]))
+                elif symbol in HYPERNYM_POINTERS:
+                    found["hypernym"].update(itertools.product(here, there))
+                    children.setdefault((pos, offset), set()).update(here)
+                elif symbol in MERONYM_POINTERS:
+                    found["meronym"].update(itertools.product(here, there))
+    for members in children.values():
+        found["co-hyponym"].update(itertools.combinations(sorted(members), 2))
+    relations = {name: pair_array(pairs) for name, pairs in found.items()}
+    lemmas = {pos: set() for pos in MORPHY_RULES}
+    for (pos, _), words in synsets.items():
+        if pos in lemmas:
+            lemmas[pos].update(words)
+    exceptions = {pos: {} for pos in MORPHY_RULES}
+    with tarfile.open(fetch(WORDNET_URL, WORDNET_SHA256)) as tar:
+        for kind, pos in (("noun", "n"), ("verb", "v"), ("adj", "a")):
+            for line in tar.extractfile(f"WordNet-3.0/dict/{kind}.exc").read().decode("utf-8").splitlines():
+                inflected, *bases = line.split()
+                exceptions[pos][inflected] = bases
+    relations["inflection"] = inflection_pairs(vocab, lemmas, exceptions)
+    return relations, covered
+
+
+def first_label(relations: dict[str, np.ndarray], order: list[str], size: int) -> dict[str, np.ndarray]:
+    """Each pair under the first relation of `order` that holds for it, so that no pair is counted under two relations."""
+    taken = np.zeros(0, dtype=np.int64)
+    out = {}
+    for name in order:
+        keys = pair_keys(relations[name], size)
+        fresh = ~np.isin(keys, taken)
+        out[name] = relations[name][fresh]
+        taken = np.union1d(taken, keys)
+    return out
+
+
+def single_label(relations: dict[str, np.ndarray], names: list[str], size: int) -> dict[str, np.ndarray]:
+    """The pairs of each relation of `names` that hold no other relation of `names` (the robustness check of the precedence)."""
+    keys = {n: pair_keys(relations[n], size) for n in names}
+    out = {}
+    for n in names:
+        others = np.concatenate([keys[m] for m in names if m != n])
+        out[n] = relations[n][~np.isin(keys[n], others)]
+    return out
+
+
+def pair_keys(pairs: np.ndarray, size: int) -> np.ndarray:
+    """One integer per unordered pair (i < j), i * size + j, so that sets of pairs can be compared with numpy."""
+    return pairs[:, 0].astype(np.int64) * size + pairs[:, 1]
+
+
+BATS_URL = ("https://codeload.github.com/bootphon/measuring-regularities-in-word-embeddings/tar.gz/"
+            "869f33a0e6aa7161e10d921bd774a54d28faab08")
+BATS_SHA256 = "9f83112c21b789b4ea8c9779c5676d9c9bbd0d8c495747f9eee723949623cd7e"
+BATS_FAMILIES = {"1_Inflectional_morphology": "inflectional", "2_Derivational_morphology": "derivational",
+                 "3_Encyclopedic_semantics": "encyclopedic", "4_Lexicographic_semantics": "lexicographic"}
+
+
+def load_bats() -> dict[str, dict[str, list[tuple[str, str]]]]:
+    """The 40 relations of BATS 3.0 (Gladkova et al. 2016), by family and relation name, as (word, answer) pairs; a word with several
+    accepted answers ("afraid  terrified/scared/...") gives one pair per answer. The copy is the BATS_3.0 directory of a repository
+    pinned at one commit, since the project page gives no stable link to the archive."""
+    out: dict[str, dict[str, list]] = {family: {} for family in BATS_FAMILIES.values()}
+    with tarfile.open(fetch(BATS_URL, BATS_SHA256)) as tar:
+        for member in tar.getmembers():
+            parts = member.name.split("/")
+            if len(parts) == 4 and parts[1] == "BATS_3.0" and parts[2] in BATS_FAMILIES and parts[3].endswith(".txt"):
+                lines = tar.extractfile(member).read().decode("utf-8").splitlines()
+                pairs = [(a.lower(), b.lower()) for a, answers in (l.split("\t") for l in lines if "\t" in l)
+                         for b in answers.strip().split("/") if b]
+                out[BATS_FAMILIES[parts[2]]][parts[3][:-4]] = pairs
+    return out
+
+
+def histogram_auc(positives: np.ndarray, negatives: np.ndarray) -> float:
+    """Probability that a pair counted in the histogram `positives` has a higher score than one counted in `negatives` (same bins,
+    ties count one half): the area under the ROC curve from two histograms, so that weighted or resampled pairs cost a bincount."""
+    below = np.cumsum(negatives) - negatives
+    return float((positives * (below + 0.5 * negatives)).sum() / (positives.sum() * negatives.sum()))
 
 
 def edit_distance(a: str, b: str) -> float:

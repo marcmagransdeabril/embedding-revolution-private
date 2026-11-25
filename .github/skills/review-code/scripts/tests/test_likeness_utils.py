@@ -172,3 +172,46 @@ def test_weighted_partial_spearman_removes_the_shared_judge():
     assert utils.weighted_spearman(x, y, ones) > 0.8  # correlated only through z
     assert abs(utils.weighted_partial_spearman(x, y, z, ones)) < 0.2
     assert np.isnan(utils.weighted_partial_spearman(x, y, z, np.array([1, 1] + [0] * 398)))
+
+
+def test_pair_array_orders_each_pair_and_drops_repeats_and_self_pairs():
+    assert utils.pair_array([(3, 1), (1, 3), (2, 2), (0, 4)]).tolist() == [[0, 4], [1, 3]]
+    assert utils.pair_array([]).shape == (0, 2)
+
+
+def test_first_label_keeps_each_pair_under_the_first_relation_only():
+    relations = {"a": np.array([[0, 1], [1, 2]]), "b": np.array([[0, 1], [2, 3]])}
+    first = utils.first_label(relations, ["a", "b"], 5)
+    assert first["a"].tolist() == [[0, 1], [1, 2]] and first["b"].tolist() == [[2, 3]]
+    single = utils.single_label(relations, ["a", "b"], 5)
+    assert single["a"].tolist() == [[1, 2]] and single["b"].tolist() == [[2, 3]]
+
+
+def test_base_forms_follow_the_rules_of_morphy_and_its_exceptions():
+    lemmas = {"walk", "church", "go", "big"}
+    assert utils.base_forms("walked", "v", lemmas, {}) == {"walk"}
+    assert utils.base_forms("churches", "n", lemmas, {}) == {"church"}
+    assert utils.base_forms("went", "v", lemmas, {"went": ["go"]}) == {"go"}
+    assert utils.base_forms("walk", "v", lemmas, {}) == {"walk"}  # a lemma is its own base form
+    assert utils.base_forms("s", "n", {""}, {}) == set()  # a rule never strips the whole word
+
+
+def test_inflection_pairs_join_the_forms_of_one_base_and_not_two_bases():
+    vocab = ["walk", "walked", "walking", "talk", "went", "go"]
+    lemmas = {"n": set(), "v": {"walk", "talk", "go"}, "a": set()}
+    pairs = utils.inflection_pairs(vocab, lemmas, {"n": {}, "v": {"went": ["go"]}, "a": {}})
+    named = {(vocab[a], vocab[b]) for a, b in pairs}
+    assert named == {("walk", "walked"), ("walk", "walking"), ("walked", "walking"), ("went", "go")}
+
+
+def test_wordnet_pointers_tell_semantic_from_lexical_pointers():
+    # offset, file, type, 2 words, 2 pointers: a hypernym between synsets (0000) and an antonym from word 2 to word 1 of its target
+    fields = "00001 03 n 02 dog 0 hound 0 002 @ 00002 n 0000 ! 00003 n 0201 | gloss".split()
+    assert list(utils.wordnet_pointers(fields, ["dog", "hound"])) == [("@", "00002", "n", None, 0), ("!", "00003", "n", "hound", 1)]
+
+
+def test_histogram_auc_is_one_half_for_equal_histograms_and_one_for_separated_ones():
+    h = np.array([1.0, 2.0, 3.0])
+    assert utils.histogram_auc(h, h) == pytest.approx(0.5)
+    assert utils.histogram_auc(np.array([0.0, 0.0, 5.0]), np.array([4.0, 0.0, 0.0])) == pytest.approx(1.0)
+    assert utils.histogram_auc(np.array([1.0, 0.0]), np.array([0.0, 1.0])) == pytest.approx(0.0)
