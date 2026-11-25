@@ -71,7 +71,7 @@ def against_neither(results: dict) -> None:
         ax.errorbar([e[0] for e in est], y + (k - 0.5) * 0.3, xerr=errors(est), fmt="o", ms=3, capsize=2, label=s)
     ax.axvline(0.5, color="black", lw=0.6, ls="--")
     ax.set_yticks(y, [f"{n} ({results['pairs'][n]:,})" for n in names], fontsize=6.5)
-    ax.set_xlabel("probability that a pair of the relation is nearer than a pair of neither", fontsize=8)
+    ax.set_xlabel("probability that a pair of the relation is nearer than a pair of no relation", fontsize=8)
     color_ticks(ax.get_yticklabels())
     spaces_legend = ax.legend(fontsize=6, loc="lower right")
     group_legend(ax, loc="upper left")

@@ -12,7 +12,7 @@ little under the quantile).
 
 Three tests. (1) For each relation, the share of its pairs below each cut and the ratio of that share to the null share under the same cut:
 a ratio above 1 (the interval above 1) is a relation associated with far, a ratio below 1 a relation kept away from it. (2) The share of the
-pairs of two WordNet words that hold one of the seven WordNet relations, among the pairs below the 1st percentile cut and among all pairs.
+pairs of two WordNet words that hold one of the eight relations, among the pairs below the 1st percentile cut and among all pairs.
 (3) The Spearman correlation between the two spaces of the ratio at the 5th percentile cut over the eight relations, to see whether the
 two losses keep the same relations away from the far end. Intervals are 95% percentile bootstraps over the words (the null is held fixed).
 
@@ -34,7 +34,7 @@ import relation_far_figures as figures
 import utils
 
 CUTS = {"below zero": None, "5th percentile": 0.05, "1st percentile": 0.01}
-ANY = "WordNet (any of seven)"
+ANY = "any of the eight"
 
 
 def cut_bins(null_hist: np.ndarray) -> dict[str, int]:
@@ -43,14 +43,17 @@ def cut_bins(null_hist: np.ndarray) -> dict[str, int]:
     return {name: gallery.BINS // 2 if q is None else int(np.searchsorted(cumulative, q)) for name, q in CUTS.items()}
 
 
-def wordnet_union(pure: dict, covered: np.ndarray) -> np.ndarray:
-    """The pairs of two WordNet words that hold any of the seven relations of WordNet (each once, under its first relation)."""
-    return np.concatenate([pure[n][covered[pure[n]].all(axis=1)] for n in rc.WORDNET])
+def relation_union(pairs: dict, covered: np.ndarray) -> np.ndarray:
+    """The pairs of two WordNet words that hold any of the eight relations, whichever judge names them (each once)."""
+    size = len(covered)
+    held = np.concatenate([pairs[n][covered[pairs[n]].all(axis=1)] for n in rc.RELATIONS])
+    keys = np.unique(utils.pair_keys(held, size))
+    return np.column_stack([keys // size, keys % size])
 
 
-def measure(spaces: dict, pairs: dict, pure: dict, covered: np.ndarray, size: int) -> dict:
+def measure(spaces: dict, pairs: dict, covered: np.ndarray, size: int) -> dict:
     """Tests 1 to 3, with the same draws of the words for every relation and both spaces."""
-    judged = {**{n: pairs[n] for n in rc.RELATIONS}, rc.RANDOM: pairs[rc.RANDOM], ANY: wordnet_union(pure, covered)}
+    judged = {**{n: pairs[n] for n in rc.RELATIONS}, rc.RANDOM: pairs[rc.RANDOM], ANY: relation_union(pairs, covered)}
     names = list(judged)
     state = {}
     for s, emb in spaces.items():
@@ -107,10 +110,9 @@ def check_claims(result: dict) -> None:
 
 def main() -> None:
     vocab, index, _ = utils.load_vocab()
-    pairs, wordnet, covered = rc.judged_pairs(vocab, index)
-    pure = utils.first_label(wordnet, rc.WORDNET, len(vocab))
+    pairs, _, covered = rc.judged_pairs(vocab, index)
     spaces = {s: utils.load_space(stem) for s, stem in rc.SPACES.items()}
-    result = measure(spaces, pairs, pure, covered, len(vocab))
+    result = measure(spaces, pairs, covered, len(vocab))
     print_results(result)
     utils.save_results("relation_far", result)
     figures.ratios(result, [n for n in result["pairs"] if n != ANY])  # no row named after a judge

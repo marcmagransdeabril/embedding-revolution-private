@@ -7,14 +7,13 @@ Spaces: PPMI-SVD and SGNS of the gallery (text8, 30,000 words, d = 100, seed 0) 
 on the second half of text8 for test 4, whose judge is counted on the first half (so that the judge is not the space itself).
 Relations, each a set of unordered pairs of words of the vocabulary:
   WordNet 3.0: inflection (a shared base form, by morphy's rules and exception lists), derivation ("+"), synonym (a shared synset),
-    antonym ("!"), hypernym (one IS-A step), meronym (part, member or substance), co-hyponym (the same direct hypernym); a pair takes
-    the first that holds in this order, and the pairs that hold only one of them are a robustness check;
+    antonym ("!"), hypernym (one IS-A step), meronym (part, member or substance), co-hyponym (the same direct hypernym); a pair that holds several counts in each, and the pairs that hold only one of them are a robustness check;
   BATS 3.0: each of its 40 relations adds its pairs to the relation of WordNet that it names (BATS_TO_RELATION: inflectional to inflection,
     derivational to derivation, the hypernyms and hyponyms to hypernym, the meronyms to meronym, the synonyms to synonym, the antonyms to
     antonym), and its encyclopedic family is the relation encyclopedic, which WordNet does not hold;
   text8, first half: direct co-occurrence (PPMI > 0 within the window of 5) and shared context only (no co-occurrence, and a cosine of
     the two PPMI rows in the top 1% of the random pairs without co-occurrence), among RANDOM_PAIRS seeded random pairs;
-  controls: neither (both words in WordNet, none of its seven relations: the baseline of every AUC, as in the gallery), random pairs of
+  controls: neither (both words in WordNet, none of the eight relations, from WordNet or BATS: the baseline of every AUC, as in the gallery), random pairs of
     the vocabulary, and, for test 3, random words of the same frequency band.
 
 Five tests. (1) For each relation, the probability that one of its pairs is nearer than a pair of neither (AUC, 0.5 if the relation
@@ -53,17 +52,17 @@ import utils
 
 SPACES = {"PPMI-SVD": "ppmi_svd_s0", "SGNS": "sgns_s0"}
 HALF_SPACES = {"PPMI-SVD": "ppmi_svd_B", "SGNS": "sgns_B"}  # trained on the second half of text8, as train_spaces.py does
-WORDNET = ["inflection", "derivation", "synonym", "antonym", "hypernym", "meronym", "co-hyponym"]  # also the precedence
+WORDNET = ["inflection", "derivation", "synonym", "antonym", "hypernym", "meronym", "co-hyponym"]  # the seven relations of WordNet
 ENCYCLOPEDIC = "encyclopedic"  # what only an encyclopedia holds; no dictionary lists it
 RELATIONS = WORDNET + [ENCYCLOPEDIC]  # the relations, whichever judge supplies their pairs
-RANDOM, NEITHER, UNCOVERED = "random pairs", "neither (in WordNet)", "not in WordNet"
+RANDOM, NEITHER, UNCOVERED = "random pairs", "no relation (in WordNet)", "not in WordNet"
 # The relation that each of the 40 relations of BATS adds its pairs to, by the letter and number that start its name (I01, L07, ...)
 BATS_TO_RELATION = {**{f"I{i:02d}": "inflection" for i in range(1, 11)}, **{f"D{i:02d}": "derivation" for i in range(1, 11)},
                     **{f"E{i:02d}": ENCYCLOPEDIC for i in range(1, 11)}, "L01": "hypernym", "L02": "hypernym", "L03": "hypernym",
                     "L04": "meronym", "L05": "meronym", "L06": "meronym", "L07": "synonym", "L08": "synonym", "L09": "antonym",
                     "L10": "antonym"}
 CONTEXT = ["direct co-occurrence", "shared context only"]
-LABELS = WORDNET + [ENCYCLOPEDIC, NEITHER, UNCOVERED]  # the labels of a neighbour in test 3, in order of precedence
+LABELS = WORDNET + [ENCYCLOPEDIC, NEITHER, UNCOVERED]  # the labels of a neighbour in test 3
 BINS, K, WINDOW = gallery.BINS, 5, 5
 RESAMPLES, FIT_RESAMPLES, RANDOM_PAIRS, PER_RELATION, TOP_SHARE = 1000, 200, 200_000, 20_000, 0.01
 
@@ -91,27 +90,29 @@ def in_vocab(pairs, index: dict[str, int]) -> np.ndarray:
 
 
 def judged_pairs(vocab: list[str], index: dict[str, int]) -> tuple[dict, dict, np.ndarray]:
-    """The pairs of every relation of tests 1 to 3 (each relation holds the pairs of every judge that names it: WordNet with its
-    precedence, the relations of BATS that belong to it; and random pairs), the WordNet relations without
-    precedence, and the WordNet coverage of the vocabulary."""
+    """The pairs of every relation of tests 1 to 3 (each relation holds the pairs of every judge that names it, WordNet and the relations
+    of BATS that belong to it, and a pair counts in every relation that it holds; and random pairs), the WordNet relations as WordNet
+    gives them, and the WordNet coverage of the vocabulary."""
     wordnet, covered = utils.wordnet_relations(vocab)
-    pairs = utils.first_label(wordnet, WORDNET, len(vocab))
+    pairs = {name: wordnet[name] for name in WORDNET}  # every pair holds every relation that it has, so the sets overlap
     pairs[ENCYCLOPEDIC] = np.zeros((0, 2), dtype=np.int64)
     for relations in utils.load_bats().values():
         for name, rows in relations.items():
-            relation = BATS_TO_RELATION[name[:3]]
-            merged = np.concatenate([pairs[relation], in_vocab(rows, index)])
-            pairs[relation] = merged[np.unique(utils.pair_keys(merged, len(vocab)), return_index=True)[1]]
+            pairs[BATS_TO_RELATION[name[:3]]] = np.concatenate([pairs[BATS_TO_RELATION[name[:3]]], in_vocab(rows, index)])
+    for name in RELATIONS:
+        pairs[name] = pairs[name][np.unique(utils.pair_keys(pairs[name], len(vocab)), return_index=True)[1]]
     pairs[RANDOM] = random_pairs(len(vocab), RANDOM_PAIRS)
     return pairs, wordnet, covered
 
 
-def neither_histogram(emb: np.ndarray, covered: np.ndarray, wordnet_pairs: dict) -> np.ndarray:
-    """Histogram of the cosine of the pairs of two WordNet words that hold none of its seven relations (exact, every pair scored)."""
+def neither_histogram(emb: np.ndarray, covered: np.ndarray, pairs: dict) -> np.ndarray:
+    """Histogram of the cosine of the pairs of two WordNet words that hold none of the relations, whichever judge names them (WordNet
+    and BATS; exact, every pair scored). A pair that holds two relations is taken out once."""
     _, both = gallery.pair_histograms(emb, covered)
-    for name in WORDNET:
-        inside = wordnet_pairs[name][covered[wordnet_pairs[name]].all(axis=1)]  # an inflected form need not be in WordNet itself
-        both = both - np.bincount(gallery.pair_bins(emb, inside), minlength=BINS)
+    size = len(covered)
+    held = [pairs[name][covered[pairs[name]].all(axis=1)] for name in RELATIONS]  # an inflected form need not be in WordNet itself
+    keys = np.unique(np.concatenate([utils.pair_keys(p, size) for p in held]))
+    both = both - np.bincount(gallery.pair_bins(emb, np.column_stack([keys // size, keys % size])), minlength=BINS)
     assert (both >= 0).all()
     return both
 
@@ -211,14 +212,17 @@ def bats_relations(spaces: dict, index: dict, neither: dict) -> dict:
 
 # --- test 3
 def labels_of(pairs: np.ndarray, keys: dict[str, np.ndarray], covered: np.ndarray, size: int) -> np.ndarray:
-    """Index in LABELS of each pair (any order of its two words): the first relation of WORDNET that holds, then encyclopedic, then
-    neither."""
+    """Which of LABELS each pair holds (any order of its two words), a boolean array (pairs x LABELS). A pair holds every relation that
+    it has, so its row can have several True; a pair with no relation holds NEITHER if its two words are in WordNet and UNCOVERED if not."""
     lo, hi = pairs.min(axis=1), pairs.max(axis=1)
     key = lo.astype(np.int64) * size + hi
-    out = np.where(covered[lo] & covered[hi], LABELS.index(NEITHER), LABELS.index(UNCOVERED))
-    for i in range(len(WORDNET) - 1, -1, -1):  # backwards, so that the first relation in the order is the one kept
-        out = np.where(np.isin(key, keys[WORDNET[i]]), i, out)
-    return np.where(np.isin(key, keys[ENCYCLOPEDIC]) & (out >= len(WORDNET)), LABELS.index(ENCYCLOPEDIC), out)
+    out = np.zeros((len(key), len(LABELS)), dtype=bool)
+    for name in RELATIONS:
+        out[:, LABELS.index(name)] = np.isin(key, keys[name])
+    none = ~out.any(axis=1)
+    out[:, LABELS.index(NEITHER)] = none & covered[lo] & covered[hi]
+    out[:, LABELS.index(UNCOVERED)] = none & ~(covered[lo] & covered[hi])
+    return out
 
 
 def same_band_controls(size: int, seed: int = 0) -> np.ndarray:
@@ -232,10 +236,10 @@ def same_band_controls(size: int, seed: int = 0) -> np.ndarray:
 
 
 def unnamed_share(labels: np.ndarray, seed: int = 0) -> tuple[float, float, float]:
-    """Of the pairs (queries x K) whose two words are in WordNet, the share that carries no label, with a 95% interval from resampling
-    the query words (a ratio of sums, since a query can have no neighbour in WordNet)."""
-    covered = labels != LABELS.index(UNCOVERED)
-    unnamed, total = (labels == LABELS.index(NEITHER)).sum(axis=1), covered.sum(axis=1)
+    """Of the pairs (queries x K x LABELS) whose two words are in WordNet, the share that holds no relation, with a 95% interval from
+    resampling the query words (a ratio of sums, since a query can have no neighbour in WordNet)."""
+    covered = ~labels[:, :, LABELS.index(UNCOVERED)]
+    unnamed, total = labels[:, :, LABELS.index(NEITHER)].sum(axis=1), covered.sum(axis=1)
     rng = np.random.default_rng(seed)
     picks = (rng.integers(0, len(total), len(total)) for _ in range(RESAMPLES))
     boots = [unnamed[p].sum() / total[p].sum() for p in picks]
@@ -247,10 +251,10 @@ def inventory(spaces: dict, pairs: dict, covered: np.ndarray, vocab: list[str]) 
     """Test 3: the share of each label among the top-K neighbours of every word, against random words of the same band, and the share
     of the neighbours in WordNet that no relation names."""
     size = len(vocab)
-    keys = {n: utils.pair_keys(pairs[n], size) for n in WORDNET + [ENCYCLOPEDIC]}
+    keys = {n: utils.pair_keys(pairs[n], size) for n in RELATIONS}
     queries = np.repeat(np.arange(size), K)
-    label = lambda neighbours: labels_of(np.column_stack([queries, neighbours.ravel()]), keys, covered, size).reshape(size, K)
-    share = lambda labels: dict(zip(LABELS, (utils.bootstrap_mean((labels == i).mean(axis=1)) for i in range(len(LABELS)))))
+    label = lambda neighbours: labels_of(np.column_stack([queries, neighbours.ravel()]), keys, covered, size).reshape(size, K, len(LABELS))
+    share = lambda labels: dict(zip(LABELS, (utils.bootstrap_mean(labels[:, :, i].mean(axis=1)) for i in range(len(LABELS)))))
     control = label(same_band_controls(size))
     out = {"control": share(control), "spaces": {}, "unnamed": {}, "unnamed_share": {"same-band control": unnamed_share(control)}}
     rng = np.random.default_rng(0)
@@ -258,7 +262,7 @@ def inventory(spaces: dict, pairs: dict, covered: np.ndarray, vocab: list[str]) 
         neighbours = utils.nearest(emb, np.arange(size), K)
         labels = label(neighbours)
         out["spaces"][s], out["unnamed_share"][s] = share(labels), unnamed_share(labels)
-        unnamed = np.flatnonzero(labels.ravel() >= LABELS.index(NEITHER))
+        unnamed = np.flatnonzero(labels.reshape(-1, len(LABELS))[:, LABELS.index(NEITHER):].any(axis=1))
         out["unnamed"][s] = [(vocab[queries[i]], vocab[neighbours.ravel()[i]]) for i in rng.choice(unnamed, 30, replace=False)]
     return out
 
@@ -428,8 +432,7 @@ def main() -> None:
     size = len(vocab)
     pairs, wordnet, covered = judged_pairs(vocab, index)
     spaces = {s: utils.load_space(stem) for s, stem in SPACES.items()}
-    pure = utils.first_label(wordnet, WORDNET, size)  # the baseline is of WordNet alone, whichever judge adds pairs to a relation
-    neither = {s: neither_histogram(emb, covered, pure) for s, emb in spaces.items()}
+    neither = {s: neither_histogram(emb, covered, pairs) for s, emb in spaces.items()}
     results = order_tests(spaces, pairs, neither, size)
     results["agreement"] = agreement(results)
     results["single_label"] = single_label_check(spaces, wordnet, neither, size)
