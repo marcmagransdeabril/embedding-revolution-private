@@ -16,6 +16,7 @@ def ratios(result: dict, names: list[str]) -> None:
     null under the same cut, in each space, with the bootstrap interval. The dashed line at 1 is a relation that is no more frequent
     among far pairs than pairs in general."""
     spaces = list(result["spaces"])
+    names = base.by_group(names)
     fig, axes = plt.subplots(1, 2, figsize=(6.5, 3.6), sharey=True)
     y = np.arange(len(names))[::-1]
     for ax, cut in zip(axes, ("5th percentile", "below zero")):
@@ -27,5 +28,8 @@ def ratios(result: dict, names: list[str]) -> None:
         ax.set_xlabel("share of the relation / share of the null", fontsize=7)
         ax.tick_params(labelsize=6)
     axes[0].set_yticks(y, [f"{n} ({result['pairs'][n]:,})" for n in names], fontsize=6)
-    axes[0].legend(fontsize=6, loc="center right")
+    base.color_ticks(axes[0].get_yticklabels())
+    spaces_legend = axes[0].legend(fontsize=6, loc="center right")
+    base.group_legend(axes[0], loc="upper center", bbox_to_anchor=(1.1, -0.17), ncol=4, frameon=False)
+    axes[0].add_artist(spaces_legend)
     base.save(fig, "relation_far")

@@ -270,7 +270,7 @@ solutions there; `make validate` fails if this file is out of date.
 
 13. The share of the null below a cut depends on the space. Below zero it is 21% in PPMI-SVD and 12% in SGNS, so the same share of a relation would be a different thing in each, and a cosine cannot be compared between spaces. Dividing by the share of the null puts both on one scale, 1 being a relation that is as frequent among far pairs as pairs in general.
 
-14. The script `relation_far.py` does it for the spaces of the gallery. The share of the null is 4.8% in PPMI-SVD and 4.9% in SGNS (a little under 5%, since the bins of the histogram are 0.001 wide). None of the 903 antonym pairs is below it in PPMI-SVD, and 0.2% [0.0%, 0.9%] in SGNS, so the ratios are 0.0 and 0.05 [0.00, 0.19] and the relation is not associated with far (it would be if the interval of the ratio were above 1).
+14. The script `relation_far.py` does it for the spaces of the gallery. The share of the null is 4.8% in PPMI-SVD and 4.9% in SGNS (a little under 5%, since the bins of the histogram are 0.001 wide). Of the 1,255 antonym pairs, 0.2% [0.0%, 0.8%] are below it in PPMI-SVD and 0.3% [0.0%, 1.0%] in SGNS, so the ratios are 0.05 [0.00, 0.17] and 0.07 [0.00, 0.20] and the relation is not associated with far (it would be if the interval of the ratio were above 1).
 
 15. The word-context matrix of pointwise mutual information, shifted by $\log k$: the optimal dot product between a word vector and a context vector is $\mathrm{PMI}(w,c) - \log k$ [@levy2014neural]. A larger $k$ lowers every entry, so pairs must be more associated than chance to get a positive value, and it works as the shift that the PPMI of the counting model does by cutting at zero.
 

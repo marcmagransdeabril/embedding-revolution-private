@@ -2,7 +2,7 @@
 no judge names looks like, where the strata of the exploration fall, whether the two spaces agree on what is extreme there, and whether
 the extremes are a matter of rare words. No pair is shown or printed, so that the person who will label the sample stays blind to it.
 
-Population and cuts are those of relation_unlabelled.py: the pairs of two WordNet words that hold none of the 13 judged relations, and the
+Population and cuts are those of relation_unlabelled.py: the pairs of two WordNet words that hold none of the 8 judged relations, and the
 strata at the 1st percentile, the middle (49.5 to 50.5) and the 99th percentile of the cosine of that population in each space. Three
 figures: relation_unlabelled_distribution.png (exact density of the cosine of the unlabelled and of the judged pairs, with the strata),
 relation_unlabelled_agreement.png (the cosine in the two spaces of RANDOM_PAIRS random unlabelled pairs) and relation_unlabelled_frequency.png

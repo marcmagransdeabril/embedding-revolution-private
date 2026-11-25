@@ -2,7 +2,7 @@
 """First exploration for Q3 of the chapter "Meaning as Likeness": what relations, if any, hold between pairs that no judge names, at the
 near and the far end of the cosine? It is open-ended on purpose: no list of relations is given to the rater.
 
-Population: the pairs of two WordNet words (the null of Q2, 175 million per space) that hold none of the 13 judged relations of
+Population: the pairs of two WordNet words (the null of Q2, 175 million per space) that hold none of the 8 judged relations of
 relation_collapse.py. Per space (PPMI-SVD and SGNS of the gallery), three strata of that population, cut at the quantiles of its own
 cosine distribution (so that a cut means the same in both spaces): top (at or above the 99th percentile), bottom (at or below the 1st
 percentile) and middle (the 49.5th to the 50.5th percentile, the control: what a rater finds between two words that the space puts at
