@@ -1,7 +1,7 @@
-"""Question Q2 of the chapter "Meaning as Likeness" (section "Similar, Related or Associated?"), second part: which relations does the
-nearness of a space not collapse? A loss trained on company rewards any relation that leaves a trace in company, so nearness is expected to
+"""Question Q2 of the chapter "Meaning as Likeness" (section "Which Relations Does Nearness Tell Apart?"): which relations does the
+nearness of a space tell apart? A loss trained on company rewards any relation that leaves a trace in company, so nearness is expected to
 mix many relations; nearness is one number per pair, so the most it can do is put relations in an order, and two relations are
-"collapsed" when the interval of the order between them holds no order. relation_split.py is the first part (the four cells of SimLex).
+"collapsed" when the interval of the order between them holds no order.
 
 Spaces: PPMI-SVD and SGNS of the gallery (text8, 30,000 words, d = 100, seed 0) for tests 1, 2, 3 and 5; the same two losses trained
 on the second half of text8 for test 4, whose judge is counted on the first half (so that the judge is not the space itself).
@@ -9,7 +9,7 @@ Relations, each a set of unordered pairs of words of the vocabulary:
   WordNet 3.0: inflection (a shared base form, by morphy's rules and exception lists), derivation ("+"), synonym (a shared synset),
     antonym ("!"), hypernym (one IS-A step), meronym (part, member or substance), co-hyponym (the same direct hypernym); a pair takes
     the first that holds in this order, and the pairs that hold only one of them are a robustness check;
-  SimLex-999 with USF: associated only and similar only, the single cells of relation_split.py (top and bottom thirds);
+  SimLex-999 with USF: associated (not similar) and similar (not associated), the pairs in the top third of one judge and the bottom third of the other;
   BATS 3.0: its four families (inflectional, derivational, lexicographic, encyclopedic), each the union of its ten relations;
   text8, first half: direct co-occurrence (PPMI > 0 within the window of 5) and shared context only (no co-occurrence, and a cosine of
     the two PPMI rows in the top 1% of the random pairs without co-occurrence), among RANDOM_PAIRS seeded random pairs;
@@ -48,13 +48,12 @@ from scipy.stats import norm, spearmanr
 
 import gallery
 import relation_collapse_figures as figures
-import relation_split
 import utils
 
 SPACES = {"PPMI-SVD": "ppmi_svd_s0", "SGNS": "sgns_s0"}
 HALF_SPACES = {"PPMI-SVD": "ppmi_svd_B", "SGNS": "sgns_B"}  # trained on the second half of text8, as train_spaces.py does
 WORDNET = ["inflection", "derivation", "synonym", "antonym", "hypernym", "meronym", "co-hyponym"]  # also the precedence
-SIMLEX = ["associated only (SimLex)", "similar only (SimLex)"]
+SIMLEX = ["associated (SimLex)", "similar (SimLex)"]  # the cells "associated only" and "similar only" of cells(), named by what they hold
 BATS = ["BATS inflectional", "BATS derivational", "BATS lexicographic", "BATS encyclopedic"]
 RELATIONS = WORDNET + SIMLEX + BATS
 RANDOM, NEITHER, UNCOVERED, ANY_BATS = "random pairs", "neither (in WordNet)", "not in WordNet", "BATS only"
@@ -64,8 +63,22 @@ BINS, K, WINDOW = gallery.BINS, 5, 5
 RESAMPLES, FIT_RESAMPLES, RANDOM_PAIRS, PER_RELATION, TOP_SHARE = 1000, 200, 200_000, 20_000, 0.01
 
 
-def fmt(estimate, sign: str = "") -> str:
-    return relation_split.fmt(estimate, sign)
+def fmt(estimate: tuple[float, float, float], sign: str = "") -> str:
+    """A number with its bootstrap interval, as it is printed everywhere."""
+    return f"{estimate[0]:{sign}.3f} [{estimate[1]:{sign}.3f}, {estimate[2]:{sign}.3f}]"
+
+
+def cells(similarity: np.ndarray, association: np.ndarray, share: float) -> dict[str, np.ndarray]:
+    """Boolean mask of each of the four cells of the two SimLex-999 judges: top `share` against bottom `share` of each (a cut at zero
+    would leave "similar, not associated" almost empty, since the pairs were drawn from USF)."""
+    hi_s, lo_s = similarity >= np.quantile(similarity, 1 - share), similarity <= np.quantile(similarity, share)
+    hi_a, lo_a = association >= np.quantile(association, 1 - share), association <= np.quantile(association, share)
+    return {"both": hi_s & hi_a, "similar only": hi_s & lo_a, "associated only": lo_s & hi_a, "neither": lo_s & lo_a}
+
+
+def frequency_features(log_counts: np.ndarray) -> np.ndarray:
+    """Design matrix of a pair from the log counts of its two words (n x 2): intercept, lower and higher log count (order-free)."""
+    return np.column_stack([np.ones(len(log_counts)), log_counts.min(axis=1), log_counts.max(axis=1)])
 
 
 # --- the judges
@@ -87,7 +100,7 @@ def judged_pairs(vocab: list[str], index: dict[str, int]) -> tuple[dict, dict, n
     pairs = utils.first_label(wordnet, WORDNET, len(vocab))
     simlex = [p for p in utils.load_simlex() if p[0] in index and p[1] in index]
     similarity, association = (np.array([p[c] for p in simlex]) for c in (2, 3))
-    masks = relation_split.cells(similarity, association, 1 / 3)
+    masks = cells(similarity, association, 1 / 3)
     for name, cell in zip(SIMLEX, ("associated only", "similar only")):
         pairs[name] = in_vocab([p[:2] for p, m in zip(simlex, masks[cell]) if m], index)
     bats = utils.load_bats()
@@ -173,7 +186,7 @@ def resolved(matrix: dict, low: str = "low", high: str = "high") -> np.ndarray:
 
 
 def agreement(result: dict) -> dict:
-    """Test 5, second part: of the contrasts of test 2, how many each space resolves, and how many both resolve the same way."""
+    """Test 5: of the contrasts of test 2, how many each space resolves, and how many both resolve the same way."""
     upper = np.triu_indices(len(RELATIONS), 1)
     signs = {s: resolved(r["matrix"])[upper] for s, r in result["spaces"].items()}
     a, b = signs.values()
@@ -288,7 +301,7 @@ def mechanism_sample(pairs: dict, seed: int = 0) -> tuple[np.ndarray, np.ndarray
 def designs(log_counts: np.ndarray, features: np.ndarray, labels: np.ndarray) -> dict[str, np.ndarray]:
     """The design matrices of test 4: frequency (intercept, lower and higher log count), frequency and first-half context (PPMI and
     overlap of the rows), and each of them with one indicator per relation (random pairs are the reference)."""
-    frequency = relation_split.frequency_features(log_counts)
+    frequency = frequency_features(log_counts)
     context = np.column_stack([frequency, features])
     onehot = (labels[:, None] == np.arange(len(RELATIONS))[None, :]).astype(float)
     return {"frequency": frequency, "context": context, "frequency + relations": np.column_stack([frequency, onehot]),

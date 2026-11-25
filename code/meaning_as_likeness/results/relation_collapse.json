@@ -982,7 +982,7 @@
        0.3824361582688465
       ]
      },
-     "associated only (SimLex)": {
+     "associated (SimLex)": {
       "with context": [
        0.18784834322147875,
        0.12985588325027073,
@@ -1054,7 +1054,7 @@
        0.24395341540636115
       ]
      },
-     "similar only (SimLex)": {
+     "similar (SimLex)": {
       "with context": [
        0.1887497397970326,
        0.1268119360819925,
@@ -1176,7 +1176,7 @@
        0.3126215931980536
       ]
      },
-     "associated only (SimLex)": {
+     "associated (SimLex)": {
       "with context": [
        0.128472111815491,
        0.08628095304110699,
@@ -1248,7 +1248,7 @@
        0.20407043844508196
       ]
      },
-     "similar only (SimLex)": {
+     "similar (SimLex)": {
       "with context": [
        0.15033591385989317,
        0.11159515135442293,
@@ -1294,14 +1294,14 @@
   "BATS inflectional": 408,
   "BATS lexicographic": 610,
   "antonym": 903,
-  "associated only (SimLex)": 77,
+  "associated (SimLex)": 77,
   "co-hyponym": 377543,
   "derivation": 2728,
   "hypernym": 52201,
   "inflection": 11354,
   "meronym": 5172,
   "random pairs": 199954,
-  "similar only (SimLex)": 70,
+  "similar (SimLex)": 70,
   "synonym": 15731
  },
  "single_label": {
@@ -1426,7 +1426,7 @@
      0.9220898196166205,
      0.9531316441359583
     ],
-    "associated only (SimLex)": [
+    "associated (SimLex)": [
      0.9369516119621069,
      0.8609918034736308,
      0.9801502686244616
@@ -1461,7 +1461,7 @@
      0.49523791831121927,
      0.5005043340862028
     ],
-    "similar only (SimLex)": [
+    "similar (SimLex)": [
      0.9464836689593861,
      0.8910757306241982,
      0.9789881678835087
@@ -2487,7 +2487,7 @@
      0.9409618376800384,
      0.9659913979203587
     ],
-    "associated only (SimLex)": [
+    "associated (SimLex)": [
      0.9466735599539763,
      0.8930098168637958,
      0.9818152689479227
@@ -2522,7 +2522,7 @@
      0.49288769223971396,
      0.49716690910945455
     ],
-    "similar only (SimLex)": [
+    "similar (SimLex)": [
      0.947274265002573,
      0.8980426095481426,
      0.9810899654573929

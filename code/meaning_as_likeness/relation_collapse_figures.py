@@ -1,4 +1,4 @@
-"""The figures of the second part of the section "Similar, Related or Associated?" (see relation_collapse.py, which computes what they
+"""The figures of the section "Which Relations Does Nearness Tell Apart?" (see relation_collapse.py, which computes what they
 show), drawn at the width of the text block of the book (6.5 inches). Nothing is computed here."""
 from __future__ import annotations
 
@@ -8,9 +8,18 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-import relation_split_figures
+import utils
 
-save, errors = relation_split_figures.save, relation_split_figures.errors
+
+def save(fig, name: str) -> None:
+    utils.FIGURES.mkdir(parents=True, exist_ok=True)
+    fig.savefig(utils.FIGURES / f"{name}.png", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+
+
+def errors(estimates: list) -> np.ndarray:
+    """Error bars (2 x n) from (point, low, high) triples."""
+    return np.array([[e[0] - e[1], e[2] - e[0]] for e in estimates]).T
 
 
 def against_neither(results: dict) -> None:
