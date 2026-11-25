@@ -37,7 +37,7 @@ But, before asking any of these questions, we need to understand our null hypoth
 The first look at the neighbours (@sec-gallery-neighbours) leaves open how many relations nearness carries. A model trained on company has no reason to favour similarity, and the loss could as well reward any relation that leaves a trace in company, so the three relations found in the literature above (similarity, relatedness and association) are only a first guess at which ones apply in spaces. The question is then which relations nearness tells apart, which it collapses into the same nearness, and which ones are not captured at all.
 
 ::: {.test #q-likeness-2}
-**Q2. Which relations does nearness tell apart?** From the relations that a judge can name (similarity, association, forms of one word, synonymy, antonymy, kind, part), which are nearer or farther than the null hypothesis set of pairs would say, which does it not tell apart, how many of the near pairs carry no named relation, and is the answer the same for spaces built in different ways?
+**Q2. Which relations does nearness tell apart?** Of the relations that a judge can name, which are nearer or farther than pairs of no relation, which does nearness not tell apart, how many of the near pairs carry none of them, and is the answer the same for spaces built in different ways?
 
 *See* @sec-likeness-relation-split.
 :::
