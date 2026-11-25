@@ -79,30 +79,6 @@ def against_neither(results: dict) -> None:
     save(fig, "relation_collapse_auc")
 
 
-def matrix(results: dict, relations: list[str]) -> None:
-    """Test 2: the probability that a pair of the row relation is nearer than a pair of the column relation, in each space; a cell
-    whose interval holds 0.5 (the two relations are collapsed) is marked with a dot."""
-    spaces = list(results["spaces"])
-    fig, axes = plt.subplots(1, len(spaces), figsize=(6.5, 3.6), sharey=True)
-    for ax, s in zip(axes, spaces):
-        m = results["spaces"][s]["matrix"]
-        point, low, high = (np.array(m[k]) for k in ("point", "low", "high"))
-        image = ax.imshow(point, cmap="RdBu_r", vmin=0, vmax=1)
-        collapsed = (low <= 0.5) & (high >= 0.5) & ~np.eye(len(relations), dtype=bool)
-        rows, cols = np.nonzero(collapsed)
-        ax.scatter(cols, rows, s=6, color="black", marker="o")
-        ax.set_xticks(range(len(relations)), relations, rotation=90, fontsize=5.5)
-        ax.set_yticks(range(len(relations)), relations, fontsize=5.5)
-        color_ticks(ax.get_xticklabels())
-        color_ticks(ax.get_yticklabels())
-        ax.set_title(s, fontsize=8)
-    bar = fig.colorbar(image, ax=axes, shrink=0.7)
-    bar.set_label("row pair nearer than column pair", fontsize=7)
-    bar.ax.tick_params(labelsize=6)
-    group_legend(axes[0], loc="upper center", bbox_to_anchor=(1.0, -0.42), ncol=4, frameon=False)
-    save(fig, "relation_collapse_matrix")
-
-
 def inventory(inv: dict, labels: list[str]) -> None:
     """Test 3: the share of the top neighbours of every word with each label, in each space and for random words of the same band."""
     columns = {**inv["spaces"], "same-band control": inv["control"]}

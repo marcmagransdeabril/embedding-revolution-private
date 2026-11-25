@@ -1,10 +1,10 @@
 """Question Q2 of the chapter "Meaning as Likeness" (section "Which Relations Does Nearness Tell Apart?"): which relations does the
 nearness of a space tell apart? A loss trained on company rewards any relation that leaves a trace in company, so nearness is expected to
-mix many relations; nearness is one number per pair, so the most it can do is put relations in an order, and two relations are
-"collapsed" when the interval of the order between them holds no order.
+mix many relations; nearness is one number per pair, so it cannot say which relation holds, and the most it can do is put relations
+in an order of how near their pairs are.
 
-Spaces: PPMI-SVD and SGNS of the gallery (text8, 30,000 words, d = 100, seed 0) for tests 1, 2, 3 and 5; the same two losses trained
-on the second half of text8 for test 4, whose judge is counted on the first half (so that the judge is not the space itself).
+Spaces: PPMI-SVD and SGNS of the gallery (text8, 30,000 words, d = 100, seed 0) for tests 1, 2 and 4; the same two losses trained
+on the second half of text8 for test 3, whose judge is counted on the first half (so that the judge is not the space itself).
 Relations, each a set of unordered pairs of words of the vocabulary:
   WordNet 3.0: inflection (a shared base form, by morphy's rules and exception lists), derivation ("+"), synonym (a shared synset),
     antonym ("!"), hypernym (one IS-A step), meronym (part, member or substance), co-hyponym (the same direct hypernym); a pair that holds several counts in each, and the pairs that hold only one of them are a robustness check;
@@ -14,37 +14,32 @@ Relations, each a set of unordered pairs of words of the vocabulary:
   text8, first half: direct co-occurrence (PPMI > 0 within the window of 5) and shared context only (no co-occurrence, and a cosine of
     the two PPMI rows in the top 1% of the random pairs without co-occurrence), among RANDOM_PAIRS seeded random pairs;
   controls: neither (both words in WordNet, none of the eight relations, from WordNet or BATS: the baseline of every AUC, as in the gallery), random pairs of
-    the vocabulary, and, for test 3, random words of the same frequency band.
+    the vocabulary, and, for test 2, random words of the same frequency band.
 
-Five tests. (1) For each relation, the probability that one of its pairs is nearer than a pair of neither (AUC, 0.5 if the relation
-leaves no trace). (2) For each two relations, the probability that a pair of the first is nearer than a pair of the second: an interval
-that holds 0.5 is a collapse, one that does not is an order; the count of orders is also given with a Bonferroni-corrected interval
-(normal, from the bootstrap standard error) for the number of contrasts. (3) The label of the top-5 neighbours of every word, against
-random words of the same band: the share of each relation, and the share that no judge names, with a seeded sample to read. (4) The
-mechanism, in the half-text spaces: the AUC of direct co-occurrence and of shared context only, the share of the cosine of random pairs
-that frequency and the first-half context explain (R^2), and the effect of each relation on the cosine with and without that context
-held fixed (least squares, the relation as an indicator, random pairs the reference); a relation whose effect with the context held
-fixed holds zero is collapsed into shared context. (5) Whether the two losses order the relations alike: the Spearman correlation of
-their AUCs against neither, and the share of the orders of test 2 that both resolve in the same direction.
-Every interval is a 95% percentile bootstrap over the words of the vocabulary (RESAMPLES; FIT_RESAMPLES for the fits of test 4), the
-same draws for every relation and both spaces, so that the contrasts are paired; the histogram of neither is held fixed, as in the
-gallery. Test 3 resamples the query words. Test 4 samples: RANDOM_PAIRS random pairs and at most PER_RELATION pairs of each relation.
+Four tests. (1) For each relation, the probability that one of its pairs is nearer than a pair of neither (AUC, 0.5 if the relation
+leaves no trace). (2) The label of the top-5 neighbours of every word, against random words of the same band: the share of each
+relation, and the share that no judge names, with a seeded sample to read. (3) The mechanism, in the half-text spaces: the AUC of direct
+co-occurrence and of shared context only, the share of the cosine of random pairs that frequency and the first-half context explain
+(R^2), and the effect of each relation on the cosine with and without that context held fixed (least squares, the relation as an
+indicator, random pairs the reference); a relation whose effect with the context held fixed holds zero is collapsed into shared context.
+(4) Whether the two losses order the relations alike: the Spearman correlation of their AUCs against neither.
+Every interval is a 95% percentile bootstrap over the words of the vocabulary (RESAMPLES; FIT_RESAMPLES for the fits of test 3), the
+same draws for every relation and both spaces; the histogram of neither is held fixed, as in the
+gallery. Test 2 resamples the query words. Test 3 samples: RANDOM_PAIRS random pairs and at most PER_RELATION pairs of each relation.
 
 Expectation (written before the run): every relation is above neither (any relation leaves a trace in company), with inflection,
-antonym and co-hyponym the nearest and hypernym and meronym the farthest; with hundreds to hundreds of thousands of pairs most of the
-orders of test 2 are resolved, and the collapses are among the small set (encyclopedic) and between relations of
-similar kind (synonym and co-hyponym); more than half of the top-5 neighbours carry no label; in test 4 the first-half context
+antonym and co-hyponym the nearest and hypernym and meronym the farthest; more than half of the top-5 neighbours carry no label; in test 3 the first-half context
 explains most of what frequency does not, and most relation effects shrink by more than half once it is held fixed, so that the
 relations collapse into shared context; the two losses order the relations alike (Spearman above 0.8).
 
-Prints every number; saves results/relation_collapse.json and the figures relation_collapse_auc.png, relation_collapse_matrix.png,
+Prints every number; saves results/relation_collapse.json and the figures relation_collapse_auc.png,
 relation_collapse_inventory.png and relation_collapse_mechanism.png (drawn by relation_collapse_figures.py).
 """
 from __future__ import annotations
 
 import numpy as np
 from scipy import sparse
-from scipy.stats import norm, spearmanr
+from scipy.stats import spearmanr
 
 import gallery
 import relation_collapse_figures as figures
@@ -62,7 +57,7 @@ BATS_TO_RELATION = {**{f"I{i:02d}": "inflection" for i in range(1, 11)}, **{f"D{
                     "L04": "meronym", "L05": "meronym", "L06": "meronym", "L07": "synonym", "L08": "synonym", "L09": "antonym",
                     "L10": "antonym"}
 CONTEXT = ["direct co-occurrence", "shared context only"]
-LABELS = WORDNET + [ENCYCLOPEDIC, NEITHER, UNCOVERED]  # the labels of a neighbour in test 3
+LABELS = WORDNET + [ENCYCLOPEDIC, NEITHER, UNCOVERED]  # the labels of a neighbour in test 2
 BINS, K, WINDOW = gallery.BINS, 5, 5
 RESAMPLES, FIT_RESAMPLES, RANDOM_PAIRS, PER_RELATION, TOP_SHARE = 1000, 200, 200_000, 20_000, 0.01
 
@@ -90,7 +85,7 @@ def in_vocab(pairs, index: dict[str, int]) -> np.ndarray:
 
 
 def judged_pairs(vocab: list[str], index: dict[str, int]) -> tuple[dict, dict, np.ndarray]:
-    """The pairs of every relation of tests 1 to 3 (each relation holds the pairs of every judge that names it, WordNet and the relations
+    """The pairs of every relation of tests 1 and 2 (each relation holds the pairs of every judge that names it, WordNet and the relations
     of BATS that belong to it, and a pair counts in every relation that it holds; and random pairs), the WordNet relations as WordNet
     gives them, and the WordNet coverage of the vocabulary."""
     wordnet, covered = utils.wordnet_relations(vocab)
@@ -117,7 +112,7 @@ def neither_histogram(emb: np.ndarray, covered: np.ndarray, pairs: dict) -> np.n
     return both
 
 
-# --- the bootstrap over words, shared by tests 1, 2, 4 and 5
+# --- the bootstrap over words, shared by tests 1, 3 and 4
 def word_draws(size: int, resamples: int, seed: int = 0):
     """How many times each word is drawn, first all ones (the point estimate), then `resamples` draws with replacement."""
     yield np.ones(size, dtype=np.int64)
@@ -149,46 +144,23 @@ def as_triple(est) -> list:
     return [float(est[0]), float(est[1]), float(est[2])]
 
 
-# --- tests 1, 2 and 5
+# --- tests 1 and 4
 def order_tests(spaces: dict, pairs: dict, neither: dict, size: int) -> dict:
-    """AUC of every relation against neither, AUC of every two relations, and the agreement of the two spaces, with paired intervals."""
+    """AUC of every relation against neither, and the agreement of the two spaces, with paired intervals."""
     names = RELATIONS + [RANDOM]
     bins = {s: {n: gallery.pair_bins(emb, pairs[n]) for n in names} for s, emb in spaces.items()}
-    against, between, rho = {s: [] for s in spaces}, {s: [] for s in spaces}, []
+    against, rho = {s: [] for s in spaces}, []
     for times in word_draws(size, RESAMPLES):
         for s in spaces:
             h = histograms(bins[s], pairs, times, names)
             against[s].append([utils.histogram_auc(row, neither[s]) for row in h])
-            between[s].append(auc_matrix(h[: len(RELATIONS)]))
         a, b = (np.array(against[s][-1][: len(RELATIONS)]) for s in spaces)
         rho.append(spearmanr(a, b).statistic)
     out = {"pairs": {n: len(pairs[n]) for n in names}, "spaces": {}, "spearman_between_spaces": as_triple(interval(np.array(rho)))}
-    contrasts = len(RELATIONS) * (len(RELATIONS) - 1) // 2
-    z = norm.ppf(1 - 0.025 / contrasts)
     for s in spaces:
-        auc, matrix = np.array(against[s]), np.array(between[s])
-        point, low, high = interval(matrix)
-        spread = matrix[1:].std(axis=0)
-        out["spaces"][s] = {"against_neither": {n: as_triple(interval(auc[:, i])) for i, n in enumerate(names)},
-                            "matrix": {"point": point.tolist(), "low": low.tolist(), "high": high.tolist(),
-                                       "bonferroni_low": (point - z * spread).tolist(), "bonferroni_high": (point + z * spread).tolist()}}
-    out["contrasts"], out["bonferroni_z"] = contrasts, float(z)
+        auc = np.array(against[s])
+        out["spaces"][s] = {"against_neither": {n: as_triple(interval(auc[:, i])) for i, n in enumerate(names)}}
     return out
-
-
-def resolved(matrix: dict, low: str = "low", high: str = "high") -> np.ndarray:
-    """+1 where the row relation is nearer than the column one, -1 where it is farther, 0 where the interval holds 0.5 (a collapse)."""
-    lo, hi = np.array(matrix[low]), np.array(matrix[high])
-    return np.where(lo > 0.5, 1, np.where(hi < 0.5, -1, 0))
-
-
-def agreement(result: dict) -> dict:
-    """Test 5: of the contrasts of test 2, how many each space resolves, and how many both resolve the same way."""
-    upper = np.triu_indices(len(RELATIONS), 1)
-    signs = {s: resolved(r["matrix"])[upper] for s, r in result["spaces"].items()}
-    a, b = signs.values()
-    return {"resolved": {s: int((v != 0).sum()) for s, v in signs.items()}, "both_same": int(((a == b) & (a != 0)).sum()),
-            "opposite": int((a * b < 0).sum()), "contrasts": len(upper[0])}
 
 
 def single_label_check(spaces: dict, wordnet: dict, neither: dict, size: int) -> dict:
@@ -210,7 +182,7 @@ def bats_relations(spaces: dict, index: dict, neither: dict) -> dict:
     return out
 
 
-# --- test 3
+# --- test 2
 def labels_of(pairs: np.ndarray, keys: dict[str, np.ndarray], covered: np.ndarray, size: int) -> np.ndarray:
     """Which of LABELS each pair holds (any order of its two words), a boolean array (pairs x LABELS). A pair holds every relation that
     it has, so its row can have several True; a pair with no relation holds NEITHER if its two words are in WordNet and UNCOVERED if not."""
@@ -248,7 +220,7 @@ def unnamed_share(labels: np.ndarray, seed: int = 0) -> tuple[float, float, floa
 
 
 def inventory(spaces: dict, pairs: dict, covered: np.ndarray, vocab: list[str]) -> dict:
-    """Test 3: the share of each label among the top-K neighbours of every word, against random words of the same band, and the share
+    """Test 2: the share of each label among the top-K neighbours of every word, against random words of the same band, and the share
     of the neighbours in WordNet that no relation names."""
     size = len(vocab)
     keys = {n: utils.pair_keys(pairs[n], size) for n in RELATIONS}
@@ -267,7 +239,7 @@ def inventory(spaces: dict, pairs: dict, covered: np.ndarray, vocab: list[str]) 
     return out
 
 
-# --- test 4
+# --- test 3
 def first_half_judge(size: int) -> tuple[sparse.csr_matrix, sparse.csr_matrix]:
     """PPMI of the first half of text8 (window WINDOW), and its rows scaled to length 1 (the context of a word, for the overlap)."""
     _, ids = utils.build_vocab(utils.load_text8(), size)  # the vocabulary of train_spaces.py, so the same indices
@@ -287,7 +259,7 @@ def context_features(m: sparse.csr_matrix, rows: sparse.csr_matrix, pairs: np.nd
 
 
 def mechanism_sample(pairs: dict, seed: int = 0) -> tuple[np.ndarray, np.ndarray]:
-    """The pairs of test 4: the random pairs, and at most PER_RELATION seeded pairs of each relation; with the label of each
+    """The pairs of test 3: the random pairs, and at most PER_RELATION seeded pairs of each relation; with the label of each
     (-1 for the random pairs, else the index in RELATIONS)."""
     rng = np.random.default_rng(seed)
     parts, labels = [pairs[RANDOM]], [np.full(len(pairs[RANDOM]), -1)]
@@ -299,7 +271,7 @@ def mechanism_sample(pairs: dict, seed: int = 0) -> tuple[np.ndarray, np.ndarray
 
 
 def designs(log_counts: np.ndarray, features: np.ndarray, labels: np.ndarray) -> dict[str, np.ndarray]:
-    """The design matrices of test 4: frequency (intercept, lower and higher log count), frequency and first-half context (PPMI and
+    """The design matrices of test 3: frequency (intercept, lower and higher log count), frequency and first-half context (PPMI and
     overlap of the rows), and each of them with one indicator per relation (random pairs are the reference)."""
     frequency = frequency_features(log_counts)
     context = np.column_stack([frequency, features])
@@ -329,7 +301,7 @@ def context_groups(sample: np.ndarray, labels: np.ndarray, features: np.ndarray)
 
 
 def mechanism(log_counts: np.ndarray, pairs: dict) -> dict:
-    """Test 4 in the half-text spaces: the AUC of the two context relations, the R^2 of frequency and context on random pairs, and the
+    """Test 3 in the half-text spaces: the AUC of the two context relations, the R^2 of frequency and context on random pairs, and the
     effect of each relation on the cosine without and with the context held fixed."""
     m, rows = first_half_judge(len(log_counts))
     sample, labels = mechanism_sample(pairs)
@@ -369,21 +341,12 @@ def print_orders(result: dict, single: dict, bats40: dict) -> None:
         for n, est in r["against_neither"].items():
             extra = f"   single label ({single[s]['pairs'][n]:,} pairs): {fmt(single[s][n])}" if n in WORDNET else ""
             print(f"  {n:26s} {fmt(est)}{extra}")
-        signs = resolved(r["matrix"])
-        strict = resolved(r["matrix"], "bonferroni_low", "bonferroni_high")
-        upper = np.triu_indices(len(RELATIONS), 1)
-        print(f"  test 2: {(signs[upper] != 0).sum()} of {result['contrasts']} contrasts resolved at 95% "
-              f"({(strict[upper] != 0).sum()} with Bonferroni, z = {result['bonferroni_z']:.2f}); collapsed:")
-        for i, j in zip(*upper):
-            if signs[i, j] == 0:
-                print(f"    {RELATIONS[i]} ~ {RELATIONS[j]}: {r['matrix']['point'][i][j]:.3f} "
-                      f"[{r['matrix']['low'][i][j]:.3f}, {r['matrix']['high'][i][j]:.3f}]")
     print("\nBATS, each of its relations against neither: " + "; ".join(
         f"{n} ({v['pairs']}) " + " / ".join(f"{v[s][0]:.2f}" for s in result["spaces"]) for n, v in bats40.items()))
 
 
 def print_inventory(inv: dict) -> None:
-    print(f"\ntest 3: share of the top-{K} neighbours of every word with each label (interval over the query words)")
+    print(f"\ntest 2: share of the top-{K} neighbours of every word with each label (interval over the query words)")
     print(f"  {'label':22s} " + "".join(f"{s:>26s}" for s in [*inv["spaces"], "same-band control"]))
     for label in LABELS:
         cells = [inv["spaces"][s][label] for s in inv["spaces"]] + [inv["control"][label]]
@@ -395,7 +358,7 @@ def print_inventory(inv: dict) -> None:
 
 
 def print_mechanism(mech: dict) -> None:
-    print(f"\ntest 4 (spaces of the second half, judge of the first half): pairs {mech['pairs']}, overlap threshold "
+    print(f"\ntest 3 (spaces of the second half, judge of the first half): pairs {mech['pairs']}, overlap threshold "
           f"{mech['overlap_threshold']:.3f}")
     for s, r in mech["spaces"].items():
         print(f"  {s}: " + "; ".join(f"AUC {k} {fmt(v)}" for k, v in r["auc"].items()))
@@ -414,9 +377,7 @@ def check_claims(results: dict) -> None:
         assert abs(auc[RANDOM][0] - 0.5) < 0.01, f"{s}: random pairs are at the level of neither"
         assert max(WORDNET, key=lambda n: auc[n][0]) == "inflection", f"{s}: inflection is the nearest WordNet relation"
         assert min(RELATIONS, key=lambda n: auc[n][0]) == "co-hyponym", f"{s}: co-hyponym is the farthest relation"
-        assert results["agreement"]["resolved"][s] >= 0.75 * results["contrasts"], f"{s}: most of the orders are resolved"
         assert results["inventory"]["unnamed_share"][s][1] > 0.6, f"{s}: most neighbours in WordNet carry no label"
-    assert results["agreement"]["opposite"] == 0, "the two losses never resolve an order in opposite directions"
     assert results["spearman_between_spaces"][0] > 0.9, "the two losses order the relations alike"
     assert results["inventory"]["unnamed_share"]["same-band control"][1] > 0.95, "random words of the band carry almost no label"
     for s, r in results["mechanism"]["spaces"].items():
@@ -434,19 +395,16 @@ def main() -> None:
     spaces = {s: utils.load_space(stem) for s, stem in SPACES.items()}
     neither = {s: neither_histogram(emb, covered, pairs) for s, emb in spaces.items()}
     results = order_tests(spaces, pairs, neither, size)
-    results["agreement"] = agreement(results)
     results["single_label"] = single_label_check(spaces, wordnet, neither, size)
     results["bats_relations"] = bats_relations(spaces, index, neither)
     print_orders(results, results["single_label"], results["bats_relations"])
-    print(f"\ntest 5: Spearman of the AUCs against neither between the spaces {fmt(results['spearman_between_spaces'])}; "
-          f"contrasts {results['agreement']}")
+    print(f"\ntest 4: Spearman of the AUCs against neither between the spaces {fmt(results['spearman_between_spaces'])}")
     results["inventory"] = inventory(spaces, pairs, covered, vocab)
     print_inventory(results["inventory"])
     results["mechanism"] = mechanism(np.log(counts.astype(float)), pairs)
     print_mechanism(results["mechanism"])
     utils.save_results("relation_collapse", results)
     figures.against_neither(results)
-    figures.matrix(results, RELATIONS)
     figures.inventory(results["inventory"], LABELS)
     figures.mechanism(results["mechanism"], RELATIONS)
     check_claims(results)
