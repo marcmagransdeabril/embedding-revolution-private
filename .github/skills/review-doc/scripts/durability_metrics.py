@@ -9,7 +9,7 @@ Subcommands
 
 Status annotations live in the text itself:
   chapters   front matter `status:` (or a class on the H1 for files without front matter) and optional `open:`
-  sections   a heading class, `## Title {.provisional}` or `{.idea}`; no class means the chapter's status
+  sections   every `##` heading carries its own class, `## Title {.definitive}`, `{.provisional}` or `{.idea}`
   roadmap    a tag `*(status)*` after each chapter title in index.qmd; `<!-- OPEN: ... -->` comments
 The script measures; it never judges. Every number is a hint for the reviewer to read the passage.
 """
@@ -210,8 +210,8 @@ def status_report(root: Path = REPO_ROOT) -> tuple[list[dict], list[tuple[str, s
         elif st and tags[key] != st:
             problems.append(("error", f, f"roadmap tag '{tags[key]}' differs from the chapter status '{st}'"))
         for h in secs:
-            if h["status"] and h["status"] == st and h["level"] > 1:
-                problems.append(("warn", f"{f}:{h['line']}", f"section tag '{h['status']}' repeats the chapter status"))
+            if h["level"] == 2 and not h["status"]:
+                problems.append(("warn", f"{f}:{h['line']}", f"section '{h['title']}' has no status class ({{.definitive}}, {{.provisional}} or {{.idea}})"))
     return rows, problems
 
 
