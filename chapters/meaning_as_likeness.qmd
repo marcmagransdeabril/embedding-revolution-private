@@ -18,7 +18,7 @@ The other seven questions cannot be answered with one static vector and are hand
 
 Once the thirteen questions are answered, the last section will complete the chapter, summarizing the findings and discussing what is still out of reach (@sec-likeness-found).
 
-## What Is Likeness in Meaning? {#sec-likeness-which .provisional}
+## What Is Likeness in Meaning? {#sec-likeness-which .definitive}
 
 Philosophy has not agreed on what meaning is, but different accounts from philosophers each say something on nearness and likeness that can be asked of a space. Below, each account is stated briefly and is followed by the question it gives.
 
@@ -199,7 +199,7 @@ Then, if symbols need something outside the symbols, does a second sense help to
 :::
 
 
-## A Gallery of Neighbours {#sec-gallery-neighbours .provisional}
+## A Gallery of Neighbours {#sec-gallery-neighbours .definitive}
 
 In this section, following the questions suggested by the different philosophical viewpoints, we try to establish an initial baseline of the basic properties of these embedding spaces. For that, we answer [Q1](#q-likeness-1), whether nearest neighbours of randomly drawn words look alike to a reader, and whether spaces built in different ways give the same neighbours. It is the null hypothesis or exploratory phase of the chapter, because if the neighbours of random words did not look alike no later statistic would be worth computing. It also fixes the text, the vocabulary and the first two models of this chapter (other models and texts come in later sections).
 
@@ -271,7 +271,7 @@ If a cosine does not say which relation holds, can the relations be disentangled
 4. For Gaussian vectors the cosine does not depend on the spelling, so the correlation is zero within its bootstrap interval; for a trained space the correlation is also small, since almost all random pairs are far apart in spelling (the normalized edit distance of two random words is near 0.9), and the information is in the few pairs that are close in spelling, which are mostly inflected forms of the same word (`walk` and `walked`) and have a higher mean cosine than random pairs. The script `gallery.py` computes it with an interval from a bootstrap over the pairs. The exercise shows how much of what a space calls near is a shared form and not a shared meaning, which is the case of the forms of the same word seen in the second test of this section.
 :::
 
-## Which Relations Does Nearness Tell Apart? {#sec-likeness-relation-split .provisional}
+## Which Relations Does Nearness Tell Apart? {#sec-likeness-relation-split .definitive}
 
 The loss of the models rewards any relation between words that shows in company, so near words can have any of several relations. For example, as we saw in the previous section, opposites come nearer than synonyms. In this section, in pursuit of an answer to [Q2](#q-likeness-2), we explore the relations for which we have a judge, and check which ones seem to be expressed by nearness of space. For the different tests, we will continue using the two spaces of the previous section (PPMI-SVD and SGNS, text8, $d=100$, the seed of the gallery).
 
