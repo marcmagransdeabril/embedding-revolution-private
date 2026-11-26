@@ -80,16 +80,16 @@ def against_neither(results: dict) -> None:
 
 
 def inventory(all_pairs: dict, cosines: dict, labels: list[str], relations: list[str], chance: str) -> None:
-    """Test 1: the share of all the pairs of the vocabulary with each label (top, exact counts, logarithmic scale), and for each relation
+    """Test 1: the number of pairs of the vocabulary with each label (top, exact counts, logarithmic scale), and for each relation
     the distribution of the cosine of its pairs in each space (below, solid) against that of random pairs (dotted); a density, so that
     sets of very different sizes can be compared."""
     spaces = list(cosines["spaces"])
     fig = plt.figure(figsize=(6.5, 7.2))
     grid = fig.add_gridspec(3, 4, height_ratios=[1.1, 1, 1], hspace=0.7, wspace=0.35)
     top = fig.add_subplot(grid[0, :])
-    top.bar(range(len(labels)), [all_pairs["labels"][label] / all_pairs["pairs"] for label in labels], 0.6, color="grey")
+    top.bar(range(len(labels)), [all_pairs["labels"][label] for label in labels], 0.6, color="grey")
     top.set_yscale("log")
-    top.set_ylabel("share of all pairs", fontsize=8)
+    top.set_ylabel("number of pairs", fontsize=8)
     top.set_xticks(range(len(labels)), [l.replace(" (", "\n(") for l in labels], fontsize=6, rotation=30, ha="right")
     top.tick_params(axis="y", labelsize=6)
     color_ticks(top.get_xticklabels())
