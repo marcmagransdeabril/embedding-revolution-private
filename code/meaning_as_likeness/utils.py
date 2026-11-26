@@ -255,7 +255,7 @@ def wordnet_relations(vocab: list[str]) -> tuple[dict[str, np.ndarray], np.ndarr
     precedence is applied (a pair can be in several):
 
     synonym (share a synset), antonym ("!" between two words), hypernym (one IS-A step, "@" or "@i" between their synsets), meronym
-    (part, member or substance, "%" or "#"), co-hyponym (synsets with the same direct hypernym), derivation ("+" between two words),
+    (part, member or substance, "%" or "#"), co-hyponym (different synsets with the same direct hypernym), derivation ("+" between two words),
     inflection (a shared base form, `inflection_pairs`). Also returns the boolean array of the words that WordNet covers."""
     index = {w: i for i, w in enumerate(vocab)}
     synsets, rows = read_wordnet()
@@ -285,6 +285,7 @@ def wordnet_relations(vocab: list[str]) -> tuple[dict[str, np.ndarray], np.ndarr
                     found["meronym"].update(itertools.product(here, there))
     for members in children.values():
         found["co-hyponym"].update(itertools.combinations(sorted(members), 2))
+    found["co-hyponym"] -= found["synonym"]  # two words of one synset share their parents, and are synonyms and not siblings
     relations = {name: pair_array(pairs) for name, pairs in found.items()}
     lemmas = {pos: set() for pos in MORPHY_RULES}
     for (pos, _), words in synsets.items():

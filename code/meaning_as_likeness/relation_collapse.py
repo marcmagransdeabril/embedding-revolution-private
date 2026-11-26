@@ -7,7 +7,7 @@ Spaces: PPMI-SVD and SGNS of the gallery (text8, 30,000 words, d = 100, seed 0) 
 on the second half of text8 for test 3, whose judge is counted on the first half (so that the judge is not the space itself).
 Relations, each a set of unordered pairs of words of the vocabulary:
   WordNet 3.0: inflection (a shared base form, by morphy's rules and exception lists), derivation ("+"), synonym (a shared synset),
-    antonym ("!"), hypernym (one IS-A step), meronym (part, member or substance), co-hyponym (the same direct hypernym); a pair that holds several counts in each, and the pairs that hold only one of them are a robustness check;
+    antonym ("!"), hypernym (one IS-A step), meronym (part, member or substance), co-hyponym (the same direct hypernym, in different synsets); a pair that holds several counts in each, and the pairs that hold only one of them are a robustness check;
   BATS 3.0: each of its 40 relations adds its pairs to the relation of WordNet that it names (BATS_TO_RELATION: inflectional to inflection,
     derivational to derivation, the hypernyms and hyponyms to hypernym, the meronyms to meronym, the synonyms to synonym, the antonyms to
     antonym), and its encyclopedic family is the relation encyclopedic, which WordNet does not hold;
