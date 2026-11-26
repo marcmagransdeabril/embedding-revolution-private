@@ -257,12 +257,12 @@ def inventory(spaces: dict, pairs: dict, covered: np.ndarray, vocab: list[str]) 
     return out
 
 
-def cosine_histograms(spaces: dict, pairs: dict) -> dict:
-    """Test 1, second part: the histogram (BINS bins of the cosine, exact) of the cosine of the pairs of each relation and of random
-    pairs, in each space."""
+def cosine_histograms(spaces: dict, pairs: dict, neither: dict) -> dict:
+    """Test 1, second part: the histogram (BINS bins of the cosine, exact) of the cosine of the pairs of each relation, of random
+    pairs and of the pairs of no relation (all pairs of two WordNet words that hold none of the relations), in each space."""
     names = RELATIONS + [RANDOM]
     return {"bins": BINS, "spaces": {s: {n: np.bincount(gallery.pair_bins(emb, pairs[n]), minlength=BINS).tolist() for n in names}
-                                     for s, emb in spaces.items()}}
+                                     | {NEITHER: neither[s].tolist()} for s, emb in spaces.items()}}
 
 
 # --- test 3
@@ -385,7 +385,7 @@ def print_all_pairs(inv: dict) -> None:
 def print_cosines(cosines: dict) -> None:
     print("\ntest 1, second part: median cosine of the pairs of each relation and of random pairs")
     middle = lambda h: -1 + (np.searchsorted(np.cumsum(h), 0.5 * np.sum(h)) + 0.5) * 2 / cosines["bins"]
-    for n in [*RELATIONS, RANDOM]:
+    for n in [*RELATIONS, RANDOM, NEITHER]:
         print(f"  {n:16s}" + "".join(f"  {s} {middle(np.array(cosines['spaces'][s][n])):+.3f}" for s in cosines["spaces"]))
 
 
@@ -450,7 +450,7 @@ def main() -> None:
     results["single_label"] = single_label_check(spaces, wordnet, neither, size)
     results["bats_relations"] = bats_relations(spaces, index, neither)
     results["inventory"], results["all_pairs"] = inventory_result, results_all
-    results["cosines"] = cosine_histograms(spaces, pairs)
+    results["cosines"] = cosine_histograms(spaces, pairs, neither)
     print_cosines(results["cosines"])
     print_orders(results, results["single_label"], results["bats_relations"])
     print(f"\ntest 4: Spearman of the AUCs against neither between the spaces {fmt(results['spearman_between_spaces'])}")
@@ -458,7 +458,7 @@ def main() -> None:
     print_mechanism(results["mechanism"])
     utils.save_results("relation_collapse", results)
     figures.against_neither(results)
-    figures.inventory(results["all_pairs"], results["cosines"], LABELS, RELATIONS, RANDOM)
+    figures.inventory(results["all_pairs"], results["cosines"], LABELS, RELATIONS, NEITHER)
     figures.mechanism(results["mechanism"], RELATIONS)
     check_claims(results)
 

@@ -81,7 +81,7 @@ def against_neither(results: dict) -> None:
 
 def inventory(all_pairs: dict, cosines: dict, labels: list[str], relations: list[str], chance: str) -> None:
     """Test 1: the number of pairs of the vocabulary with each label (top, exact counts, logarithmic scale), and for each relation
-    the distribution of the cosine of its pairs in each space (below, solid) against that of random pairs (dotted); a density, so that
+    the distribution of the cosine of its pairs in each space (below, solid) against that of the pairs of no relation (dotted); a density, so that
     sets of very different sizes can be compared."""
     spaces = list(cosines["spaces"])
     fig = plt.figure(figsize=(6.5, 7.2))
@@ -100,7 +100,7 @@ def inventory(all_pairs: dict, cosines: dict, labels: list[str], relations: list
         ax = fig.add_subplot(grid[1 + k // 4, k % 4])
         for color, s in zip(("tab:blue", "tab:orange"), spaces):
             ax.plot(centres, density(cosines["spaces"][s][name]), color=color, lw=1, label=s)
-            ax.plot(centres, density(cosines["spaces"][s][chance]), color=color, lw=0.9, ls=":", label=f"{chance}, {s}")
+            ax.plot(centres, density(cosines["spaces"][s][chance]), color=color, lw=0.9, ls=":", label=f"no relation, {s}")
         ax.set_xlim(-0.4, 1.0)
         ax.set_title(name, fontsize=7, color=GROUP_COLORS[group_of(name)])
         ax.tick_params(labelsize=5)
