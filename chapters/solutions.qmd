@@ -266,7 +266,7 @@ solutions there; `make validate` fails if this file is out of date.
 
 11. The 0.96 says that the cosines of inflection pairs are mostly above those of pairs of no relation, and not which relation holds. The cosines of the other relations, from 0.73 to 0.94 in the same terms, overlap with it and with each other, so a cosine of a given size is compatible with several relations. One number per pair cannot tell innumerable kinds of relation apart, which is why a space has many dimensions.
 
-12. The script `relation_collapse.py` does it, with WordNet read from its data files and the lemmatizer written from its rules and exception lists. In both spaces of the gallery 73% [72%, 73%] of the neighbours in WordNet carry no relation, against 99.6% of the random words of the band, and forms of one word and co-hyponyms are the commonest labels (about 5% of the neighbours each).
+12. The script `relation_collapse.py` does it, with WordNet read from its data files and the lemmatizer written from its rules and exception lists. In the two spaces of the gallery 56% [55%, 57%] (PPMI-SVD) and 55% [54%, 56%] (SGNS) of the nearest neighbours in WordNet carry no relation, and the share rises to 79% at ranks 3 and 4 and to 99% at ranks 500 to 1,000.
 
 13. The share of the null below a cut depends on the space. Below zero it is 21% in PPMI-SVD and 12% in SGNS, so the same share of a relation would be a different thing in each, and a cosine cannot be compared between spaces. Dividing by the share of the null puts both on one scale, 1 being a relation that is as frequent among far pairs as pairs in general.
 

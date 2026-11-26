@@ -79,19 +79,39 @@ def against_neither(results: dict) -> None:
     save(fig, "relation_collapse_auc")
 
 
-def inventory(inv: dict, labels: list[str]) -> None:
-    """Test 3: the share of the top neighbours of every word with each label, in each space and for random words of the same band."""
-    columns = {**inv["spaces"], "same-band control": inv["control"]}
-    fig, ax = plt.subplots(figsize=(6.5, 3.0))
-    width = 0.8 / len(columns)
-    for k, (name, shares) in enumerate(columns.items()):
-        est = [shares[label] for label in labels]
-        ax.bar(np.arange(len(labels)) + (k - (len(columns) - 1) / 2) * width, [e[0] for e in est], width * 0.9, yerr=errors(est),
-               capsize=1.5, label=name, color="lightgrey" if "control" in name else None, edgecolor="grey" if "control" in name else None)
-    ax.set_xticks(range(len(labels)), [l.replace(" (", "\n(") for l in labels], fontsize=6, rotation=30, ha="right")
-    ax.set_ylabel("share of the neighbours", fontsize=8)
-    color_ticks(ax.get_xticklabels())
-    ax.legend(fontsize=6)
+def inventory(all_pairs: dict, rec: dict, labels: list[str], relations: list[str], chance: str) -> None:
+    """Test 1: the share of all the pairs of the vocabulary with each label (top, exact counts, logarithmic scale), and for each relation
+    the share of its pairs that are found within the k nearest neighbours of one of the two words (bottom, one panel per space, with the
+    interval over the words); the dashed line is the same for random pairs, the chance level."""
+    spaces = list(rec["spaces"])
+    fig = plt.figure(figsize=(6.5, 5.6))
+    grid = fig.add_gridspec(2, len(spaces), height_ratios=[1, 1.25], hspace=0.6, wspace=0.12)
+    top = fig.add_subplot(grid[0, :])
+    top.bar(range(len(labels)), [all_pairs["labels"][label] / all_pairs["pairs"] for label in labels], 0.6, color="grey")
+    top.set_yscale("log")
+    top.set_ylabel("share of all pairs", fontsize=8)
+    top.set_xticks(range(len(labels)), [l.replace(" (", "\n(") for l in labels], fontsize=6, rotation=30, ha="right")
+    top.tick_params(axis="y", labelsize=6)
+    color_ticks(top.get_xticklabels())
+    colors = plt.cm.tab10(np.arange(len(relations)))
+    for k, s in enumerate(spaces):
+        ax = fig.add_subplot(grid[1, k], sharey=None if k == 0 else fig.axes[-1])
+        for color, name in zip(colors, relations):
+            est = rec["spaces"][s][name]["recall"]
+            ax.plot(rec["ranks"], [e[0] for e in est], marker="o", ms=2.5, lw=0.9, color=color, label=name)
+            ax.fill_between(rec["ranks"], [e[1] for e in est], [e[2] for e in est], color=color, alpha=0.25, lw=0)
+        est = rec["spaces"][s][chance]["recall"]
+        ax.plot(rec["ranks"], [e[0] for e in est], color="black", ls="--", lw=1, label=chance)
+        ax.set_xscale("log")
+        ax.set_yscale("log")
+        ax.set_title(s, fontsize=8)
+        ax.set_xlabel("number of neighbours examined (k)", fontsize=7)
+        ax.tick_params(labelsize=6)
+        if k == 0:
+            ax.set_ylabel("share of the pairs found", fontsize=8)
+            ax.legend(fontsize=5, loc="lower right", ncol=1)
+        else:
+            ax.tick_params(labelleft=False)
     save(fig, "relation_collapse_inventory")
 
 
