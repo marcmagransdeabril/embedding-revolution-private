@@ -110,25 +110,3 @@ def inventory(all_pairs: dict, cosines: dict, labels: list[str], relations: list
             ax.set_ylabel("density", fontsize=6)
     fig.legend(*ax.get_legend_handles_labels(), fontsize=6, loc="lower center", ncol=4, frameon=False)
     save(fig, "relation_collapse_inventory")
-
-
-def mechanism(mech: dict, relations: list[str]) -> None:
-    """Test 4: the effect of each relation on the cosine without and with the first-half context held fixed, in each half-text space."""
-    spaces = list(mech["spaces"])
-    relations = by_group(relations)
-    fig, axes = plt.subplots(1, len(spaces), figsize=(6.5, 3.4), sharey=True)
-    y = np.arange(len(relations))[::-1]
-    for ax, s in zip(axes, spaces):
-        for k, kind in enumerate(("without context", "with context")):
-            est = [mech["spaces"][s]["effect"][n][kind] for n in relations]
-            ax.errorbar([e[0] for e in est], y + (k - 0.5) * 0.3, xerr=errors(est), fmt="o", ms=3, capsize=2, label=kind)
-        ax.axvline(0, color="black", lw=0.6)
-        r2 = mech["spaces"][s]["r2_random"]
-        ax.set_title(f"{s} (R$^2$ of random pairs: frequency {r2['frequency'][0]:.2f},\nwith context {r2['frequency + context'][0]:.2f})",
-                     fontsize=7)
-        ax.set_xlabel("effect on the cosine", fontsize=7)
-        ax.tick_params(labelsize=6)
-    axes[0].set_yticks(y, relations, fontsize=6)
-    color_ticks(axes[0].get_yticklabels())
-    axes[0].legend(fontsize=6, loc="lower right")
-    save(fig, "relation_collapse_mechanism")

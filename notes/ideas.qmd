@@ -311,6 +311,12 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Why:** the result is about physical experiments in a network scenario, not about learning or representation, and a 2026 preprint (snippet only) claims the opposite conclusion under other assumptions. It neither supports nor refutes complex embeddings.
 - **Reopen if:** never for this book.
 
+### Relations as shared context: the cosine regressed on company counted on another half of the text
+- **Dropped:** 2026-11-26 (third test of the section on which relations nearness tells apart, `meaning_as_likeness`).
+- **Why:** the control (the PPMI of the pair and the overlap of the PPMI rows, counted on the first half of text8, against the cosine of the two losses trained on the second half) is a noisy copy of what the models receive. A relation keeps 30% to 51% of its effect whatever the truth (the control explained 15% and 10% of the cosine of random pairs), so the test could only fail to reduce a relation to company. The models see only company, so a relation is not a cause apart from it.
+- **Reopen if:** the control is the best possible copy, the cosine of a replicate space of the same loss, and the relation effect is compared with the replicate noise of the stability section.
+- **A suggestion for Q7, not yet convincing (the author, 2026-11-26):** compare the raw collocation score $C(x,y)/(C(x)\,C(y))$ with the cosines of PPMI-SVD and SGNS for the eight relations (AUC against pairs of no relation), and the cosine AUC among the pairs that never co-occur, inside frequency bands, with the cosine of the PPMI rows as a middle rung. Lift is large for rare words, so a minimum count or the bands are needed.
+
 ## Open durability actions
 
 From the Lindy review of 2026-11-10 (`tmp/lindy_review.md`, which is gitignored; the chapter numbers in its items are those of that date) and later work. A review (`review-doc` §18) proposes new ones and checks whether the "done" ones really are.
