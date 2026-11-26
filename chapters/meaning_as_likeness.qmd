@@ -303,17 +303,29 @@ Nearness carries every relation tested, but synonym, hypernym and co-hyponym sho
 ::: {.questions}
 1. The probability that a pair of inflection is nearer than a pair of no relation is 0.96. Why does that not let a reader tell the relation of a pair from its cosine?
 
-2. Label the nearest neighbour of every word of a space with each WordNet relation that it holds (inflection, derivation, synonym, antonym, hypernym, meronym, co-hyponym). What share of the nearest neighbours whose two words WordNet holds carries no relation?
+2. Co-hyponyms are the commonest relation (384,411 pairs) and have the weakest trace in nearness. Why might a relation that holds for so many pairs be hard to see in a space built from company?
 
-3. Read the seeded sample of nearest neighbours that no relation names, and write in a few words the relation that you see between each pair. Which kinds does a dictionary like WordNet not hold?
+3. Suppose a space put every pair of every relation above every pair of no relation. What would the probability of the second test be for each relation, and would the figure then tell the relations apart?
+
+4. With the pairs of each relation and the pairs of two WordNet words that hold none of the eight relations as the baseline, compute for PPMI-SVD and SGNS the probability that a pair of a relation has a higher cosine than a pair of the baseline. Which relation is nearest and which is farthest?
+
+5. Label the nearest neighbour of every word of a space with each WordNet relation that it holds (inflection, derivation, synonym, antonym, hypernym, meronym, co-hyponym). What share of the nearest neighbours whose two words WordNet holds carries no relation?
+
+6. Read the seeded sample of nearest neighbours that no relation names, and write in a few words the relation that you see between each pair. Which kinds does a dictionary like WordNet not hold?
 :::
 
 ::: {.answers}
 1. The 0.96 says that the cosines of inflection pairs are mostly above those of pairs of no relation, and not which relation holds. The cosines of the other relations, from 0.72 to 0.94 in the same terms, overlap with it and with each other, so a cosine of a given size is compatible with several relations. One number per pair cannot tell innumerable kinds of relation apart, which is why a space has many dimensions.
 
-2. The script `relation_collapse.py` does it, with WordNet read from its data files and the lemmatizer written from its rules and exception lists. In the two spaces of the gallery 56% [55%, 57%] (PPMI-SVD) and 55% [54%, 56%] (SGNS) of the nearest neighbours in WordNet carry no relation, and the share rises to 79% at ranks 3 and 4 and to 99% at ranks 500 to 1,000.
+2. Two siblings, such as `dog` and `wolf`, share a parent in the dictionary's hierarchy, and a parent is not something that the text says. Two words of one kind can be used in very different contexts, and a vector that serves all the senses of a word may blur the one that makes it a sibling. A relation that the dictionary draws for many pairs is then diffuse in company.
 
-3. The script prints 30 pairs for each space. Most read as relations of the world or of use and not of a dictionary: a currency and its country (`krone` and `denmark`), neighbouring places (`karlsruhe` and `mannheim`), a maker and its instrument (`moog` and `synthesizer`), or two people of one field (`oldfield` and `enya`). Some are near-synonyms that WordNet does not link (`fully` and `completely`). The kinds are the reader's, so fix the list of names before counting.
+3. The probability would be 1 for every relation. That would show that every relation leaves a trace, and still not tell the relations apart, since they could all lie in the same range of cosines. The probability against pairs of no relation measures a trace and not a separation between relations.
+
+4. The script `relation_collapse.py` does it. Build the histogram of the cosine of the pairs of each relation and of the baseline, and take the probability from the cumulative histogram, with ties counting one half. Inflection is nearest (0.96 in PPMI-SVD and 0.97 in SGNS) and co-hyponym farthest (0.72 and 0.73).
+
+5. The script `relation_collapse.py` does it, with WordNet read from its data files and the lemmatizer written from its rules and exception lists. In the two spaces of the gallery 56% [55%, 57%] (PPMI-SVD) and 55% [54%, 56%] (SGNS) of the nearest neighbours in WordNet carry no relation, and the share rises to 79% at ranks 3 and 4 and to 99% at ranks 500 to 1,000.
+
+6. The script prints 30 pairs for each space. Most read as relations of the world or of use and not of a dictionary: a currency and its country (`krone` and `denmark`), neighbouring places (`karlsruhe` and `mannheim`), a maker and its instrument (`moog` and `synthesizer`), or two people of one field (`oldfield` and `enya`). Some are near-synonyms that WordNet does not link (`fully` and `completely`). The kinds are the reader's, so fix the list of names before counting.
 :::
 
 ## Is Any Relation Associated with Far Pairs? {#sec-likeness-relations-far}
