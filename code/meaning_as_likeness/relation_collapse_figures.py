@@ -79,13 +79,13 @@ def against_neither(results: dict) -> None:
     save(fig, "relation_collapse_auc")
 
 
-def inventory(all_pairs: dict, rec: dict, labels: list[str], relations: list[str], chance: str) -> None:
+def inventory(all_pairs: dict, cosines: dict, labels: list[str], relations: list[str], chance: str) -> None:
     """Test 1: the share of all the pairs of the vocabulary with each label (top, exact counts, logarithmic scale), and for each relation
-    the share of its pairs that are found within the k nearest neighbours of one of the two words (bottom, one panel per space, with the
-    interval over the words); the dashed line is the same for random pairs, the chance level."""
-    spaces = list(rec["spaces"])
-    fig = plt.figure(figsize=(6.5, 5.6))
-    grid = fig.add_gridspec(2, len(spaces), height_ratios=[1, 1.25], hspace=0.6, wspace=0.12)
+    the distribution of the cosine of its pairs in each space (below, solid) against that of random pairs (dotted); a density, so that
+    sets of very different sizes can be compared."""
+    spaces = list(cosines["spaces"])
+    fig = plt.figure(figsize=(6.5, 7.2))
+    grid = fig.add_gridspec(3, 4, height_ratios=[1.1, 1, 1], hspace=0.7, wspace=0.35)
     top = fig.add_subplot(grid[0, :])
     top.bar(range(len(labels)), [all_pairs["labels"][label] / all_pairs["pairs"] for label in labels], 0.6, color="grey")
     top.set_yscale("log")
@@ -93,25 +93,22 @@ def inventory(all_pairs: dict, rec: dict, labels: list[str], relations: list[str
     top.set_xticks(range(len(labels)), [l.replace(" (", "\n(") for l in labels], fontsize=6, rotation=30, ha="right")
     top.tick_params(axis="y", labelsize=6)
     color_ticks(top.get_xticklabels())
-    colors = plt.cm.tab10(np.arange(len(relations)))
-    for k, s in enumerate(spaces):
-        ax = fig.add_subplot(grid[1, k], sharey=None if k == 0 else fig.axes[-1])
-        for color, name in zip(colors, relations):
-            est = rec["spaces"][s][name]["recall"]
-            ax.plot(rec["ranks"], [e[0] for e in est], marker="o", ms=2.5, lw=0.9, color=color, label=name)
-            ax.fill_between(rec["ranks"], [e[1] for e in est], [e[2] for e in est], color=color, alpha=0.25, lw=0)
-        est = rec["spaces"][s][chance]["recall"]
-        ax.plot(rec["ranks"], [e[0] for e in est], color="black", ls="--", lw=1, label=chance)
-        ax.set_xscale("log")
-        ax.set_yscale("log")
-        ax.set_title(s, fontsize=8)
-        ax.set_xlabel("number of neighbours examined (k)", fontsize=7)
-        ax.tick_params(labelsize=6)
-        if k == 0:
-            ax.set_ylabel("share of the pairs found", fontsize=8)
-            ax.legend(fontsize=5, loc="lower right", ncol=1)
-        else:
-            ax.tick_params(labelleft=False)
+    merge = 20  # bins of 0.02 in the cosine, out of 0.001
+    centres = -1 + (np.arange(cosines["bins"] // merge) + 0.5) * 2 * merge / cosines["bins"]
+    density = lambda h: np.add.reduceat(np.array(h, dtype=float), np.arange(0, cosines["bins"], merge)) / (sum(h) * 2 * merge / cosines["bins"])
+    for k, name in enumerate(relations):
+        ax = fig.add_subplot(grid[1 + k // 4, k % 4])
+        for color, s in zip(("tab:blue", "tab:orange"), spaces):
+            ax.plot(centres, density(cosines["spaces"][s][name]), color=color, lw=1, label=s)
+            ax.plot(centres, density(cosines["spaces"][s][chance]), color=color, lw=0.9, ls=":", label=f"{chance}, {s}")
+        ax.set_xlim(-0.4, 1.0)
+        ax.set_title(name, fontsize=7, color=GROUP_COLORS[group_of(name)])
+        ax.tick_params(labelsize=5)
+        if k // 4 == 1:
+            ax.set_xlabel("cosine", fontsize=6)
+        if k % 4 == 0:
+            ax.set_ylabel("density", fontsize=6)
+    fig.legend(*ax.get_legend_handles_labels(), fontsize=6, loc="lower center", ncol=4, frameon=False)
     save(fig, "relation_collapse_inventory")
 
 

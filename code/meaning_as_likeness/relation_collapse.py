@@ -18,8 +18,7 @@ Relations, each a set of unordered pairs of words of the vocabulary:
 
 Four tests. (1) The label of every pair of the vocabulary (how many hold each relation and how many relations a pair holds); the share of the
 neighbours of every word, by rank (1 to 1,000), that hold a relation, with a seeded sample of the nearest neighbours that no judge
-names; and, for each relation, how many neighbours of a word have to be examined to find the other word of a pair of the relation
-(the share of its pairs found within k neighbours, and the median rank), against random pairs. (2) For each relation, the probability that one of its pairs is nearer
+names; and, for each relation, the distribution of the cosine of its pairs against that of random pairs. (2) For each relation, the probability that one of its pairs is nearer
 than a pair of neither (AUC, 0.5 if the relation leaves no trace). (3) The mechanism, in the half-text spaces: the AUC of direct
 co-occurrence and of shared context only, the share of the cosine of random pairs that frequency and the first-half context explain
 (R^2), and the effect of each relation on the cosine with and without that context held fixed (least squares, the relation as an
@@ -30,7 +29,7 @@ same draws for every relation and both spaces; the histogram of neither is held 
 gallery. Test 1 resamples the query words (FIT_RESAMPLES for the shares by rank). Test 3 samples: RANDOM_PAIRS random pairs and at most PER_RELATION pairs of each relation.
 
 Expectation (written before the run): every relation is above neither (any relation leaves a trace in company), with inflection,
-antonym and co-hyponym the nearest and hypernym and meronym the farthest; more than half of the top-5 neighbours carry no label; in test 3 the first-half context
+antonym and co-hyponym the nearest and hypernym and meronym the farthest; more than half of the nearest neighbours carry no label; in test 3 the first-half context
 explains most of what frequency does not, and most relation effects shrink by more than half once it is held fixed, so that the
 relations collapse into shared context; the two losses order the relations alike (Spearman above 0.8).
 
@@ -63,7 +62,6 @@ LABELS = WORDNET + [ENCYCLOPEDIC, NEITHER, UNCOVERED]  # the labels of a neighbo
 BINS, WINDOW = gallery.BINS, 5
 RANK_BINS = [(1, 1), (2, 2), (3, 4), (5, 9), (10, 19), (20, 49), (50, 99), (100, 199), (200, 499), (500, 1000)]  # ranks of a neighbour
 RANK_MAX = RANK_BINS[-1][1]
-RANKS = [1, 2, 3, 5, 10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 29999]  # numbers of neighbours examined
 ANY = "any relation"  # the label of a pair that holds at least one of the eight relations
 RESAMPLES, FIT_RESAMPLES, RANDOM_PAIRS, PER_RELATION, TOP_SHARE = 1000, 200, 200_000, 20_000, 0.01
 
@@ -259,55 +257,12 @@ def inventory(spaces: dict, pairs: dict, covered: np.ndarray, vocab: list[str]) 
     return out
 
 
-def pair_ranks(emb: np.ndarray, pairs: np.ndarray, chunk: int = 2000) -> np.ndarray:
-    """For each pair, the smaller of the two ranks (1 is the nearest neighbour, by cosine, the word itself excluded) that one word has
-    among the neighbours of the other, so that the rank does not depend on the order of the two words."""
-    u = utils.unit(emb).astype(np.float32)
-    size, m = len(u), len(pairs)
-    directed = np.concatenate([pairs, pairs[:, ::-1]])
-    order = np.argsort(directed[:, 0], kind="stable")
-    first, second = directed[order, 0], directed[order, 1]
-    starts = np.searchsorted(first, np.arange(size + 1))
-    ranks = np.empty(len(directed), dtype=np.int32)
-    for s in range(0, size, chunk):
-        e = min(size, s + chunk)
-        sims = u[s:e] @ u.T
-        sims[np.arange(e - s), np.arange(s, e)] = -np.inf
-        for i in range(e - s):
-            lo, hi = starts[s + i], starts[s + i + 1]
-            if hi > lo:
-                value = sims[i, second[lo:hi]]  # the cosine as the matrix product gives it, so that a word is not its own rival
-                ranks[lo:hi] = 1 + (sims[i][None, :] > value[:, None]).sum(axis=1)
-    both = np.empty(len(directed), dtype=np.int32)
-    both[order] = ranks
-    return np.minimum(both[:m], both[m:])
-
-
-def rank_recall(spaces: dict, pairs: dict, size: int) -> dict:
-    """Test 1, second part: for each relation, how many neighbours of a word have to be examined to find the other word of a pair of the
-    relation. For each space, the share of the pairs of the relation (and of random pairs, the chance level) found within each number of
-    neighbours of RANKS, and the median rank, with a bootstrap interval over the words (FIT_RESAMPLES, the same draws for every relation)."""
+def cosine_histograms(spaces: dict, pairs: dict) -> dict:
+    """Test 1, second part: the histogram (BINS bins of the cosine, exact) of the cosine of the pairs of each relation and of random
+    pairs, in each space."""
     names = RELATIONS + [RANDOM]
-    out = {"ranks": RANKS, "spaces": {}}
-    draws = list(word_draws(size, FIT_RESAMPLES))
-    for s, emb in spaces.items():
-        every = pair_ranks(emb, np.concatenate([pairs[n] for n in names]))  # one pass over the vocabulary for all the pairs
-        ranks = dict(zip(names, np.split(every, np.cumsum([len(pairs[n]) for n in names])[:-1])))
-        out["spaces"][s] = {}
-        for n in names:
-            r, p = ranks[n], pairs[n]
-            found = (r[:, None] <= np.array(RANKS)[None, :]).astype(float)
-            by_value = np.argsort(r, kind="stable")
-            recall, median = [], []
-            for times in draws:
-                w = times[p[:, 0]] * times[p[:, 1]]
-                recall.append(w @ found / w.sum())
-                cumulative = np.cumsum(w[by_value])
-                median.append(r[by_value][np.searchsorted(cumulative, 0.5 * cumulative[-1])])
-            recall, median = np.array(recall), np.array(median, dtype=float)
-            out["spaces"][s][n] = {"recall": [as_triple(interval(recall[:, j])) for j in range(len(RANKS))],
-                                   "median_rank": as_triple(interval(median))}
-    return out
+    return {"bins": BINS, "spaces": {s: {n: np.bincount(gallery.pair_bins(emb, pairs[n]), minlength=BINS).tolist() for n in names}
+                                     for s, emb in spaces.items()}}
 
 
 # --- test 3
@@ -427,13 +382,11 @@ def print_all_pairs(inv: dict) -> None:
     print("  share of the pairs of a relation that hold it alone: " + ", ".join(f"{n} {v:.2f}" for n, v in inv["alone"].items()))
 
 
-def print_recall(rec: dict) -> None:
-    print("\ntest 1, second part: share of the pairs of each relation found within k neighbours of one of the two words, and median rank")
-    for s, relations in rec["spaces"].items():
-        print(f"  {s}")
-        print(f"  {'':16s}" + "".join(f"{k:>8d}" for k in rec["ranks"]) + "   median rank")
-        for n, r in relations.items():
-            print(f"  {n:16s}" + "".join(f"{x[0]:8.3f}" for x in r["recall"]) + f"   {fmt(r['median_rank'])}")
+def print_cosines(cosines: dict) -> None:
+    print("\ntest 1, second part: median cosine of the pairs of each relation and of random pairs")
+    middle = lambda h: -1 + (np.searchsorted(np.cumsum(h), 0.5 * np.sum(h)) + 0.5) * 2 / cosines["bins"]
+    for n in [*RELATIONS, RANDOM]:
+        print(f"  {n:16s}" + "".join(f"  {s} {middle(np.array(cosines['spaces'][s][n])):+.3f}" for s in cosines["spaces"]))
 
 
 def print_inventory(inv: dict) -> None:
@@ -497,15 +450,15 @@ def main() -> None:
     results["single_label"] = single_label_check(spaces, wordnet, neither, size)
     results["bats_relations"] = bats_relations(spaces, index, neither)
     results["inventory"], results["all_pairs"] = inventory_result, results_all
-    results["recall"] = rank_recall(spaces, pairs, size)
-    print_recall(results["recall"])
+    results["cosines"] = cosine_histograms(spaces, pairs)
+    print_cosines(results["cosines"])
     print_orders(results, results["single_label"], results["bats_relations"])
     print(f"\ntest 4: Spearman of the AUCs against neither between the spaces {fmt(results['spearman_between_spaces'])}")
     results["mechanism"] = mechanism(np.log(counts.astype(float)), pairs)
     print_mechanism(results["mechanism"])
     utils.save_results("relation_collapse", results)
     figures.against_neither(results)
-    figures.inventory(results["all_pairs"], results["recall"], LABELS, RELATIONS, RANDOM)
+    figures.inventory(results["all_pairs"], results["cosines"], LABELS, RELATIONS, RANDOM)
     figures.mechanism(results["mechanism"], RELATIONS)
     check_claims(results)
 
