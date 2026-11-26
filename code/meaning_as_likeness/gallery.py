@@ -13,7 +13,7 @@ with its nearest neighbours in each space and a control row of random words of t
 Expectation (written before the run): the AUC of synonyms is above 0.5 in the two trained spaces and 0.5 in both random models; the
 AUC of antonyms is also above 0.5, since opposites share contexts; the spaces agree on the neighbours of frequent words more than on
 those of rare words. Prints every number and a verdict for each part; saves results/gallery.json and figures/meaning_as_likeness/
-gallery_neighbours.png, gallery_distributions.png, gallery_auc.png, gallery_overlap.png and gallery_edit_distance.png (drawn by gallery_figures.py).
+gallery_neighbours.png, gallery_distributions.png, gallery_auc.png, and gallery_overlap.png (drawn by gallery_figures.py).
 """
 from __future__ import annotations
 
@@ -238,7 +238,6 @@ def main() -> None:
     figures.cosine_by_class({n: {k: v for k, v in curves[n].items() if k != "all pairs"} for n in TRAINED}, centres)
     figures.auc_bars(results, TRAINED + ["random Gaussian"])
     figures.overlap_by_band(results["overlap_per_band"], size)
-    figures.edit_distance(edit)
 
 
 if __name__ == "__main__":

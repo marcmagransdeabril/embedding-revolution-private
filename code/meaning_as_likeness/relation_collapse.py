@@ -26,7 +26,7 @@ Expectation (written before the run): every relation is above neither (any relat
 antonym and co-hyponym the nearest and hypernym and meronym the farthest; more than half of the nearest neighbours carry no label; the
 two losses order the relations alike (Spearman above 0.8).
 
-Prints every number; saves results/relation_collapse.json and the figures relation_collapse_auc.png and relation_collapse_inventory.png
+Prints every number; saves results/relation_collapse.json and the figures relation_collapse_auc.png, relation_collapse_inventory.png and relation_collapse_neighbours.png
 (drawn by relation_collapse_figures.py).
 """
 from __future__ import annotations
@@ -330,6 +330,7 @@ def main() -> None:
     utils.save_results("relation_collapse", results)
     figures.against_neither(results)
     figures.inventory(results["all_pairs"], results["cosines"], LABELS, RELATIONS, NEITHER)
+    figures.neighbours(results["inventory"])
     check_claims(results)
 
 

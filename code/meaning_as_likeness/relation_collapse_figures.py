@@ -110,3 +110,26 @@ def inventory(all_pairs: dict, cosines: dict, labels: list[str], relations: list
             ax.set_ylabel("density", fontsize=6)
     fig.legend(*ax.get_legend_handles_labels(), fontsize=6, loc="lower center", ncol=4, frameon=False)
     save(fig, "relation_collapse_inventory")
+
+
+def neighbours(inventory: dict) -> None:
+    """Test 1, second part: by rank of the neighbour (1st, 2nd, 3rd to 4th, ... 500th to 1,000th), the share of the neighbours of every word that hold
+    at least one of the eight relations (left, logarithmic scale), and the share of the neighbours whose two words WordNet holds that hold none
+    (right), in each space, with the interval over the query words."""
+    labels = [f"{a}" if a == b else f"{a}-{b}" for a, b in inventory["bins"]]
+    x = np.arange(len(labels))
+    fig, axes = plt.subplots(1, 2, figsize=(6.5, 2.8))
+    for k, (s, color) in enumerate(zip(inventory["spaces"], ("tab:blue", "tab:orange"))):
+        for ax, est in zip(axes, ([r["any relation"] for r in inventory["spaces"][s]], inventory["unnamed_share"][s])):
+            ax.errorbar(x + (k - 0.5) * 0.15, [e[0] for e in est], yerr=errors(est), fmt="o-", ms=3, lw=0.8, capsize=2, color=color, label=s)
+    axes[0].set_yscale("log")
+    axes[0].set_ylabel("share of the neighbours that hold a relation", fontsize=7)
+    axes[1].set_ylabel("share of the neighbours in WordNet\nthat hold none", fontsize=7)
+    axes[1].set_ylim(0.4, 1.0)
+    for ax in axes:
+        ax.set_xticks(x, labels, fontsize=6, rotation=45)
+        ax.set_xlabel("rank of the neighbour", fontsize=7)
+        ax.tick_params(axis="y", labelsize=6)
+    axes[0].legend(fontsize=6)
+    fig.tight_layout()
+    save(fig, "relation_collapse_neighbours")

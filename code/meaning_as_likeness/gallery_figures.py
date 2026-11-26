@@ -110,17 +110,3 @@ def overlap_by_band(overlap: dict, size: int) -> None:
            ylabel="Percentage of top-5\nneighbours overlapping")
     ax.legend(fontsize=6)
     save(fig, "gallery_overlap")
-
-
-def edit_distance(edit: dict) -> None:
-    """For the exercise on spelling: the edit distance of random pairs, and its relation to the cosine in a trained space and in a random one."""
-    fig, axes = plt.subplots(1, 3, figsize=(6.5, 2.3))
-    axes[0].hist(edit["edit"], bins=40, color="grey")
-    axes[0].set(title="edit distance of random pairs", xlabel="normalized edit distance")
-    for ax, name in zip(axes[1:], ["SGNS", "random Gaussian"]):
-        ax.hist2d(edit["edit"], edit["cosine"][name], bins=40, cmap="Greys", cmin=1)
-        ax.set(title=f"{name}: rho = {edit['rho'][name][0]:.3f}", xlabel="edit distance", ylabel="cosine")
-    for ax in axes:
-        ax.title.set_fontsize(7)
-    fig.tight_layout()
-    save(fig, "gallery_edit_distance")

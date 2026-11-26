@@ -3,10 +3,9 @@ no judge names looks like, where the strata of the exploration fall, whether the
 the extremes are a matter of rare words. No pair is shown or printed, so that the person who will label the sample stays blind to it.
 
 Population and cuts are those of relation_unlabelled.py: the pairs of two WordNet words that hold none of the 8 judged relations, and the
-strata at the 1st percentile, the middle (49.5 to 50.5) and the 99th percentile of the cosine of that population in each space. Three
+strata at the 1st percentile, the middle (49.5 to 50.5) and the 99th percentile of the cosine of that population in each space. Two
 figures: relation_unlabelled_distribution.png (exact density of the cosine of the unlabelled and of the judged pairs, with the strata),
-relation_unlabelled_agreement.png (the cosine in the two spaces of RANDOM_PAIRS random unlabelled pairs) and relation_unlabelled_frequency.png
-(the cosine against the rank of the rarer word of the pair, in each space). Prints the cuts, the Spearman correlation between the two
+relation_unlabelled_agreement.png (the cosine in the two spaces of RANDOM_PAIRS random unlabelled pairs). Prints the cuts, the Spearman correlation between the two
 spaces, how many of the pairs of each extreme in one space are in the same extreme in the other, and the Spearman correlation of the cosine
 with the rank of the rarer word.
 """
@@ -114,21 +113,11 @@ def agreement(state: dict, sample: np.ndarray) -> None:
 
 
 def frequency(state: dict, cov: np.ndarray, sample: np.ndarray) -> None:
-    """The cosine against the (log) rank of the rarer word of the pair, in each space: whether the extremes are a matter of rare words."""
+    """Whether the extremes are a matter of rare words: the Spearman correlation of the cosine with the (log) rank of the rarer word of the pair,
+    in each space (printed, not drawn)."""
     rank = np.log10(cov[sample].max(axis=1) + 1)
-    fig, axes = plt.subplots(1, 2, figsize=(6.5, 2.8), sharey=True)
-    for ax, (name, st) in zip(axes, state.items()):
-        image = ax.hexbin(rank, st["cosine"], gridsize=60, bins="log", mincnt=1, cmap="viridis")
-        for k, (lo, hi) in st["cuts"].items():
-            ax.axhspan(lo, hi, color=COLOURS[k], alpha=0.15, lw=0)
-        ax.set_title(name, fontsize=8)
-        ax.set_ylim(-0.5, 1.0)
-        ax.set_xlabel("log10 rank of the rarer word (1 = most frequent)", fontsize=7)
-        ax.tick_params(labelsize=6)
+    for name, st in state.items():
         print(f"{name}: Spearman correlation of the cosine with the rank of the rarer word {spearmanr(rank, st['cosine']).statistic:+.3f}")
-    axes[0].set_ylabel("cosine", fontsize=7)
-    fig.tight_layout()
-    base.save(fig, "relation_unlabelled_frequency")
 
 
 if __name__ == "__main__":

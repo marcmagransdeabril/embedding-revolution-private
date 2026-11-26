@@ -28,7 +28,7 @@ co-occurrence (field, place and event, part and whole) and not of the seven rela
 pairs.
 
 Prints the thresholds and the counts, never a pair, so that the person reading the output stays blind; saves results/unlabelled_blinded.csv
-and results/unlabelled_key.json. What is done with the labels is in relation_unlabelled_analysis.py.
+and results/unlabelled_key.json.
 """
 from __future__ import annotations
 
@@ -175,7 +175,7 @@ def main() -> None:
     print(f"sample of {len(rows)} pairs written to {BLIND.name} (key in {KEY.name}, not to be read before the labels are written)")
     for space, ranges in thresholds.items():
         print(f"  {space}: " + "; ".join(f"{k}: cosine {a} to {b}, {n:,} pairs" for k, (a, b, n) in ranges.items()))
-    print(f"the rater labels it in {len(batch_requests())} batches of {BATCH}; see relation_unlabelled_analysis.py for what is done with the labels")
+    print(f"the rater labels it in {len(batch_requests())} batches of {BATCH}")
 
 
 if __name__ == "__main__":
