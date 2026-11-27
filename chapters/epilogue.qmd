@@ -25,23 +25,23 @@ Each section below is an idea about meaning that no current technology satisfies
 
 | Section | Chapters it hooks into |
 |:--|:--|
-| @sec-meaning-meaning | @sec-ch-symbols-without-interior, @sec-ch-meaning-across-senses, @sec-ch-meaning-and-truth |
-| @sec-perfect-language | @sec-ch-symbols-without-interior, @sec-ch-meaning-as-likeness, @sec-ch-meaning-as-region |
-| @sec-harris-unused | @sec-ch-meaning-as-likeness, @sec-ch-meaning-as-direction, @sec-ch-memory-retrieval |
-| @sec-life-makes-meaning | @sec-ch-meaning-across-senses, @sec-ch-meaning-as-arrangement, @sec-ch-alien-technology |
-| @sec-literature-laboratory-meaning | @sec-ch-symbols-without-interior, @sec-room-exponentially-many-directions, @sec-ch-meaning-as-likeness, @sec-ch-meaning-in-context, @sec-ch-meaning-as-arrangement |
-| @sec-mathematics-meaning | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-as-region, @sec-ch-meaning-and-structure |
-| @sec-ignoramus-et-ignorabimus | the earlier Prologue and the ledger of limits of the earlier plan (snapshot) |
-| @sec-what-finite-data-cannot | @sec-room-exponentially-many-directions, @sec-ch-meaning-as-likeness, @sec-ch-meaning-and-structure |
-| @sec-does-structure-fix-meaning | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-across-senses |
-| @sec-what-system-cannot-say | @sec-ch-symbols-without-interior, @sec-ch-meaning-and-truth |
-| @sec-compression-capacity-learnability | @sec-ch-meaning-as-likeness, @sec-room-exponentially-many-directions, @sec-ch-meaning-and-structure |
-| @sec-deciding-without-knowing-possibilities | @sec-ch-meaning-as-likeness, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-generation, @sec-ch-meaning-as-region |
-| @sec-how-reasoners-go-wrong | @sec-ch-meaning-in-context, @sec-ch-meaning-as-direction, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-region |
-| @sec-language-thought-translation | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-across-senses, @sec-ch-meaning-and-structure, @sec-ch-alien-technology, @sec-ch-meaning-in-context, @sec-ch-symbols-without-interior |
-| @sec-limits-that-may-be | @sec-ch-meaning-across-senses, @sec-ch-meaning-as-region |
-| @sec-chomsky-against-statistics | @sec-ch-symbols-without-interior, @sec-ch-meaning-in-context, @sec-ch-meaning-and-structure, @sec-ch-meaning-across-senses |
-| @sec-final-geek-musings-where | none yet |
+| [Meaning Is Not One Thing](#sec-meaning-meaning) | @sec-ch-symbols-without-interior, @sec-ch-meaning-across-senses, @sec-ch-meaning-and-truth |
+| [The Perfect Language](#sec-perfect-language) | @sec-ch-symbols-without-interior, @sec-ch-meaning-as-likeness, @sec-ch-meaning-as-region |
+| [Methods of Harris That Nobody Uses](#sec-harris-unused) | @sec-ch-meaning-as-likeness, @sec-ch-meaning-as-direction, @sec-ch-memory-retrieval |
+| [Meaning for a Body That Acts](#sec-life-makes-meaning) | @sec-ch-meaning-across-senses, @sec-ch-meaning-as-arrangement, @sec-ch-alien-technology |
+| [Part and Whole, Round and Round](#sec-literature-laboratory-meaning) | @sec-ch-symbols-without-interior, @sec-room-exponentially-many-directions, @sec-ch-meaning-as-likeness, @sec-ch-meaning-in-context, @sec-ch-meaning-as-arrangement |
+| [Relations Fix the Object](#sec-mathematics-meaning) | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-as-region, @sec-ch-meaning-and-structure |
+| [A Cost or an Impossibility](#sec-ignoramus-et-ignorabimus) | the earlier Prologue and the ledger of limits of the earlier plan (snapshot) |
+| [What Finite Data Cannot Fix](#sec-what-finite-data-cannot) | @sec-room-exponentially-many-directions, @sec-ch-meaning-as-likeness, @sec-ch-meaning-and-structure |
+| [Does Structure Fix Meaning?](#sec-does-structure-fix-meaning) | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-across-senses |
+| [What a System Cannot Say About Itself](#sec-what-system-cannot-say) | @sec-ch-symbols-without-interior, @sec-ch-meaning-and-truth |
+| [Compression and the Number of Dimensions](#sec-compression-capacity-learnability) | @sec-ch-meaning-as-likeness, @sec-room-exponentially-many-directions, @sec-ch-meaning-and-structure |
+| [Deciding Without Knowing the Possibilities](#sec-deciding-without-knowing-possibilities) | @sec-ch-meaning-as-likeness, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-generation, @sec-ch-meaning-as-region |
+| [How Reasoners Go Wrong](#sec-how-reasoners-go-wrong) | @sec-ch-meaning-in-context, @sec-ch-meaning-as-direction, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-region |
+| [Language, Thought and Translation](#sec-language-thought-translation) | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-across-senses, @sec-ch-meaning-and-structure, @sec-ch-alien-technology, @sec-ch-meaning-in-context, @sec-ch-symbols-without-interior |
+| [Limits That May Not Be Costs](#sec-limits-that-may-be) | @sec-ch-meaning-across-senses, @sec-ch-meaning-as-region |
+| [Chomsky Against Statistics](#sec-chomsky-against-statistics) | @sec-ch-symbols-without-interior, @sec-ch-meaning-in-context, @sec-ch-meaning-and-structure, @sec-ch-meaning-across-senses |
+| [The Other Meaning of Meaning](#sec-final-geek-musings-where) | none yet |
 
 ## Meaning Is Not One Thing {#sec-meaning-meaning .idea}
 Ogden and Richards listed sixteen senses of "meaning" and drew the triangle of symbol, thought and referent [@ogden1923meaning]. A vector models the edge between the symbol and the thought, which is Frege's sense, and the edge from the thought to the referent is what grounding would add [@frege1892sense]. Peirce's version is not made of pairs: a sign stands for an object to an interpretant, the three-way relation cannot be resolved into pairs, and the interpretant is itself a sign [@peirce1931collected]. A table of embeddings is dyadic, token to token; what a downstream use supplies to a vector (a retrieval step, a generation step) may be the interpretant, and his pragmatic maxim would test an embedding by what it lets one do (speculation). What current technologies lack: a third term, and a statement of which sense of "meaning" a given space carries.
@@ -113,7 +113,7 @@ Here we ask the question that this chapter has deliberately not asked, what the 
 ::: {.test #q-likeness-21}
 **Q21. How well can a space represent likeness at all?** If the loss is allowed to use anything (labels that people wrote for pairs, natural pairings such as a caption and its image, a model pre-trained on far more text), how well does nearness follow a judge that was held out of the training, and which of the relations of @sec-likeness-relation-split that a loss on text alone cannot tell apart does it now tell apart?
 
-*See* @sec-likeness-ceiling.
+*See* [How Well Can a Space Represent Likeness at All?](#sec-likeness-ceiling).
 :::
 
 *The chapter so far is a floor. PPMI-SVD and SGNS were trained on text alone (text8, one loss each), and every result says what nearness carries when nothing but company is given. That is the right control for the question of Harris and Firth, and the wrong measure of what a space can be. Three levels of supervision separate the models that could give the ceiling. At the first the loss sees only running text (counting, predicting, masked words). At the second it sees pairings that people made for another purpose (a caption and its image, a sentence and its translation). At the third it sees labels that people wrote for the task (entailment, contradiction, similarity scores). The first is the floor of this chapter. The second and the third are not cheating if they are named, since a person also learns from other people and from what they observe, but they move the judge into the loss, so the nearness is built in and not found, and the test needs a judge that is held out. WordNet and BATS are such judges only for a model that was not trained on them, and the pairs of NLI contradictions overlap with the antonym relation of the chapter, so the antonym row is the one that leaks. The run takes one model of each level, chosen as the best available at the time and recorded with its training data (a static one, a contextual one, a sentence encoder trained with labels), embeds the 30,000 words of the gallery, or the sentences, and repeats the eight relations of @sec-likeness-relation-split and the far pairs of @sec-likeness-relations-far, next to the two spaces of the gallery. The expectation is that the gap is largest for the relations that company mixes (opposites among them), and smallest for forms of one word, and that the far end changes where the loss has a chosen negative. A gap that is small would say that the limit is the judge and not the loss, and a gap that is large would say how much of likeness a text alone leaves out. The two spaces of the gallery stay as they are, because they are the only ones in which the difference between models comes from the loss. The text-only comparison that does not put a judge in the loss (centring the spaces and keeping the pairs that PMI clips) is run first.*
