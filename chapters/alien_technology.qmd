@@ -5,13 +5,13 @@ status: idea
 # The Alien Technology Test {#sec-ch-alien-technology}
 
 <!-- Task 6 template -->
-*Part III, a speculative test: there is no judge, and a failure is not informative.* This chapter follows @sec-ch-meaning-as-arrangement. **Question: can an unknown system's function be recovered from its behaviour?** This chapter is speculative: there is no judge for it, and a failure is not informative.
+*Part III, a speculative test: there is no judge, and a failure is not informative.* This chapter follows @sec-ch-meaning-as-arrangement. **Question: can an unknown system's function be recovered from its behaviour?**
 
 *Data, models and loss.* Data: Ashby's isomorphic oscillators, embedded by their responses to common inputs (`notes/function_of_physical_systems.md`). The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
 
 | Model | Zoo | Role in this chapter |
 |:--|:--|:--|
-| Ashby oscillators | testbed | a testbed, not a method |
+| Ashby oscillators | none (a testbed) | not a method |
 
 
 ## Candidate Sections {#sec-alien-technology-candidates}

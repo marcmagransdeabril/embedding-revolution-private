@@ -5,7 +5,7 @@ status: idea
 # Meaning as Generation: Producing and Growing Meaning {#sec-ch-meaning-as-generation}
 
 <!-- Task 6 template -->
-*Part II, critical literacy: can a representation be read critically?* This chapter follows @sec-ch-meaning-and-structure. **Question: can a space be written to as well as read?**
+*Part II, critical literacy: what a reader needs beyond finding (scale, context, truth, structure, generation).* This chapter follows @sec-ch-meaning-and-structure. **Question: can a space be written to as well as read?**
 
 *Data, models and loss.* Data: The digits of the contrast experiment (kept in `embedding-technologies-stubs-v1/code/embedding_spaces/`). The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
 

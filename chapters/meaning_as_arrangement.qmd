@@ -5,7 +5,7 @@ status: idea
 # Meaning as Arrangement: What Survives a Change of Coordinates {#sec-ch-meaning-as-arrangement}
 
 <!-- Task 6 template -->
-*Part III, a speculative test: there is no judge, and a failure is not informative.* This chapter follows @sec-ch-meaning-as-generation. **Question: can two spaces be aligned from relations alone?** This chapter is speculative: there is no judge for it, and a failure is not informative.
+*Part III, a speculative test: there is no judge, and a failure is not informative.* This chapter follows @sec-ch-meaning-as-generation. **Question: can two spaces be aligned from relations alone?**
 
 *Data, models and loss.* Data: Two static spaces (SGNS and PPMI-SVD) trained on different texts or languages, with no dictionary, and a random rotation as the null; human languages first, whales and birds, Goedel's shorthand notebooks and SETI only as speculative cases. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
 

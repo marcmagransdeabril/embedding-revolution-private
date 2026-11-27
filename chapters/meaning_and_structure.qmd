@@ -5,7 +5,7 @@ status: idea
 # Meaning and Structure: What a Store Can Hold That a Vector Cannot {#sec-ch-meaning-and-structure}
 
 <!-- Task 6 template -->
-*Part II, critical literacy: can a representation be read critically?* This chapter follows @sec-ch-meaning-and-truth. **Question: what can a structured store hold that a vector cannot?**
+*Part II, critical literacy: what a reader needs beyond finding (scale, context, truth, structure, generation).* This chapter follows @sec-ch-meaning-and-truth. **Question: what can a structured store hold that a vector cannot?**
 
 *Data, models and loss.* Data: Toy symbolic structures (roles and fillers, a small knowledge base) to bind with tensor products and constrain with logic tensor networks. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
 

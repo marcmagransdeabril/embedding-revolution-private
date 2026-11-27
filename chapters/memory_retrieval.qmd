@@ -7,7 +7,7 @@ status: idea
 <!-- Task 6 template -->
 *Part I, the Librarian Test: can a computer shelve and find things by meaning alone, with one fixed place for each thing?* This chapter follows @sec-ch-meaning-across-senses. **Question: can the librarian find the passage that answers a question?**
 
-*Data, models and loss.* Data: The passages and questions of the repository's ground-truth evaluation (`.github/skills/ground-truth-review/eval/EVAL_REPORT.md`; its numbers are the repository's own, not independent, and were not re-run). The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+*Data, models and loss.* Data: The 150 gold claims and 14 reference documents of the repository's ground-truth evaluation, where retrieval means finding the page that supports a claim (`.github/skills/ground-truth-review/eval/EVAL_REPORT.md`; its numbers are the repository's own, not independent, and were not re-run). The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
 
 | Model | Zoo | Role in this chapter |
 |:--|:--|:--|

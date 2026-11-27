@@ -5,7 +5,7 @@ status: idea
 # Meaning in Context: One Word, Many Vectors {#sec-ch-meaning-in-context}
 
 <!-- Task 6 template -->
-*Part II, critical literacy: can a representation be read critically?* This chapter follows @sec-ch-meaning-across-scales. **Question: does a word keep its meaning when its situation changes?**
+*Part II, critical literacy: what a reader needs beyond finding (scale, context, truth, structure, generation).* This chapter follows @sec-ch-meaning-across-scales. **Question: does a word keep its meaning when its situation changes?**
 
 *Data, models and loss.* Data: WordNet senses and sentences with a polysemous word, read in BERT and in the static SGNS space of the likeness chapter. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
 

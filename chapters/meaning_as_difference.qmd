@@ -74,7 +74,7 @@ The scope is differences between pairs of meanings: analogy and relation, opposi
 
 Experiments that could go in this chapter, not run:
 
-- Late-interaction reranking that outputs the three Tversky quantities (an idea, in `notes/ideas.qmd`).
+- A late-interaction score that separates what is missing from what is extraneous, after Tversky (an idea, avenue 2 in `notes/ideas.qmd`; no literature search done).
 
 ## Question and Answer {#sec-meaning-as-difference-answer}
 

@@ -5,7 +5,7 @@ status: idea
 # Meaning Across Scales: Words, Phrases, Chunks and Texts {#sec-ch-meaning-across-scales}
 
 <!-- Task 6 template -->
-*Part II, critical literacy: can a representation be read critically?* This chapter follows @sec-ch-memory-retrieval. **Question: what does a fixed-size vector keep of a text as it grows?**
+*Part II, critical literacy: what a reader needs beyond finding (scale, context, truth, structure, generation).* This chapter follows @sec-ch-memory-retrieval. **Question: what does a fixed-size vector keep of a text as it grows?**
 
 *Data, models and loss.* Data: Sentence-pair judgements (the STS benchmarks of the likeness literature) and chunks of this book's own chapters, to be chosen when the chapter is written. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
 
