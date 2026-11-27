@@ -198,7 +198,8 @@ def space_cuts(spaces: dict, cov: np.ndarray, labelled_keys: np.ndarray) -> tupl
         strata = stratum_bins(hist)
         ranges.append((strata["top 1%"][0], strata["bottom 1%"][1]))
         info[name] = {"far cut": round(float(ranges[-1][1] / gallery.BINS * 2 - 1), 3),
-                      "near cut": round(float(ranges[-1][0] / gallery.BINS * 2 - 1), 3), "unlabelled": int(hist.sum())}
+                      "near cut": round(float(ranges[-1][0] / gallery.BINS * 2 - 1), 3), "unlabelled": int(hist.sum()),
+                      "below": int(hist[:ranges[-1][1]].sum())}
     return ranges, info
 
 
@@ -281,7 +282,7 @@ def step_sample(run: str = "") -> None:
     blind(rows, vocab, run)
     for name in rc.SPACES:
         print(f"  {name}: of {info[name]['unlabelled']:,} unlabelled pairs, 1st percentile at cosine {info[name]['far cut']}, "
-              f"99th percentile at {info[name]['near cut']}")
+              f"99th percentile at {info[name]['near cut']}; {info[name]['below']:,} pairs below the first")
     print("  pairs available: " + ", ".join(f"{k} {info[k]:,}" for k in ("far in both", "near in both", "random") if k in info))
     print("  subsets: " + ", ".join(f"{s} {n}" for s, n in info["subsets"].items()))
     print(f"sample of {len(rows)} pairs written to {files['blind'].name} (key in {files['key'].name}, read only by the report)")
