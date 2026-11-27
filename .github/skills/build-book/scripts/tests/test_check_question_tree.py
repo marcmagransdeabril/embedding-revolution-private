@@ -163,8 +163,8 @@ def test_testbed_needs_no_zoo_anchor(tmp_path):
 
 
 def test_quarto_yml_must_follow_the_tree(tmp_path):
-    yml = ("book:\n  chapters:\n  - index.qmd\n  - chapters/first.qmd\n  - part: P1\n    chapters:\n    - chapters/alpha.qmd\n"
-           "  - part: P2\n    chapters:\n    - chapters/beta.qmd\n  - chapters/last.qmd\n")
+    yml = ("book:\n  chapters:\n  - index.qmd\n  - chapters/first.qmd\n  - part: One\n    chapters:\n    - chapters/alpha.qmd\n"
+           "  - part: Two\n    chapters:\n    - chapters/beta.qmd\n  - chapters/last.qmd\n")
     (tmp_path / "_quarto.yml").write_text(yml, encoding="utf-8")
     assert cqt.check_quarto(rows(), tmp_path) == []
     swapped = yml.replace("alpha", "TMP").replace("beta", "alpha").replace("TMP", "beta")
@@ -177,3 +177,15 @@ def test_repository_tree_is_clean():
     r = cqt.parse_tree(text)
     assert len(r.chapters) == 13
     assert cqt.check_tree(r) == []
+
+
+def test_model_without_colon_or_twice_is_a_finding():
+    assert any("Name:anchor" in f for f in cqt.check_tree(rows(TREE.replace("A:sec-zoo-a, B", "A, B"))))
+    assert any("twice" in f for f in cqt.check_tree(rows(TREE.replace("B:sec-zoo-b", "A:sec-zoo-a"))))
+
+
+def test_part_titles_must_match(tmp_path):
+    yml = ("book:\n  chapters:\n  - chapters/first.qmd\n  - part: Wrong\n    chapters:\n    - chapters/alpha.qmd\n"
+           "  - part: Two\n    chapters:\n    - chapters/beta.qmd\n  - chapters/last.qmd\n")
+    (tmp_path / "_quarto.yml").write_text(yml, encoding="utf-8")
+    assert any("Part titles" in f for f in cqt.check_quarto(rows(), tmp_path))

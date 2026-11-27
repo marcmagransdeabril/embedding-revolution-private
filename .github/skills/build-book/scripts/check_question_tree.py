@@ -82,7 +82,10 @@ def parse_tree(text: str) -> Tree:
         part, stem, question, models, _ = r
         pairs = []
         for item in filter(None, (s.strip() for s in models.split(","))):
-            name, _, anchor = item.rpartition(":")
+            name, sep, anchor = item.rpartition(":")
+            if not sep:
+                tree.errors.append(f"tree: model '{item}' of {stem} must be written Name:anchor")
+                continue
             pairs.append((name.strip(), anchor.strip()))
         tree.chapters.append(Chapter(part, stem, question, pairs))
     for r in _table(text, "Chapters outside the Parts"):
@@ -113,6 +116,10 @@ def check_tree(tree: Tree) -> list[str]:
             found.append(f"tree: the question of {c.stem} must end with a question mark")
         elif c.question.count("?") != 1:
             found.append(f"tree: {c.stem} must have one question, it has {c.question.count('?')}")
+        if len({n for n, _ in c.models}) != len(c.models):
+            found.append(f"tree: {c.stem} lists a model twice")
+        if c.stem in tree.outside:
+            found.append(f"tree: {c.stem} is both in a Part and outside the Parts")
         if not 1 <= len(c.models) <= 2:
             found.append(f"tree: {c.stem} must have one or two models, it has {len(c.models)}")
         for name, anchor in c.models:
@@ -175,8 +182,8 @@ def check_quarto(tree: Tree, root: Path) -> list[str]:
     if groups != list(by_part.values()):
         found.append(f"quarto: Parts group {groups}, the tree says {list(by_part.values())}")
     titles = [e.get("part") for e in cfg["book"]["chapters"] if isinstance(e, dict)]
-    if len(titles) == len(tree.parts) and any(t is None or not str(t).strip() for t in titles):
-        found.append("quarto: every Part needs a title")
+    if titles != [t for _, t in tree.parts]:
+        found.append(f"quarto: Part titles are {titles}, the tree says {[t for _, t in tree.parts]}")
     return found
 
 
