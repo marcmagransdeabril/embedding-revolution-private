@@ -2,7 +2,7 @@
 status: idea
 ---
 
-# Meaning as Arrangement: What Survives a Change of Coordinates {#sec-ch-meaning-as-arrangement}
+# The Universal Translator {#sec-ch-meaning-as-arrangement}
 
 <!-- Task 6 template -->
 *Part III, a speculative test: there is no judge, and a failure is not informative.* This chapter follows @sec-ch-meaning-as-generation. **Question: can two spaces be aligned from relations alone?**
@@ -16,17 +16,17 @@ status: idea
 
 The coordinates of a trained space mean nothing on their own. The loss depends on the vectors only through dot products or cosines, so any rotation of the space gives the same loss, and a trained space is one arbitrary point of an orbit; what is real is the arrangement, the distances and the angles between directions. Saussure's meaning as a system of differences [@saussure1916cours] and the representational similarity of neuroscience [@kriegeskorte2008representational; @edelman1998representation] say the same of minds. The question of this chapter is what survives a change of coordinates, what a training objective leaves free and what it breaks, and how two spaces can be compared when their coordinates are not comparable: two seeds, two languages, two senses.
 
-The scope is the invariance of a space and the comparison of spaces. The stability of nearest neighbours across seeds, losses and texts is already measured in the section on many runs (@sec-likeness-many-spaces), salvaged from the chapter on nearness (@sec-ch-meaning-as-likeness), and this chapter takes up the alignment that it hands over; the senses a shared space can hold is the chapter on senses (@sec-ch-meaning-across-senses); a transformation along a path is the section on paths of the chapter on generation (@sec-prop-paths); and what changes with the situation of use is the chapter on context (@sec-ch-meaning-in-context).
+The scope is the invariance of a space and the comparison of spaces. The stability of nearest neighbours across seeds, losses and texts is already measured in the section on many runs (@sec-likeness-many-spaces), salvaged from the chapter on likeness (@sec-ch-meaning-as-likeness), and this chapter takes up the alignment that it hands over; the senses a shared space can hold is the chapter on senses (@sec-ch-meaning-across-senses); a transformation along a path is the chapter on generation of the chapter on generation (@sec-prop-paths); and what changes with the situation of use is the chapter on context (@sec-ch-meaning-in-context).
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
 *Goal 1, the arrangement determines the space (Saussure, Kriegeskorte).* A set of vectors is fixed up to rotation and reflection by its pairwise inner products. The expectation, which has an analytic answer, is that classical multidimensional scaling of a distance matrix recovers a space whose distances equal the originals, and that a coordinate-dependent readout does not survive the change (@sec-arr-arrangement). *This goal receives Q14 (@sec-likeness-handed-to-meaning-as-arrangement).*
 
-*Goal 2, two seeds are two views of one arrangement.* The expectation is that two spaces trained on the same text with different seeds are related by an orthogonal map up to noise, so that an orthogonal Procrustes alignment brings their neighbours into agreement far above a random map, and that the residual after alignment is the seed gap of the chapter on nearness. The run uses the trained spaces of that chapter (@sec-aligning-two-spaces).
+*Goal 2, two seeds are two views of one arrangement.* The expectation is that two spaces trained on the same text with different seeds are related by an orthogonal map up to noise, so that an orthogonal Procrustes alignment brings their neighbours into agreement far above a random map, and that the residual after alignment is the seed gap of the chapter on likeness. The run uses the trained spaces of that chapter (@sec-aligning-two-spaces).
 
 *Goal 3, alignment without pairs (Quine's indeterminacy, the universal translator).* The expectation is that two spaces of languages that describe a similar world can be aligned with no dictionary and that the matching is well determined where the structures are similar, which is evidence against the radical case of indeterminacy for that part of the structure and not a refutation of it. Quine's radical case would be two alignments of equal fit that disagree on the neighbours of held-out words [@quine1960word]; the run counts distinct equal-loss alignments and their disagreement (@sec-same-map-different-north). *This goal receives Q14 (@sec-likeness-handed-to-meaning-as-arrangement).*
 
-*Goal 4, relative representations (Moschella and colleagues).* If each item is described by its cosines to a set of anchors, two spaces become comparable without alignment. The expectation is that relative representations of two seeds are closer than their raw coordinates by a stated margin; the run is a small experiment on the spaces of the chapter on nearness [@moschella2023relative] (@sec-arr-relative).
+*Goal 4, relative representations (Moschella and colleagues).* If each item is described by its cosines to a set of anchors, two spaces become comparable without alignment. The expectation is that relative representations of two seeds are closer than their raw coordinates by a stated margin; the run is a small experiment on the spaces of the chapter on likeness [@moschella2023relative] (@sec-arr-relative).
 
 *Goal 5, the shape of a representation.* The expectation is that the persistent homology of the point cloud of a trained space is stable across seeds and that it does or does not support the manifold hypothesis of the appendix on dimensionality; the run needs a persistence computation, which is not yet in the allowed dependencies (@sec-measuring-shape-representation).
 
@@ -109,25 +109,6 @@ The scope is the invariance of a space and the comparison of spaces. The stabili
 
 *Open question for the author: this chapter holds two subjects, what survives a change of coordinates (the symmetries, which is the longest section of the earlier summary chapter) and the comparison of two spaces (alignment, optimal transport, the universal translator). It may be one chapter or two.*
 
-## Candidate Sections {#sec-meaning-as-arrangement-candidates}
-
-Experiments that could go in this chapter, not run:
-
-- The shape of a representation (persistent homology).
-- Curse of dimensionality: the shape of a representation (persistent homology).
-
-## Question and Answer {#sec-meaning-as-arrangement-answer}
-
-*Question:* can two spaces be aligned from relations alone?
-
-*Answer:* to be written when the chapter is answered.
-
-*Next:* from messages to machines: can the function of a system we did not build be recovered (@sec-ch-alien-technology)?
-
-## Exercises {#sec-meaning-as-arrangement-exercises}
-
-At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
-
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-arrangement -->
 
 ## What Is Real Is the Arrangement {#sec-prop-arrangement}
@@ -179,7 +160,7 @@ Sources (first pass). Geometry as what survives a group of transformations [@kle
 ## The Universal Translator {#sec-test-translator .idea}
 *Two spaces, no dictionary: can the structure of one be mapped onto the structure of the other from the relations alone?*
 
-Varies the language, or the species (lateral). There may be no judge and no ground truth. The test is asymmetric: a pass is informative, a failure is not, because the spaces may differ for reasons that say nothing about meaning. It needs calibration on two human languages before any other case is claimed. Stated in the Epilogue (idea 15 of `notes/ideas.qmd`); the property it rests on is @sec-prop-arrangement and the symmetries of @sec-prop-invariance.
+Varies the language, or the species (lateral). There may be no judge and no ground truth. The test is asymmetric: a pass is informative, a failure is not, because the spaces may differ for reasons that say nothing about meaning. It needs calibration on two human languages before any other case is claimed. Introduced in @sec-symbols-tests (idea 15 of `notes/ideas.qmd`); the property it rests on is @sec-prop-arrangement and the symmetries of @sec-prop-invariance.
 
 Rungs (first draft):
 
@@ -303,3 +284,22 @@ Here we check how much of what the previous sections found belongs to the meanin
 
 3. The script `stability.py` takes 2,000 query words and, for each pair of spaces, the share of the $k$ nearest neighbours that they have in common (for $k$ from 1 to 50), averaged over the words: seeds (three seeds of each loss), losses (counting against SGNS against GloVe), texts (the two halves of text8, the text with 10 per cent of it removed, and text8 against an equal amount of fil9 that does not overlap it, the same source with disjoint text). It also gives the agreement of the global geometry, the Spearman correlation of the cosines of 200,000 random pairs. The seed gap is the floor: a difference between losses or texts counts only if it lies clearly below it. The scripts were written and not yet run together, so the figure of the chapter is still the stub.
 :::
+
+## Candidate Sections {#sec-meaning-as-arrangement-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- The shape of a representation (persistent homology).
+- Curse of dimensionality: the shape of a representation (persistent homology).
+
+## Question and Answer {#sec-meaning-as-arrangement-answer}
+
+*Question:* can two spaces be aligned from relations alone?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* from messages to machines: can the function of a system we did not build be recovered (@sec-ch-alien-technology)?
+
+## Exercises {#sec-meaning-as-arrangement-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.

@@ -14,13 +14,13 @@ status: idea
 | SGNS | @sec-zoo-sgns | offsets between word vectors |
 | TransE | @sec-zoo-transe | relations as translations |
 
-The chapter on nearness asked how far apart two meanings are. It did not ask how they differ. The step from one meaning to another is itself meaningful: from man to woman, from hot to cold, from Paris to France, from a sentence to its negation. A property of a space of meanings would be that such a step is a thing in its own right: the same step can be taken from elsewhere (an analogy), the opposite of a meaning has a place, and a relation is an operator that is named once and applied to many pairs. The question of this chapter is how much of difference a vector space carries. It starts from two sceptical results: that the offset of an analogy is often an artefact of how it is tested, and that a nearest-neighbour query cannot say no.
+The chapter on likeness asked how far apart two meanings are. It did not ask how they differ. The step from one meaning to another is itself meaningful: from man to woman, from hot to cold, from Paris to France, from a sentence to its negation. A property of a space of meanings would be that such a step is a thing in its own right: the same step can be taken from elsewhere (an analogy), the opposite of a meaning has a place, and a relation is an operator that is named once and applied to many pairs. The question of this chapter is how much of difference a vector space carries. It starts from two sceptical results: that the offset of an analogy is often an artefact of how it is tested, and that a nearest-neighbour query cannot say no.
 
-The scope is differences between pairs of meanings: analogy and relation, opposition and negation, and the relations of a knowledge graph. The likeness that opposites share is the section "Near but Not Alike" (@sec-near-not-alike), salvaged here from the chapter on nearness (@sec-ch-meaning-as-likeness); a direction that carries one quality for many items at once (@sec-ch-meaning-as-direction); regions and hierarchy (@sec-ch-meaning-as-region); how a negation combines with the rest of a sentence (@sec-ch-meaning-and-structure); or whether a negated sentence is false, which is a verdict on the world (@sec-ch-meaning-and-truth).
+The scope is differences between pairs of meanings: analogy and relation, opposition and negation, and the relations of a knowledge graph. The likeness that opposites share is the section "Near but Not Alike" (@sec-near-not-alike), salvaged here from the chapter on likeness (@sec-ch-meaning-as-likeness); a direction that carries one quality for many items at once (@sec-ch-meaning-as-direction); regions and hierarchy (@sec-ch-meaning-as-region); how a negation combines with the rest of a sentence (@sec-ch-meaning-and-structure); or whether a negated sentence is false, which is a verdict on the world (@sec-ch-meaning-and-truth).
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment; each is kept or dropped by the run named in its paragraph).*
 
-*Goal 1, meaning as a system of differences (Saussure, Gentner, Turney and Pantel).* If a sign has value through its differences from the others, a relation should be a property of pairs and not of points. The expectation is that for some relations (grammatical ones such as plural and tense, and some semantic ones) the offset between the two words of a pair is more consistent across pairs than chance, and that it beats the baselines of the sceptics (answer from the third word only, and ignore the first pair), and that for other relations it does not. The run is the analogy test with the input words excluded, in both directions, on the spaces of the chapter on nearness (@sec-diff-offset).
+*Goal 1, meaning as a system of differences (Saussure, Gentner, Turney and Pantel).* If a sign has value through its differences from the others, a relation should be a property of pairs and not of points. The expectation is that for some relations (grammatical ones such as plural and tense, and some semantic ones) the offset between the two words of a pair is more consistent across pairs than chance, and that it beats the baselines of the sceptics (answer from the third word only, and ignore the first pair), and that for other relations it does not. The run is the analogy test with the input words excluded, in both directions, on the spaces of the chapter on likeness (@sec-diff-offset).
 
 *Goal 2, opposition (Osgood, Mohammad and colleagues).* An opposite shares the contexts of its pair and differs along one axis. The expectation is that the offsets of antonym pairs (hot to cold, big to small) are more aligned with each other than the offsets of random pairs, and less than those of grammatical relations; the antonym lists are to be specified (@sec-diff-opposites).
 
@@ -31,7 +31,7 @@ The scope is differences between pairs of meanings: analogy and relation, opposi
 *Goal 5, which relation holds between two near items.* A cosine says that two items are near and not in which way. The expectation is that a relation that is given as an input, a label that selects the offset or the operator, can be recovered for pairs that were never seen with it, for the relations on which Goal 1 finds a consistent offset, and cannot for the others. The run takes the labelled pairs of Goal 1 and asks which relation holds between a held-out pair, from the offset alone, against a classifier on the two vectors and a shuffled-label null (@sec-diff-offset). *This goal receives Q19 of @sec-gallery-neighbours.*
 
 ## What the Philosophies Say About Difference {#sec-diff-philosophy}
-*Plan (about 3 pages). Saussure's claim that a sign has value only through its differences from the other signs [@saussure1916cours], to be read at the page before it is quoted; Gentner's structure mapping, in which an analogy is a one-to-one, relationally consistent mapping of parts [@gentner1983structure], and Turney and Pantel's distinction between attributional similarity (between two words) and relational similarity (between two pairs), which does not reduce to the first [@turney2010frequency, §2.4]; Tversky's asymmetry of likeness [@tversky1977features], which a symmetric score cannot say; opposition as one axis (Osgood's bipolar scales [@osgood1957measurement]) and as lexical contrast [@mohammad2013computing]; and negation as a logical operation on subspaces [@birkhoff1936logic]. For each account: what it says a difference would be, what a vector carries of it, and where it stops. What stops it is stated here and handed on: the truth of a negation to the chapter on truth, its place in a sentence to the chapter on composition.*
+*Plan (about 3 pages). Saussure's claim that a sign has value only through its differences from the other signs [@saussure1916cours], to be read at the page before it is quoted; Gentner's structure mapping, in which an analogy is a one-to-one, relationally consistent mapping of parts [@gentner1983structure], and Turney and Pantel's distinction between attributional similarity (between two words) and relational similarity (between two pairs), which does not reduce to the first [@turney2010frequency, §2.4]; Tversky's asymmetry of likeness [@tversky1977features], which a symmetric score cannot say; opposition as one axis (Osgood's bipolar scales [@osgood1957measurement]) and as lexical contrast [@mohammad2013computing]; and negation as a logical operation on subspaces [@birkhoff1936logic]. For each account: what it says a difference would be, what a vector carries of it, and where it stops. What stops it is stated here and handed on: the truth of a negation to the chapter on truth, its place in a sentence to the chapter on structure.*
 
 ## Is the Offset Consistent? {#sec-diff-offset}
 *Plan (about 4 pages). The offset between word vectors encodes relations such as plural or gender [@mikolov2013linguistic], and it is the best-known and the most contested property. For it: the offset method is a linear combination of three pairwise similarities, and a similar amount of relational similarity can be recovered from sparse counts [@levy2014linguistic], with derivations of why offsets appear [@allen2019analogies; @ethayarajh2019linear]. Against it: a literal implementation returns an input word almost always, baselines that ignore the first pair recover part of the success, and the result depends on how similar the words are and on the test implementation [@linzen2016analogies; @rogers2017toomany; @schluter2018analogy]. The run reports the offset against those baselines, in both directions, per relation, on the three spaces of the nearness chapter (script `offset.py`, moved here from that chapter's code directory); the standard test is itself a combination of three cosines, so a failure may come from the nearness and not from the relation. Null: the baselines. Judge: the Google analogy set, restricted to the vocabulary.*
@@ -69,24 +69,6 @@ The scope is differences between pairs of meanings: analogy and relation, opposi
 *Plan (1 page). Findings: whether the offset of a relation is more consistent than the baselines for some relations and not others; whether opposites are a direction or a region; which relation patterns (symmetric, antisymmetric, inverse, compositional) each knowledge-graph model can and cannot express, in the order in which each fixed what the previous one could not; and what one dot product cannot rank. Achieved for the representation of meaning: difference as a relation (@sec-prop-difference), with a direction for each relation that survives the baselines. Computation: whether embeddings learned from data make explicit graph structure unnecessary, read from cost per query and quality at matched data, dated. Still out of reach: a pairwise edge cannot express an interaction among three or more things (@sec-what-pairwise-structure-cannot), and the truth of a negation is a verdict on the world (@sec-ch-meaning-and-truth).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: the offset and its sceptics, relational similarity, lexical contrast, the logic of subspaces. Not yet read for this chapter: Saussure at the page; the knowledge-graph papers (TransE and RotatE are in `references/`, DistMult and ComplEx are not); the claim about re-evaluations of knowledge-graph models.
-
-## Candidate Sections {#sec-meaning-as-difference-candidates}
-
-Experiments that could go in this chapter, not run:
-
-- A late-interaction score that separates what is missing from what is extraneous, after Tversky (an idea, avenue 2 in `notes/ideas.qmd`; no literature search done).
-
-## Question and Answer {#sec-meaning-as-difference-answer}
-
-*Question:* is the offset between related pairs consistent?
-
-*Answer:* to be written when the chapter is answered.
-
-*Next:* a difference taken repeatedly in the same sense is a direction (@sec-ch-meaning-as-direction).
-
-## Exercises {#sec-meaning-as-difference-exercises}
-
-At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-difference -->
 
@@ -234,3 +216,21 @@ Here we check where nearness and likeness part, that is, which neighbours of a v
 
 3. Take static vectors for the words (word2vec or GloVe from the Internet, or the spaces of this chapter) and a sentence encoder for the sentences, such as a MiniLM model of the `transformers` library with the mean of the token vectors as the sentence vector. Typical results: antonyms like hot–cold have a cosine as high as synonyms or higher, well above the random pairs; "the film is good" is as near to "the film is not good" as to "the film is fine", and with some encoders nearer. The answer depends on the model and on how it was trained (a model trained with contradiction pairs as negatives can separate negations), so state the model and look at several pairs and not at one.
 :::
+
+## Candidate Sections {#sec-meaning-as-difference-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- A late-interaction score that separates what is missing from what is extraneous, after Tversky (an idea, avenue 2 in `notes/ideas.qmd`; no literature search done).
+
+## Question and Answer {#sec-meaning-as-difference-answer}
+
+*Question:* is the offset between related pairs consistent?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a difference taken repeatedly in the same sense is a direction (@sec-ch-meaning-as-direction).
+
+## Exercises {#sec-meaning-as-difference-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.

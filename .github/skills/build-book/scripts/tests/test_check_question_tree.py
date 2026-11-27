@@ -201,3 +201,11 @@ def test_part_title_is_read_from_the_part_page(tmp_path):
     assert cqt.check_quarto(rows(), tmp_path) == []
     (tmp_path / "parts" / "p2.qmd").write_text("# Other\n", encoding="utf-8")
     assert any("Part titles" in f for f in cqt.check_quarto(rows(), tmp_path))
+
+
+def test_exercises_must_be_the_last_section_after_the_answer(tmp_path):
+    write_chapter(tmp_path, "alpha", GOOD_BODY + "\n## Late {#sec-late}\n\ntext\n")
+    assert any("last section" in f for f in cqt.check_chapter(rows().chapters[0], tmp_path))
+    swapped = GOOD_BODY.replace("## Question and Answer {#sec-x}", "## Exercises {#sec-e0}").replace("## Exercises {#sec-e}", "## Question and Answer {#sec-q0}")
+    write_chapter(tmp_path, "alpha", swapped)
+    assert any("last section" in f for f in cqt.check_chapter(rows().chapters[0], tmp_path))

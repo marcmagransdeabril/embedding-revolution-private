@@ -15,11 +15,11 @@ status: idea
 
 A direction is a meaning you can move along. If a space of meanings has this property, a quality such as sentiment, tense, formality or gender corresponds to a direction, moving along it changes that quality and little else, and the same direction works for many items at once. Osgood's semantic differential gave a space with named axes, evaluation, potency and activity, found by factor analysis of human ratings of concepts on bipolar scales [@osgood1957measurement], and Gärdenfors proposed that meanings are regions of spaces of quality dimensions [@gardenfors2000conceptual]. The axes of a trained space are free up to a rotation, so the question of this chapter is whether the directions that matter can be found in it, whether they are used by the model that has them, and how many there can be.
 
-The scope is one quality for many items. The step between one pair of meanings is the chapter on difference (@sec-ch-meaning-as-difference); the extent of a concept around a direction is the chapter on regions (@sec-ch-meaning-as-region); a direction in time or motion is the section on paths of the chapter on generation (@sec-prop-paths); and whether a direction tracks truth or only what is asserted is the chapter on truth (@sec-ch-meaning-and-truth), which uses the tools of this one.
+The scope is one quality for many items. The step between one pair of meanings is the chapter on difference (@sec-ch-meaning-as-difference); the extent of a concept around a direction is the chapter on regions (@sec-ch-meaning-as-region); a direction in time or motion is the chapter on generation of the chapter on generation (@sec-prop-paths); and whether a direction tracks truth or only what is asserted is the chapter on truth (@sec-ch-meaning-and-truth), which uses the tools of this one.
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
-*Goal 1, quality dimensions (Osgood, Gärdenfors).* The expectation is that for some qualities (sentiment, perhaps gender and tense) a direction fitted on labelled words, as the difference of the means of the two classes, ranks held-out words in agreement with a human scale, against a random direction and a shuffled-label null. The run uses a rated lexicon and the spaces of the chapter on nearness (@sec-dir-qualities).
+*Goal 1, quality dimensions (Osgood, Gärdenfors).* The expectation is that for some qualities (sentiment, perhaps gender and tense) a direction fitted on labelled words, as the difference of the means of the two classes, ranks held-out words in agreement with a human scale, against a random direction and a shuffled-label null. The run uses a rated lexicon and the spaces of the chapter on likeness (@sec-dir-qualities).
 
 *Goal 2, the linear representation hypothesis (Park and colleagues).* The expectation is that a concept can be a direction both in what a model represents and in how it reads it out, so that moving a representation along the direction changes the model's output in the corresponding way, against a random direction of the same norm. The sceptics find features that are not one-dimensional lines [@engels2025notlinear]. The run needs a small open language model (@sec-dir-used).
 
@@ -56,26 +56,6 @@ The scope is one quality for many items. The step between one pair of meanings i
 
 *Sources and gaps (first pass).* Sourced in `references/`: Osgood, Gärdenfors, the linear representation hypothesis and its sceptics, probes and control tasks, superposition. Not yet read for this chapter: the claims about steering at scale and about the stability of sparse features across seeds.
 
-## Candidate Sections {#sec-meaning-as-direction-candidates}
-
-Experiments that could go in this chapter, not run:
-
-- Steering a sentence along a direction (candidate, not run).
-- Sparse autoencoders on a small model's hidden states (candidate, not run).
-- Curse of dimensionality: room for many directions, superposition, separability and Johnson-Lindenstrauss.
-
-## Question and Answer {#sec-meaning-as-direction-answer}
-
-*Question:* is a quality a direction you can move along?
-
-*Answer:* to be written when the chapter is answered.
-
-*Next:* a direction is one quality; a concept has extent (@sec-ch-meaning-as-region).
-
-## Exercises {#sec-meaning-as-direction-exercises}
-
-At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
-
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-direction -->
 
 ## A Direction Is a Meaning You Can Move Along {#sec-prop-direction}
@@ -98,3 +78,23 @@ Sceptics and balance. For it: gender bias is captured by a direction, and a sing
 
 ## The Johnson-Lindenstrauss Lemma {#sec-johnson-lindenstrauss-lemma}
 *The mathematical foundation preserving pairwise distances under random projections [@johnson1984extensions], and the tool behind capacity bounds for vector symbolic architectures [@clarkson2023capacity] (@sec-ch-meaning-and-structure).*
+
+## Candidate Sections {#sec-meaning-as-direction-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- Steering a sentence along a direction (candidate, not run).
+- Sparse autoencoders on a small model's hidden states (candidate, not run).
+- Curse of dimensionality: room for many directions, superposition, separability and Johnson-Lindenstrauss.
+
+## Question and Answer {#sec-meaning-as-direction-answer}
+
+*Question:* is a quality a direction you can move along?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a direction is one quality; a concept has extent (@sec-ch-meaning-as-region).
+
+## Exercises {#sec-meaning-as-direction-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.

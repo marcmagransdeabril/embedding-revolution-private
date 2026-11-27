@@ -20,7 +20,7 @@ The scope is reference and truth. The dependence of a sentence on its situation 
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
-*Goal 1, a name and its bearer (Kripke, Putnam).* The expectation is that nearness follows the company of a name and not its bearer: names with a widespread false description sit near the description, a name with two bearers has one vector that averages them, and two names for one object are near only if their company is. The first run is the one of the chapter on nearness (@sec-near-not-alike); this chapter carries its result on, and adds a test with a contextual model, which sees the sentence that the name is in (@sec-truth-bearer). *This goal receives Q16 (@sec-likeness-handed-to-meaning-and-truth).*
+*Goal 1, a name and its bearer (Kripke, Putnam).* The expectation is that nearness follows the company of a name and not its bearer: names with a widespread false description sit near the description, a name with two bearers has one vector that averages them, and two names for one object are near only if their company is. The first run is the one of the chapter on likeness (@sec-near-not-alike); this chapter carries its result on, and adds a test with a contextual model, which sees the sentence that the name is in (@sec-truth-bearer). *This goal receives Q16 (@sec-likeness-handed-to-meaning-and-truth).*
 
 *Goal 2, a direction of truth.* There are linear structures of truth with causal interventions [@marks2024geometry] and unsupervised directions [@burns2023discovering], and probes that fail to generalize [@levinstein2023still] and a warning that the method may find the most prominent feature and not truth [@farquhar2023challenges]. The expectation is that a direction fitted on one set of true and false statements separates them there and generalizes worse to another set, and that a direction that separates true from commonly asserted differs from one that separates true from false. The run needs activations of an open language model and labelled statements (@sec-truth-direction). *This goal receives Q16 (@sec-likeness-handed-to-meaning-and-truth).*
 
@@ -34,7 +34,7 @@ The scope is reference and truth. The dependence of a sentence on its situation 
 *Plan (about 4 pages). Frege: sense, reference and the truth value of a sentence, and the sentence without reference [@frege1892sense]; Russell's descriptions [@russell1905denoting] and Kripke's attack on the description theory of names [@kripke1980naming]; Putnam's Twin Earth, "meanings ain't in the head" [@putnam1975meaning]; Ramsey's redundancy view and his meaning by consequences [@ramsey1927facts]; Tarski's semantic conception [@tarski1944semantic]; the argument from form [@bender2020climbing; @searle1980minds]; and grounding [@harnad1990symbol]. For each: what truth or reference would be, what a vector carries of it, and where it stops. The correspondence reading of a truth direction (it tracks facts) and the coherence or deflationary readings (it tracks what is asserted, or only endorses a sentence) are kept apart.*
 
 ## Does a Sense Know Its Bearer? {#sec-truth-bearer}
-*Plan (about 2 pages). Goal 1. The three kinds of name of the chapter on nearness (a false description, two bearers, two names for one object), now with a contextual model that sees the sentence; the ground truth of "the bearer" comes from outside the corpus and is declared.*
+*Plan (about 2 pages). Goal 1. The three kinds of name of the chapter on likeness (a false description, two bearers, two names for one object), now with a contextual model that sees the sentence; the ground truth of "the bearer" comes from outside the corpus and is declared.*
 
 ## Is There a Direction of Truth? {#sec-truth-direction}
 *Plan (about 3 pages). Goal 2. A probe of the activations of a small open model for true and false statements, its generalization to a second set, the control task, and the separation of true from commonly asserted. The claim that truth directions diverge from what is commonly believed has no source in the collection and is not to be stated before one is read.*
@@ -56,7 +56,7 @@ Two origins now read: Frege's truth value as the reference of a sentence [@frege
 Sources (first pass, none yet in `references.bib`; read before citing). Reiter on the closed-world assumption and default logic; Belnap's four-valued logic; order embeddings (Vendrov et al. 2016) and box embeddings for containment; logic tensor networks for truth degrees; three-way reasoning benchmarks with an "unknown" answer (ProofWriter, FOLIO), and NLI with its neutral class. All from memory, to be checked.
 
 ## More Than Two Verdicts {#sec-truth-logics}
-*Plan (about 2 pages; an idea, kept only if a vector construction separates the verdicts and does not just label them). Classical logic puts every claim on one line, true or false. Belnap's four-valued logic reads a claim by two independent axes, evidence for and evidence against, so that its values are true, false, both and neither (to be read at the source; not in `references/`); paraconsistent and dialetheist logics allow a claim to be both [@priest2002beyond], the Buddhist tetralemma has the same four corners [@nagarjuna1995fundamental], and non-monotonic logics (default reasoning, circumscription) are about revising a verdict, which is a path in the space of the chapter on paths. Two coordinates are what a vector represents naturally. The test, if the idea is kept: a model with two probes, one for evidence for and one for evidence against, on premises that are contradictory, silent and consistent; do the four corners separate, or does the model collapse "both" and "neither" into one low score? Sources to be read before any prose: Belnap, Priest, Reiter on default logic.*
+*Plan (about 2 pages; an idea, kept only if a vector construction separates the verdicts and does not just label them). Classical logic puts every claim on one line, true or false. Belnap's four-valued logic reads a claim by two independent axes, evidence for and evidence against, so that its values are true, false, both and neither (to be read at the source; not in `references/`); paraconsistent and dialetheist logics allow a claim to be both [@priest2002beyond], the Buddhist tetralemma has the same four corners [@nagarjuna1995fundamental], and non-monotonic logics (default reasoning, circumscription) are about revising a verdict, which is a path in the space of the chapter on generation. Two coordinates are what a vector represents naturally. The test, if the idea is kept: a model with two probes, one for evidence for and one for evidence against, on premises that are contradictory, silent and consistent; do the four corners separate, or does the model collapse "both" and "neither" into one low score? Sources to be read before any prose: Belnap, Priest, Reiter on default logic.*
 
 ## Technologies That Exploit Truth {#sec-truth-technologies}
 *Plan (about 1 page). Retrieval-augmented generation and the vector databases and approximate-search indexes behind it, checking against knowledge graphs, internal-consistency checks and self-verification, proof assistants and neural theorem proving, and truth probes. Vector databases are one technology among several for one problem; the others are listed with their own costs. For each: the cost per query, and whether the evidence at scale shows fewer unsupported claims at matched tuning.*
@@ -65,24 +65,6 @@ Sources (first pass, none yet in `references.bib`; read before citing). Reiter o
 *Plan (1 page). Findings: why distance concentration forces approximate search, what a fixed-dimension dot product can and cannot rank, and how retrieval-augmented generation behaved on negation, conjunction and multi-hop questions, told as a dated case study. Achieved for the representation of meaning: nearness (@sec-prop-nearness) at the scale of billions, and a memory outside the weights that grounds generation in text that can be checked. Computation: search can be paid once in training and amortized into the weights, or paid at every query, the same trade as for reasoning in @sec-ch-meaning-in-context. Parametric memory is the amortized side, retrieval and agentic search the per-query side, and which is cheaper depends on the difficulty of the question and the compute available [@snell2024scaling; @jones2021scaling]. Whether long contexts and agentic search absorb retrieval, or external memory survives on cost, is open and dated. Evidence at scale: benchmark comparisons of approximate-search indexes and of dense against lexical retrieval exist (from memory, to be checked: ANN-Benchmarks and BEIR), and the dense-retrieval paper held in references/ (Karpukhin et al.) is the authors' own comparison. Smoke tests: recall against query time of exact and approximate search on random and on clustered vectors, which shows distance concentration directly, and a count of the rankings that a query vector of dimension 2 and 3 can realize over a small set of items. Still out of reach: a retrieved passage is not a checked claim, and one vector per item cannot negate or chain. Checking a text against verified sources is the external-consistency question of the critical literacy test, and keeping the structure of a subject is taken up by the extensions that follow, beginning with curvature in @sec-ch-meaning-as-generation.*
 
 *Sources and gaps (first pass).* Sourced in `references/`: Frege, Kripke, Putnam, Ramsey, Russell, the argument from form and grounding, truth directions and their sceptics, dense retrieval. Not yet sourced: Belnap and Reiter (the logics section rests on them); Tarski at the page; a corpus of true and false statements for the probe; the claim that truth directions diverge from common belief; benchmark comparisons of retrieval methods named in the earlier chapter (from memory, not read).
-
-## Candidate Sections {#sec-meaning-and-truth-candidates}
-
-Experiments that could go in this chapter, not run:
-
-- A truth direction in GPT-2 small and its sceptics.
-
-## Question and Answer {#sec-meaning-and-truth-answer}
-
-*Question:* does truth live in the space or must it be looked up?
-
-*Answer:* to be written when the chapter is answered.
-
-*Next:* what a vector cannot hold may sit in a structured store (@sec-ch-meaning-and-structure).
-
-## Exercises {#sec-meaning-and-truth-exercises}
-
-At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-truth -->
 
@@ -104,3 +86,21 @@ For Frege (1892) a name has a sense, which can be a description, and a reference
 
 *Not answerable in this chapter from text alone. See* @sec-ch-meaning-and-truth.
 :::
+
+## Candidate Sections {#sec-meaning-and-truth-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- A truth direction in GPT-2 small and its sceptics.
+
+## Question and Answer {#sec-meaning-and-truth-answer}
+
+*Question:* does truth live in the space or must it be looked up?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* what a vector cannot hold may sit in a structured store (@sec-ch-meaning-and-structure).
+
+## Exercises {#sec-meaning-and-truth-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.

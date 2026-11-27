@@ -146,6 +146,11 @@ def check_chapter(c: Chapter, root: Path) -> list[str]:
         found.append(f"{c.stem}: no line starting '*Next:*'")
     if not re.search(r"^## Exercises\b", text, re.M):
         found.append(f"{c.stem}: no section '## Exercises'")
+    heads = re.findall(r"^## (.*?)(?:\s*\{[^}]*\})?\s*$", text, re.M)
+    names = [h.split(":")[0].strip() for h in heads]
+    if "Question and Answer" in names and "Exercises" in names:
+        if not (names.index("Question and Answer") < names.index("Exercises") == len(names) - 1):
+            found.append(f"{c.stem}: 'Question and Answer' must come before 'Exercises', and 'Exercises' must be the last section")
     for name, anchor in c.models:
         if anchor != "testbed" and f"@{anchor}" not in text:
             found.append(f"{c.stem}: model {name} is not cited by its zoo anchor @{anchor}")

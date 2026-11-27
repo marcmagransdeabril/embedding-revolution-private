@@ -2,7 +2,7 @@
 status: provisional
 ---
 
-# Meaning as Likeness {#sec-ch-meaning-as-likeness}
+# Meaning as Likeness: What a Distance Can Carry {#sec-ch-meaning-as-likeness}
 
 The last chapter showed a table of one-hot symbols in which every pair of words is equally far apart, so that no pair is nearer than another, and with Rice's theorem putting exact meaning out of reach. What is left is a graded nearness, exactly what learned embedding spaces provide, and the room that high dimensions have for many nearly orthogonal directions (@sec-room-exponentially-many-directions) is where such a nearness can live. This chapter opens Part I, the Librarian Test, with the simplest of its questions.
 
@@ -145,6 +145,29 @@ The answer to Q3 is in the box at the end of the chapter (@sec-likeness-answer).
 
 The answer would change with another reader, another text or another loss. It cannot exclude a relation that covers less than about 0.15% of the far pairs (3 pairs of 2,000). It says nothing of the pairs that only one space puts far apart, which are most of those below the cut in each space (the other 93%): whether they are far because of the pair or because of the space is the question of @sec-likeness-many-spaces.
 
+<!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-nearness -->
+
+## Nearness Is Likeness {#sec-prop-nearness}
+*Things that mean alike sit close together, and things that mean differently sit far apart.*
+
+Figure (planned): a small map in which "dog", "puppy", and "wolf" cluster, while "car" and "doorbell" sit far away.
+
+Tested in this chapter for static word vectors (Q1 to Q3); the tests of the loss, the seed and the text are in @sec-loss-decides-near and @sec-likeness-many-spaces. Earned here (where the distances come from), in @sec-concentration-measure (why distance still works in many dimensions), and in @sec-ch-memory-retrieval (search by nearness).
+
+Sources (first pass). The distributional idea that likeness of meaning shows as likeness of company [@harris1954distributional; @firth1957synopsis]; the first vector spaces built from counts [@deerwester1990indexing; @lund1996producing]; generalization that falls off with distance in a psychological space [@shepard1987toward]; meanings as points in a space of quality dimensions [@gardenfors2000conceptual]. Two caveats: human similarity judgements are not always symmetric or metric [@tversky1977features] (which axioms a trained score keeps is taken up in @sec-likeness-not-distance), and in some trained spaces all vectors share a large common direction, so that raw nearness is relative to the space (@sec-reading-nearness-correctly). Origins of three ideas, to be read before they are relied on: Frege's levels of difference (idea, sense, reference) [@frege1892sense]; Quine's denial of a criterion for synonymy [@quine1951two]; Wittgenstein's family resemblance, read at §§66–67, as overlapping similarities with no feature common to all [@wittgenstein1953philosophical].
+
+Sceptics and balance. Four objections, each from a source held in `references/`. First, similarity is not relatedness: word-similarity benchmarks mixed the two, so that *cup* and *coffee* are rated more similar than *car* and *train* in WordSim-353 [@faruqui2016problems, p. 2], and SimLex-999 was built to separate similarity from association [@hill2015simlex]; the first paper concludes that word-similarity tasks alone are not a sustainable way to evaluate vectors. Second, raw nearness is shaped by a common mean and a few dominating directions: removing them made off-the-shelf vectors better on similarity, categorization and analogy tasks, across methods and languages [@mu2018allbutthetop], and contextual representations are not isotropic in any layer of BERT, ELMo or GPT-2 [@ethayarajh2019contextual]. Third, cosine similarity can be arbitrary: for embeddings derived from regularized linear models it can yield arbitrary and even non-unique similarities, controlled implicitly by the regularization, and the authors caution that deep models may share the problem, which they discuss and do not prove [@steck2024cosine]. Fourth, the algorithm matters less than it seems: much of the gain attributed to neural embeddings over counting came from design choices and hyperparameters, and the differences between the methods were mostly local or insignificant [@levy2015improving]. The fourth point supports the question of this book, since count-based and predictive spaces then share nearness; the first three say that "near" is relative to the notion of similarity chosen, to the centring of the space, and to the training. What survives: nearness is a robust property of trained spaces when the benchmark separates similarity from relatedness and the space is centred; it is not a property of the raw cosine of any space.
+
+<!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-high-dimensional-trap -->
+
+## The High-Dimensional Trap {#sec-high-dimensional-trap}
+*Why volume concentrates in a thin shell and corners are empty, and why the probability mass of a Gaussian, the usual distribution of a random embedding, also sits in a thin shell at a fixed radius [@bishop2024deep].*
+
+<!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-concentration-measure -->
+
+## Concentration of Measure {#sec-concentration-measure}
+*Why random vectors are nearly orthogonal and Euclidean distances concentrate [@vershynin2018high], so that the nearest and the farthest neighbour become almost equally far [@beyer1999nearest], which forces the approximate search of @sec-ch-memory-retrieval. Hubness, a few points that appear among the nearest neighbours of very many, is related to distance concentration but distinct from it [@radovanovic2010hubs], and it is a practical problem of shared embedding spaces [@rostami2021transfer] (@sec-ch-meaning-across-senses). Anisotropy, by contrast, is a property of trained spaces (@sec-reading-nearness-correctly).*
+
 ## Question and Answer {#sec-likeness-answer}
 
 ::: {.test-answer #a-likeness}
@@ -208,26 +231,3 @@ Seven questions to think over or look up, and three to reproduce.
 
 10. The script `relation_unlabelled.py` does it when it draws the sample. The cut is the 1st percentile of the 174.7 million pairs of two WordNet words with none of the eight relations, at -0.096 in PPMI-SVD and -0.103 in SGNS, with 1,690,956 and 1,705,489 pairs below it. 111,332 pairs are below it in both, 6.6% and 6.5% of each, so the two spaces agree on very little of what is far.
 :::
-
-<!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-nearness -->
-
-## Nearness Is Likeness {#sec-prop-nearness}
-*Things that mean alike sit close together, and things that mean differently sit far apart.*
-
-Figure (planned): a small map in which "dog", "puppy", and "wolf" cluster, while "car" and "doorbell" sit far away.
-
-Tested in this chapter for static word vectors (Q1 to Q3); the tests of the loss, the seed and the text are in @sec-loss-decides-near and @sec-likeness-many-spaces. Earned here (where the distances come from), in @sec-concentration-measure (why distance still works in many dimensions), and in @sec-ch-memory-retrieval (search by nearness).
-
-Sources (first pass). The distributional idea that likeness of meaning shows as likeness of company [@harris1954distributional; @firth1957synopsis]; the first vector spaces built from counts [@deerwester1990indexing; @lund1996producing]; generalization that falls off with distance in a psychological space [@shepard1987toward]; meanings as points in a space of quality dimensions [@gardenfors2000conceptual]. Two caveats: human similarity judgements are not always symmetric or metric [@tversky1977features] (which axioms a trained score keeps is taken up in @sec-likeness-not-distance), and in some trained spaces all vectors share a large common direction, so that raw nearness is relative to the space (@sec-reading-nearness-correctly). Origins of three ideas, to be read before they are relied on: Frege's levels of difference (idea, sense, reference) [@frege1892sense]; Quine's denial of a criterion for synonymy [@quine1951two]; Wittgenstein's family resemblance, read at §§66–67, as overlapping similarities with no feature common to all [@wittgenstein1953philosophical].
-
-Sceptics and balance. Four objections, each from a source held in `references/`. First, similarity is not relatedness: word-similarity benchmarks mixed the two, so that *cup* and *coffee* are rated more similar than *car* and *train* in WordSim-353 [@faruqui2016problems, p. 2], and SimLex-999 was built to separate similarity from association [@hill2015simlex]; the first paper concludes that word-similarity tasks alone are not a sustainable way to evaluate vectors. Second, raw nearness is shaped by a common mean and a few dominating directions: removing them made off-the-shelf vectors better on similarity, categorization and analogy tasks, across methods and languages [@mu2018allbutthetop], and contextual representations are not isotropic in any layer of BERT, ELMo or GPT-2 [@ethayarajh2019contextual]. Third, cosine similarity can be arbitrary: for embeddings derived from regularized linear models it can yield arbitrary and even non-unique similarities, controlled implicitly by the regularization, and the authors caution that deep models may share the problem, which they discuss and do not prove [@steck2024cosine]. Fourth, the algorithm matters less than it seems: much of the gain attributed to neural embeddings over counting came from design choices and hyperparameters, and the differences between the methods were mostly local or insignificant [@levy2015improving]. The fourth point supports the question of this book, since count-based and predictive spaces then share nearness; the first three say that "near" is relative to the notion of similarity chosen, to the centring of the space, and to the training. What survives: nearness is a robust property of trained spaces when the benchmark separates similarity from relatedness and the space is centred; it is not a property of the raw cosine of any space.
-
-<!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-high-dimensional-trap -->
-
-## The High-Dimensional Trap {#sec-high-dimensional-trap}
-*Why volume concentrates in a thin shell and corners are empty, and why the probability mass of a Gaussian, the usual distribution of a random embedding, also sits in a thin shell at a fixed radius [@bishop2024deep].*
-
-<!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-concentration-measure -->
-
-## Concentration of Measure {#sec-concentration-measure}
-*Why random vectors are nearly orthogonal and Euclidean distances concentrate [@vershynin2018high], so that the nearest and the farthest neighbour become almost equally far [@beyer1999nearest], which forces the approximate search of @sec-ch-memory-retrieval. Hubness, a few points that appear among the nearest neighbours of very many, is related to distance concentration but distinct from it [@radovanovic2010hubs], and it is a practical problem of shared embedding spaces [@rostami2021transfer] (@sec-ch-meaning-across-senses). Anisotropy, by contrast, is a property of trained spaces (@sec-reading-nearness-correctly).*

@@ -15,7 +15,7 @@ CODE_HELPERS := $(wildcard code/*/utils.py)
 CODE_SKELETONS := $(shell grep -l '^\# SKELETON' $(wildcard code/*/*.py) 2>/dev/null)
 CODE_SCRIPTS := $(filter-out $(CODE_HELPERS) $(CODE_SKELETONS),$(wildcard code/*/*.py))
 CODE_STAMPS  := $(CODE_SCRIPTS:code/%.py=.code-tests/%.ok)
-TREE_FLAGS   := --quarto
+TREE_FLAGS   := --all
 REVIEW_CODE  := .github/skills/review-code/scripts
 
 # A script is also re-run when a module it imports (transitively) changes. The rules are generated from the import statements
@@ -56,7 +56,7 @@ help:
 
 # Consistency checks come first: check-code (helper unit tests, allowed imports, chapter-to-script links, Makefile deps), then
 # validate (markdown, math, cross-references, citations) once sync-solutions has regenerated chapters/solutions.qmd.
-book: diagrams check-code test-code sync-chapters sync-solutions validate validate-citations html pdf
+book: diagrams check-code check-tree test-code sync-chapters sync-solutions validate validate-citations html pdf
 
 # TikZ diagrams: diagrams/<chapter>/<name>.tex -> .pdf (vector, for the PDF book) and .png (300 dpi, for HTML and EPUB)
 # Chapters reference the .pdf; filters/tikz-img.lua swaps it for the .png outside LaTeX.
@@ -83,7 +83,7 @@ unit-tests-code:
 check-code: unit-tests-code
 	@$(VENV_PYTHON) $(REVIEW_CODE)/code_deps.py check
 
-# The question tree (notes/question_tree.md): the tree itself now; --all (chapters, zoo, _quarto.yml) once the restructure is done.
+# The question tree (notes/question_tree.md) against the chapters, the zoo and _quarto.yml.
 check-tree:
 	@$(VENV_PYTHON) .github/skills/build-book/scripts/check_question_tree.py $(TREE_FLAGS)
 

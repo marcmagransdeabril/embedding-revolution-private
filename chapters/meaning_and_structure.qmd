@@ -14,27 +14,6 @@ status: idea
 | tensor product | @sec-zoo-tpr | binding roles and fillers |
 | LTN | @sec-zoo-ltn | logic over vectors |
 
-
-## Candidate Sections {#sec-meaning-and-structure-candidates}
-
-Experiments that could go in this chapter, not run:
-
-- Neural theorem proving.
-- Graph against vector databases.
-- Curse of dimensionality: capacity bounds and random walks (DeepWalk, node2vec).
-
-## Question and Answer {#sec-meaning-and-structure-answer}
-
-*Question:* what can a structured store hold that a vector cannot?
-
-*Answer:* to be written when the chapter is answered.
-
-*Next:* a store is read; can a space also be written to (@sec-ch-meaning-as-generation)?
-
-## Exercises {#sec-meaning-and-structure-exercises}
-
-At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
-
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-combine -->
 
 ## Meanings Combine {#sec-prop-combine}
@@ -164,3 +143,23 @@ Sceptics and balance. The failure case of the figure is documented: image-text m
 *Searching discrete proof trees along continuous latent trajectories.*
 
 <!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-reaching-false -->
+
+## Candidate Sections {#sec-meaning-and-structure-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- Neural theorem proving.
+- Graph against vector databases.
+- Curse of dimensionality: capacity bounds and random walks (DeepWalk, node2vec).
+
+## Question and Answer {#sec-meaning-and-structure-answer}
+
+*Question:* what can a structured store hold that a vector cannot?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a store is read; can a space also be written to (@sec-ch-meaning-as-generation)?
+
+## Exercises {#sec-meaning-and-structure-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.

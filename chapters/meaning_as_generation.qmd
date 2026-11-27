@@ -16,7 +16,7 @@ status: idea
 
 Meaning is not only read; it is made and grown. A space of meanings that can be read only is a catalogue, and the same space that can also be written to is a way to produce what has not been said: a sentence that fits, an image of a dog that no one photographed, a molecule, a hypothesis in a field where nobody has looked. Chomsky's generative grammar made production the test of a theory of language [@chomsky1957syntactic; @chomsky1965aspects], and Wittgenstein's use includes saying new things with old words [@wittgenstein1953philosophical]. The question of this chapter is what a latent space does when it is used to make and not to read: how a point becomes an object, what happens when the point lies beyond the data, where new regions might be, and what separates a plausible object from a true or a useful one.
 
-The scope is production and growth. Travel between points that the data already hold is the section on paths (@sec-prop-paths), and its geometry (curves, metrics, geodesics) is taken from there; whether a product is true is the chapter on truth (@sec-ch-meaning-and-truth), which takes from here the contrast between plausible and true; the sense that a decoder gives to a point depends on its context (@sec-ch-meaning-in-context); and a combination of known parts into a new whole is the chapter on composition (@sec-ch-meaning-and-structure).
+The scope is production and growth. Travel between points that the data already hold is the chapter on generation (@sec-prop-paths), and its geometry (curves, metrics, geodesics) is taken from there; whether a product is true is the chapter on truth (@sec-ch-meaning-and-truth), which takes from here the contrast between plausible and true; the sense that a decoder gives to a point depends on its context (@sec-ch-meaning-in-context); and a combination of known parts into a new whole is the chapter on structure (@sec-ch-meaning-and-structure).
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment). A first search for the literature was made on 2026-11-22 (author's request) and the sources it found are in `references/`; they were read at the level of the abstract and the passages quoted below, and are to be read before the chapter is written. One source that the author knows, on how far the output of a model recombines the ideas discussed in the prompt, has not been identified yet.*
 
@@ -36,7 +36,7 @@ The scope is production and growth. Travel between points that the data already 
 *Plan (about 3 pages). Chomsky's generative grammar and the distinction between competence and performance [@chomsky1957syntactic; @chomsky1965aspects; @chomsky1986knowledge]; Wittgenstein on use and on the rule that is followed [@wittgenstein1953philosophical]; Ramsey on meaning by consequences [@ramsey1927facts]; and creativity as exploring a conceptual space or transforming it (Boden, in the account of the surveys [@franceschelli2024creativityml; @franceschelli2023creativityllm]; Boden's own book is not in the collection and is to be read before it is quoted). Gärdenfors's quality spaces give the first a geometry, a region to explore, and the second a change of the space itself. For each: what making meaning would be, what a latent space carries of it, and where it stops.*
 
 ## Beyond the Data {#sec-gen-beyond-data}
-*Plan (about 3 pages). Goal 2. Points decoded at growing distance from the data, their plausibility, and the null of random latent points; the relation to the geometry the decoder induces (the section on paths), to the density the model assigns, and to the manifold hypothesis of the appendix.*
+*Plan (about 3 pages). Goal 2. Points decoded at growing distance from the data, their plausibility, and the null of random latent points; the relation to the geometry the decoder induces (the chapter on generation), to the density the model assigns, and to the manifold hypothesis of the appendix.*
 
 ## Where Are the New Regions? {#sec-gen-new-regions}
 *Plan (about 2 pages; an idea). Goal 5. A map of a corpus with dates, the sparse regions between dense ones, and the check of whether later work falls in them more often than in random gaps. Truth directions, from the chapter on truth, could steer toward a region and are not assumed to.*
@@ -74,25 +74,6 @@ The scope is production and growth. Travel between points that the data already 
 *Plan (1 page). Findings: what a latent variable model adds to a map (a new point and a score), what happens to plausibility beyond the data, and whether the sparse regions of a corpus predict later work. Achieved for the representation of meaning: meaning that can be produced, a property that the earlier list did not have and that this chapter proposes (@sec-prop-produced). Computation: the cost of sampling against the quality of what is sampled. Still out of reach: a produced object is plausible and not necessarily true, and checking it is the chapter on truth (@sec-ch-meaning-and-truth). The Epilogue collects what the tests found.*
 
 *Sources and gaps (first pass).* Sourced in `references/`: generative grammar, the use view, Ramsey, the earlier chapter's sources on variational, diffusion and autoregressive models. Sourced in `references/` and read at the abstract only: the high-dimensional argument against interpolation and extrapolation as a distinction, the novelty of language-model text, of research ideas and of diffusion samples, the creativity surveys, the materials-embedding result, and Swanson (1990), read at the abstract and on pages 29 and 31. Not yet sourced: Boden's own account; the source on the recombination of the ideas of a prompt that the author knows; the claim that plausibility falls with distance from the data (to be measured).
-
-## Candidate Sections {#sec-meaning-as-generation-candidates}
-
-Experiments that could go in this chapter, not run:
-
-- A diffusion run on the digits (candidate, not run).
-- An autoregressive run on the digits (candidate, not run).
-
-## Question and Answer {#sec-meaning-as-generation-answer}
-
-*Question:* can a space be written to as well as read?
-
-*Answer:* to be written when the chapter is answered.
-
-*Next:* two spaces trained on different data say the same only up to a change of coordinates, so can one be mapped onto the other (@sec-ch-meaning-as-arrangement)?
-
-## Exercises {#sec-meaning-as-generation-exercises}
-
-At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-paths -->
 
@@ -167,3 +148,22 @@ Sources (first pass). Generative grammar as the test of a theory of language [@c
 *Plan (1 page). Findings: whether the straight line leaves the data and the geodesic does not, whether transport helps analogies in curved word spaces, and what the arrow of time needs. Achieved for the representation of meaning: meaning that moves (@sec-prop-paths), over territory that the data hold. Computation: the cost of geodesics against straight lines. Still out of reach: travel beyond the data (@sec-gen-beyond-data).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: the geometry of latent spaces, parallel transport, hyperbolic embeddings, the arrow of time in video. Not yet read for this chapter: Gärdenfors on actions and events in the form stated; any account of time. The figures about the arrow of time are those of the earlier chapter and were not re-checked here.
+
+## Candidate Sections {#sec-meaning-as-generation-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- A diffusion run on the digits (candidate, not run).
+- An autoregressive run on the digits (candidate, not run).
+
+## Question and Answer {#sec-meaning-as-generation-answer}
+
+*Question:* can a space be written to as well as read?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* two spaces trained on different data say the same only up to a change of coordinates, so can one be mapped onto the other (@sec-ch-meaning-as-arrangement)?
+
+## Exercises {#sec-meaning-as-generation-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.

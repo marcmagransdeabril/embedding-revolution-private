@@ -518,7 +518,7 @@ If exact meaning is out of reach and one-hot symbols are a table with no interio
 *Four tests.* The thought experiments of the Prologue become the three Parts of the book: the first test is Part I, the second is Part II, and the last two, which are speculative, share Part III.
 
 - The *Librarian Test* (Part I): can a computer shelve and find things by meaning alone, with one fixed place for each thing? It asks, chapter by chapter, for likeness, for a relation, for a quality, for a kind, for a second sense (the dog test, in @sec-ch-meaning-across-senses), and for the passage that answers a question. A human can judge each, and a failure is informative.
-- The *Critical Literacy Test* (Part II): can a representation be read critically? A text has scales, a word has a situation, a claim has a truth value, a sentence has structure and a space can be written to as well as read. A checker can judge most of these, and a planted contradiction tests them.
+- The *Critical Literacy Test* (Part II): what does a reader need beyond finding? A text has scales, a word has a situation, a claim has a truth value, a sentence has structure and a space can be written to as well as read. A checker can judge most of these, and a planted contradiction tests them.
 - The *Universal Translator* (Part III, speculative): can two spaces be aligned from relations alone, with no dictionary? A pass is informative; a failure is not, because the spaces may differ for reasons that say nothing about meaning.
 - The *Alien Technology Test* (Part III, the last chapter, speculative): can the function of a system we did not build be recovered from its behaviour? There is no judge, and a failure says little.
 
