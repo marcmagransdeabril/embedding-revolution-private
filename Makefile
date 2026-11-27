@@ -15,7 +15,7 @@ CODE_HELPERS := $(wildcard code/*/utils.py)
 CODE_SKELETONS := $(shell grep -l '^\# SKELETON' $(wildcard code/*/*.py) 2>/dev/null)
 CODE_SCRIPTS := $(filter-out $(CODE_HELPERS) $(CODE_SKELETONS),$(wildcard code/*/*.py))
 CODE_STAMPS  := $(CODE_SCRIPTS:code/%.py=.code-tests/%.ok)
-TREE_FLAGS   :=
+TREE_FLAGS   := --quarto
 REVIEW_CODE  := .github/skills/review-code/scripts
 
 # A script is also re-run when a module it imports (transitively) changes. The rules are generated from the import statements

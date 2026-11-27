@@ -189,3 +189,15 @@ def test_part_titles_must_match(tmp_path):
            "  - part: Two\n    chapters:\n    - chapters/beta.qmd\n  - chapters/last.qmd\n")
     (tmp_path / "_quarto.yml").write_text(yml, encoding="utf-8")
     assert any("Part titles" in f for f in cqt.check_quarto(rows(), tmp_path))
+
+
+def test_part_title_is_read_from_the_part_page(tmp_path):
+    (tmp_path / "parts").mkdir()
+    (tmp_path / "parts" / "p1.qmd").write_text("# One {.unnumbered}\n\ntext\n", encoding="utf-8")
+    (tmp_path / "parts" / "p2.qmd").write_text("# Two\n", encoding="utf-8")
+    yml = ("book:\n  chapters:\n  - chapters/first.qmd\n  - part: parts/p1.qmd\n    chapters:\n    - chapters/alpha.qmd\n"
+           "  - part: parts/p2.qmd\n    chapters:\n    - chapters/beta.qmd\n  - chapters/last.qmd\n")
+    (tmp_path / "_quarto.yml").write_text(yml, encoding="utf-8")
+    assert cqt.check_quarto(rows(), tmp_path) == []
+    (tmp_path / "parts" / "p2.qmd").write_text("# Other\n", encoding="utf-8")
+    assert any("Part titles" in f for f in cqt.check_quarto(rows(), tmp_path))

@@ -162,6 +162,17 @@ def check_zoo(tree: Tree, root: Path) -> list[str]:
             for c in tree.chapters for name, anchor in c.models if anchor != "testbed" and anchor not in ids]
 
 
+def _part_title(part: str, root: Path) -> str | None:
+    """The title of a Part: the value of `part:`, or the first heading of the page it names."""
+    if not str(part).endswith(".qmd"):
+        return part
+    page = root / part
+    if not page.exists():
+        return None
+    m = re.search(r"^# (.*?)(?:\s*\{[^}]*\})?\s*$", page.read_text(encoding="utf-8"), re.M)
+    return m.group(1) if m else None
+
+
 def check_quarto(tree: Tree, root: Path) -> list[str]:
     cfg = yaml.safe_load((root / "_quarto.yml").read_text(encoding="utf-8"))
     flat, groups = [], []
@@ -181,7 +192,7 @@ def check_quarto(tree: Tree, root: Path) -> list[str]:
         by_part.setdefault(c.part, []).append(c.stem)
     if groups != list(by_part.values()):
         found.append(f"quarto: Parts group {groups}, the tree says {list(by_part.values())}")
-    titles = [e.get("part") for e in cfg["book"]["chapters"] if isinstance(e, dict)]
+    titles = [_part_title(e["part"], root) for e in cfg["book"]["chapters"] if isinstance(e, dict)]
     if titles != [t for _, t in tree.parts]:
         found.append(f"quarto: Part titles are {titles}, the tree says {[t for _, t in tree.parts]}")
     return found

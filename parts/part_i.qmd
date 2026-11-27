@@ -1,0 +1,3 @@
+# The Librarian Test {.unnumbered}
+
+Can a computer shelve and find things by meaning alone, with one fixed place for each thing? Each chapter of this Part takes one human goal and one metric: likeness (find things like this one; recall@k, AUC), difference (find the thing in a relation; hits@k), direction (rank or filter by a quality; rank correlation), region (find all members of a kind; category recall), senses (find the photo for a word; cross-modal recall@k) and retrieval (find the passage that answers a question; recall@k). A human can judge each of them, and a failure is informative.

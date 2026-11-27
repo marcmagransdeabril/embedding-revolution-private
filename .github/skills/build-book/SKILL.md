@@ -99,7 +99,7 @@ Drives the entire build lifecycle with automatic environment variable injection 
 - `--no-validate`: Skip syntax, math, and citation validation.
 
 ### 2. `sync_chapters.py` — Dynamic Chapter Registry
-Scans `chapters/*.qmd`, lists the chapters in the order of the roadmap (a flat list: the introduction, the summary of the properties, one chapter per property of meaning, the epilogue; no Parts), puts the appendices and the generated solutions last, and updates `_quarto.yml`:
+Scans `chapters/*.qmd`, lists the chapters in the order of `notes/question_tree.md` (the introduction, three Parts whose pages are `parts/part_<n>.qmd`, the epilogue), puts the appendices and the generated solutions last, and updates `_quarto.yml`:
 
 ```bash
 .venv/bin/python .github/skills/build-book/scripts/sync_chapters.py --verbose
@@ -150,19 +150,10 @@ LaTeX only warns (`Overfull \hbox`) about a display formula, a table or a line w
 
 ### File Placement and Naming
 Place new chapters in `chapters/`:
-- `chapters/properties_of_meaning.qmd` (Chapter 1)
-- `chapters/curse_of_dimensionality.qmd` (Chapter 2)
-- `chapters/symbols_without_interior.qmd` (Chapter 3)
-- `chapters/embedding_spaces.qmd` (Chapter 4)
-- `chapters/generative_spaces.qmd` (Chapter 5)
-- `chapters/contextual_vectors.qmd` (Chapter 6)
-- `chapters/vector_databases.qmd` (Chapter 7)
-- ... (the numbers are those of `_quarto.yml`; in the text, refer to chapters by label, see "Referring to chapters")
+- `chapters/<stem>.qmd`, one file per chapter of `notes/question_tree.md` (the numbers are those of `_quarto.yml`; in the text, refer to chapters by label, see "Referring to chapters"). A new chapter is first added to the tree (its question, one or two models, its Part), and `make check-tree` checks it.
 
 Run `make sync-chapters` to automatically register newly added files into `_quarto.yml`.
-The file-to-chapter mapping lives in `MASTER_PARTS` in `scripts/sync_chapters.py`:
-a file goes to the first chapter whose pattern is a substring of its filename
-stem or its title, so keep patterns specific.
+The order of the chapters and the Parts come from `notes/question_tree.md` (`sync_chapters.py` reads it); a chapter that is not in the tree is listed after the others.
 
 ### Referring to chapters
 Never type a chapter number: the numbers follow the order of `_quarto.yml`, so an inserted, merged or dropped chapter renumbers the book by itself.

@@ -1,0 +1,3 @@
+# Speculative Tests {.unnumbered}
+
+These two chapters are speculative, and they say so plainly. The universal translator asks whether two spaces can be aligned from relations alone, and the alien technology test whether an unknown system's function can be recovered from its behaviour. There is no judge for either, and a failure is not informative: the spaces, or the systems, may differ for reasons that say nothing about meaning. A pass, on a case calibrated first on a toy, is.
