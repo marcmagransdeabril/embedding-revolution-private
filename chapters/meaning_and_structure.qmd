@@ -1,0 +1,137 @@
+---
+status: idea
+---
+
+# Meaning and Structure: What a Store Can Hold That a Vector Cannot {#sec-ch-meaning-and-structure}
+
+Stub. The question, the models and the template are written in Task 6 of `tmp/plan_tests_refactor.md`; the sections below are salvaged text waiting to be placed.
+
+<!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-combine -->
+
+## Meanings Combine {#sec-prop-combine}
+*Two meanings can be added into a bundle or bound into a pair, and the result is again a position in the same space.*
+
+Figure (planned): "red" and "ball" combined into "red ball", and the failure case where "red ball, blue cube" cannot say which colour belongs to which object.
+
+Earned in @sec-ch-meaning-and-structure (bundling and binding) and @sec-ch-meaning-and-structure (composition and systematicity).
+
+Sources (first pass). Binding and bundling of vectors by circular convolution [@plate1995holographic], by random high-dimensional vectors [@kanerva2009hyperdimensional], and by tensor products [@smolensky1990tensor], surveyed in [@kleyko2023survey]; why composition is the crux, as a question of systematicity [@fodor1988connectionism]; addition and multiplication as composition in distributional models [@mitchell2010composition; @coecke2010mathematical].
+
+Sceptics and balance. The failure case of the figure is documented: image-text models trained contrastively behave like bags of words, with poor relational understanding, blunders when linking attributes to objects, and little sensitivity to word order [@yuksekgonul2023bagofwords]. For networks that learn a mapping, generalization works when training and test commands differ little and fails when a systematic composition is required, as in the "dax twice" example [@lake2018scan]; that study is on sequence-to-sequence networks, not on embedding spaces, so it motivates the property and does not test it. What survives: composition is not free in a trained space; it is a property that a structure must be built to have, which is the reason for @sec-ch-meaning-and-structure.
+
+<!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-random-walks-many-dimensions -->
+
+## Random Walks in Many Dimensions {#sec-random-walks-many-dimensions}
+*Pólya's theorem of 1921 [@doyle1984random]: a random walk returns home with certainty in one or two dimensions and only with probability less than one in three or more, and the chance of return falls as the dimension grows (about 34% in three dimensions [@doyle1984random, p. 99]), so in high dimensions a walker rarely comes back. After $n$ steps it is only about $\sqrt{n}$ from the start, which makes random walks slow explorers [@bishop2024deep]. On data the picture reverses: a walk confined to a neighbourhood graph cannot get lost, and its diffusion reveals the shape of the data [@coifman2006diffusion; @belkin2003laplacian], which leads to the manifold hypothesis. The same walk reappears as a slowly drifting discourse vector that explains why word embeddings recover co-occurrence statistics [@arora2016latent] (@sec-ch-meaning-as-likeness), and as the walks over a graph that DeepWalk and node2vec turn into sentences [@perozzi2014deepwalk; @grover2016node2vec] (@sec-ch-meaning-as-difference).*
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-comp-philosophy -->
+
+## What the Philosophies Say About Composition {#sec-comp-philosophy}
+*Plan (about 3 pages). The principle that the meaning of a whole is a function of the meanings of its parts and their mode of combination, as formalized in Montague's grammar [@montague1970universal], to be read at the page; Fodor and Pylyshyn's systematicity and productivity [@fodor1988connectionism]; the connectionist replies, Smolensky's tensor product and the hyperdimensional algebras [@smolensky1990tensor; @plate1995holographic; @kanerva2009hyperdimensional]; Mitchell and Lapata's additive and multiplicative composition of word vectors [@mitchell2010composition]; and the poverty of the stimulus, which asks how a learner could have found the structure from data. For each: what composition it demands and what a vector carries; where a vector stops is stated and handed on.*
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-comp-capacity -->
+
+## How Much Can a Vector Hold? {#sec-comp-capacity}
+*Plan (about 3 pages). Goals 2 and 3. Simulation of binding, bundling and cleanup, the recall curve against the number of pairs and the dimension, the same for the tensor product with its cost in dimension, and the reading of the theoretical bounds from the surveys.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_symbolic_architectures.qmd, section sec-near-orthogonality-resource -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-near-orthogonality-resource -->
+
+## Near-Orthogonality as a Resource {#sec-near-orthogonality-resource}
+*The payoff of @sec-room-exponentially-many-directions, representing concepts directly in 10,000-dimensional hypervectors.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_symbolic_architectures.qmd, section sec-algebraic-operations-thoughts -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-algebraic-operations-thoughts -->
+
+## Algebraic Operations on Thoughts {#sec-algebraic-operations-thoughts}
+
+*Bundling ($+$).*
+*Superposition and set representation. Bundling is commutative, like Chomsky's Merge (1995), the single operation of the Minimalist Program, which builds the unordered set $\{a, b\}$; in both, order and hierarchy must come from somewhere else, binding and permutation here and labelling there.*
+
+*Binding ($\odot$ / $\circledast$).*
+*Role-filler pairing and circular convolution. Modality is a natural role: a multimodal percept is the bundle of bindings of a modality with its content, so that a photograph, a bark, and a gait can be superposed in one hypervector and still be told apart.*
+
+*Permutation ($\Pi$).*
+*Sequence ordering and hierarchical encoding.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_symbolic_architectures.qmd, section sec-associative-clean-up-memories -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-associative-clean-up-memories -->
+
+## Associative Clean-Up Memories & Capacity Bounds {#sec-associative-clean-up-memories}
+*Theoretical bounds on robust concept retrieval without weight retraining, and the relation to attention as associative memory. The classical capacity result is Hopfield's, about $0.15N$ random patterns for $N$ units [@hopfield1982neural]; the continuous version is [@ramsauer2021hopfield].*
+
+<!-- salvaged from embedding-technologies-stubs/vector_symbolic_architectures.qmd, section sec-which-red-which-ball -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-which-red-which-ball -->
+
+## Which Red, Which Ball {#sec-which-red-which-ball}
+*Plan (1 page). Findings: what bundling, binding and permutation can express in hypervectors of ten thousand dimensions, how clean-up memories recover a stored concept, and the capacity bounds that say how many can be bundled. Achieved for the representation of meaning: meanings that combine without losing track of which belongs to which (@sec-prop-combine). Partial answer to the dog test: modality as a role, so that a photograph, a bark and a gait can be bundled and still told apart. Computation: capacity grows with dimension, and dimension is cheap; when a hyperdimensional encoding beats a learned one is read from capacity per dimension, cost per operation and accuracy at matched compute. Evidence at scale: the capacity bounds are theorems (structural). A comparison with learned encoders at scale is not held or known, and the chapter says so. Smoke test: bundle $k$ random hypervectors for increasing $k$ and $d$ and check the measured accuracy of retrieval against the capacity formula, then bind roles to fillers and unbind, as an exercise with `numpy` that can fail if the formula is wrong. Still out of reach: an algebra can bind, but whether composition is systematic is another question (@sec-ch-meaning-and-structure).*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-systematicity-challenge -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-systematicity-challenge -->
+
+## The Systematicity Challenge {#sec-systematicity-challenge}
+*Fodor and Pylyshyn's argument that thought is compositional, the connectionist replies, and the staircase of @sec-ch-symbols-without-interior revisited: which steps can a vector system climb? Cross-modal models give a concrete test: image-text models that retrieve a "dog" and a "man" but confuse "dog bites man" with "man bites dog".*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-poverty-stimulus -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-poverty-stimulus -->
+
+## The Poverty of the Stimulus {#sec-poverty-stimulus}
+*Chomsky's argument (1965, 1980) that children receive too little data to learn grammar unless much of it is innate, the question of how much must be built in, in the vocabulary of linguistics, with recursion as the core of the language faculty (Hauser, Chomsky, and Fitch, 2002). Told as a historical sequence on the standard example, structure-dependent question formation ("Is the man who is tall happy?"): sequential networks generalize linearly and only tree-structured ones hierarchically (2020); vanilla transformers learn the hierarchical rule long after in-domain accuracy saturates, "structural grokking" (2023); GPT-2 learns humanly impossible languages less easily than possible ones, against Chomsky's claim (2024); and the BabyLM challenge (2023) sets the budget at the fewer than 100 million words a child hears by age 13.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-bridging-connectionism-logic -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-bridging-connectionism-logic -->
+
+## Bridging Connectionism and Logic {#sec-bridging-connectionism-logic}
+*Differentiable reasoning over structured knowledge.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-logic-tensor-networks -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-logic-tensor-networks -->
+
+## Logic Tensor Networks (LTN) {#sec-logic-tensor-networks}
+*Translating first-order logic into continuous real-valued constraints via fuzzy logic t-norms.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-smolensky-tensor-product-representations -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-smolensky-tensor-product-representations -->
+
+## Smolensky's Tensor Product Representations (TPR) {#sec-smolensky-tensor-product-representations}
+*The foundational algebra for binding variable roles to continuous fillers.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-emergent-symbolic-structure -->
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-emergent-symbolic-structure -->
+
+## Emergent Symbolic Structure {#sec-emergent-symbolic-structure}
+*How trained networks come to show compositional role-filler structure, with the DISCOVER framework as one recent instance.*
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-comp-technologies -->
+
+## Technologies That Exploit Composition {#sec-comp-technologies}
+*Plan (about 1 page). Hyperdimensional computing for low-power classification and memory, tensor-product and logic-tensor models for neuro-symbolic reasoning, and structured encoders. For each: the capacity per dimension, the cost of binding (circular convolution against elementwise product), and whether the gain over an unstructured network holds at matched parameters.*
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-parts-that-know-their -->
+
+## Parts That Know Their Place {#sec-parts-that-know-their}
+*Plan (1 page). Findings: what the swap test shows for each kind of encoder, how recall falls with the number of bound pairs and the dimension, and what the connectionist replies to the systematicity challenge achieved. Achieved for the representation of meaning: meanings that combine (@sec-prop-combine), or the places where they still do not. Computation: whether capacity grows with dimension as the bounds say, and what binding costs. Still out of reach: a combination can be a long text (@sec-ch-meaning-across-scales) and a combined claim can be false (@sec-ch-meaning-and-truth).*
+
+*Sources and gaps (first pass).* Sourced in `references/`: the systematicity challenge, the tensor product, the holographic and hyperdimensional algebras, the surveys and capacity bounds, additive composition, Winoground and its follow-up, SCAN. Not yet read for this chapter: Montague at the page; logic tensor networks (no source in the collection); the human and model scores quoted for Winoground are those of the earlier chapter and are to be re-read.
+
+<!-- salvaged from chapters/meaning_as_difference.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_difference.qmd), section sec-graph-databases-vs-vector -->
+
+## Graph Databases vs. Vector Databases {#sec-graph-databases-vs-vector}
+*The convergence of discrete graph topology and continuous latent coordinates.*
+
+<!-- salvaged from chapters/meaning_and_truth.qmd (snapshot: embedding-technologies-stubs-v2/meaning_and_truth.qmd), section sec-neural-theorem-proving -->
+
+## Neural Theorem Proving {#sec-neural-theorem-proving}
+*Searching discrete proof trees along continuous latent trajectories.*
+
+<!-- salvaged from embedding-technologies-stubs/neurosymbolic_integration.qmd, section sec-reaching-false -->

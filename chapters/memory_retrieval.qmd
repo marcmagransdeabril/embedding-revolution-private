@@ -1,0 +1,28 @@
+---
+status: idea
+---
+
+# Memory and Retrieval: Finding the Passage That Answers {#sec-ch-memory-retrieval}
+
+Stub. The question, the models and the template are written in Task 6 of `tmp/plan_tests_refactor.md`; the sections below are salvaged text waiting to be placed.
+
+<!-- salvaged from chapters/meaning_and_truth.qmd (snapshot: embedding-technologies-stubs-v2/meaning_and_truth.qmd), section sec-retrieval-augmented-generation -->
+
+## Retrieval-Augmented Generation {#sec-retrieval-augmented-generation}
+*Bridging parametric model memory with external latent storage, told as the answer of the 2020s.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-from-exact-approximate-search -->
+
+<!-- salvaged from chapters/meaning_and_truth.qmd (snapshot: embedding-technologies-stubs-v2/meaning_and_truth.qmd), section sec-from-exact-approximate-search -->
+
+## Finding Neighbours Among Billions {#sec-from-exact-approximate-search}
+Here we check what exact search costs and what is lost, if anything, when the neighbours are found approximately.
+
+*Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-negation-multi-hop-reasoning -->
+
+<!-- salvaged from chapters/meaning_across_scales.qmd (snapshot: embedding-technologies-stubs-v2/meaning_across_scales.qmd), section sec-hybrid-search-multi-vector -->
+
+## Hybrid Search & Multi-Vector Alignments {#sec-hybrid-search-multi-vector}
+*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item: likeness there is an alignment, the sum over query tokens of the best match among document tokens (Khattab and Zaharia, SIGIR 2020, to add), which is asymmetric and not a distance (@sec-likeness-other-objects). The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-meaning-across-senses are practical problems.*

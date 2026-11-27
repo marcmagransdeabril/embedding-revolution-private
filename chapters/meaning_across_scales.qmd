@@ -6,7 +6,7 @@ status: idea
 
 A word, a phrase, a sentence, a chunk of a page and a whole document are all things that mean, and nobody knows what the representation of each should be, or whether one space can hold all of them. The vector of a word is a position; the vector of a sentence is a position that someone built from the positions of its words, or trained directly; the vector of a document is a position that must stand for thousands of words at the same fixed size. Shannon's frame asks the capacity question: how much of a text can a vector of $d$ numbers keep, as the text grows? The scale axis of the critical literacy test asks the reader's question: at what scale of a text does a representation start to lose the thing that a careful reader keeps?
 
-The scope is the size of what is represented. How the parts are combined is the chapter on composition (@sec-ch-meaning-as-composition); the dependence of a word's vector on its sentence is the chapter on context (@sec-ch-meaning-in-context); the nearness of two texts is the chapter on nearness (@sec-ch-meaning-as-likeness), from which the section on phrases and sentences is moved here; and whether a long text is true is the chapter on truth (@sec-ch-meaning-and-truth).
+The scope is the size of what is represented. How the parts are combined is the chapter on composition (@sec-ch-meaning-and-structure); the dependence of a word's vector on its sentence is the chapter on context (@sec-ch-meaning-in-context); the nearness of two texts is the chapter on nearness (@sec-ch-meaning-as-likeness), from which the section on phrases and sentences is moved here; and whether a long text is true is the chapter on truth (@sec-ch-meaning-and-truth).
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
@@ -27,7 +27,6 @@ The scope is the size of what is represented. How the parts are combined is the 
 ## Chunks {#sec-scale-chunks}
 *Plan (about 2 pages). Goal 4. The trade-off of chunk size in retrieval, the effect of overlap, and the case of a question whose answer spans two chunks.*
 
-
 <!-- salvaged from embedding-technologies-stubs/meaning_as_likeness.qmd, section sec-likeness-phrases-sentences -->
 ## Phrases and Sentences {#sec-likeness-phrases-sentences}
 *What the benchmark of the level offers, read in the SemEval-2017 STS report (Cer, Diab, Agirre, Lopez-Gazpio and Specia [@cer2017semeval], the PDF, tables cited). The judge is a 6-point ordinal scale for pairs of sentences, from 0 (completely dissimilar) to 5 (completely equivalent), with anchors between: 4 "mostly equivalent, but some unimportant details differ", 3 "roughly equivalent, but some important information differs", 2 "not equivalent, but share some details", 1 "on the same topic" (Table 1); the gold score is the mean of five crowd annotations, and the score of a system is the Pearson correlation with it. STS is explicitly graded, unlike entailment or paraphrase, and the report separates it from relatedness: "night" and "day" are "highly related but not particularly similar" and contradictory material "still [is] a candidate for a high score" for relatedness (§1), which is the same line as in @sec-likeness-which. Four facts that matter for this section. (1) The pairs were not drawn at random: for the 2017 data they were chosen from SNLI captions with the cosine of a sum of word embeddings (§3.4, eq. 1) "to find interesting pairs", with new pairings built so that the gold entailment label does not leak into the score. So the benchmark is filtered by the very null that this section wants to use (the average of word vectors), and a correlation of that null with the judge is measured on pairs it already considered promising. (2) The null is cheap and not at zero: the cosine of binary bag-of-words vectors (one dimension per word, after machine translation for cross-lingual pairs) has an average Pearson correlation of 53.7 on tracks 1 to 5 and would rank 23rd of 44 systems (§6.4). On the English STS Benchmark the averaged-embedding baselines (Table 14, Pearson $\times 100$ on development and test sets) range from 70.0 and 56.5 for skip-gram, 68.9 and 55.8 for a weighted factorisation of PPMI, and 52.4 and 40.6 for GloVe fitted to counts, to a bidirectional LSTM trained on the SNLI entailment labels with 80.1 and 75.8, and the best 2017 ensemble at 84.7 and 81.0; the best single English track result was r = 0.8547. The gap between development and test for the averaged embeddings (12 to 14 points) is as large as the gap between a baseline and a trained encoder, and so the split, and not only the model, is reported. (3) The same table shows that trained supervision on a related pair judge (SNLI) beats counting by a wide margin, which is nearness made by the loss and not found (@sec-likeness-built-in-emergent). (4) The error analysis lists the cases of @sec-near-not-alike for sentences: word sense ("making" and "preparing" are similar in the context of food, "picture" and "movie" are not similar when the picture is followed by "day"), attribute importance, composition ("a man is carrying a canoe with a dog" against "a dog is carrying a man in a canoe", the same content words and a different meaning), negation (systems score "with goggles and a swimming cap" as nearly equivalent to "without goggles or a swimming cap"), and *semantic blending*, in which appending "with a woman" to "boy" brings the representation of "a young boy with the woman" nearer to "a young girl". The report states no agreement between the annotators or any ceiling for the 2017 data in the part read, so the ceiling of this section is to be taken from the sources that report it (and not assumed), and a smoke test per error class, with the averaged embedding as the null, is the first experiment of the section.*
@@ -41,9 +40,6 @@ The scope is the size of what is represented. How the parts are combined is the 
 *Image patches, spectrogram frames, and video tubelets turned into tokens, so that the same attention machinery reads every modality. This is one of two routes to a shared space, a single network over interleaved tokens, compared in @sec-ch-meaning-across-senses with separate encoders aligned by a contrastive loss.*
 
 <!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-hybrid-search-multi-vector -->
-## Hybrid Search & Multi-Vector Alignments {#sec-hybrid-search-multi-vector}
-*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item: likeness there is an alignment, the sum over query tokens of the best match among document tokens (Khattab and Zaharia, SIGIR 2020, to add), which is asymmetric and not a distance (@sec-likeness-other-objects). The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-meaning-across-senses are practical problems.*
-
 ## Technologies That Exploit Scale {#sec-scale-technologies}
 *Plan (about 1 page). Sentence encoders and their training, document embeddings and topic models, multi-vector retrieval, chunking strategies for retrieval-augmented generation, and long-context models as the alternative to pooling. For each: the cost in memory and time against the length, and whether quality at matched tuning supports it. The cost of scale (compute, memory per item, index size at a billion items) is a line in this section and not a chapter.*
 
@@ -51,3 +47,36 @@ The scope is the size of what is represented. How the parts are combined is the 
 *Plan (1 page). Findings: how the recoverable share of a text falls with its length and the dimension, how far a weighted average goes against a trained encoder, when per-token scoring pays, and where chunk size peaks. Achieved for the representation of meaning: a representation at each scale, with its limit. The first rung of the critical literacy test, the scale of the text, is read here. Still out of reach: the text is one sense, and the dog arrives through several (@sec-ch-meaning-across-senses).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: the sentence-similarity benchmark and encoders, the weighted-average baseline, late interaction, Harris on connected discourse. Not yet sourced: Frege's context principle at the page; any capacity result for fixed-size text vectors (the search for sources is decided chapter by chapter, and none was made); benchmark comparisons of chunking strategies.
+
+<!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-scale -->
+
+## Meaning Has a Size: From a Word to a Text {#sec-prop-scale}
+*A vector has a fixed size and a text does not, so what a vector keeps of a word, a phrase, a chunk and a document is a question of capacity.*
+
+Earned in @sec-ch-meaning-across-scales. Last update: 2026-11-22, a promise: no chapter text yet.
+
+Sources (first pass). Harris on the dependence of the correlation between structure and meaning on connected discourse [@harris1954distributional]; the weighted average of word vectors as a baseline for sentences [@arora2017simple]; sentence encoders and late interaction [@reimers2019sentence; @khattab2020colbert]. Sceptics and balance: not yet read; no capacity result for fixed-size text vectors is in the collection.
+
+<!-- salvaged from chapters/tests_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/tests_of_meaning.qmd), section sec-test-critical-literacy -->
+
+## The Critical Literacy Test {#sec-test-critical-literacy .idea}
+*One text, several scales: what must a representation keep of a word, a paragraph, a chapter and a book for answers about it to survive without the text?*
+
+Varies the scale (vertical). A checker can judge it, and a contradiction can be planted. Stated in the Prologue as a first draft, with four kinds of question: granularity (Shannon's rate against distortion), dependency (an order of definitions, a graph and not a tree), internal consistency, and agreement with the world. The risk to design out is contamination: a correct answer may come from the memory of a model that has read the book, not from the representation. Use texts the model cannot have seen, such as chapters of this book, or planted contradictions in synthetic documents.
+
+Error classes for the rungs, observed in the SemEval-2017 STS systems [@cer2017semeval]: word sense, attribute importance, composition (same content words, different meaning), negation, and semantic blending (appending "with a woman" to "boy" moves it towards "girl"). Each is a ready source of pairs for the planted-contradiction rung, with the averaged embedding of @sec-likeness-phrases-sentences as the null.
+
+Rungs (first draft):
+
+0. Reconstruction at a rate: how much of each level survives.
+1. Recovery of the dependency order on a graph of definitions.
+2. Detection of a planted contradiction.
+3. A three-way verdict (entails, refutes, undetermined).
+4. Checks against an external source.
+
+Expected reach: @sec-ch-meaning-as-likeness reaches 0, and shows that nearness does not detect consistency; later chapters take 1 to 4 where their structure allows (@sec-ch-meaning-as-difference, @sec-ch-meaning-and-truth, @sec-ch-meaning-and-structure).
+
+<!-- salvaged from chapters/meaning_as_composition.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_composition.qmd), section sec-comp-order -->
+
+## Does Order Matter? {#sec-comp-order}
+*Plan (about 2 pages). Goal 1. Swap tests on averaged static vectors, on contrastive sentence encoders and on contextual encoders; the baseline of a bag of words; the pairs that differ only in order, and the control of pairs that differ in meaning.*

@@ -1,0 +1,22 @@
+---
+status: idea
+---
+
+# The Alien Technology Test {#sec-ch-alien-technology}
+
+Stub. The question, the models and the template are written in Task 6 of `tmp/plan_tests_refactor.md`; the sections below are salvaged text waiting to be placed.
+
+<!-- salvaged from chapters/tests_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/tests_of_meaning.qmd), section sec-test-alien -->
+
+## The Alien Technology Test {#sec-test-alien .idea}
+*A system whose function is unknown: can its function be recovered, up to isomorphism, from its behaviour alone?*
+
+Varies the system (what is embedded is a behaviour, not a text). It is Ashby's black box. No judge, and a failure says little. It stays a calibrated ladder, not a score, and it is a notes-only idea for now (`function_of_physical_systems.md`, ideas 16 and 17).
+
+Rungs (first draft):
+
+0. Ashby's isomorphic oscillators embedded by their responses to common inputs: do isomorphic systems land together?
+1. Transfer to families that were not seen.
+2. Later rungs are speculative and are not listed until the earlier ones have results.
+
+Expected reach: @sec-ch-meaning-as-arrangement reaches 0, as a toy and flagged as a smoke test.
