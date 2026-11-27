@@ -153,3 +153,31 @@ $$
 The paper trains it on one million sentences of Wikipedia. In the supervised version the premise and the hypothesis of a pair labelled as entailment in the NLI data are the positives, and the pair labelled as contradiction is added to the denominator as a hard negative, together with the other sentences of the batch.
 
 The output is one vector per sentence, taken from the encoder. Two things differ from SGNS (@sec-zoo-sgns): the vectors are compared after normalization and with a temperature, and the negatives are the other sentences of the batch (and, in the supervised version, a chosen contradiction) and not a random draw from a unigram distribution. The unsupervised version has no labels of any kind, but starts from a model pre-trained on a large text, and its positive is a choice of the authors (that two dropout views of one sentence mean the same). The supervised version takes both its positives and its hard negatives from the labels that people gave to pairs of sentences, so an antonym-like contrast is built into its loss and is not found in the text. Not used in the chapters so far.
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-loss-decides-near: the three objectives -->
+
+## The Three Objectives, Stated Once {#sec-zoo-objectives}
+
+The three objectives are stated here once, since the rest of the chapter reads their results, and later chapters that need them point back to this section. Let $C_{wc}$ be the number of times the word $c$ stands within a window of the word $w$, and let $\hat P$ be the relative frequencies of the pairs, with $|\mathcal D| = \sum_{w,c} C_{wc}$ pairs in all. *Counting* turns the counts into the pointwise mutual information of a pair, the log of how many times more often the two words meet than independent words would,
+
+$$
+\mathrm{PMI}(w,c) = \log_2 \frac{\hat P(w,c)}{\hat P(w)\,\hat P(c)},
+$$
+
+which is zero for independent words, positive for words that attract each other and minus infinity for a pair that never occurs, so the matrix $\mathbf M$ of $\mathrm{PPMI} = \max(0, \mathrm{PMI})$ is kept [@church1990word]. The embedding of a word is its row of $\mathbf M$ reduced to $d$ dimensions by the truncated singular value decomposition, $\mathbf E = \mathbf U_d \mathbf\Sigma_d$, the best rank-$d$ description of the rows in the sense of least squared error [@deerwester1990indexing]. The reduction fills pairs that never occur through second-order neighbours: on a toy corpus of thirteen sentences, `dawn` and `dusk` never stand next to the same word but share `over` through `breaks` and `falls`, and their cosine goes from 0.04 in the PPMI rows to 0.999 at $d = 2$ (the counting script of the chapter that held the derivation, now in `embedding-technologies-stubs/code/embedding_spaces/`).
+
+*Predicting* asks a model $Q(c \mid w)$ for the neighbour of a word, with two sets of $d$-dimensional vectors, $\mathbf e_w$ for the word and $\mathbf v_c$ for the neighbour, and the softmax of their dot products,
+
+$$
+Q(c \mid w) = \frac{\exp \langle \mathbf e_w, \mathbf v_c \rangle}{\sum_{c' \in \mathcal V} \exp \langle \mathbf e_w, \mathbf v_{c'} \rangle},
+$$
+
+which is the skip-gram model before its speed-up [@mikolov2013efficient]. The loss is the cross-entropy $H(P,Q) = -\sum_{w,c} P(w,c) \log_2 Q(c \mid w)$, which is the likelihood of the text under the model, cannot go below the conditional entropy $H(C \mid W)$ of the text, and is minimal exactly when $Q = P$. At that minimum the scores are $\ln P(c) + \mathrm{PMI}(w,c)$ up to a constant for each word, so predicting reaches the same object as counting. On the toy corpus the trained predictor ends within 0.001 bits of $H(C \mid W) = 1.8507$ bits per pair and is within 0.12 bits of the PMI on the pairs that occur, but it does not fill in the pairs that never occur, which is where it differs from the SVD (the prediction scripts of the chapter that held the derivation, now in `embedding-technologies-stubs/code/embedding_spaces/`; the numbers are those of that chapter and are to be re-run in the first phase). *Weighted least squares* on the logarithm of the counts (GloVe) fits the dot products to $\log C_{wc}$ with a weight that limits the influence of the commonest and the rarest pairs [@pennington2014glove], and is the third route to a shift of the same matrix.
+
+*Contrasting* avoids the sum over the vocabulary. Each real pair comes with $k$ noise neighbours drawn from a noise distribution $P_n$, and a model that keeps the score $s_c = \langle \mathbf e_w, \mathbf v_c \rangle$ and drops the division classifies real against noise: the probability that a candidate is real is $\sigma(s_c - \ln(k P_n(c)))$, with $\sigma$ the logistic function, and the loss of the pair is
+
+$$
+\ell_{w,c} = -\ln \sigma(\lambda_c) - \sum_{i=1}^{k} \ln\bigl(1 - \sigma(\lambda_{c'_i})\bigr), \qquad \lambda_c = s_c - \ln\bigl(k P_n(c)\bigr),
+$$
+
+which touches $k+1$ vectors whatever the size of the vocabulary [@gutmann2010noise]. Skip-gram with negative sampling therefore factorizes the PMI matrix shifted by $\log k$ [@levy2014neural, p. 4], and the three losses meet again at a shift of the same matrix. For pairs of anything with no vocabulary, such as an image and its caption, InfoNCE takes $k+1$ matched pairs in a batch and classifies, for each anchor $x_i$, which of the $k+1$ candidates is its positive, with the loss $\ell_k = \frac{1}{k+1}\sum_i \bigl(-s_{ii} + \ln \sum_j e^{s_{ij}}\bigr)$ and scores $s_{ij}$ the dot products of unit vectors divided by a temperature. Its minimizer is $s_{ij} = \ln \frac{P(y_j \mid x_i)}{P(y_j)} + a(x_i)$, the log-ratio of the pair against independence [@oord2018representation], and the information it can certify is at most $\log_2(k+1)$ bits. What follows from the three is an expectation about words. All of them reward co-occurrence, which is neither similarity nor relatedness, so their cosines should agree with each other more than any of them agrees with a judge. They differ in cost (the memory and time of a step) and in what they do where the text is silent, and not in the object they approximate.

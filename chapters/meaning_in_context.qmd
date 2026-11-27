@@ -71,3 +71,62 @@ The scope is dependence on the sentence and the situation. The static nearness t
 Earned in this chapter. Last update: 2026-11-22, a promise.
 
 Sources (first pass). Harris on homonymy and connected discourse [@harris1954distributional]; Firth on the context of situation [@firth1957synopsis]; Kaplan on character and content [@kaplan1989demonstratives]; the anisotropy and context-specificity of contextual vectors [@ethayarajh2019contextual]. Sceptics and balance: a contextual vector carries the context that is in the text; the situation of the speaker is not in it.
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-likeness-which: the questions that the likeness chapter hands on -->
+
+## Questions Handed On From the Likeness Chapter {#sec-likeness-handed-to-meaning-in-context}
+
+Wittgenstein also says that the members of a class like the games need share no feature. They form "a complicated network of similarities overlapping and criss-crossing" [@wittgenstein1953philosophical, §66]. Goodman argues that counting shared features cannot define likeness, since any two things share countless properties until we say in which respect they are compared [@goodman1972seven]. In a space this means that a concept is not a ball around a prototype, so a fixed radius is a poor model of it, and that a cosine returns a number and not the respect in which two items are alike.
+
+::: {.test #q-likeness-8}
+**Q8. Is a raw nearness a measure of likeness?** Before it is corrected for what inflates it, does the number behind "near" follow judged likeness, and does a fixed radius around an item hold a concept?
+
+*See* @sec-reading-nearness-correctly.
+:::
+
+Kaplan (1989) separates the character of an expression, a rule that does not depend on the context, from its content, which is fixed in the context: "I am here now" says something different each time [@kaplan1989demonstratives]. An encoder that takes the text and not the situation as input errs on the side of the character.
+
+::: {.test #q-likeness-15}
+**Q15. Does the same word keep its meaning when the speaker, the place or the sentence changes?** A vector that does not take the situation as input can have one meaning at most.
+
+*Not answerable in this chapter with one vector per item. See* @sec-ch-meaning-in-context.
+:::
+
+If a cosine does not say which relation holds, can the relations be disentangled in a different space? Perhaps context is an answer:
+
+::: {.test #q-likeness-20}
+**Q20. How can the relations that nearness mixes be disentangled?** Given a space in which near words are similar, associated, opposite, or forms of one word, what has to be changed to answer about different kinds of relations, and does the answer hold for sentences, images and sounds as well as for words?
+
+*See* @sec-ch-meaning-in-context.
+:::
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-reading-nearness-correctly -->
+
+## Reading Nearness Correctly {#sec-reading-nearness-correctly .idea}
+Here we check what the number behind "near" is made of, and whether a raw cosine can be trusted as a measure of likeness before it is corrected for the artefacts that inflate it. It answers Q8 of @sec-likeness-which.
+
+*What a raw cosine hides: a common mean vector and a few dominating directions [@mu2018allbutthetop], word frequency [@schnabel2015evaluation], hubs in high dimension [@radovanovic2010hubs], an arbitrary scale for some regularised models [@steck2024cosine], a norm that stops the dot product from giving every vector the same similarity to itself (@sec-likeness-not-distance), and anisotropy in every layer of contextual models [@ethayarajh2019contextual]. For each, a statistic and a null, and what centring changes. The narrow cone has a training-side cause for language models whose output embeddings are tied to the input ones: Gao et al. (2019 [@gao2019representation]) show that likelihood maximisation pushes the embeddings of rare words in a common direction, so that most word embeddings end up in a narrow cone and any two have a large cosine, and they propose a regulariser that widens the aperture (this concerns generation models with tied weights, and is not shown for the encoders used for retrieval). The choice of score is itself a source of bias: Weeds, Weir and McCarthy (2004 [@weeds2004characterising], read in the PDF, cited also by Turney and Pantel §4.4 [@turney2010frequency]) compare similarity measures on 2,000 nouns split into high-frequency and low-frequency targets and find strong tendencies in the frequency of the neighbours they select, in three classes: measures that favour high-frequency neighbours whatever the target (cosine, Jensen–Shannon, $\alpha$-skew and recall), one that favours low-frequency neighbours (precision), and those that choose neighbours of a frequency like the target's (Jaccard, Lin, harmonic mean); and, since recall prefers distributionally more general words and precision more specific ones, the relative values of precision and recall predict the direction of the hyponym–hypernym relation for the 20,415 WordNet pairs among those nouns (the asymmetry of @sec-near-not-alike obtained from the same counts, with the caveat that it is correlated with the frequency of the hypernym). The cosine is thus a high-frequency-sensitive score, and Bullinaria and Levy (2007) found the cosine the best of six measures on four word-similarity tasks. So the frequency statistic of this section is to be reported per score, and not only for the cosine.*
+
+*Two readings from a debate on whether likeness is nearness, both stated as claims to test and not as findings. (1) Anisotropy decouples proximity from likeness: when a few high-variance directions dominate, two points can be near in cosine or L2 because they share a frequency or surface-form artefact, and not because they are alike. A few rogue dimensions are reported to dominate the cosine of contextual models [@timkey2021rogue], and a common mean and a few top directions to inflate it [@mu2018allbutthetop]. The test is the one already in the list: the correlation of cosine with a judge before and after centring, whitening or removing the top directions, and the correlation of cosine with frequency, against a shuffled-label null. If the correlation with the judge rises after the correction, the raw nearness was partly the artefact. (2) A fixed radius is not a fixed likeness. A threshold $\epsilon$ on cosine or distance is read the same way everywhere, but the density of a space varies, so the same $\epsilon$ can hold only synonyms in a dense region and unrelated words in a sparse one; this is why a number of neighbours ($k$) and a rank are safer to compare than a radius, and why a similarity threshold taken from one model or one corpus does not carry to another. The test: for each query, the human-judged likeness of the neighbours inside a fixed $\epsilon$, plotted against the local density (the distance to the $k$-th neighbour), and the fraction of queries whose $\epsilon$-ball is empty or holds a large share of the vocabulary. The geometric reason (a space made of regions of different intrinsic dimension) is a hypothesis of @sec-manifold-hypothesis and not established here; the practical consequence for search is in @sec-ch-meaning-and-truth. A source now bears on the claim, and only partly: Cai, Huang, Bian and Church (2021 [@cai2021isotropy], read in the PDF) find that the high cosines of BERT, DistilBERT, GPT, GPT-2 and ELMo come from a few isolated clusters of the space, and that after subtracting the mean *of each cluster* the cosine between different word types is close to zero in every layer (inside each cluster the space is isotropic), whereas the cosine between instances of one word falls with depth and that between different words rises (their Figure 1); that GPT-2 has an effective dimension $d(0.8)$ of 1 in layers 2 to 6 (against about 270 to 290 for BERT); and that the local intrinsic dimension, estimated from nearest-neighbour distances, averages 5.6 for BERT, 6.8 for GPT, 7.0 for GPT-2 and 9.1 for ELMo, against 18.0 for static GloVe (100 dimensions), 21.1 for GNEWS and 26.1 for GloVe-2M. A Swiss-roll manifold related to word frequency appears for GPT and GPT-2 and not for BERT. This supports that density and dimension are not uniform over the space, and that a global centring is not the right correction when the space has clusters; it does not show regions of *different* intrinsic dimension compared with one another, nor that a fixed radius varies in likeness, which remains this section's test. So the correction arm of the first experiment is run twice, with a global mean and with the mean of each cluster, and the correlation with the judge and with frequency are reported for both.*
+
+*Expected result: correction helps most for the contextual model, where anisotropy is strongest, and little for the static one; if a bar does not rise, the raw nearness was not an artefact there. In the second figure, the likeness of the neighbours falls as the local distance to the $k$-th neighbour grows.*
+
+![STUB. Expected shape only, invented numbers: correlation of the cosine with the judge, raw and after centring and removing the top directions, for three model families, with the shuffled-label null and a bootstrap interval.](../figures/meaning_as_likeness/stub_centring.png){#fig-stub-centring width=70%}
+
+![STUB. Expected shape only, invented points: judged likeness of the neighbours inside a fixed radius $\epsilon$ against the distance to the $k$-th neighbour, one point per query.](../figures/meaning_as_likeness/stub_radius_density.png){#fig-stub-radius-density width=70%}
+
+::: {.questions}
+1. What do centring the vectors and removing their top principal directions change in a cosine, and why can it raise the correlation with a human judge?
+
+2. Why is the rank of a neighbour a safer measure than a fixed radius?
+
+3. Reproduce @fig-stub-centring and @fig-stub-radius-density: the correlation of the cosine with a judge before and after the correction, with a null, and the judged likeness of the neighbours against the density of the region.
+:::
+
+::: {.answers}
+1. A mean vector and a few dominant directions are shared by all the words of a space, so they add the same component to every cosine: all the cosines become high, and the part that tells the words apart is a small share of the vector. Subtracting the mean and removing the top directions removes that common part [@mu2018allbutthetop]. The correlation with the judge rises if the common part was noise for the judgement, for example when it follows the frequency of the words, and it does not rise if the raw nearness was not an artefact; the test needs a null (the judge with its labels shuffled, random vectors) to say how much of a change is more than chance.
+
+2. A fixed radius $\epsilon$ contains many neighbours in a dense region and few in a sparse one, so the same $\epsilon$ does not mean the same likeness everywhere, and in a sparse region the nearest neighbour may already be far. The rank, the $k$-th nearest, adapts to the density: the $k$ neighbours of a word are the nearest it has, whatever the distance. The price is that the rank is not symmetric (a word can be among the neighbours of another without the reverse) and ignores how far the $k$-th is.
+
+3. The script `reading_nearness.py` does it with the spaces of `train_spaces.py`. For the first figure: score the pairs of the judge by the raw cosine, by the cosine after subtracting the mean and after also removing the first 1, 3 and 10 principal directions (`np.linalg.svd` of the centred matrix), with a bootstrap interval over pairs, the 95th percentile of the correlation with shuffled labels and the same correlation for Gaussian vectors; add the correlation of the cosine with the mean log frequency of the two words. For the second: for each judged pair take the cosine to the 10th neighbour of each word as the density of the region, cut the pairs in three groups of density, and compare in each group the correlation with the judge of the cosine and of the rank. The scripts were written and not yet run together, so the figures of the chapter are still stubs.
+:::

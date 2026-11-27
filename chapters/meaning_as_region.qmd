@@ -104,3 +104,15 @@ Sceptics and balance. None of the sceptical sources collected so far bears on th
 *Why real-world data saves us from empty high-dimensional voids ($d_{\text{int}} \ll D_{\text{ambient}}$): images of an object that can only shift and rotate lie on a three-dimensional manifold, whatever the number of pixels [@bishop2024deep]. @sec-ch-meaning-as-arrangement tests the hypothesis with persistent homology [@chung2021neural].*
 
 *One manifold or several? A single intrinsic dimension for a whole dataset is an idealisation. If the data are a union of pieces of different dimension and curvature (a stratified space), then a fixed radius means different things in different pieces: it covers a tight neighbourhood in a dense, low-dimensional piece and many unrelated points in a sparse, high-dimensional one, and distance concentration (@sec-concentration-measure) sets in earlier where the local dimension is higher. The estimate of local intrinsic dimension from the ratio of distances to the first two neighbours (Facco et al. 2017, to add) is the check, and a map of it over a trained space is the test; no result for embedding spaces is held in `references/`, so the claim is an idea until one is read. Consequence taken up elsewhere: a global similarity threshold has no fixed meaning (@sec-reading-nearness-correctly).*
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-likeness-which: the questions that the likeness chapter hands on -->
+
+## Questions Handed On From the Likeness Chapter {#sec-likeness-handed-to-meaning-as-region}
+
+Gärdenfors (2000) places meanings as regions of a space of quality dimensions and not as points [@gardenfors2000conceptual]. The quality dimensions of colour are hue, saturation and brightness, and "red" is the region of that space of the shades that we call red, with the clearest red at its centre and orange at its edge, where a shade is more or less red. A point holds one shade, and a region holds the concept and says what is inside. This matches Wittgenstein's concept "not closed by a frontier" [@wittgenstein1953philosophical, §68] when there is no exact shade at which red stops, and a boundary can be drawn for a purpose, but the concept worked before it was drawn.
+
+::: {.test #q-likeness-17}
+**Q17. Is a meaning a point?** Does a concept have an extent that a single point cannot hold, and does a region beat a point of the same size on a stated judge?
+
+*See* @sec-ch-meaning-as-region.
+:::

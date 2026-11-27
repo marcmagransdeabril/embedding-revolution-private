@@ -64,3 +64,15 @@ Sources (first pass, none yet in `references.bib`; read before citing). Reiter o
 Earned in this chapter. Last update: 2026-11-22, a promise.
 
 Sources (first pass). Frege on sense, reference and truth value [@frege1892sense]; Kripke and Putnam on names and natural kinds [@kripke1980naming; @putnam1975meaning]; Ramsey on the redundancy of truth [@ramsey1927facts]; the argument from form [@bender2020climbing]; truth directions and their sceptics [@marks2024geometry; @burns2023discovering; @levinstein2023still; @farquhar2023challenges]. Sceptics and balance: whether a truth direction tracks facts or only what the text asserts is open.
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-likeness-which: the questions that the likeness chapter hands on -->
+
+## Questions Handed On From the Likeness Chapter {#sec-likeness-handed-to-meaning-and-truth}
+
+For Frege (1892) a name has a sense, which can be a description, and a reference, the thing it names. For example, "Aristotle" can mean "the pupil of Plato and teacher of Alexander the Great" [@frege1892sense]. A space learned from text has only the sense, the words around a name. It may place the name among "Alexander", "Macedon" and "tutor" and still not reach the man. The same holds for sentences. The sense of a sentence can be grasped without knowing whether it is true, so a sense alone does not fix a truth value. For Ramsey (1927) "it is true that p" says no more than p [@ramsey1927facts], so truth is nothing that the words add. A direction that separates true from false sentences may then follow the facts, or only what texts assert. A false claim that is repeated often, such as that we use only a tenth of our brain, is asserted by many texts and may fall on the true side.
+
+::: {.test #q-likeness-16}
+**Q16. Does nearness reach the thing named and its truth?** Does a name sit near its bearer or only near the words around it, and does a direction that separates true from false text follow the facts or only what the text asserts?
+
+*Not answerable in this chapter from text alone. See* @sec-ch-meaning-and-truth.
+:::

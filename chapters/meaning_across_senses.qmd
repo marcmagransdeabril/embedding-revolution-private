@@ -152,3 +152,47 @@ Rungs (first draft, to be verified and refined):
 4. Held-out concepts (zero-shot), and what the shared space loses of what is specific to each channel.
 
 Expected reach: the chapters on likeness, difference and direction (@sec-ch-meaning-as-likeness, @sec-ch-meaning-as-difference, @sec-ch-meaning-as-direction) reach rung 0; this chapter reaches 1 to 4.
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-likeness-which: the questions that the likeness chapter hands on -->
+
+## Questions Handed On From the Likeness Chapter {#sec-likeness-handed-to-meaning-across-senses}
+
+Goodman (1972) raises a doubt about what such a space generated from collocation can show. A term may apply to things because of the way they were grouped, and not because they belong together. Equally, terms that are alike but have never been collocated may not appear near in the space. The fact that a term applies to certain objects "may itself constitute rather than arise from a particular similarity among those objects" [@goodman1972seven]. Does the doubt hold for the embedding spaces that have been precisely derived from co-occurrence? If it does, two things are near because training grouped them, and that nearness says nothing about meaning beyond the grouping. If it does not, some nearness appears that no grouping asked for, and only that nearness is evidence about meaning.
+
+::: {.test #q-likeness-7}
+**Q7. Is nearness built in or emergent?** When two words are near, is it only because the training text put them in the same window, or are words that never occurred together near as well?
+
+*See* @sec-likeness-built-in-emergent.
+:::
+
+Then, if symbols need something outside the symbols, does a second sense help to reach what the symbols alone cannot?
+
+::: {.test #q-likeness-18}
+**Q18. Does a second sense add meaning?** Does grounding in images, sounds or action bring nearness that text alone does not, beyond what the pairing built in?
+
+*See* @sec-ch-meaning-across-senses.
+:::
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-likeness-built-in-emergent -->
+
+## Built In or Emergent? {#sec-likeness-built-in-emergent .idea}
+<!-- OPEN: a suggestion, not convinced it is a good case (2026-11-26). Extend the split by co-occurrence count to the eight relations of the section on which relations nearness tells apart: the AUC against pairs of no relation of the raw collocation score C(x,y)/(C(x)C(y)) next to the cosines of PPMI-SVD and SGNS, and the cosine AUC among the pairs that never co-occur, inside frequency bands. See notes/ideas.qmd (dropped idea on shared context). -->
+Here we check whether two words are near only because the training text showed them together, or also when they never occurred together. It answers Q7 of @sec-likeness-which.
+
+*The training text decides which pairs the loss touches. Two words that share a window are pulled together by the loss of SGNS and GloVe and have a positive entry in the matrix that PPMI-SVD factorizes: their nearness is built in, and it says something about the text and not necessarily about meaning. Two words that never share a window have no such term, and SGNS even pushes sampled pairs apart as negatives, so if they are near it is because their neighbours are, a second-order effect that nobody asked for. Only that emergent cell says something about meaning and not about the loss. The run, on the cached spaces of @sec-loss-decides-near, splits all pairs of words of @sec-gallery-neighbours by their co-occurrence count in the window (zero or positive, in bands of count), compares the cosine distributions in each cell, and applies the WordNet judge of that section (synonym, antonym, none) within each cell, with the shuffled-vocabulary space as the null. The expectation is that pairs with a positive count are nearer, mostly because of association, and that synonyms with a zero count are still nearer than unrelated pairs with a zero count, which is the emergent evidence. A zero count is also a property of rare words and of the size of the corpus, so the cells are compared inside frequency bands. The same question for an image and its caption, where the loss pairs two different kinds of item, is taken up in @sec-sens-built-in-emergent.*
+
+::: {.questions}
+1. In a skip-gram model with negative sampling, which pairs of words are pulled together and which are pushed apart? What does the loss say about two synonyms that never occur in the same window?
+
+2. Why is the nearness of two words that never co-occur better evidence about meaning than the nearness of two words that do, and what confounds the comparison?
+
+3. With the co-occurrence counts of text8 (window of 5), take all pairs of words in the same frequency band, split them into zero and positive counts, and compute for each cell the area under the curve of the cosine for synonyms against unrelated pairs in the PPMI-SVD and SGNS spaces. Is the area above 0.5 in the zero-count cell?
+:::
+
+::: {.answers}
+1. A word is pulled towards the contexts observed with it in the window, and pushed away from contexts sampled at random as negatives. Two synonyms that never share a window are never pulled together directly, and if one is sampled as a negative of the other they are pushed apart. If they end up near, it is because the contexts that pull each of them are alike [@levy2014neural].
+
+2. A pair with a positive count is near partly because the loss was given exactly that pair, so the nearness may only repeat the text. A pair with a zero count has no such term, so what remains is shared company, which is what the distributional hypothesis says meaning is. The comparison is confounded by frequency, because a zero count is mostly a property of rare words in a finite corpus, whose vectors are also poorer, and by the judge, since WordNet covers fewer rare words. The pairs are therefore compared inside frequency bands, and the coverage of the judge is reported by cell.
+
+3. Count the pairs in a window of 5 over the text, keep a sparse matrix of counts, take the pairs of the gallery, label them with the WordNet parser, and compute the area as the probability that a synonym pair has a higher cosine than an unrelated pair of the same cell and band (`scipy.stats.mannwhitneyu`, area equal to U divided by the product of the sizes). The result is a number to be read after the run; the shuffled-vocabulary space must give 0.5.
+:::
