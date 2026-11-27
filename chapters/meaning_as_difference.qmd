@@ -4,6 +4,16 @@ status: idea
 
 # Meaning as Difference: Opposition, Relation and Negation {#sec-ch-meaning-as-difference}
 
+<!-- Task 6 template -->
+*Part I, the Librarian Test: can a computer shelve and find things by meaning alone, with one fixed place for each thing?* This chapter follows @sec-ch-meaning-as-likeness. **Question: is the offset between related pairs consistent?**
+
+*Data, models and loss.* Data: The text8 spaces of the likeness chapter, the analogy pairs of BATS 3.0 and WordNet; for TransE a small knowledge graph, to be chosen when the chapter is written. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| SGNS | @sec-zoo-sgns | offsets between word vectors |
+| TransE | @sec-zoo-transe | relations as translations |
+
 The chapter on nearness asked how far apart two meanings are. It did not ask how they differ. The step from one meaning to another is itself meaningful: from man to woman, from hot to cold, from Paris to France, from a sentence to its negation. A property of a space of meanings would be that such a step is a thing in its own right: the same step can be taken from elsewhere (an analogy), the opposite of a meaning has a place, and a relation is an operator that is named once and applied to many pairs. The question of this chapter is how much of difference a vector space carries. It starts from two sceptical results: that the offset of an analogy is often an artefact of how it is tested, and that a nearest-neighbour query cannot say no.
 
 The scope is differences between pairs of meanings: analogy and relation, opposition and negation, and the relations of a knowledge graph. The likeness that opposites share is the section "Near but Not Alike" (@sec-near-not-alike), salvaged here from the chapter on nearness (@sec-ch-meaning-as-likeness); a direction that carries one quality for many items at once (@sec-ch-meaning-as-direction); regions and hierarchy (@sec-ch-meaning-as-region); how a negation combines with the rest of a sentence (@sec-ch-meaning-and-structure); or whether a negated sentence is false, which is a verdict on the world (@sec-ch-meaning-and-truth).
@@ -59,6 +69,24 @@ The scope is differences between pairs of meanings: analogy and relation, opposi
 *Plan (1 page). Findings: whether the offset of a relation is more consistent than the baselines for some relations and not others; whether opposites are a direction or a region; which relation patterns (symmetric, antisymmetric, inverse, compositional) each knowledge-graph model can and cannot express, in the order in which each fixed what the previous one could not; and what one dot product cannot rank. Achieved for the representation of meaning: difference as a relation (@sec-prop-difference), with a direction for each relation that survives the baselines. Computation: whether embeddings learned from data make explicit graph structure unnecessary, read from cost per query and quality at matched data, dated. Still out of reach: a pairwise edge cannot express an interaction among three or more things (@sec-what-pairwise-structure-cannot), and the truth of a negation is a verdict on the world (@sec-ch-meaning-and-truth).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: the offset and its sceptics, relational similarity, lexical contrast, the logic of subspaces. Not yet read for this chapter: Saussure at the page; the knowledge-graph papers (TransE and RotatE are in `references/`, DistMult and ComplEx are not); the claim about re-evaluations of knowledge-graph models.
+
+## Candidate Sections {#sec-meaning-as-difference-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- Late-interaction reranking that outputs the three Tversky quantities (an idea, in `notes/ideas.qmd`).
+
+## Question and Answer {#sec-meaning-as-difference-answer}
+
+*Question:* is the offset between related pairs consistent?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a difference taken repeatedly in the same sense is a direction (@sec-ch-meaning-as-direction).
+
+## Exercises {#sec-meaning-as-difference-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-difference -->
 

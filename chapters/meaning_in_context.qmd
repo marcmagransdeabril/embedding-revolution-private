@@ -4,6 +4,16 @@ status: idea
 
 # Meaning in Context: One Word, Many Vectors {#sec-ch-meaning-in-context}
 
+<!-- Task 6 template -->
+*Part II, critical literacy: can a representation be read critically?* This chapter follows @sec-ch-meaning-across-scales. **Question: does a word keep its meaning when its situation changes?**
+
+*Data, models and loss.* Data: WordNet senses and sentences with a polysemous word, read in BERT and in the static SGNS space of the likeness chapter. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| BERT | @sec-zoo-bert | a contextual vector |
+| SGNS | @sec-zoo-sgns | one vector per word, the baseline |
+
 A word means different things in different sentences, and the same sentence means different things said by different people in different places. If meaning is context-dependent in many cases, a space of meanings needs a way for the vector of a word to depend on what surrounds it. Harris already set homonymy aside from his classification of words by environment [@harris1954distributional]; Firth stated meaning at a series of levels, one of which is the context of situation [@firth1957synopsis]; Kaplan separated a rule that does not depend on context (character) from the content it yields in one [@kaplan1989demonstratives]. Attention is the mechanism that makes a vector depend on its sentence. The question of this chapter is how much of the dependence on context a contextual vector carries, which part of it lies outside the text, and what is near at each layer of a model.
 
 The scope is dependence on the sentence and the situation. The static nearness that the contextual one is measured against is the chapter on nearness (@sec-ch-meaning-as-likeness); the representation of the sense of a word as a region is the chapter on regions (@sec-ch-meaning-as-region); how a part is put into a whole is the chapter on composition (@sec-ch-meaning-and-structure); and whether what the sentence says is true is the chapter on truth (@sec-ch-meaning-and-truth).
@@ -27,7 +37,6 @@ The scope is dependence on the sentence and the situation. The static nearness t
 
 ## The Situation Is Not in the Text {#sec-ctx-situation}
 *Plan (about 1 page). Goal 4. A short demonstration with a static and a contextual encoder: the same sentence with a different speaker, place or date, the same vector; and a sentence in which the situation is written in, and the vector that moves.*
-
 
 <!-- salvaged from embedding-technologies-stubs/contextual_vectors.qmd, section sec-from-word-vectors-contextual -->
 ## From Word Vectors to Contextual Vectors {#sec-from-word-vectors-contextual}
@@ -62,6 +71,24 @@ The scope is dependence on the sentence and the situation. The static nearness t
 *Plan (1 page). Findings: which of the structures that Part II designs by hand trained transformers discover on their own, if any (a parse tree in a linear subspace, features as directions, a geometry shared across models), each told with its dated experiment and its evidence class. Achieved for the representation of meaning: directions as meanings (@sec-prop-direction), meanings that combine (@sec-prop-combine), and a vector that depends on its sentence. Computation: here the geometry is learned rather than designed. For reasoning, the question is whether keeping the steps in the space is a prior that sampling, verification and amortization absorb, or a different use of compute (serial depth, a distribution over paths held in one vector). The question that decides it: at matched compute, does a latent chain beat sampled token chains plus a verifier, on problems with an oracle verifier and on problems without one? The book cannot run that comparison. The chapter reports the best evidence at scale with its class (Coconut is the authors' own, partly on a benchmark they introduced, and no independent matched-compute comparison is known to the author) and says so when none exists. Smoke test: a sparse autoencoder on synthetic data with more features than dimensions, to see whether near-orthogonality lets it recover them. Still out of reach: a model that reads its context still produces what is plausible without checking it. Every one of these models rewards nearness, and what that nearness says about likeness of meaning, level by level, is the first question of Part II (@sec-ch-meaning-as-likeness).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: Harris, Firth, Kaplan and Perry, Wittgenstein, Tversky, the anisotropy of contextual models, attention as associative memory, chain of thought and latent reasoning. Not yet sourced: a corpus with sense labels for the polysemy test; any benchmark of word-sense disambiguation; the size of the reasoning gains at scale (the comparisons cited by the earlier chapter are to be re-read).
+
+## Candidate Sections {#sec-meaning-in-context-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- Attention as similarity-weighted retrieval.
+
+## Question and Answer {#sec-meaning-in-context-answer}
+
+*Question:* does a word keep its meaning when its situation changes?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a vector that fits its context still says nothing about whether it is true (@sec-ch-meaning-and-truth).
+
+## Exercises {#sec-meaning-in-context-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-context -->
 

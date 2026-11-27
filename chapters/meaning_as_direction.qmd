@@ -4,6 +4,15 @@ status: idea
 
 # Meaning as Direction: Qualities You Can Move Along {#sec-ch-meaning-as-direction}
 
+<!-- Task 6 template -->
+*Part I, the Librarian Test: can a computer shelve and find things by meaning alone, with one fixed place for each thing?* This chapter follows @sec-ch-meaning-as-difference. **Question: is a quality a direction you can move along?**
+
+*Data, models and loss.* Data: The text8 SGNS space of the likeness chapter and a labelled quality (sentiment, tense or formality), to be chosen when the chapter is written. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| SGNS | @sec-zoo-sgns | a quality as a direction of the space |
+
 A direction is a meaning you can move along. If a space of meanings has this property, a quality such as sentiment, tense, formality or gender corresponds to a direction, moving along it changes that quality and little else, and the same direction works for many items at once. Osgood's semantic differential gave a space with named axes, evaluation, potency and activity, found by factor analysis of human ratings of concepts on bipolar scales [@osgood1957measurement], and Gärdenfors proposed that meanings are regions of spaces of quality dimensions [@gardenfors2000conceptual]. The axes of a trained space are free up to a rotation, so the question of this chapter is whether the directions that matter can be found in it, whether they are used by the model that has them, and how many there can be.
 
 The scope is one quality for many items. The step between one pair of meanings is the chapter on difference (@sec-ch-meaning-as-difference); the extent of a concept around a direction is the chapter on regions (@sec-ch-meaning-as-region); a direction in time or motion is the section on paths of the chapter on generation (@sec-prop-paths); and whether a direction tracks truth or only what is asserted is the chapter on truth (@sec-ch-meaning-and-truth), which uses the tools of this one.
@@ -30,7 +39,6 @@ The scope is one quality for many items. The step between one pair of meanings i
 ## Features in Superposition {#sec-dir-superposition}
 *Plan (about 3 pages). Goal 4. A toy model with more sparse features than dimensions, trained to reconstruct them; the phase diagram of which features are stored as a function of sparsity; a sparse dictionary that recovers them. The claim carried to real models (that they store features in superposition) is stated as a hypothesis with the sceptics beside it.*
 
-
 <!-- salvaged from embedding-technologies-stubs/contextual_vectors.qmd, section sec-features-directions -->
 ## Features as Directions {#sec-features-directions}
 *The linear representation and superposition hypotheses, stated as claims together with the experiments that test them (probing and steering). Results are told as dated history.*
@@ -47,6 +55,26 @@ The scope is one quality for many items. The step between one pair of meanings i
 *Plan (1 page). Findings: which qualities have a direction that generalizes to held-out items, whether moving along it changes the output, and what a probe with its control task says about what is represented against what is used. Achieved for the representation of meaning: directions that carry qualities (@sec-prop-direction), with the conditions. Computation: whether sparse dictionaries scale, and whether the features they find are stable across seeds. Still out of reach: a concept has an extent and a hierarchy, which a direction does not say (@sec-ch-meaning-as-region).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: Osgood, Gärdenfors, the linear representation hypothesis and its sceptics, probes and control tasks, superposition. Not yet read for this chapter: the claims about steering at scale and about the stability of sparse features across seeds.
+
+## Candidate Sections {#sec-meaning-as-direction-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- Steering a sentence along a direction (candidate, not run).
+- Sparse autoencoders on a small model's hidden states (candidate, not run).
+- Curse of dimensionality: room for many directions, superposition, separability and Johnson-Lindenstrauss.
+
+## Question and Answer {#sec-meaning-as-direction-answer}
+
+*Question:* is a quality a direction you can move along?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a direction is one quality; a concept has extent (@sec-ch-meaning-as-region).
+
+## Exercises {#sec-meaning-as-direction-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-direction -->
 

@@ -4,6 +4,16 @@ status: idea
 
 # Meaning Across Scales: Words, Phrases, Chunks and Texts {#sec-ch-meaning-across-scales}
 
+<!-- Task 6 template -->
+*Part II, critical literacy: can a representation be read critically?* This chapter follows @sec-ch-memory-retrieval. **Question: what does a fixed-size vector keep of a text as it grows?**
+
+*Data, models and loss.* Data: Sentence-pair judgements (the STS benchmarks of the likeness literature) and chunks of this book's own chapters, to be chosen when the chapter is written. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| SIF | @sec-zoo-sif | a weighted average of word vectors |
+| SBERT | @sec-zoo-sbert | a sentence encoder |
+
 A word, a phrase, a sentence, a chunk of a page and a whole document are all things that mean, and nobody knows what the representation of each should be, or whether one space can hold all of them. The vector of a word is a position; the vector of a sentence is a position that someone built from the positions of its words, or trained directly; the vector of a document is a position that must stand for thousands of words at the same fixed size. Shannon's frame asks the capacity question: how much of a text can a vector of $d$ numbers keep, as the text grows? The scale axis of the critical literacy test asks the reader's question: at what scale of a text does a representation start to lose the thing that a careful reader keeps?
 
 The scope is the size of what is represented. How the parts are combined is the chapter on composition (@sec-ch-meaning-and-structure); the dependence of a word's vector on its sentence is the chapter on context (@sec-ch-meaning-in-context); the nearness of two texts is the chapter on nearness (@sec-ch-meaning-as-likeness), from which the section on phrases and sentences is moved here; and whether a long text is true is the chapter on truth (@sec-ch-meaning-and-truth).
@@ -47,6 +57,25 @@ The scope is the size of what is represented. How the parts are combined is the 
 *Plan (1 page). Findings: how the recoverable share of a text falls with its length and the dimension, how far a weighted average goes against a trained encoder, when per-token scoring pays, and where chunk size peaks. Achieved for the representation of meaning: a representation at each scale, with its limit. The first rung of the critical literacy test, the scale of the text, is read here. Still out of reach: the text is one sense, and the dog arrives through several (@sec-ch-meaning-across-senses).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: the sentence-similarity benchmark and encoders, the weighted-average baseline, late interaction, Harris on connected discourse. Not yet sourced: Frege's context principle at the page; any capacity result for fixed-size text vectors (the search for sources is decided chapter by chapter, and none was made); benchmark comparisons of chunking strategies.
+
+## Candidate Sections {#sec-meaning-across-scales-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- SimCSE against SBERT on sentence pairs (candidate, not run).
+- ColBERT, one vector per token, against one pooled vector.
+
+## Question and Answer {#sec-meaning-across-scales-answer}
+
+*Question:* what does a fixed-size vector keep of a text as it grows?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a text is read in a situation; does a word keep its meaning when the situation changes (@sec-ch-meaning-in-context)?
+
+## Exercises {#sec-meaning-across-scales-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-scale -->
 

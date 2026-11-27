@@ -4,6 +4,16 @@ status: idea
 
 # Meaning as Region: Concepts, Hierarchies and Subspaces {#sec-ch-meaning-as-region}
 
+<!-- Task 6 template -->
+*Part I, the Librarian Test: can a computer shelve and find things by meaning alone, with one fixed place for each thing?* This chapter follows @sec-ch-meaning-as-direction. **Question: does a region hold a concept better than a point?**
+
+*Data, models and loss.* Data: The text8 SGNS space and the WordNet hypernym tree, for the Poincare embedding of nouns. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| SGNS | @sec-zoo-sgns | points, the baseline |
+| Poincare | @sec-zoo-poincare | a hierarchy in curved space |
+
 A concept is a region and not a point. A point says where one thing is; the meaning of a word such as "dog" covers many things, some more typical than others, with a boundary that is blurred and members that are held by overlapping resemblances and not by one shared feature. Rosch found that categories have graded membership and a best example [@rosch1975cognitive]; Gärdenfors proposed that concepts are convex regions of quality spaces [@gardenfors2000conceptual]; Wittgenstein's family resemblance says that a family is a connected set and not a ball [@wittgenstein1953philosophical]. The question of this chapter is what shape a concept has in a trained space (a ball, a box, a cone, a subspace, a region of a curved space) and whether any of these beats a point of the same size on a stated judge.
 
 The scope is the extent and the structure of concepts: typicality, hierarchy (a dog is a mammal) and negation as complement. It does not cover the likeness of two points (@sec-ch-meaning-as-likeness), a single quality (@sec-ch-meaning-as-direction), a concept that moves or changes (the section on paths of the chapter on generation, @sec-prop-paths), or the composition of two concepts into a third (@sec-ch-meaning-and-structure).
@@ -28,7 +38,6 @@ The scope is the extent and the structure of concepts: typicality, hierarchy (a 
 
 ## Are Categories Convex? {#sec-reg-convex}
 *Plan (about 3 pages). Goal 2. A linear separator of a category against the rest, its accuracy on held-out words, and the same for random categories of the same size; the share of non-members inside the convex hull of the members in a low-dimensional projection. The chain test of the chapter on nearness (neighbours of neighbours) is the family-resemblance counterpart: a concept held by chains is connected and not convex.*
-
 
 <!-- salvaged from embedding-technologies-stubs/meaning_as_likeness.qmd, section sec-likeness-other-objects -->
 ## Changing the Object Changes the Likeness {#sec-likeness-other-objects}
@@ -79,6 +88,25 @@ Sources (first pass). The logic of subspaces [@birkhoff1936logic]; negation and 
 *Plan (1 page). Findings: whether typicality is recoverable from a centroid, whether categories are convex or held by chains, which shape of region carries hierarchy at low distortion and at what cost, and whether negation as complement works. Achieved for the representation of meaning: meanings as regions (@sec-prop-region), with the shapes that survive. Computation: whether curved spaces and boxes train as cheaply as flat ones. Still out of reach: a region is static, and an event changes (@sec-ch-meaning-as-generation).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: Rosch, Gärdenfors, Wittgenstein, Goodman, Putnam, the logic of subspaces, hyperbolic embeddings, boxes, the structural probe. Not yet read for this chapter: a typicality norm other than Rosch's own; the claim that a tree embeds with low distortion in a hyperbolic space of few dimensions is stated from the papers' own results and is to be checked by the toy run.
+
+## Candidate Sections {#sec-meaning-as-region-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- Boxes, cones and Gaussian densities against a point of the same size, on a stated judge.
+- Curse of dimensionality: the manifold hypothesis, local intrinsic dimension and the statistical curse.
+
+## Question and Answer {#sec-meaning-as-region-answer}
+
+*Question:* does a region hold a concept better than a point?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* the concepts so far are words; the dog arrives through several senses (@sec-ch-meaning-across-senses).
+
+## Exercises {#sec-meaning-as-region-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-region -->
 

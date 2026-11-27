@@ -4,7 +4,33 @@ status: idea
 
 # The Alien Technology Test {#sec-ch-alien-technology}
 
-Stub. The question, the models and the template are written in Task 6 of `tmp/plan_tests_refactor.md`; the sections below are salvaged text waiting to be placed.
+<!-- Task 6 template -->
+*Part III, a speculative test: there is no judge, and a failure is not informative.* This chapter follows @sec-ch-meaning-as-arrangement. **Question: can an unknown system's function be recovered from its behaviour?** This chapter is speculative: there is no judge for it, and a failure is not informative.
+
+*Data, models and loss.* Data: Ashby's isomorphic oscillators, embedded by their responses to common inputs (`notes/function_of_physical_systems.md`). The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| Ashby oscillators | testbed | a testbed, not a method |
+
+
+## Candidate Sections {#sec-alien-technology-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- Transfer to families of systems that were not seen.
+
+## Question and Answer {#sec-alien-technology-answer}
+
+*Question:* can an unknown system's function be recovered from its behaviour?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* what do current spaces represent, and what is missing (the Epilogue)?
+
+## Exercises {#sec-alien-technology-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/tests_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/tests_of_meaning.qmd), section sec-test-alien -->
 

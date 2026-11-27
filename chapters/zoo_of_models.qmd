@@ -154,6 +154,149 @@ The paper trains it on one million sentences of Wikipedia. In the supervised ver
 
 The output is one vector per sentence, taken from the encoder. Two things differ from SGNS (@sec-zoo-sgns): the vectors are compared after normalization and with a temperature, and the negatives are the other sentences of the batch (and, in the supervised version, a chosen contradiction) and not a random draw from a unigram distribution. The unsupervised version has no labels of any kind, but starts from a model pre-trained on a large text, and its positive is a choice of the authors (that two dropout views of one sentence mean the same). The supervised version takes both its positives and its hard negatives from the labels that people gave to pairs of sentences, so an antonym-like contrast is built into its loss and is not found in the text. Not used in the chapters so far.
 
+## TransE: Relations as Translations {#sec-zoo-transe}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* [@bordes2013translating].
+- *What it takes:* a knowledge graph of (head, relation, tail) triples.
+- *What it optimizes:* a head vector plus a relation vector should land near the tail vector, with a margin between true and corrupted triples.
+- *What it outputs, and how it is set up in this book:* one vector per entity and one per relation; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## Poincare Embeddings: Hierarchies in Hyperbolic Space {#sec-zoo-poincare}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* [@nickel2017poincare].
+- *What it takes:* a hierarchy such as the WordNet noun tree.
+- *What it optimizes:* a distance in the Poincare ball that puts a parent near the centre and its children towards the boundary, against sampled non-children.
+- *What it outputs, and how it is set up in this book:* one point in the ball per node; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## CLIP: Text and Images in One Space {#sec-zoo-clip}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* [@radford2021learning].
+- *What it takes:* image-caption pairs.
+- *What it optimizes:* a contrastive loss over a batch of images and captions, each matched pair against the other pairings.
+- *What it outputs, and how it is set up in this book:* one vector per image and one per text, in the same space; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## BM25: Retrieval by Term Counts {#sec-zoo-bm25}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* (a source to be read and added).
+- *What it takes:* a collection of passages and a query.
+- *What it optimizes:* no learned objective: a score from term frequency in the passage, rarity of the term in the collection and the length of the passage.
+- *What it outputs, and how it is set up in this book:* a ranked list of passages, with a sparse vector as the representation; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## SIF: A Weighted Average of Word Vectors {#sec-zoo-sif}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* [@arora2017simple].
+- *What it takes:* word vectors and word frequencies.
+- *What it optimizes:* no training: each word is weighted down by its frequency, the vectors are averaged and the first principal component is removed.
+- *What it outputs, and how it is set up in this book:* one vector per sentence, of the dimension of the word vectors; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## BERT: Contextual Vectors From a Masked Language Model {#sec-zoo-bert}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* [@devlin2019bert].
+- *What it takes:* a transformer encoder trained on text.
+- *What it optimizes:* predicting masked tokens from both sides of the context (and, in the paper, whether one sentence follows another).
+- *What it outputs, and how it is set up in this book:* one vector per token, different in each context, at each layer; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## GPT-2 Small: A Decoder Language Model {#sec-zoo-gpt2}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* (a source to be read and added).
+- *What it takes:* a transformer decoder trained on web text.
+- *What it optimizes:* predicting the next token from the tokens before it, by cross-entropy.
+- *What it outputs, and how it is set up in this book:* a distribution over the next token and a hidden vector per position; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## Tensor Product Representations {#sec-zoo-tpr}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* [@smolensky1990tensor].
+- *What it takes:* symbolic structures made of roles and fillers.
+- *What it optimizes:* no training in the basic form: each filler is bound to its role by an outer product and the bindings are summed.
+- *What it outputs, and how it is set up in this book:* one tensor per structure, from which a filler is unbound by its role; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## LTN: Logic Tensor Networks {#sec-zoo-ltn}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* (a source to be read and added).
+- *What it takes:* a set of logical formulas and the objects they talk about.
+- *What it optimizes:* maximizing the degree to which the formulas hold, with predicates as networks and connectives as fuzzy operators.
+- *What it outputs, and how it is set up in this book:* truth degrees of formulas and vectors for the objects; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## Autoencoder {#sec-zoo-autoencoder}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* (a source to be read and added).
+- *What it takes:* unlabelled data such as images.
+- *What it optimizes:* reconstructing the input from a code of lower dimension, by squared error.
+- *What it outputs, and how it is set up in this book:* a code per item and a decoder that maps a code back to the data; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
+## VAE: Variational Autoencoder {#sec-zoo-vae}
+
+*Stub. Plan in four lines; the text, the formulas and the sources are to be written with the chapter that uses this model.*
+
+- *Where it comes from:* (a source to be read and added).
+- *What it takes:* unlabelled data such as images.
+- *What it optimizes:* reconstruction plus a penalty that keeps the codes close to a standard normal prior.
+- *What it outputs, and how it is set up in this book:* a distribution of codes per item and a decoder that can be sampled; the set-up is fixed when the chapter that uses it is written.
+
+*Diagram: planned.*
+
+{{< pagebreak >}}
+
 <!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-loss-decides-near: the three objectives -->
 
 ## The Three Objectives, Stated Once {#sec-zoo-objectives}

@@ -4,6 +4,16 @@ status: idea
 
 # Meaning and Truth: Reference, Checking and Hallucination {#sec-ch-meaning-and-truth}
 
+<!-- Task 6 template -->
+*Part II, critical literacy: can a representation be read critically?* This chapter follows @sec-ch-meaning-in-context. **Question: does truth live in the space or must it be looked up?**
+
+*Data, models and loss.* Data: True and false statements and a passage store, read in GPT-2 small and retrieved with BM25; to be chosen when the chapter is written. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| GPT-2 small | @sec-zoo-gpt2 | a decoder language model |
+| BM25 | @sec-zoo-bm25 | looking the answer up |
+
 A sense is not a truth value. Frege's three levels end in the reference, the object that a sign picks out, and the reference of a sentence is its truth value; the thought alone, he says, yields no knowledge, but only the thought together with its reference [@frege1892sense]. A space trained on text has the sense at best, and the question of this chapter is how far it can go towards the reference and the truth: how a name is tied to its bearer (Kripke and Putnam [@kripke1980naming; @putnam1975meaning]), whether "true" adds anything to what is asserted (Ramsey [@ramsey1927facts]), what a model that is built to produce what is plausible does when it is not true (hallucination), and what it takes to check a text: against sources, against itself, by proof. The chapter also keeps a question that the chapter on difference leaves open: can a representation reach "false" by derivation and keep it apart from "unknown"?
 
 The scope is reference and truth. The dependence of a sentence on its situation is the chapter on context (@sec-ch-meaning-in-context); the production of plausible text is the chapter on generation (@sec-ch-meaning-as-generation), from which this chapter takes the contrast between plausible and true; a negation as a vector operation is the chapter on difference (@sec-ch-meaning-as-difference); and whether a space can be grounded by another sense is the chapter on senses (@sec-ch-meaning-across-senses).
@@ -55,6 +65,24 @@ Sources (first pass, none yet in `references.bib`; read before citing). Reiter o
 *Plan (1 page). Findings: why distance concentration forces approximate search, what a fixed-dimension dot product can and cannot rank, and how retrieval-augmented generation behaved on negation, conjunction and multi-hop questions, told as a dated case study. Achieved for the representation of meaning: nearness (@sec-prop-nearness) at the scale of billions, and a memory outside the weights that grounds generation in text that can be checked. Computation: search can be paid once in training and amortized into the weights, or paid at every query, the same trade as for reasoning in @sec-ch-meaning-in-context. Parametric memory is the amortized side, retrieval and agentic search the per-query side, and which is cheaper depends on the difficulty of the question and the compute available [@snell2024scaling; @jones2021scaling]. Whether long contexts and agentic search absorb retrieval, or external memory survives on cost, is open and dated. Evidence at scale: benchmark comparisons of approximate-search indexes and of dense against lexical retrieval exist (from memory, to be checked: ANN-Benchmarks and BEIR), and the dense-retrieval paper held in references/ (Karpukhin et al.) is the authors' own comparison. Smoke tests: recall against query time of exact and approximate search on random and on clustered vectors, which shows distance concentration directly, and a count of the rankings that a query vector of dimension 2 and 3 can realize over a small set of items. Still out of reach: a retrieved passage is not a checked claim, and one vector per item cannot negate or chain. Checking a text against verified sources is the external-consistency question of the critical literacy test, and keeping the structure of a subject is taken up by the extensions that follow, beginning with curvature in @sec-ch-meaning-as-generation.*
 
 *Sources and gaps (first pass).* Sourced in `references/`: Frege, Kripke, Putnam, Ramsey, Russell, the argument from form and grounding, truth directions and their sceptics, dense retrieval. Not yet sourced: Belnap and Reiter (the logics section rests on them); Tarski at the page; a corpus of true and false statements for the probe; the claim that truth directions diverge from common belief; benchmark comparisons of retrieval methods named in the earlier chapter (from memory, not read).
+
+## Candidate Sections {#sec-meaning-and-truth-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- A truth direction in GPT-2 small and its sceptics.
+
+## Question and Answer {#sec-meaning-and-truth-answer}
+
+*Question:* does truth live in the space or must it be looked up?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* what a vector cannot hold may sit in a structured store (@sec-ch-meaning-and-structure).
+
+## Exercises {#sec-meaning-and-truth-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-truth -->
 

@@ -4,6 +4,16 @@ status: idea
 
 # Meaning as Arrangement: What Survives a Change of Coordinates {#sec-ch-meaning-as-arrangement}
 
+<!-- Task 6 template -->
+*Part III, a speculative test: there is no judge, and a failure is not informative.* This chapter follows @sec-ch-meaning-as-generation. **Question: can two spaces be aligned from relations alone?** This chapter is speculative: there is no judge for it, and a failure is not informative.
+
+*Data, models and loss.* Data: Two static spaces (SGNS and PPMI-SVD) trained on different texts or languages, with no dictionary, and a random rotation as the null; human languages first, whales and birds, Goedel's shorthand notebooks and SETI only as speculative cases. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| SGNS | @sec-zoo-sgns | a space to align |
+| PPMI-SVD | @sec-zoo-ppmi-svd | a second space to align |
+
 The coordinates of a trained space mean nothing on their own. The loss depends on the vectors only through dot products or cosines, so any rotation of the space gives the same loss, and a trained space is one arbitrary point of an orbit; what is real is the arrangement, the distances and the angles between directions. Saussure's meaning as a system of differences [@saussure1916cours] and the representational similarity of neuroscience [@kriegeskorte2008representational; @edelman1998representation] say the same of minds. The question of this chapter is what survives a change of coordinates, what a training objective leaves free and what it breaks, and how two spaces can be compared when their coordinates are not comparable: two seeds, two languages, two senses.
 
 The scope is the invariance of a space and the comparison of spaces. The stability of nearest neighbours across seeds, losses and texts is already measured in the section on many runs (@sec-likeness-many-spaces), salvaged from the chapter on nearness (@sec-ch-meaning-as-likeness), and this chapter takes up the alignment that it hands over; the senses a shared space can hold is the chapter on senses (@sec-ch-meaning-across-senses); a transformation along a path is the section on paths of the chapter on generation (@sec-prop-paths); and what changes with the situation of use is the chapter on context (@sec-ch-meaning-in-context).
@@ -28,7 +38,6 @@ The scope is the invariance of a space and the comparison of spaces. The stabili
 
 ## Relative Representations {#sec-arr-relative}
 *Plan (about 2 pages). Goal 4. Anchors, the cosines to anchors as coordinates, and the comparison of two seeds with and without them.*
-
 
 <!-- salvaged from embedding-technologies-stubs/tangent_spaces_geodesics.qmd, section sec-erlangen-programme-deep-learning -->
 ## The Erlangen Programme for Deep Learning {#sec-erlangen-programme-deep-learning}
@@ -99,6 +108,25 @@ The scope is the invariance of a space and the comparison of spaces. The stabili
 *Sources and gaps (first pass).* Sourced in `references/`: Saussure and the structuralist readings, the Erlangen programme and geometric deep learning, relative representations, gauge and coordinate-independent networks, the pull-back metric, orthogonal symmetries of transformers. Not yet sourced: Mikolov's 2013 map between languages (no entry in the collection); optimal-transport references as named in the earlier chapter; a persistent-homology tool; Saussure at the page.
 
 *Open question for the author: this chapter holds two subjects, what survives a change of coordinates (the symmetries, which is the longest section of the earlier summary chapter) and the comparison of two spaces (alignment, optimal transport, the universal translator). It may be one chapter or two.*
+
+## Candidate Sections {#sec-meaning-as-arrangement-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- The shape of a representation (persistent homology).
+- Curse of dimensionality: the shape of a representation (persistent homology).
+
+## Question and Answer {#sec-meaning-as-arrangement-answer}
+
+*Question:* can two spaces be aligned from relations alone?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* from messages to machines: can the function of a system we did not build be recovered (@sec-ch-alien-technology)?
+
+## Exercises {#sec-meaning-as-arrangement-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
 
 <!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-arrangement -->
 
