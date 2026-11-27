@@ -5,6 +5,41 @@
 
 The chapters before this one ask how far a vector with a distance can carry each property of meaning, and they say where it stops. This epilogue keeps the ideas about meaning that no current technology satisfies: each section states an idea, the tradition that reached it first, and what the technologies of the book lack for it. Nothing here is a result. The sections are short on purpose, and each is a candidate for a chapter, for `notes/ideas.qmd`, or for deletion.
 
+## The Question {#sec-epilogue-question}
+
+*Question: what do current spaces represent, and what is missing?* The chapters answered one question each. This section will collect the answers by the four tests (the Librarian Test of Part I, critical literacy of Part II, the universal translator and the alien technology test of Part III), in the scorecard below, and ask what none of them could reach. It is a stub: no test has a verdict yet, and the verdicts are dated when they come (@sec-symbols-tests).
+
+| Test | Where it is asked | Verdict | Date, model |
+|:--|:--|:--|:--|
+| Librarian Test | @sec-ch-meaning-as-likeness to @sec-ch-memory-retrieval | untested | |
+| Critical literacy | @sec-ch-meaning-across-scales to @sec-ch-meaning-as-generation | untested | |
+| Universal translator | @sec-ch-meaning-as-arrangement | untested | |
+| Alien technology | @sec-ch-alien-technology | untested | |
+
+*Where the idea boxes go.*
+
+Each section below is an idea about meaning that no current technology satisfies. The chapters in the last column are the ones whose answers the idea will have to take into account (from the hooks of the earlier sketch, `notes/epilogue_sketch.qmd`); a section whose idea a chapter carries goes there, and one that cannot say what technology lacks is dropped to `notes/ideas.qmd` with the reason.
+
+| Section | Chapters it hooks into |
+|:--|:--|
+| @sec-meaning-meaning | none yet |
+| @sec-perfect-language | @sec-ch-symbols-without-interior, @sec-ch-meaning-as-likeness, @sec-ch-meaning-as-region |
+| @sec-harris-unused | none yet |
+| @sec-life-makes-meaning | none yet |
+| @sec-literature-laboratory-meaning | @sec-ch-symbols-without-interior, @sec-ch-meaning-as-likeness, @sec-ch-meaning-in-context, @sec-ch-meaning-as-arrangement |
+| @sec-mathematics-meaning | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-as-region, @sec-ch-meaning-and-structure |
+| @sec-ignoramus-et-ignorabimus | the Prologue |
+| @sec-what-finite-data-cannot | @sec-ch-meaning-as-likeness, @sec-ch-meaning-and-structure |
+| @sec-does-structure-fix-meaning | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-across-senses |
+| @sec-what-system-cannot-say | @sec-ch-symbols-without-interior, @sec-ch-meaning-and-truth |
+| @sec-compression-capacity-learnability | @sec-ch-meaning-as-likeness, @sec-ch-meaning-and-structure |
+| @sec-deciding-without-knowing-possibilities | @sec-ch-meaning-as-likeness, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-generation, @sec-ch-meaning-as-region |
+| @sec-how-reasoners-go-wrong | @sec-ch-meaning-in-context, @sec-ch-meaning-and-truth, @sec-ch-meaning-as-region |
+| @sec-language-thought-translation | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-across-senses, @sec-ch-meaning-and-structure, @sec-ch-alien-technology |
+| @sec-limits-that-may-be | @sec-ch-meaning-across-senses |
+| @sec-chomsky-against-statistics | @sec-ch-symbols-without-interior, @sec-ch-meaning-in-context, @sec-ch-meaning-and-structure, @sec-ch-meaning-across-senses |
+| @sec-final-geek-musings-where | none yet |
+
 ## Meaning Is Not One Thing {#sec-meaning-meaning}
 Ogden and Richards listed sixteen senses of "meaning" and drew the triangle of symbol, thought and referent [@ogden1923meaning]. A vector models the edge between the symbol and the thought, which is Frege's sense, and the edge from the thought to the referent is what grounding would add [@frege1892sense]. Peirce's version is not made of pairs: a sign stands for an object to an interpretant, the three-way relation cannot be resolved into pairs, and the interpretant is itself a sign [@peirce1931collected]. A table of embeddings is dyadic, token to token; what a downstream use supplies to a vector (a retrieval step, a generation step) may be the interpretant, and his pragmatic maxim would test an embedding by what it lets one do (speculation). What current technologies lack: a third term, and a statement of which sense of "meaning" a given space carries.
 
