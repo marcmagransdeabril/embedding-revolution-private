@@ -15,6 +15,7 @@ CODE_HELPERS := $(wildcard code/*/utils.py)
 CODE_SKELETONS := $(shell grep -l '^\# SKELETON' $(wildcard code/*/*.py) 2>/dev/null)
 CODE_SCRIPTS := $(filter-out $(CODE_HELPERS) $(CODE_SKELETONS),$(wildcard code/*/*.py))
 CODE_STAMPS  := $(CODE_SCRIPTS:code/%.py=.code-tests/%.ok)
+TREE_FLAGS   :=
 REVIEW_CODE  := .github/skills/review-code/scripts
 
 # A script is also re-run when a module it imports (transitively) changes. The rules are generated from the import statements
@@ -25,7 +26,7 @@ $(CODE_DEPS): $(wildcard code/*/*.py) $(REVIEW_CODE)/code_deps.py
 	@$(VENV_PYTHON) $(REVIEW_CODE)/code_deps.py make-deps > $@
 -include $(CODE_DEPS)
 
-.PHONY: help all book pdf check-overflow html epub diagrams sync-chapters sync-solutions test-code unit-tests-code check-code validate validate-citations status durability check preview clean
+.PHONY: help all book check-tree pdf check-overflow html epub diagrams sync-chapters sync-solutions test-code unit-tests-code check-code validate validate-citations status durability check preview clean
 
 # Default target
 all: book
@@ -36,6 +37,7 @@ help:
 	@echo "======================================================================"
 	@echo " make book              - Run consistency checks and code tests, then build HTML and PDF book (O'Reilly 7in x 9.1875in)"
 	@echo " make diagrams          - Compile the TikZ diagrams in diagrams/*/*.tex to PDF (PDF book) and PNG (HTML, EPUB)"
+	@echo " make check-tree        - Check notes/question_tree.md (one question and one or two models per chapter) against the book"
 	@echo " make check-code        - Unit tests of the shared code helpers, and the allowed-imports and chapter-to-script checks"
 	@echo " make test-code         - Run the solution scripts in code/ that changed since their last pass"
 	@echo " make pdf               - Build PDF book (O'Reilly 7in x 9.1875in); fails if a formula, table or line sticks out of the text block"
@@ -80,6 +82,10 @@ unit-tests-code:
 # Findings about the imports and the links between chapters and scripts. Part of `book`: any finding stops the build.
 check-code: unit-tests-code
 	@$(VENV_PYTHON) $(REVIEW_CODE)/code_deps.py check
+
+# The question tree (notes/question_tree.md): the tree itself now; --all (chapters, zoo, _quarto.yml) once the restructure is done.
+check-tree:
+	@$(VENV_PYTHON) .github/skills/build-book/scripts/check_question_tree.py $(TREE_FLAGS)
 
 test-code: $(CODE_STAMPS)
 	@for f in $(CODE_SKELETONS); do echo "==> Skipped (skeleton, not implemented): $$f"; done
