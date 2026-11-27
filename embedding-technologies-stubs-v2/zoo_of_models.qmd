@@ -1,0 +1,155 @@
+---
+status: provisional
+---
+
+# A Zoo of Models {#sec-ch-zoo-of-models}
+
+The chapters name the technologies that build a space of meaning (PPMI-SVD, SGNS, GloVe, and the ones that will follow) and use them as instruments. This appendix describes each one in the same four lines, so that a chapter can point to it instead of explaining it: where it comes from, what it optimizes, what it outputs, and how it was set up in this book. One model takes one page. Notation follows the summary of the book: $\mathcal{V}$ is the vocabulary, $d$ the dimension of the space, $\mathbf{e}$ the vector of the thing looked at and $\mathbf{v}$ that of the candidate.
+
+{{< pagebreak >}}
+
+## PPMI-SVD: Pointwise Mutual Information and Singular Value Decomposition {#sec-zoo-ppmi-svd}
+
+Latent semantic analysis took the singular value decomposition of a term-by-document count matrix to find a few dimensions that keep most of its structure [@deerwester1990indexing]. Replacing the counts by the pointwise mutual information (PMI) of two words, the logarithm of how much more often they occur together than independence predicts [@church1990word], and keeping only its positive part (PPMI), gives the matrix that is reduced here. Reducing it with an exponent on the singular values is the variant studied by Levy and colleagues [@levy2015improving].
+
+Let $\mathbf{M}$ be the $|\mathcal{V}| \times |\mathcal{V}|$ matrix with $M_{ij} = \max(0, \mathrm{PMI}(i, j))$. Where PMI is the pointwise mutual information of words $i$ and $j$, $\mathrm{PMI}(i, j) = \log \frac{P(i, j)}{P(i) P(j)}$.
+
+The truncated singular value decomposition $\mathbf{M} \approx \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$ is the rank-$d$ matrix closest to $\mathbf{M}$ in the Frobenius norm, the square root of the sum of the squares of all the entries, $\lVert \mathbf{A} \rVert_F = \sqrt{\sum_{ij} A_{ij}^2}$, so that the distance between two matrices is the length of their difference when each is read as one long vector [@eckart1936approximation]. Nothing is trained by gradient descent; the criterion is the best low-rank approximation, and it has a closed form.
+
+The decomposition of the matrix gives one vector of dimension $d$ per word, the rows of $\mathbf{E} = \mathbf{U}_d \mathbf{\Sigma}_d^{p}$. The exponent $p$ moves weight between the leading directions and the rest, and $p = \tfrac{1}{2}$ is the usual choice.
+
+![PPMI-SVD. The matrix of positive PMI is approximated by a product of three small matrices, and the rows of $\mathbf{U}_d$ scaled by the singular values are the word vectors.](../diagrams/models/ppmi_svd.pdf){#fig-zoo-ppmi-svd width=90%}
+
+{{< pagebreak >}}
+
+## SGNS: Skip-Gram with Negative Sampling {#sec-zoo-sgns}
+
+The skip-gram model predicts the words around a word from the word itself [@mikolov2013efficient]. Negative sampling replaces the softmax over the whole vocabulary by a binary decision between a real neighbour and a few words drawn at random, and subsampling drops frequent words from the text [@mikolov2013distributed]. The combination is called skip-gram with negative sampling (SGNS).
+
+For a word $w$ and a context word $c$ that occurs within the window, with $k$ noise words $c_1, \dots, c_k$ drawn from the unigram distribution raised to the power $3/4$, SGNS minimizes the cross-entropy loss of the binary classification task that distinguishes the real context from the noise words:
+$$
+-\log \sigma(\mathbf{e}_w^\top \mathbf{v}_c) - \sum_{i=1}^{k} \log \sigma(-\mathbf{e}_w^\top \mathbf{v}_{c_i}),
+$$
+where $\sigma=\frac{1}{1+e^{-x}}$ is the logistic function. It uses two tables of vectors, one for the word looked at and one for the candidate. At the optimum, the dot product of a pair approaches its PMI minus $\log k$ [@levy2014neural], so SGNS factorizes a shifted PMI matrix without ever building it.
+
+The output of the model is the table $\mathbf{E}$ of word vectors, one row per word. The table of context vectors $\mathbf{V}$ is normally discarded.
+
+![Skip-gram with negative sampling. A real context is pulled towards the word, and $k$ noise words are pushed away from it.](../diagrams/models/sgns.pdf){#fig-zoo-sgns width=90%}
+
+{{< pagebreak >}}
+
+## GloVe (Global Vectors): Fitting the Log of the Counts {#sec-zoo-glove}
+
+GloVe was proposed as a model that keeps the count statistics of the first family and the learned vectors of the second [@pennington2014glove].
+
+Let $X_{ij}$ be the number of times that word $j$ occurs in the context of word $i$. GloVe minimizes a weighted least-squares error between the dot product of two vectors, plus a bias for each, and the logarithm of the count:
+$$
+\sum_{i,j} f(X_{ij}) \left( \mathbf{w}_i^\top \tilde{\mathbf{w}}_j + b_i + \tilde{b}_j - \log X_{ij} \right)^2, \qquad f(x) = \min\!\big((x / x_{\max})^{3/4}, 1\big),
+$$
+with $x_{\max} = 100$. The weight $f$ makes the rarest pairs count less, since their counts are noisy, and caps the weight of the commonest.
+
+The outputs are two sets of vectors, $\mathbf{w}_i$ and $\tilde{\mathbf{w}}_j$, which are equivalent when the count matrix is symmetric and differ only by their random initialization [@pennington2014glove].
+
+![GloVe. The dot product of two word vectors plus two biases is fitted to the logarithm of their co-occurrence count, weighted by $f$.](../diagrams/models/glove.pdf){#fig-zoo-glove width=90%}
+
+
+{{< pagebreak >}}
+
+## LSA and LSI: Singular Value Decomposition of Term-by-Document Counts {#sec-zoo-lsa}
+
+Latent semantic indexing (LSI) and latent semantic analysis (LSA) are one method with two names, according to the use that was made of it: LSI to retrieve documents [@deerwester1990indexing], LSA to model how people judge the likeness of words [@landauer1997solution]. It is the ancestor of PPMI-SVD (@sec-zoo-ppmi-svd), and the two differ in the matrix that is reduced and not in the idea.
+
+Let $\mathbf{X}$ be the $|\mathcal{V}| \times |\mathcal{D}|$ matrix whose entry $X_{id}$ is the number of times that word $i$ occurs in document $d$, where a document is a paragraph or a passage. Each count is usually transformed before the decomposition, by the logarithm of the count divided by the entropy of the word over the documents, so that a word that occurs everywhere counts for less. The truncated singular value decomposition $\mathbf{X} \approx \mathbf{U}_d \mathbf{\Sigma}_d \mathbf{V}_d^\top$ is the rank-$d$ matrix closest to $\mathbf{X}$ in the Frobenius norm, with a closed form and no training by gradient descent.
+
+The output is one vector of dimension $d$ per word, the row of $\mathbf{U}_d \mathbf{\Sigma}_d$, and, as a by-product, one vector per document, the row of $\mathbf{V}_d \mathbf{\Sigma}_d$. Two words are near when they occur in the same documents, and not only when they occur next to each other, so the context is the whole passage and not a window of a few words. Although every count is non-negative, only the first singular direction has entries of one sign. The others are orthogonal to it and so have both signs, and the cosines between words can be negative.
+
+{{< pagebreak >}}
+
+## CBOW: Continuous Bag of Words {#sec-zoo-cbow}
+
+The continuous bag of words (CBOW) is the second model of the paper that proposed skip-gram [@mikolov2013efficient]. It reverses the direction of the prediction: the centre word is predicted from its context, and not the context from the centre word. The loss is the one of SGNS, with negative sampling, or the softmax over the vocabulary in the first formulation.
+
+For a centre word $c$ and the context words $w_1, \dots, w_m$ inside the window, the context is summarized by the mean of their vectors,
+$$
+\bar{\mathbf{e}} = \frac{1}{m} \sum_{j=1}^{m} \mathbf{e}_{w_j},
+$$
+and the model scores the centre word by $\bar{\mathbf{e}}^\top \mathbf{v}_c$. With negative sampling it minimizes $-\log \sigma(\bar{\mathbf{e}}^\top \mathbf{v}_c) - \sum_{i=1}^{k} \log \sigma(-\bar{\mathbf{e}}^\top \mathbf{v}_{c_i})$ for $k$ noise words $c_i$. The order of the context words is lost, hence the name.
+
+The output is the table $\mathbf{E}$ of the vectors of the context words, one row per word, and the table $\mathbf{V}$ of the centre words is normally discarded. Since the context is averaged, one training example updates all the context words with the same gradient, which makes CBOW faster than skip-gram and, in the experience reported by its authors, a little better for frequent words and a little worse for rare ones [@mikolov2013efficient]. I do not know of a proof that CBOW factorizes a shifted PMI matrix as SGNS does [@levy2014neural].
+
+{{< pagebreak >}}
+
+## fastText: Words as Bags of Character n-grams {#sec-zoo-fasttext}
+
+fastText keeps the loss of skip-gram with negative sampling (@sec-zoo-sgns) and changes what a word vector is made of [@bojanowski2017enriching]. A word is not a row of a table but the sum of the vectors of its character n-grams. For the word `where`, with the boundary marks `<` and `>`, the n-grams of length 3 are `<wh`, `whe`, `her`, `ere` and `re>`, and the whole word `<where>` is added as one more unit. The paper takes all the lengths from 3 to 6.
+
+Let $\mathcal{G}_w$ be the set of n-grams of the word $w$, plus the word itself, and $\mathbf{z}_g$ the vector of the n-gram $g$. The vector of the word is
+$$
+\mathbf{e}_w = \sum_{g \in \mathcal{G}_w} \mathbf{z}_g,
+$$
+and it replaces $\mathbf{e}_w$ in the SGNS loss. The n-grams are hashed into a fixed number of buckets, so the size of the table does not grow with the vocabulary.
+
+The output is the table of the vectors of the n-grams. A vector for any string can be computed from it, including a word never seen in training, a misspelling, or a form of a word that is rare in the text. The consequence for this book is that the forms of one word (`practise`, `practising`) share n-grams, and are therefore near by construction and not only by company. A relation that a judge names as inflection or derivation is partly built into the parametrization.
+
+{{< pagebreak >}}
+
+## Are They Fundamentally Different?
+
+Not in what is optimized, but in two choices: what counts as context and what a word vector is.
+
+| Model | Context | Word vector | What is optimized |
+|---|---|---|---|
+| LSA, LSI | the document | row of an SVD | best rank-$d$ approximation of weighted counts |
+| PPMI-SVD | window | row of an SVD | best rank-$d$ approximation of PPMI |
+| SGNS | window | free row of a table | binary cross-entropy against noise |
+| CBOW | window, averaged | free row of a table | binary cross-entropy against noise, centre word predicted |
+| fastText | window | sum of n-gram rows | the SGNS loss |
+| GloVe | window | free row plus bias | weighted least squares on $\log X_{ij}$ |
+
+: The models of this appendix. {#tbl-zoo-summary}
+
+They fall in two families. Counting and decomposing (LSA, LSI and PPMI-SVD) has a closed form, and prediction (SGNS, CBOW and fastText) is trained by gradient descent. For SGNS it is known that the second family reaches the first at the optimum, a factorization of shifted PMI [@levy2014neural]. LSA and PPMI-SVD differ only in the matrix, and CBOW and fastText change the direction of prediction and the parametrization of the vector without changing the loss. SGNS and CBOW are contrastive in the loose sense: the noise words of negative sampling are pushed away from the word, as a simplification of noise-contrastive estimation. What they push apart is a random draw from the unigram distribution, on unnormalized dot products, so the pairs that end up far are those that the text never put together, and not pairs chosen as unlike. The clipping at zero of PPMI throws away the pairs that occur less than chance, and GloVe has no negatives at all, only the weighted fit of the counts.
+
+{{< pagebreak >}}
+
+## Models That Are Different in Kind {#sec-zoo-different-kinds}
+
+All six models above map a word to one point of a Euclidean space and are trained on co-occurrence in text. The following families change at least one of those three things. They are listed here with what changes; none is used in the chapters yet, and the descriptions have not been checked against the papers.
+
+- **Contextual encoders** (BERT [@devlin2019bert]). The vector is not a row of a table but the output of a network that reads the whole sentence, so one word has a different vector in each context. The loss is the prediction of masked words. The static-vector assumption of the likeness chapter does not apply to them (@sec-ch-meaning-in-context).
+- **Contrastive sentence encoders** (SBERT, @sec-zoo-sbert, and SimCSE, @sec-zoo-simcse). A network maps a whole sentence to a vector, trained from pairs that are alike. They are described in their own sections.
+- **Multimodal contrastive models** (CLIP [@radford2021learning]). Two encoders, one for images and one for text, share a space and are trained to put each image near its caption. Meaning is then anchored in a second sense, which is the subject of @sec-ch-meaning-across-senses.
+- **Knowledge-graph embeddings** (TransE [@bordes2013translating]). The training data are triples (head, relation, tail), not text, and a relation is a translation, $\mathbf{h} + \mathbf{r} \approx \mathbf{t}$. Nearness then means "linked by that relation" and not "shares company".
+- **Graph embeddings** (DeepWalk [@perozzi2014deepwalk], node2vec [@grover2016node2vec]). Random walks on a graph play the role of sentences and skip-gram is run on them, so this family is SGNS on a different corpus and not a different model.
+- **Non-Euclidean and probabilistic embeddings** (Poincaré embeddings [@nickel2017poincare], Gaussian embeddings [@vilnis2015word]). The geometry is hyperbolic, which fits trees, or each word is a distribution and not a point, so that a word has an extent (@sec-ch-meaning-as-region).
+- **Random and hyperdimensional vectors** (random indexing, hyperdimensional computing [@kanerva2009hyperdimensional]). Nothing is learned. Each item gets a random high-dimensional vector, and structure comes from algebraic operations such as binding and superposition.
+
+Of these, the contextual family is the one that breaks the assumption of one vector per word, and is the subject of its own chapter. The sentence encoders differ from SGNS in what supervises them and in how the push apart is done, as the next two sections describe.
+
+{{< pagebreak >}}
+
+## SBERT: Sentence-BERT {#sec-zoo-sbert}
+
+BERT gives a vector for every token of a sentence but no vector for the sentence that can be compared by cosine, and averaging the token vectors or taking the first one correlates poorly with human judgements of sentence similarity. Sentence-BERT fine-tunes a pre-trained BERT or RoBERTa inside a siamese network, two copies with tied weights, so that the cosine between the two outputs is meaningful [@reimers2019sentence].
+
+Each sentence goes through the encoder and the output vectors of all its tokens are averaged (mean pooling) into $\mathbf{u}$, and the other sentence into $\mathbf{v}$. The paper trains with one of three objectives, depending on the data. For the classification objective, used on the labelled sentence pairs of the natural language inference data sets SNLI and MultiNLI, the labels are contradiction, entailment and neutral, and the model minimizes the cross-entropy of
+$$
+\mathbf{o} = \mathrm{softmax}\big(\mathbf{W}\,[\mathbf{u};\, \mathbf{v};\, |\mathbf{u} - \mathbf{v}|]\big),
+$$
+where $\mathbf{W}$ is a trained matrix and the brackets join the three vectors. For the regression objective the squared error between $\cos(\mathbf{u}, \mathbf{v})$ and a human similarity score is minimized, and for the triplet objective the anchor is pulled nearer to a positive sentence than to a negative one by a margin. At prediction time only the encoder is kept and two sentences are compared by their cosine.
+
+The output is one vector per sentence, with the dimension of the encoder (768 for the base models). The loss of the paper is therefore not contrastive in the sense of SimCSE, except for the triplet variant. The checkpoints distributed later with the same name were often trained with in-batch negatives, so the loss of a given checkpoint has to be read from its model card. What is common to all of them is that the signal is a label given by people to a pair of sentences, and not the text alone. Not used in the chapters so far.
+
+{{< pagebreak >}}
+
+## SimCSE: Simple Contrastive Learning of Sentence Embeddings {#sec-zoo-simcse}
+
+SimCSE fine-tunes a pre-trained BERT or RoBERTa so that a sentence is near its positive and far from the other sentences of the batch, in two versions that differ in where the positive comes from [@gao2021simcse]. It follows the contrastive losses studied for images, and its authors explain the effect with the alignment and uniformity of Wang and Isola [@wang2020understanding]: positives should stay near (alignment) and the embeddings of all sentences should spread on the sphere (uniformity).
+
+In the unsupervised version the positive of a sentence is itself, passed through the encoder a second time with a different random dropout mask (the default dropout of 0.1 is the only noise). For a batch of $N$ sentences, with $\mathbf{h}_i$ and $\mathbf{h}_i'$ the two outputs for sentence $i$, $\tau$ a temperature, and $\mathrm{sim}$ the cosine, the loss of the sentence is
+$$
+-\log \frac{e^{\mathrm{sim}(\mathbf{h}_i, \mathbf{h}_i')/\tau}}{\sum_{j=1}^{N} e^{\mathrm{sim}(\mathbf{h}_i, \mathbf{h}_j')/\tau}}.
+$$
+The paper trains it on one million sentences of Wikipedia. In the supervised version the premise and the hypothesis of a pair labelled as entailment in the NLI data are the positives, and the pair labelled as contradiction is added to the denominator as a hard negative, together with the other sentences of the batch.
+
+The output is one vector per sentence, taken from the encoder. Two things differ from SGNS (@sec-zoo-sgns): the vectors are compared after normalization and with a temperature, and the negatives are the other sentences of the batch (and, in the supervised version, a chosen contradiction) and not a random draw from a unigram distribution. The unsupervised version has no labels of any kind, but starts from a model pre-trained on a large text, and its positive is a choice of the authors (that two dropout views of one sentence mean the same). The supervised version takes both its positives and its hard negatives from the labels that people gave to pairs of sentences, so an antonym-like contrast is built into its loss and is not found in the text. Not used in the chapters so far.

@@ -1,0 +1,103 @@
+project:
+  type: book
+  output-dir: _book
+bibliography: references.bib
+book:
+  title: The Embedding Revolution
+  subtitle: Navigating High-Dimensional Knowledge Manifolds Through the Geek's Lens
+  author: Marc Magrans de Abril
+  date: '2026'
+  description: A comprehensive guide to high-dimensional embedding spaces, geometry,
+    and neurosymbolic computing.
+  page-footer:
+    left: The Embedding Revolution
+    right: Marc Magrans de Abril
+  chapters:
+  - index.qmd
+  - chapters/symbols_without_interior.qmd
+  - chapters/tests_of_meaning.qmd
+  - chapters/properties_of_meaning.qmd
+  - chapters/meaning_as_likeness.qmd
+  - chapters/meaning_as_difference.qmd
+  - chapters/meaning_as_direction.qmd
+  - chapters/meaning_as_region.qmd
+  - chapters/meaning_as_path.qmd
+  - chapters/meaning_as_composition.qmd
+  - chapters/meaning_across_scales.qmd
+  - chapters/meaning_across_senses.qmd
+  - chapters/meaning_as_arrangement.qmd
+  - chapters/meaning_in_context.qmd
+  - chapters/meaning_and_truth.qmd
+  - chapters/meaning_as_generation.qmd
+  - chapters/epilogue.qmd
+  appendices:
+  - chapters/curse_of_dimensionality.qmd
+  - chapters/zoo_of_models.qmd
+  - chapters/solutions.qmd
+format:
+  html:
+    theme:
+      light:
+      - cosmo
+      - styles/book-theme.scss
+      dark:
+      - darkly
+      - styles/book-theme.scss
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: show
+    code-tools: true
+    html-math-method: mathjax
+    filters:
+    - filters/tikz-img.lua
+    - filters/book-chapter-refs.lua
+    - filters/book-questions.lua
+    - filters/book-callouts.lua
+    - filters/book-typography.lua
+  pdf:
+    output-file: The-Embedding-Revolution.pdf
+    latex-clean: false
+    keep-tex: true
+    documentclass: scrbook
+    classoption:
+    - openany
+    - twoside=true
+    - fontsize=10pt
+    geometry:
+    - paperwidth=7in
+    - paperheight=9.1875in
+    - top=0.8in
+    - bottom=0.85in
+    - inner=0.85in
+    - outer=0.75in
+    - headheight=14pt
+    - headsep=0.25in
+    - footskip=0.35in
+    pdf-engine: xelatex
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    number-depth: 3
+    colorlinks: true
+    linkcolor: DarkRed
+    urlcolor: DarkRed
+    citecolor: DarkRed
+    include-in-header:
+    - styles/oreilly-preamble.tex
+    filters:
+    - filters/book-questions.lua
+    - filters/book-callouts.lua
+    - filters/book-typography.lua
+  epub:
+    output-file: The-Embedding-Revolution.epub
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    css:
+    - styles/epub.css
+    filters:
+    - filters/tikz-img.lua
+    - filters/book-questions.lua
+    - filters/book-callouts.lua
+    - filters/book-typography.lua

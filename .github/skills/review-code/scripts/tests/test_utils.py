@@ -1,4 +1,4 @@
-"""Unit tests of the helpers shared by the solution scripts (embedding-technologies-stubs/code/embedding_spaces/utils.py, the dissolved chapter on the objectives): each one is small and has a known answer."""
+"""Unit tests of the helpers shared by the solution scripts (embedding-technologies-stubs-v1/code/embedding_spaces/utils.py, the dissolved chapter on the objectives): each one is small and has a known answer."""
 from __future__ import annotations
 
 import sys
@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-UTILS_DIR = Path(__file__).resolve().parents[5] / "embedding-technologies-stubs" / "code" / "embedding_spaces"
+UTILS_DIR = Path(__file__).resolve().parents[5] / "embedding-technologies-stubs-v1" / "code" / "embedding_spaces"
 sys.path.insert(0, str(UTILS_DIR))
 import utils  # noqa: E402
 

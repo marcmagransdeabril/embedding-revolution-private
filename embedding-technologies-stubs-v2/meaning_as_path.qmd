@@ -1,0 +1,49 @@
+---
+status: idea
+---
+
+# Meaning as Path: Events, Time and Travel Through Known Territory {#sec-ch-meaning-as-path}
+
+A static thing is a point and an event is a curve. If a space of meanings has this property, a change of meaning (a day going by, a sentence unfolding, a relation applied step by step) is a path through it, and a path has a length, a shape and a way of being carried from one place to another. On a flat space the straight line is the only candidate; on a curved one, such as the manifold that real data occupy, the straight line between two points may leave the data, and the geodesic does not. The question of this chapter is what travel through the space means when it stays on territory that the data already hold: between points that were encoded, along the data.
+
+The scope is travel over known territory. Travel beyond the data, where nothing has fixed a metric or says whether a point means anything, is the chapter on generation (@sec-ch-meaning-as-generation). The step between two meanings as a relation is the chapter on difference (@sec-ch-meaning-as-difference); the symmetries that leave a path unchanged are the chapter on arrangement (@sec-ch-meaning-as-arrangement); and the order of events in a story as composition is the chapter on composition (@sec-ch-meaning-as-composition).
+
+*Goals and expectations (proposed, to be confirmed by the author before any experiment).*
+
+*Goal 1, the straight line against the geodesic (Arvanitidis and colleagues).* The expectation is that on a trained latent space the straight line between two encoded points passes through regions that decode to implausible items, and the geodesic of the metric that the decoder induces stays nearer the data. The run is a small autoencoder on the digits of the repository, with the plausibility of decoded interpolants measured by a classifier or by reconstruction error (@sec-path-line).
+
+*Goal 2, carrying a relation (Tifrea and colleagues).* An analogy repeats a step from one place to another, which needs a rule for carrying a vector between points. In flat space this is vector addition; on a curved one it is parallel transport, and going round a loop returns the vector rotated. The expectation is that in a hyperbolic space of word vectors analogies are solved by transport better than by flat addition, which is a claim of the papers to be checked on a toy (@sec-path-transport).
+
+*Goal 3, the arrow of time (Wei and colleagues).* Networks trained to say whether a video plays forwards or backwards reach 72 to 76 per cent on a test of real videos where people reach 80 per cent (Table 9), and are partly driven by artefacts: on a set of action videos, removing black frames lowers the accuracy by about 8 points and removing camera motion by about 13 (Table 1) [@wei2018learning]. The expectation is that a representation of a clip that is invariant to reversal cannot do the task and one that is not can; the run is a toy on trajectories, and the real test needs video (@sec-motion-time).
+
+## What the Philosophies Say About Paths {#sec-path-philosophy}
+*Plan (about 3 pages). The difference between a thing and an event, and between a state and a process; Gärdenfors's treatment of actions as vectors of force and of events as changes in a space of qualities (to be read, not yet in `references/` in this form); Kant's and Bergson's accounts of time (not in the collection; to be decided whether they belong); and what a vector carries: a point carries a state, and a path needs a parameter (time, or the step of a computation) that the vector does not have. The reading of reasoning as a path through a latent space, one draw from a distribution of paths and not a guaranteed route, is the book's own frame and is tested here and in the chapter on generation.*
+
+## Is the Straight Line a Path? {#sec-path-line}
+*Plan (about 3 pages). Goal 1. The autoencoder on digits, linear interpolation against the geodesic of the pull-back metric [@arvanitidis2018latent], the plausibility of the interpolants, and the null of a random path with the same endpoints.*
+
+## Carrying a Relation From Place to Place {#sec-path-transport}
+*Plan (about 2 pages). Goal 2. Parallel transport and holonomy on a curved space [@needham2021visual], hyperbolic word embeddings and analogy [@tifrea2019poincare; @nickel2017poincare], and what the toy can and cannot show about trained word spaces.*
+
+
+<!-- salvaged from embedding-technologies-stubs/tangent_spaces_geodesics.qmd, section sec-tangent-spaces-geodesics -->
+## Tangent Spaces and Geodesics {#sec-tangent-spaces-geodesics}
+*Parallel transport, Riemannian metrics, and semantic interpolation along curves. A static thing is a point and an event is a curve, so a running dog is a trajectory whose tangent vector is its motion; a plan is a curve too, and so is an argument if reasoning can stay in the space (@sec-ch-meaning-in-context), though a sampled argument is one draw from a distribution of curves, not a geodesic, since nothing guarantees that a single path converges on the answer. The geometry of this section is the vocabulary for both, developed for planning in @sec-ch-meaning-across-senses. The metric that a decoder pulls back onto its code space, and the geodesics of that metric, are introduced in @sec-ch-meaning-as-generation and used here.*
+
+*Why nearness is likeness only locally (from the debate in @sec-ch-meaning-as-likeness). An embedding space is flat, $\mathbb{R}^d$, and retrieval measures a straight line; the data lie on a curved manifold of lower dimension. In an infinitesimal neighbourhood the manifold is close to its tangent space, so the straight-line distance and the distance along the manifold agree; farther apart, the chord cuts across regions with no data and underestimates the geodesic, by an amount that grows with curvature. The standard estimate of the geodesic is the shortest path on a graph of nearest neighbours (Isomap, Tenenbaum et al. 2000, to add), which is also the diffusion picture of @sec-random-walks-many-dimensions. Smoke test: points on a rolled sheet (the swiss roll), where the true geodesic is known in closed form; the fraction of pairs whose nearest-neighbour rank changes between the chord and the graph geodesic, as a function of the distance of the pair. It should be near zero for close pairs and large for far pairs, and a trained space is expected, not shown, to behave in the same way. A caveat: a space whose data are not on one manifold but on several pieces of different dimension has no single geodesic between pieces, and the graph estimate breaks where the neighbour graph is disconnected.*
+
+<!-- salvaged from embedding-technologies-stubs/multimodal_embeddings.qmd, section sec-motion-time -->
+## Motion and Time {#sec-motion-time}
+*Events as trajectories in the shared space (@sec-ch-meaning-as-path), and why dynamics are the weakest part of current multimodal spaces. The gait is the hardest of the dog's four signals. A test of direction in time: networks trained to say whether a video plays forwards or backwards reach 72 to 76 per cent on a test of real videos where people reach 80 per cent (Table 9), and are partly driven by artefacts, since on a set of action videos removing black frames lowers the accuracy by about 8 points and removing camera motion by about 13 (Table 1) [@wei2018learning].*
+
+<!-- salvaged from embedding-technologies-stubs/generative_spaces.qmd, section sec-geometry-decoder-induces -->
+## The Geometry a Decoder Induces {#sec-geometry-decoder-induces}
+*A decoder pulls a metric back onto the code space, so straight lines in the code are curved in the data and the shortest path is a geodesic of the pullback metric [@arvanitidis2018latent]. This is the one home of the pullback idea; it applies to the autoencoder of @sec-ch-meaning-as-likeness as well, and @sec-ch-meaning-as-path develops geodesics and points back. The same section answers when the midpoint of two codes is meaningful.*
+
+## Technologies That Exploit Paths {#sec-path-technologies}
+*Plan (about 1 page). Latent interpolation in generative models, geodesic and Riemannian methods for representation learning, trajectory models for video and robot control, and the reading of chain-of-thought as a path. For each: cost, and whether the evidence at scale shows that following the geodesic beats the straight line on a downstream measure.*
+
+## A Curve Through the Data {#sec-path-closing}
+*Plan (1 page). Findings: whether the straight line leaves the data and the geodesic does not, whether transport helps analogies in curved word spaces, and what the arrow of time needs. Achieved for the representation of meaning: meaning that moves (@sec-prop-paths), over territory that the data hold. Computation: the cost of geodesics against straight lines. Still out of reach: travel beyond the data (@sec-ch-meaning-as-generation).*
+
+*Sources and gaps (first pass).* Sourced in `references/`: the geometry of latent spaces, parallel transport, hyperbolic embeddings, the arrow of time in video. Not yet read for this chapter: Gärdenfors on actions and events in the form stated; any account of time. The figures about the arrow of time are those of the earlier chapter and were not re-checked here.

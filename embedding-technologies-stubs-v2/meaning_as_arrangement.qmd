@@ -1,0 +1,101 @@
+---
+status: idea
+---
+
+# Meaning as Arrangement: What Survives a Change of Coordinates {#sec-ch-meaning-as-arrangement}
+
+The coordinates of a trained space mean nothing on their own. The loss depends on the vectors only through dot products or cosines, so any rotation of the space gives the same loss, and a trained space is one arbitrary point of an orbit; what is real is the arrangement, the distances and the angles between directions. Saussure's meaning as a system of differences [@saussure1916cours] and the representational similarity of neuroscience [@kriegeskorte2008representational; @edelman1998representation] say the same of minds. The question of this chapter is what survives a change of coordinates, what a training objective leaves free and what it breaks, and how two spaces can be compared when their coordinates are not comparable: two seeds, two languages, two senses.
+
+The scope is the invariance of a space and the comparison of spaces. The stability of nearest neighbours across seeds, losses and texts is already measured in the chapter on nearness (@sec-ch-meaning-as-likeness), and this chapter takes up the alignment that it hands over; the senses a shared space can hold is the chapter on senses (@sec-ch-meaning-across-senses); a transformation along a path is the chapter on paths (@sec-ch-meaning-as-path); and what changes with the situation of use is the chapter on context (@sec-ch-meaning-in-context).
+
+*Goals and expectations (proposed, to be confirmed by the author before any experiment).*
+
+*Goal 1, the arrangement determines the space (Saussure, Kriegeskorte).* A set of vectors is fixed up to rotation and reflection by its pairwise inner products. The expectation, which has an analytic answer, is that classical multidimensional scaling of a distance matrix recovers a space whose distances equal the originals, and that a coordinate-dependent readout does not survive the change (@sec-arr-arrangement). *This goal receives Q14 of @sec-likeness-which.*
+
+*Goal 2, two seeds are two views of one arrangement.* The expectation is that two spaces trained on the same text with different seeds are related by an orthogonal map up to noise, so that an orthogonal Procrustes alignment brings their neighbours into agreement far above a random map, and that the residual after alignment is the seed gap of the chapter on nearness. The run uses the trained spaces of that chapter (@sec-aligning-two-spaces).
+
+*Goal 3, alignment without pairs (Quine's indeterminacy, the universal translator).* The expectation is that two spaces of languages that describe a similar world can be aligned with no dictionary and that the matching is well determined where the structures are similar, which is evidence against the radical case of indeterminacy for that part of the structure and not a refutation of it. Quine's radical case would be two alignments of equal fit that disagree on the neighbours of held-out words [@quine1960word]; the run counts distinct equal-loss alignments and their disagreement (@sec-same-map-different-north). *This goal receives Q14 of @sec-likeness-which.*
+
+*Goal 4, relative representations (Moschella and colleagues).* If each item is described by its cosines to a set of anchors, two spaces become comparable without alignment. The expectation is that relative representations of two seeds are closer than their raw coordinates by a stated margin; the run is a small experiment on the spaces of the chapter on nearness [@moschella2023relative] (@sec-arr-relative).
+
+*Goal 5, the shape of a representation.* The expectation is that the persistent homology of the point cloud of a trained space is stable across seeds and that it does or does not support the manifold hypothesis of the appendix on dimensionality; the run needs a persistence computation, which is not yet in the allowed dependencies (@sec-measuring-shape-representation).
+
+## What the Philosophies Say About Arrangement {#sec-arr-philosophy}
+*Plan (about 3 pages). Meaning as a system of differences without positive terms [@saussure1916cours], to be read at the page; Klein's Erlangen programme, that a geometry is what survives a group of transformations [@klein1893comparative]; Quine on the indeterminacy of translation and the rotation as its weak case [@quine1960word]; the structuralist reading that a representation is a pattern of similarities [@edelman1998representation; @kriegeskorte2008representational]; and the symmetries a model has, from the rotation of its residual stream to the equivariance of its layers [@bronstein2021geometric]. What a vector carries: positions that mean something only relative to each other.*
+
+## What Is Real Is the Arrangement {#sec-arr-arrangement}
+*Plan (about 3 pages). Goal 1. Recovering a space from its distance matrix; the groups of transformations and what each preserves (rotation and reflection: distances and angles; uniform scaling: angles and the cosine, not distances; translation: differences, not dot products; invertible linear maps: linear readability, not distances); the origin of the symmetry in the objective, and what the optimizer chooses inside the orbit; the symmetry breakers (elementwise nonlinearities, ordered coordinates, a few dimensions of large value). These are the points of the summary chapter's section on symmetries, here with the test.*
+
+## Relative Representations {#sec-arr-relative}
+*Plan (about 2 pages). Goal 4. Anchors, the cosines to anchors as coordinates, and the comparison of two seeds with and without them.*
+
+
+<!-- salvaged from embedding-technologies-stubs/tangent_spaces_geodesics.qmd, section sec-erlangen-programme-deep-learning -->
+## The Erlangen Programme for Deep Learning {#sec-erlangen-programme-deep-learning}
+*What is a representation invariant to? Symmetries, invariances, and equivariances.*
+
+<!-- salvaged from embedding-technologies-stubs/tangent_spaces_geodesics.qmd, section sec-symmetries-each-sense -->
+## The Symmetries of Each Sense {#sec-symmetries-each-sense}
+*Images vary by translation and viewpoint, audio by time shift, pitch, and speaker, video by motion, and text by none of these. A shared semantic space can be seen as a quotient by the nuisance symmetries of each modality: the same dog from any angle, in any voice.*
+
+<!-- salvaged from embedding-technologies-stubs/tangent_spaces_geodesics.qmd, section sec-lie-groups-continuous-symmetries -->
+## Lie Groups and Continuous Symmetries {#sec-lie-groups-continuous-symmetries}
+*$SO(n)$, $SE(n)$, and Rotary Position Embeddings (RoPE), a structure that was adopted at scale.*
+
+<!-- salvaged from embedding-technologies-stubs/tangent_spaces_geodesics.qmd, section sec-gauge-equivariance -->
+## Gauge Equivariance {#sec-gauge-equivariance}
+*When coordinate frames depend on local manifold position.*
+
+<!-- salvaged from embedding-technologies-stubs/cross_domain_transfer.qmd, section sec-gauge-freedom -->
+## Gauge Freedom {#sec-gauge-freedom}
+*A trained space is determined only up to an isometry, the relabelling invariance of @sec-ch-symbols-without-interior seen from the other side, so comparing two spaces is a geometric problem.*
+
+<!-- salvaged from embedding-technologies-stubs/cross_domain_transfer.qmd, section sec-aligning-two-spaces -->
+## Aligning Two Spaces {#sec-aligning-two-spaces}
+*Canonical correlation analysis (Hotelling, 1936), orthogonal Procrustes, and Mikolov's 2013 linear map between the embedding spaces of two languages: the classical, linear forms of alignment, and the precursors of the contrastive alignment of @sec-ch-meaning-across-senses.*
+
+<!-- salvaged from embedding-technologies-stubs/cross_domain_transfer.qmd, section sec-optimal-transport-wasserstein-distances -->
+## Optimal Transport & Wasserstein Distances {#sec-optimal-transport-wasserstein-distances}
+*Monge-Kantorovich formulations for transporting probability mass across latent manifolds.*
+
+<!-- salvaged from embedding-technologies-stubs/cross_domain_transfer.qmd, section sec-domain-adaptation-distribution-alignment -->
+## Domain Adaptation & Distribution Alignment {#sec-domain-adaptation-distribution-alignment}
+*Maximum Mean Discrepancy (MMD) and adversarial manifold alignment.*
+
+<!-- salvaged from embedding-technologies-stubs/cross_domain_transfer.qmd, section sec-zero-shot-cross-domain -->
+## Zero-Shot Cross-Domain Transfer {#sec-zero-shot-cross-domain}
+*Transfer through aligned spaces, and the evidence for and against representational convergence across models.*
+
+<!-- salvaged from embedding-technologies-stubs/cross_domain_transfer.qmd, section sec-principles-parameters -->
+## Principles and Parameters {#sec-principles-parameters}
+*Chomsky's picture (1981) of languages as one shared core with a few switches, read geometrically: multilingual models encode grammatical relations in a subspace shared across languages, with directions specific to each (2020), the same shared-plus-specific structure as the concept subspaces of @sec-ch-meaning-as-region.*
+
+<!-- salvaged from embedding-technologies-stubs/contextual_vectors.qmd, section sec-do-different-models-share -->
+## Do Different Models Share a Geometry? {#sec-do-different-models-share}
+*Claims of representational convergence across models, as a bridge to Chapters [-@sec-ch-meaning-as-arrangement] and [-@sec-ch-meaning-across-senses], which take up alignment between spaces and across modalities.*
+
+<!-- salvaged from embedding-technologies-stubs/topological_deep_learning.qmd, section sec-what-pairwise-structure-cannot -->
+## What Pairwise Structure Cannot Express {#sec-what-pairwise-structure-cannot}
+*Moving beyond pairwise edges to simplicial complexes, cell complexes, and Combinatorial Complexes (CCs).*
+
+<!-- salvaged from embedding-technologies-stubs/topological_deep_learning.qmd, section sec-topological-cochains-boundary-operators -->
+## Topological Cochains & Boundary Operators {#sec-topological-cochains-boundary-operators}
+*Modeling multi-way interactions, flows, faces, and higher-order cavities.*
+
+<!-- salvaged from embedding-technologies-stubs/topological_deep_learning.qmd, section sec-hodge-theory-topological-message -->
+## Hodge Theory & Topological Message Passing {#sec-hodge-theory-topological-message}
+*Decomposing flows into gradient, curl, and harmonic parts, and learning representations on manifolds with topological holes.*
+
+<!-- salvaged from embedding-technologies-stubs/topological_deep_learning.qmd, section sec-measuring-shape-representation -->
+## Measuring the Shape of a Representation {#sec-measuring-shape-representation}
+*Persistent homology in latent spaces, with barcodes and persistence diagrams as tools to test the manifold hypothesis of @sec-ch-curse-of-dimensionality.*
+
+## Technologies That Exploit Arrangement {#sec-arr-technologies}
+*Plan (about 1 page). Procrustes and canonical correlation alignment, optimal transport and its entropic approximation, domain adaptation and zero-shot transfer, equivariant networks and gauge-equivariant convolutions, model compression that uses the symmetry of the residual stream, and topological message passing. For each: cost (optimal transport is cubic in the number of points without approximation), and whether the gain is shown against a plain baseline at matched tuning.*
+
+## Same Map, Different North {#sec-same-map-different-north}
+*Plan (1 page). Findings: a trained space is fixed only up to an isometry, so comparing two is a geometric problem, and the classical alignments, optimal transport, domain adaptation and zero-shot transfer each answer a version of it. Achieved for the representation of meaning: what is real is the arrangement (@sec-prop-arrangement), and spaces trained apart can be compared through it. Computation: does scale make independently trained spaces more alike, and if so, what is left for alignment to do? Read from the evidence for and against representational convergence, dated. That hypothesis is contested, so the chapter attributes it with its test and what the test found, and names which evidence is independent of its proponents. Smoke test: train two seeds of the predictor of @sec-ch-meaning-as-likeness, align them by orthogonal Procrustes and check that the cosines survive (the answer to exercise 3 of Learning by Prediction found the first within 3% of the second after the best rotation). Still out of reach: aligning two spaces from paired examples is one problem, and aligning two systems of communication with no parallel data and no way to check the result is another, the universal translator of the Epilogue. Joining the senses in one space is the next step (@sec-ch-meaning-across-senses).*
+
+*Sources and gaps (first pass).* Sourced in `references/`: Saussure and the structuralist readings, the Erlangen programme and geometric deep learning, relative representations, gauge and coordinate-independent networks, the pull-back metric, orthogonal symmetries of transformers. Not yet sourced: Mikolov's 2013 map between languages (no entry in the collection); optimal-transport references as named in the earlier chapter; a persistent-homology tool; Saussure at the page.
+
+*Open question for the author: this chapter holds two subjects, what survives a change of coordinates (the symmetries, which is the longest section of the earlier summary chapter) and the comparison of two spaces (alignment, optimal transport, the universal translator). It may be one chapter or two.*
