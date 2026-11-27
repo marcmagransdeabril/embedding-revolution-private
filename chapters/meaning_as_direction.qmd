@@ -6,7 +6,7 @@ status: idea
 
 A direction is a meaning you can move along. If a space of meanings has this property, a quality such as sentiment, tense, formality or gender corresponds to a direction, moving along it changes that quality and little else, and the same direction works for many items at once. Osgood's semantic differential gave a space with named axes, evaluation, potency and activity, found by factor analysis of human ratings of concepts on bipolar scales [@osgood1957measurement], and Gärdenfors proposed that meanings are regions of spaces of quality dimensions [@gardenfors2000conceptual]. The axes of a trained space are free up to a rotation, so the question of this chapter is whether the directions that matter can be found in it, whether they are used by the model that has them, and how many there can be.
 
-The scope is one quality for many items. The step between one pair of meanings is the chapter on difference (@sec-ch-meaning-as-difference); the extent of a concept around a direction is the chapter on regions (@sec-ch-meaning-as-region); a direction in time or motion is the chapter on paths (@sec-ch-meaning-as-generation); and whether a direction tracks truth or only what is asserted is the chapter on truth (@sec-ch-meaning-and-truth), which uses the tools of this one.
+The scope is one quality for many items. The step between one pair of meanings is the chapter on difference (@sec-ch-meaning-as-difference); the extent of a concept around a direction is the chapter on regions (@sec-ch-meaning-as-region); a direction in time or motion is the section on paths of the chapter on generation (@sec-prop-paths); and whether a direction tracks truth or only what is asserted is the chapter on truth (@sec-ch-meaning-and-truth), which uses the tools of this one.
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
@@ -55,7 +55,7 @@ The scope is one quality for many items. The step between one pair of meanings i
 
 Figure (planned): a sentence nudged along one direction, changing tone while keeping its topic.
 
-Earned in @sec-ch-meaning-as-likeness (directions as concepts, steering), @sec-ch-meaning-as-direction (features as directions), and @sec-room-exponentially-many-directions (why there is room for so many directions).
+Earned in @sec-ch-meaning-as-likeness (directions as concepts, steering), in this chapter (features as directions), and in @sec-room-exponentially-many-directions (why there is room for so many directions).
 
 Sources (first pass). Constant offsets between word vectors [@mikolov2013linguistic]; directions that also carry social bias [@caliskan2017semantics; @garg2018word]; the linear representation hypothesis for large language models [@park2024linear]; more features than dimensions, stored as nearly orthogonal directions in superposition [@elhage2022toy].
 

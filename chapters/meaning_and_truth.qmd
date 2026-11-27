@@ -61,6 +61,6 @@ Sources (first pass, none yet in `references.bib`; read before citing). Reiter o
 ## Meaning Is Tied to the World, and a Sense Is Not a Truth Value {#sec-prop-truth}
 *A vector gives the sense; whether a name picks out its bearer and whether a sentence is true are further facts, and a model that produces the plausible can produce the false.*
 
-Earned in @sec-ch-meaning-and-truth. Last update: 2026-11-22, a promise.
+Earned in this chapter. Last update: 2026-11-22, a promise.
 
 Sources (first pass). Frege on sense, reference and truth value [@frege1892sense]; Kripke and Putnam on names and natural kinds [@kripke1980naming; @putnam1975meaning]; Ramsey on the redundancy of truth [@ramsey1927facts]; the argument from form [@bender2020climbing]; truth directions and their sceptics [@marks2024geometry; @burns2023discovering; @levinstein2023still; @farquhar2023challenges]. Sceptics and balance: whether a truth direction tracks facts or only what the text asserts is open.

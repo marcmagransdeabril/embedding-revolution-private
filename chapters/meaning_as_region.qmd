@@ -6,7 +6,7 @@ status: idea
 
 A concept is a region and not a point. A point says where one thing is; the meaning of a word such as "dog" covers many things, some more typical than others, with a boundary that is blurred and members that are held by overlapping resemblances and not by one shared feature. Rosch found that categories have graded membership and a best example [@rosch1975cognitive]; Gärdenfors proposed that concepts are convex regions of quality spaces [@gardenfors2000conceptual]; Wittgenstein's family resemblance says that a family is a connected set and not a ball [@wittgenstein1953philosophical]. The question of this chapter is what shape a concept has in a trained space (a ball, a box, a cone, a subspace, a region of a curved space) and whether any of these beats a point of the same size on a stated judge.
 
-The scope is the extent and the structure of concepts: typicality, hierarchy (a dog is a mammal) and negation as complement. It does not cover the likeness of two points (@sec-ch-meaning-as-likeness), a single quality (@sec-ch-meaning-as-direction), a concept that moves or changes (@sec-ch-meaning-as-generation), or the composition of two concepts into a third (@sec-ch-meaning-and-structure).
+The scope is the extent and the structure of concepts: typicality, hierarchy (a dog is a mammal) and negation as complement. It does not cover the likeness of two points (@sec-ch-meaning-as-likeness), a single quality (@sec-ch-meaning-as-direction), a concept that moves or changes (the section on paths of the chapter on generation, @sec-prop-paths), or the composition of two concepts into a third (@sec-ch-meaning-and-structure).
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
@@ -87,7 +87,7 @@ Sources (first pass). The logic of subspaces [@birkhoff1936logic]; negation and 
 
 Figure (planned): "dog" as a region inside "animal", with the individual dogs as points within it.
 
-Earned in @sec-ch-meaning-as-region (hierarchies in curved space) and @sec-ch-meaning-as-region (concepts as subspaces).
+Earned in this chapter (hierarchies in curved space, and concepts as subspaces).
 
 Sources (first pass). Concepts as convex regions of a conceptual space [@gardenfors2000conceptual]; words as Gaussian densities instead of points [@vilnis2015word]; hierarchies embedded in hyperbolic space [@nickel2017poincare]; a parse tree recovered from distances under a linear map [@hewitt2019structural]; concepts as subspaces with a logic of their own [@widdows2004geometry; @birkhoff1936logic].
 
@@ -96,7 +96,7 @@ Sceptics and balance. None of the sceptical sources collected so far bears on th
 <!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-statistical-curse-why-learning -->
 
 ## The Statistical Curse: Why Learning Needs Structure {#sec-statistical-curse-why-learning}
-*Bellman's name for it [@bellman1961adaptive] was about computation and learning, not geometry. A neighbourhood that holds 1% of uniform data in ten dimensions spans 63% of every axis, most points lie closer to the boundary than to any other point, and the sample size needed for the same density grows exponentially, so 100 points in one dimension become $100^{10}$ in ten [@hastie2009elements]. Knowing only that a function is smooth (Lipschitz), learning it takes a number of samples exponential in the dimension [@bronstein2021geometric]. The ways out are assumptions about structure, and the book follows three: data of low intrinsic dimension (the Manifold Hypothesis, below), symmetry (@sec-ch-meaning-as-generation), and abstraction into a few relevant variables [@bernardi2020geometry], which returns as composition (Chapters [-@sec-ch-meaning-and-structure] and [-@sec-ch-meaning-and-structure]).*
+*Bellman's name for it [@bellman1961adaptive] was about computation and learning, not geometry. A neighbourhood that holds 1% of uniform data in ten dimensions spans 63% of every axis, most points lie closer to the boundary than to any other point, and the sample size needed for the same density grows exponentially, so 100 points in one dimension become $100^{10}$ in ten [@hastie2009elements]. Knowing only that a function is smooth (Lipschitz), learning it takes a number of samples exponential in the dimension [@bronstein2021geometric]. The ways out are assumptions about structure, and the book follows three: data of low intrinsic dimension (the Manifold Hypothesis, below), symmetry (@sec-prop-invariance), and abstraction into a few relevant variables [@bernardi2020geometry], which returns as composition (@sec-ch-meaning-and-structure).*
 
 <!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-manifold-hypothesis -->
 

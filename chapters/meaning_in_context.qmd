@@ -68,6 +68,6 @@ The scope is dependence on the sentence and the situation. The static nearness t
 ## Meaning Depends on Context {#sec-prop-context}
 *A word does not have one vector: the vector it needs depends on its sentence and, beyond the text, on the situation of use.*
 
-Earned in @sec-ch-meaning-in-context. Last update: 2026-11-22, a promise.
+Earned in this chapter. Last update: 2026-11-22, a promise.
 
 Sources (first pass). Harris on homonymy and connected discourse [@harris1954distributional]; Firth on the context of situation [@firth1957synopsis]; Kaplan on character and content [@kaplan1989demonstratives]; the anisotropy and context-specificity of contextual vectors [@ethayarajh2019contextual]. Sceptics and balance: a contextual vector carries the context that is in the text; the situation of the speaker is not in it.

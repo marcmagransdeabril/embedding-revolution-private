@@ -19,4 +19,4 @@ Rungs (first draft):
 1. Transfer to families that were not seen.
 2. Later rungs are speculative and are not listed until the earlier ones have results.
 
-Expected reach: @sec-ch-meaning-as-arrangement reaches 0, as a toy and flagged as a smoke test.
+Expected reach: this chapter reaches 0, as a toy and flagged as a smoke test.
