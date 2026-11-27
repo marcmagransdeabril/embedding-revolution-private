@@ -25,13 +25,13 @@ Each section below is an idea about meaning that no current technology satisfies
 
 | Section | Chapters it hooks into |
 |:--|:--|
-| @sec-meaning-meaning | none yet |
+| @sec-meaning-meaning | @sec-ch-symbols-without-interior, @sec-ch-meaning-across-senses, @sec-ch-meaning-and-truth |
 | @sec-perfect-language | @sec-ch-symbols-without-interior, @sec-ch-meaning-as-likeness, @sec-ch-meaning-as-region |
-| @sec-harris-unused | none yet |
-| @sec-life-makes-meaning | none yet |
+| @sec-harris-unused | @sec-ch-meaning-as-likeness, @sec-ch-meaning-as-direction, @sec-ch-memory-retrieval |
+| @sec-life-makes-meaning | @sec-ch-meaning-across-senses, @sec-ch-meaning-as-arrangement, @sec-ch-alien-technology |
 | @sec-literature-laboratory-meaning | @sec-ch-symbols-without-interior, @sec-room-exponentially-many-directions, @sec-ch-meaning-as-likeness, @sec-ch-meaning-in-context, @sec-ch-meaning-as-arrangement |
 | @sec-mathematics-meaning | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-as-region, @sec-ch-meaning-and-structure |
-| @sec-ignoramus-et-ignorabimus | the Prologue and the ledger of limits of the earlier plan (snapshot) |
+| @sec-ignoramus-et-ignorabimus | the earlier Prologue and the ledger of limits of the earlier plan (snapshot) |
 | @sec-what-finite-data-cannot | @sec-room-exponentially-many-directions, @sec-ch-meaning-as-likeness, @sec-ch-meaning-and-structure |
 | @sec-does-structure-fix-meaning | @sec-ch-meaning-as-arrangement, @sec-ch-meaning-across-senses |
 | @sec-what-system-cannot-say | @sec-ch-symbols-without-interior, @sec-ch-meaning-and-truth |
