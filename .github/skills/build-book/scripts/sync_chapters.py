@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Sync Quarto book chapter registry (_quarto.yml) with chapters/ directory.
 
-Discovers existing .qmd files in chapters/, puts them in the order of the
-roadmap (a flat list: there are no Parts for the time being, and the appendices
-and the generated solutions close the book), and updates _quarto.yml.
+The order of the book, and its three Parts, are read from notes/question_tree.md (the single source, also checked by
+check_question_tree.py): the index, the chapter outside the Parts that comes first, one `part:` entry per Part (a page
+`parts/part_<n>.qmd` with the chapters of the Part), the chapter outside the Parts that comes last. Appendices and the
+generated solutions close the book.
 """
 from __future__ import annotations
 
@@ -23,29 +24,27 @@ INDEX_QMD = REPO_ROOT / "index.qmd"
 # numbered chapter, so it is excluded from discovery and always listed last.
 SOLUTIONS_QMD = CHAPTERS_DIR / "solutions.qmd"
 
-# Canonical order of the book (the roadmap of index.qmd): the introduction, the summary of the properties, one chapter per property of
-# meaning, the epilogue. There are no Parts for the time being. A chapter is named by its file stem; the identifier of a chapter is
-# `sec-ch-` plus the stem with hyphens, which is the key that the status tooling reads from the roadmap.
-ORDER = [
-    "symbols_without_interior",
-    "tests_of_meaning",
-    "properties_of_meaning",
-    "meaning_as_likeness",
-    "meaning_as_difference",
-    "meaning_as_direction",
-    "meaning_as_region",
-    "meaning_as_path",
-    "meaning_as_composition",
-    "meaning_across_scales",
-    "meaning_across_senses",
-    "meaning_as_arrangement",
-    "meaning_in_context",
-    "meaning_and_truth",
-    "meaning_as_generation",
-    "epilogue",
-]
+PARTS_DIR = REPO_ROOT / "parts"
 # Appendices follow the chapters; the solutions are generated and always come last.
-APPENDICES = ["curse_of_dimensionality", "zoo_of_models"]
+APPENDICES = ["zoo_of_models"]
+
+
+def load_tree():
+    """The question tree of notes/question_tree.md."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import check_question_tree
+
+    return check_question_tree.parse_tree((REPO_ROOT / "notes" / "question_tree.md").read_text(encoding="utf-8"))
+
+
+def part_page(number: str) -> str:
+    """The page of Part `number` (a roman numeral): parts/part_i.qmd."""
+    return f"parts/part_{number.lower()}.qmd"
+
+
+def book_order(tree) -> list[str]:
+    """The stems of the tree in the order of the book."""
+    return [tree.first] + [c.stem for c in tree.chapters] + [tree.last]
 
 
 def extract_title_from_qmd(qmd_path: Path) -> str:
@@ -73,13 +72,22 @@ def extract_title_from_qmd(qmd_path: Path) -> str:
 
 
 def discover_and_build_chapters_list() -> tuple[list[Any], list[str]]:
-    """Scan chapters/ and return the flat list of chapters in the order of the roadmap, and the list of appendices."""
+    """Scan chapters/ and return the book's entries (files and Parts) in the order of the tree, and the list of appendices."""
     stems = {p.stem: p for p in CHAPTERS_DIR.glob("*.qmd") if p != SOLUTIONS_QMD}
+    tree = load_tree()
+    chapter = lambda s: f"chapters/{stems[s].name}"  # noqa: E731
     chapters: list[Any] = ["index.qmd"]
-    chapters += [f"chapters/{stems[s].name}" for s in ORDER if s in stems]
-    # A chapter that is not in the roadmap is listed after the others, so that it is not lost
-    chapters += [f"chapters/{p.name}" for s, p in sorted(stems.items()) if s not in ORDER and s not in APPENDICES]
-    appendices = [f"chapters/{stems[s].name}" for s in APPENDICES if s in stems]
+    if tree.first in stems:
+        chapters.append(chapter(tree.first))
+    for number, _title in tree.parts:
+        members = [chapter(c.stem) for c in tree.chapters if c.part == number and c.stem in stems]
+        chapters.append({"part": part_page(number), "chapters": members})
+    if tree.last in stems:
+        chapters.append(chapter(tree.last))
+    # A chapter that is not in the tree is listed after the others, so that it is not lost
+    known = set(book_order(tree)) | set(APPENDICES)
+    chapters += [f"chapters/{p.name}" for s, p in sorted(stems.items()) if s not in known]
+    appendices = [chapter(s) for s in APPENDICES if s in stems]
     if SOLUTIONS_QMD.is_file():
         appendices.append(f"chapters/{SOLUTIONS_QMD.name}")
     return chapters, appendices

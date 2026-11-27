@@ -317,6 +317,10 @@ For each idea: when it was dropped, what was learned, and what would bring it ba
 - **Reopen if:** the control is the best possible copy, the cosine of a replicate space of the same loss, and the relation effect is compared with the replicate noise of the stability section.
 - **A suggestion for Q7, not yet convincing (the author, 2026-11-26):** compare the raw collocation score $C(x,y)/(C(x)\,C(y))$ with the cosines of PPMI-SVD and SGNS for the eight relations (AUC against pairs of no relation), and the cosine AUC among the pairs that never co-occur, inside frequency bands, with the cosine of the PPMI rows as a middle rung. Lift is large for rare words, so a minimum count or the bands are needed.
 
+### An aside on optimization (from the dissolved chapter on the curse of dimensionality)
+
+Why saddle points rather than poor local minima dominate high-dimensional loss landscapes, their ratio to local minima growing exponentially with dimension [@dauphin2014identifying], and what overparameterization changes. This concerns parameter space, not embedding space, so it has no chapter; dropped from the book 2026-11-27 (plan `tmp/plan_tests_refactor.md`).
+
 ## Open durability actions
 
 From the Lindy review of 2026-11-10 (`tmp/lindy_review.md`, which is gitignored; the chapter numbers in its items are those of that date) and later work. A review (`review-doc` §18) proposes new ones and checks whether the "done" ones really are.

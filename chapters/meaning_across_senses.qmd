@@ -4,13 +4,23 @@ status: idea
 
 # Meaning Across Senses: Many Views, One Space {#sec-ch-meaning-across-senses}
 
-The dog of the Prologue arrives as a photograph, as a word, as a bark and as a gait, and the claim of this property is that all of them can land in one neighbourhood of one space. Firth's company is a company of words. Harnad asks what grounds a symbol in something other than other symbols [@harnad1990symbol], Bender and Koller argue that a system trained on form alone has no way to learn meaning [@bender2020climbing], and Gärdenfors places meanings in spaces of qualities that the senses supply [@gardenfors2000conceptual]. The question of this chapter has two halves that the earlier plan did not separate. Does adding a sense improve the representation of meaning itself? And what else does it improve?
+<!-- Task 6 template -->
+*Part I, the Librarian Test: can a computer shelve and find things by meaning alone, with one fixed place for each thing?* This chapter follows @sec-ch-meaning-as-region. **Question: does a second sense add meaning beyond the pairing?**
 
-The scope is several senses in one space. How a reference is fixed, and whether a picture does it better than a word, is the chapter on truth (@sec-ch-meaning-and-truth). The nearness of an image to its caption, which the loss builds in, and the nearness that it does not build in, is taken up here (@sec-sens-built-in-emergent) as the cross-modal counterpart of the question for words (@sec-likeness-built-in-emergent) in the chapter on nearness (@sec-ch-meaning-as-likeness); the comparison of two spaces up to a change of coordinates is the chapter on arrangement (@sec-ch-meaning-as-arrangement); composition across senses is partly the chapter on composition (@sec-ch-meaning-as-composition).
+*Data, models and loss.* Data: Image-caption pairs for CLIP (to be chosen) and the toy of digits and their names; the text8 SGNS space as the text-only baseline. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| CLIP | @sec-zoo-clip | text and images in one space |
+| SGNS | @sec-zoo-sgns | text-only baseline |
+
+The dog arrives as a photograph, as a word, as a bark and as a gait, and the claim of this property is that all of them can land in one neighbourhood of one space. Firth's company is a company of words. Harnad asks what grounds a symbol in something other than other symbols [@harnad1990symbol], Bender and Koller argue that a system trained on form alone has no way to learn meaning [@bender2020climbing], and Gärdenfors places meanings in spaces of qualities that the senses supply [@gardenfors2000conceptual]. The question of this chapter has two halves that the earlier plan did not separate. Does adding a sense improve the representation of meaning itself? And what else does it improve?
+
+The scope is several senses in one space. How a reference is fixed, and whether a picture does it better than a word, is the chapter on truth (@sec-ch-meaning-and-truth). The nearness of an image to its caption, which the loss builds in, and the nearness that it does not build in, is taken up here (@sec-sens-built-in-emergent) as the cross-modal counterpart of the question for words (@sec-likeness-built-in-emergent) in the section salvaged here from the chapter on likeness (@sec-ch-meaning-as-likeness); the comparison of two spaces up to a change of coordinates is the chapter on arrangement (@sec-ch-meaning-as-arrangement); composition across senses is partly the chapter on structure (@sec-ch-meaning-and-structure).
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
-*Goal 1, does a second sense improve meaning?* The expectation is that a text model whose vectors were shaped by images agrees better with human similarity judgments on concrete words than a text-only model of the same size, and not on abstract words, since SimLex-999 carries a concreteness rating for each of its words. The expectation is also bounded by the redundancy of the senses: a corpus is written by people who have seen, so a text-only space may already carry much of what an image adds (text descriptions predict human similarity of images, sounds and video better than the vision, audio and video models do [@marjieh2022words]; blind adults agree substantially with sighted ones on the appearance of animals except for colour [@kim2019knowledge]). The result to report is therefore the size of the residue that text lacks, and a null difference is as informative as a gain. The run compares the text tower of an open image-text model with a text-only space on the concrete and the abstract pairs of SimLex-999, with a bootstrap over pairs and the seed noise as the floor (@sec-sens-improve). The argument against is that an image is also form, so Bender and Koller's argument and Kripke's chain apply to a picture as much as to a word; this chapter measures an improvement and does not claim grounding. *This goal receives Q18 of @sec-likeness-which.*
+*Goal 1, does a second sense improve meaning?* The expectation is that a text model whose vectors were shaped by images agrees better with human similarity judgments on concrete words than a text-only model of the same size, and not on abstract words, since SimLex-999 carries a concreteness rating for each of its words. The expectation is also bounded by the redundancy of the senses: a corpus is written by people who have seen, so a text-only space may already carry much of what an image adds (text descriptions predict human similarity of images, sounds and video better than the vision, audio and video models do [@marjieh2022words]; blind adults agree substantially with sighted ones on the appearance of animals except for colour [@kim2019knowledge]). The result to report is therefore the size of the residue that text lacks, and a null difference is as informative as a gain. The run compares the text tower of an open image-text model with a text-only space on the concrete and the abstract pairs of SimLex-999, with a bootstrap over pairs and the seed noise as the floor (@sec-sens-improve). The argument against is that an image is also form, so Bender and Koller's argument and Kripke's chain apply to a picture as much as to a word; this chapter measures an improvement and does not claim grounding. *This goal receives Q18 (@sec-likeness-handed-to-meaning-across-senses).*
 
 *Goal 2, what else improves.* The expectation is that the gains of a shared space are in retrieval across modalities, in zero-shot classification and in the alignment of pairs never seen together (a sound and a word, through images), and not in composition, where models score far below people on a test of the order of words [@radford2021learning; @thrush2022winoground]. The run reproduces one retrieval and one zero-shot result with an open model and one composition failure (@sec-sens-improve).
 
@@ -38,10 +48,9 @@ The scope is several senses in one space. How a reference is fixed, and whether 
 
 *Why this is not a paradox. Animals have several senses because the senses are redundant and complementary for acting: they localise, confirm and survive the failure of one channel, and a body that moves needs them. That is a claim about control and about learning from one's own experience. Kim et al. test something else, knowledge of appearance acquired by a person who has language and no sight, and the sighted people whose speech and writing the blind learn from are the multimodal source. Text is a compressed trace of what multimodal bodies have seen, so a text model is trained on a second-hand multimodal signal, and a corpus that carries much of the senses is expected to make a second sense add less to it, but it does not show that the senses were not needed to produce it. Kim et al. find that the blind do not mainly repeat descriptions (they disagree most on colour, which is the easiest to say) and instead infer appearance from kind and habitat, which is structure inside language and not a copy of it. The conclusion for the section is limited: on the aspects tested, partial redundancy, with a residue that only the sense gives (colour in Kim et al.); not that language is sufficient. What the experiment can show is the size of that residue for a text-only model, on concrete against abstract words.*
 
-
 <!-- salvaged from embedding-technologies-stubs/multimodal_embeddings.qmd, section sec-grounding-problem -->
 ## The Grounding Problem {#sec-grounding-problem}
-*Firth's company is a company of words. Harnad's symbol grounding, Bender and Koller's argument that form alone does not yield meaning, and Gärdenfors's conceptual spaces, set against the dog test of the Prologue: what would a photograph, the word, a bark, and a gait have to share? Chomsky's distinction (1986) between I-language, the system in the speaker's head, and E-language, the corpus of what is said: a text model is trained on E-language only, and a multimodal one adds the senses but not the head.*
+*Firth's company is a company of words. Harnad's symbol grounding, Bender and Koller's argument that form alone does not yield meaning, and Gärdenfors's conceptual spaces, set against the dog test: what would a photograph, the word, a bark, and a gait have to share? Chomsky's distinction (1986) between I-language, the system in the speaker's head, and E-language, the corpus of what is said: a text model is trained on E-language only, and a multimodal one adds the senses but not the head.*
 
 <!-- salvaged from embedding-technologies-stubs/multimodal_embeddings.qmd, section sec-meaning-what-views-share -->
 ## Meaning as What Views Share {#sec-meaning-what-views-share}
@@ -56,7 +65,7 @@ The scope is several senses in one space. How a reference is fixed, and whether 
 *Separate encoders aligned by a contrastive loss versus a single transformer over interleaved tokens (@sec-ch-meaning-in-context), with post-hoc alignment (@sec-ch-meaning-as-arrangement) as a third, and what each route keeps and loses.*
 
 ## Built In or Emergent Across Senses: CLIP {#sec-sens-built-in-emergent}
-Here we check whether nearness between modalities is evidence about meaning or only a consequence of the loss that paired an image with its caption. It is the cross-modal counterpart of Q7 of @sec-likeness-which, answered for words in @sec-likeness-built-in-emergent.
+Here we check whether nearness between modalities is evidence about meaning or only a consequence of the loss that paired an image with its caption. It is the cross-modal counterpart of Q7 (@sec-likeness-handed-to-meaning-across-senses), answered for words in @sec-likeness-built-in-emergent.
 
 *A single image-text model, with examples of multimodal likeness: the image of a dog against "dog", "puppy", "wolf", "car" and "doorbell", a caption against the images it retrieves, a sound against its words if an audio-text model is available. An image and its caption are near because the loss pulled them together, and nothing in the loss says that two images, or an unpaired sound and word, are near; the built-in cell and the emergent cell are separated here, since only the emergent one says something about meaning and not about the loss. The model and the modality gap [@radford2021learning; @liang2022modalitygap] are taken up in @sec-ch-meaning-across-senses.*
 
@@ -95,15 +104,15 @@ Here we check whether nearness between modalities is evidence about meaning or o
 
 <!-- salvaged from embedding-technologies-stubs/multimodal_embeddings.qmd, section sec-modality-gap -->
 ## The Modality Gap {#sec-modality-gap}
-*Why embeddings of different modalities occupy separate cones even after contrastive training, its relation to the anisotropy of @sec-ch-meaning-as-likeness and the hubness of Chapters [-@sec-ch-curse-of-dimensionality] and [-@sec-ch-meaning-as-likeness], and what it means for the claim of a "single" space.*
+*Why embeddings of different modalities occupy separate cones even after contrastive training, its relation to the anisotropy of @sec-reading-nearness-correctly and the hubness of Chapters [-@sec-ch-memory-retrieval] and [-@sec-ch-meaning-as-likeness], and what it means for the claim of a "single" space.*
 
 <!-- salvaged from embedding-technologies-stubs/multimodal_embeddings.qmd, section sec-predicting-space-signal -->
 ## Predicting in the Space, Not the Signal {#sec-predicting-space-signal}
-*Joint-embedding predictive architectures (JEPA), which predict the embedding of a masked or future part of a signal from the embedding of its context, so that the views are context and target within one signal rather than two modalities. The prediction of embeddings of @sec-ch-meaning-as-likeness, now applied where it was designed to matter: a generative model must spend capacity on every pixel, a latent predictor can ignore what it cannot predict. The debate between the two is taken up in the closing section of @sec-ch-meaning-as-generation; this chapter tells the image, video and planning forms. Told as a historical sequence: LeCun's position paper on autonomous machine intelligence (2022); I-JEPA for images (2023); V-JEPA for video (2024); and V-JEPA 2 (2025), whose action-conditioned predictor plans in latent space. A world model is a learned map from a state and an action to the next state, a discrete vector field on the embedding manifold, and planning is the search for a trajectory along it (@sec-ch-meaning-as-path), which is where the agentic trajectories of the Prologue live. The question of @sec-ch-meaning-in-context, whether thinking can stay in the space instead of passing through text, is here asked of planning, where latent rollouts have a longer record: world models (Ha and Schmidhuber, 2018; Dreamer) and diffusion planners (Diffuser, 2022). The link to predictive processing in the brain is taken up in the Epilogue.*
+*Joint-embedding predictive architectures (JEPA), which predict the embedding of a masked or future part of a signal from the embedding of its context, so that the views are context and target within one signal rather than two modalities. The prediction of embeddings (@sec-zoo-objectives), now applied where it was designed to matter: a generative model must spend capacity on every pixel, a latent predictor can ignore what it cannot predict. The debate between the two is taken up in the closing section of @sec-ch-meaning-as-generation; this chapter tells the image, video and planning forms. Told as a historical sequence: LeCun's position paper on autonomous machine intelligence (2022); I-JEPA for images (2023); V-JEPA for video (2024); and V-JEPA 2 (2025), whose action-conditioned predictor plans in latent space. A world model is a learned map from a state and an action to the next state, a discrete vector field on the embedding manifold, and planning is the search for a trajectory along it (@sec-motion-time), which is where the agentic trajectories of the Prologue live. The question of @sec-ch-meaning-in-context, whether thinking can stay in the space instead of passing through text, is here asked of planning, where latent rollouts have a longer record: world models (Ha and Schmidhuber, 2018; Dreamer) and diffusion planners (Diffuser, 2022). The link to predictive processing in the brain is taken up in the Epilogue.*
 
 <!-- salvaged from embedding-technologies-stubs/multimodal_embeddings.qmd, section sec-composition-across-senses -->
 ## Composition Across Senses {#sec-composition-across-senses}
-*Binding attributes to objects across modalities (Chapters [-@sec-ch-meaning-as-composition] and [-@sec-ch-meaning-as-composition]), and the failures that remain. Winoground pairs two captions with the same words in another order with two images: people reach 89.5, 88.5 and 85.5 on the text, image and group scores, and the best of the models tested 38.0, 20.5 and 14.5 (chance 25, 25 and 16.7) [@thrush2022winoground]; the same swap-based probe is run on the sentence encoders of @sec-ch-meaning-as-likeness.*
+*Binding attributes to objects across modalities (@sec-ch-meaning-and-structure), and the failures that remain. Winoground pairs two captions with the same words in another order with two images: people reach 89.5, 88.5 and 85.5 on the text, image and group scores, and the best of the models tested 38.0, 20.5 and 14.5 (chance 25, 25 and 16.7) [@thrush2022winoground]; the same swap-based probe is run on the sentence encoders of @sec-ch-meaning-as-likeness.*
 
 <!-- salvaged from embedding-technologies-stubs/multimodal_embeddings.qmd, section sec-do-senses-converge -->
 ## Do the Senses Converge? {#sec-do-senses-converge}
@@ -122,3 +131,96 @@ Here we check whether nearness between modalities is evidence about meaning or o
 *Plan (1 page). Findings: whether a second sense adds to what text already carries, and how much (partial redundancy with a residue, colour in the blind and sighted comparison, to be measured here for text vectors), what a shared space keeps (what the views share) and loses (what is specific to each sense), the modality gap, how weak the dynamics are, and what composition across senses still fails to do. Achieved for the representation of meaning: several senses in one space (@sec-prop-senses). This chapter gives its own answer to the dog test, with what is lost; the Epilogue collects the answers of all the chapters. Computation: does scale make the alignment between modalities easier, or do the modality gap, the loss of modality-specific information and the failure of composition persist as the structure of the problem? And does prediction in latent space scale as a general method, as its proponents argue against autoregressive generation, or is it a prior that scaled generative models will absorb (the debate of the closing section of @sec-ch-meaning-as-generation)? Evidence at scale: CLIP, trained on 400 million image-text pairs, is the held comparison of a contrastive objective against predicting the caption (Radford et al., Figure 2: the contrastive objective about 4 times more efficient than a bag-of-words predictor, which was itself about 3 times more efficient than a caption transformer), and it is the authors' own. The modality gap and the convergence claims are single-study or contested, and the chapter states N, scale and status in the same sentence. Smoke test: the digits experiment of @sec-ch-meaning-as-likeness with a different encoder for each view, measuring the offset (a column of its contrast table) as a small analogue of the modality gap. Still out of reach: whether any of this is meaning and not only structure, which the Epilogue takes up.*
 
 *Sources and gaps (first pass).* Sourced in `references/`: grounding, the argument from form, quality spaces, the modality gap, the convergence claim and its sceptics, contrastive image-text training, Winoground, the bag-of-words failure of image-text models (ARO), text-only prediction of sensory judgments, appearance knowledge of blind adults. Not yet sourced: the claim that a second sense improves the agreement of text vectors with human similarity judgments on concrete words (a result of the multimodal distributional semantics literature, from memory, not in the collection; the first entries to fetch are Bruni, Tran and Baroni 2014, and Yun et al. 2021 on whether vision-and-language pretraining improves lexical grounding); the claim that multimodal training lowers text-only ability; the effect of images on generation and on hallucination; the claims about robustness and data efficiency; the figures of the earlier closing section are those of the earlier chapter.
+
+<!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-senses -->
+
+## Many Senses, One Space {#sec-prop-senses}
+*A photograph, a word, a bark, and a gait of the same dog can land near each other, and far from a cat or a car.*
+
+Figure (planned): the four signals of the dog test, converging on one neighbourhood.
+
+Earned in this chapter (multimodal embeddings) and in @sec-ch-meaning-as-arrangement (aligning separate spaces).
+
+Sources (first pass). The grounding problem [@harnad1990symbol]; the old question whether touch and sight yield one concept [@locke1694essay; @held2011newly]; single neurons that respond to one person across photographs and name [@quiroga2005invariant]; crossmodal correspondences and synaesthesia [@spence2011crossmodal; @ramachandran2001synaesthesia]; images and text trained into one space by contrastive learning [@radford2021learning]; the claim that separate models converge on a shared representation [@huh2024platonic].
+
+Sceptics and balance. For the dog test the standing is mixed. The grounding objection is old and sharp: a system trained only on form has, a priori, no way to learn meaning [@bender2020climbing]. Where several senses are trained into one space, the signals do not simply land together: in CLIP-like models images and text sit at arm's length from each other, a gap that comes from the initialization together with the contrastive loss, and its size changes downstream behaviour [@liang2022modalitygap]. The convergence claim itself is contested: global similarity measures are inflated by the scale of the network, and after a permutation-based calibration the apparent convergence of the global measures largely disappears, while agreement on local neighbourhoods, though not on local distances, remains [@groger2026aristotelian]; the evidence of the original study uses a mutual nearest-neighbour measure on 1,024 text-image pairs that captures only coarse structure, and alignment saturates for recent language models and falls when the pairing is not one-to-one [@koepke2026plato]. What survives: modalities share coarse semantic structure, which is enough for retrieval across them, and there is no evidence of one shared fine-grained representation. The dog test asks for the fine-grained one.
+
+<!-- salvaged from chapters/tests_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/tests_of_meaning.qmd), section sec-test-dog -->
+
+## The Dog Test {#sec-test-dog}
+*One concept, several senses: does the photograph of a dog, the word, the sound of its bark and the video of its run land in the same neighbourhood, and far from a cat or a car?*
+
+Varies the channel (horizontal). A human can judge it. A failure is informative. Introduced in @sec-symbols-tests, and the question of this chapter; the property it asks for is @sec-prop-senses, and the literature on it is mixed: coarse structure is shared, and a fine-grained shared representation has not been shown.
+
+Rungs (first draft, to be verified and refined):
+
+0. Text only: does "dog" sit near "puppy", "bark" and "wolf", and far from "car" and "doorbell"?
+1. Image and text in one space (a CLIP-type model): retrieval in both directions, and the size of the modality gap.
+2. Audio with image and text: the bark.
+3. Video or motion: the gait.
+4. Held-out concepts (zero-shot), and what the shared space loses of what is specific to each channel.
+
+Expected reach: the chapters on likeness, difference and direction (@sec-ch-meaning-as-likeness, @sec-ch-meaning-as-difference, @sec-ch-meaning-as-direction) reach rung 0; this chapter reaches 1 to 4.
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-likeness-which: the questions that the likeness chapter hands on -->
+
+## Questions Handed On From the Likeness Chapter {#sec-likeness-handed-to-meaning-across-senses}
+
+Goodman (1972) raises a doubt about what such a space generated from collocation can show. A term may apply to things because of the way they were grouped, and not because they belong together. Equally, terms that are alike but have never been collocated may not appear near in the space. The fact that a term applies to certain objects "may itself constitute rather than arise from a particular similarity among those objects" [@goodman1972seven]. Does the doubt hold for the embedding spaces that have been precisely derived from co-occurrence? If it does, two things are near because training grouped them, and that nearness says nothing about meaning beyond the grouping. If it does not, some nearness appears that no grouping asked for, and only that nearness is evidence about meaning.
+
+::: {.test #q-likeness-7}
+**Q7. Is nearness built in or emergent?** When two words are near, is it only because the training text put them in the same window, or are words that never occurred together near as well?
+
+*See* @sec-likeness-built-in-emergent.
+:::
+
+Then, if symbols need something outside the symbols, does a second sense help to reach what the symbols alone cannot?
+
+::: {.test #q-likeness-18}
+**Q18. Does a second sense add meaning?** Does grounding in images, sounds or action bring nearness that text alone does not, beyond what the pairing built in?
+
+*See* @sec-ch-meaning-across-senses.
+:::
+
+<!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-likeness-built-in-emergent -->
+
+## Built In or Emergent? {#sec-likeness-built-in-emergent .idea}
+<!-- OPEN: a suggestion, not convinced it is a good case (2026-11-26). Extend the split by co-occurrence count to the eight relations of the section on which relations nearness tells apart: the AUC against pairs of no relation of the raw collocation score C(x,y)/(C(x)C(y)) next to the cosines of PPMI-SVD and SGNS, and the cosine AUC among the pairs that never co-occur, inside frequency bands. See notes/ideas.qmd (dropped idea on shared context). -->
+Here we check whether two words are near only because the training text showed them together, or also when they never occurred together. It answers Q7 (@sec-likeness-handed-to-meaning-across-senses).
+
+*The training text decides which pairs the loss touches. Two words that share a window are pulled together by the loss of SGNS and GloVe and have a positive entry in the matrix that PPMI-SVD factorizes: their nearness is built in, and it says something about the text and not necessarily about meaning. Two words that never share a window have no such term, and SGNS even pushes sampled pairs apart as negatives, so if they are near it is because their neighbours are, a second-order effect that nobody asked for. Only that emergent cell says something about meaning and not about the loss. The run, on the cached spaces of @sec-loss-decides-near, splits all pairs of words of @sec-gallery-neighbours by their co-occurrence count in the window (zero or positive, in bands of count), compares the cosine distributions in each cell, and applies the WordNet judge of that section (synonym, antonym, none) within each cell, with the shuffled-vocabulary space as the null. The expectation is that pairs with a positive count are nearer, mostly because of association, and that synonyms with a zero count are still nearer than unrelated pairs with a zero count, which is the emergent evidence. A zero count is also a property of rare words and of the size of the corpus, so the cells are compared inside frequency bands. The same question for an image and its caption, where the loss pairs two different kinds of item, is taken up in @sec-sens-built-in-emergent.*
+
+::: {.questions}
+1. In a skip-gram model with negative sampling, which pairs of words are pulled together and which are pushed apart? What does the loss say about two synonyms that never occur in the same window?
+
+2. Why is the nearness of two words that never co-occur better evidence about meaning than the nearness of two words that do, and what confounds the comparison?
+
+3. With the co-occurrence counts of text8 (window of 5), take all pairs of words in the same frequency band, split them into zero and positive counts, and compute for each cell the area under the curve of the cosine for synonyms against unrelated pairs in the PPMI-SVD and SGNS spaces. Is the area above 0.5 in the zero-count cell?
+:::
+
+::: {.answers}
+1. A word is pulled towards the contexts observed with it in the window, and pushed away from contexts sampled at random as negatives. Two synonyms that never share a window are never pulled together directly, and if one is sampled as a negative of the other they are pushed apart. If they end up near, it is because the contexts that pull each of them are alike [@levy2014neural].
+
+2. A pair with a positive count is near partly because the loss was given exactly that pair, so the nearness may only repeat the text. A pair with a zero count has no such term, so what remains is shared company, which is what the distributional hypothesis says meaning is. The comparison is confounded by frequency, because a zero count is mostly a property of rare words in a finite corpus, whose vectors are also poorer, and by the judge, since WordNet covers fewer rare words. The pairs are therefore compared inside frequency bands, and the coverage of the judge is reported by cell.
+
+3. Count the pairs in a window of 5 over the text, keep a sparse matrix of counts, take the pairs of the gallery, label them with the WordNet parser, and compute the area as the probability that a synonym pair has a higher cosine than an unrelated pair of the same cell and band (`scipy.stats.mannwhitneyu`, area equal to U divided by the product of the sizes). The result is a number to be read after the run; the shuffled-vocabulary space must give 0.5.
+:::
+
+## Candidate Sections {#sec-meaning-across-senses-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- The modality gap of CLIP-like models and whether the senses converge.
+- Curse of dimensionality: hubness in shared spaces.
+
+## Question and Answer {#sec-meaning-across-senses-answer}
+
+*Question:* does a second sense add meaning beyond the pairing?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a shared space can be searched; can the librarian find the passage that answers a question (@sec-ch-memory-retrieval)?
+
+## Exercises {#sec-meaning-across-senses-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.

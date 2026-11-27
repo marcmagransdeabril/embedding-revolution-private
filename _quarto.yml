@@ -15,23 +15,27 @@ book:
   chapters:
   - index.qmd
   - chapters/symbols_without_interior.qmd
-  - chapters/tests_of_meaning.qmd
-  - chapters/properties_of_meaning.qmd
-  - chapters/meaning_as_likeness.qmd
-  - chapters/meaning_as_difference.qmd
-  - chapters/meaning_as_direction.qmd
-  - chapters/meaning_as_region.qmd
-  - chapters/meaning_as_path.qmd
-  - chapters/meaning_as_composition.qmd
-  - chapters/meaning_across_scales.qmd
-  - chapters/meaning_across_senses.qmd
-  - chapters/meaning_as_arrangement.qmd
-  - chapters/meaning_in_context.qmd
-  - chapters/meaning_and_truth.qmd
-  - chapters/meaning_as_generation.qmd
+  - part: parts/part_i.qmd
+    chapters:
+    - chapters/meaning_as_likeness.qmd
+    - chapters/meaning_as_difference.qmd
+    - chapters/meaning_as_direction.qmd
+    - chapters/meaning_as_region.qmd
+    - chapters/meaning_across_senses.qmd
+    - chapters/memory_retrieval.qmd
+  - part: parts/part_ii.qmd
+    chapters:
+    - chapters/meaning_across_scales.qmd
+    - chapters/meaning_in_context.qmd
+    - chapters/meaning_and_truth.qmd
+    - chapters/meaning_and_structure.qmd
+    - chapters/meaning_as_generation.qmd
+  - part: parts/part_iii.qmd
+    chapters:
+    - chapters/meaning_as_arrangement.qmd
+    - chapters/alien_technology.qmd
   - chapters/epilogue.qmd
   appendices:
-  - chapters/curse_of_dimensionality.qmd
   - chapters/zoo_of_models.qmd
   - chapters/solutions.qmd
 format:

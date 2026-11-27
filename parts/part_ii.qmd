@@ -1,0 +1,3 @@
+# Critical Literacy {.unnumbered}
+
+Finding is not reading. What does a reader need beyond finding? This Part asks what a text keeps as it grows (scale), whether a word keeps its meaning when its situation changes (context), whether truth lives in the space or must be looked up (truth), what a structured store holds that a vector cannot (structure), and whether a space can be written to as well as read (generation). A checker can judge most of these, and a planted contradiction can test them.

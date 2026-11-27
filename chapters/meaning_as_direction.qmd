@@ -4,13 +4,22 @@ status: idea
 
 # Meaning as Direction: Qualities You Can Move Along {#sec-ch-meaning-as-direction}
 
+<!-- Task 6 template -->
+*Part I, the Librarian Test: can a computer shelve and find things by meaning alone, with one fixed place for each thing?* This chapter follows @sec-ch-meaning-as-difference. **Question: is a quality a direction you can move along?**
+
+*Data, models and loss.* Data: The text8 SGNS space of the likeness chapter and a labelled quality (sentiment, tense or formality), to be chosen when the chapter is written. The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| SGNS | @sec-zoo-sgns | a quality as a direction of the space |
+
 A direction is a meaning you can move along. If a space of meanings has this property, a quality such as sentiment, tense, formality or gender corresponds to a direction, moving along it changes that quality and little else, and the same direction works for many items at once. Osgood's semantic differential gave a space with named axes, evaluation, potency and activity, found by factor analysis of human ratings of concepts on bipolar scales [@osgood1957measurement], and Gärdenfors proposed that meanings are regions of spaces of quality dimensions [@gardenfors2000conceptual]. The axes of a trained space are free up to a rotation, so the question of this chapter is whether the directions that matter can be found in it, whether they are used by the model that has them, and how many there can be.
 
-The scope is one quality for many items. The step between one pair of meanings is the chapter on difference (@sec-ch-meaning-as-difference); the extent of a concept around a direction is the chapter on regions (@sec-ch-meaning-as-region); a direction in time or motion is the chapter on paths (@sec-ch-meaning-as-path); and whether a direction tracks truth or only what is asserted is the chapter on truth (@sec-ch-meaning-and-truth), which uses the tools of this one.
+The scope is one quality for many items. The step between one pair of meanings is the chapter on difference (@sec-ch-meaning-as-difference); the extent of a concept around a direction is the chapter on regions (@sec-ch-meaning-as-region); a direction in time or motion is the chapter on generation of the chapter on generation (@sec-prop-paths); and whether a direction tracks truth or only what is asserted is the chapter on truth (@sec-ch-meaning-and-truth), which uses the tools of this one.
 
 *Goals and expectations (proposed, to be confirmed by the author before any experiment).*
 
-*Goal 1, quality dimensions (Osgood, Gärdenfors).* The expectation is that for some qualities (sentiment, perhaps gender and tense) a direction fitted on labelled words, as the difference of the means of the two classes, ranks held-out words in agreement with a human scale, against a random direction and a shuffled-label null. The run uses a rated lexicon and the spaces of the chapter on nearness (@sec-dir-qualities).
+*Goal 1, quality dimensions (Osgood, Gärdenfors).* The expectation is that for some qualities (sentiment, perhaps gender and tense) a direction fitted on labelled words, as the difference of the means of the two classes, ranks held-out words in agreement with a human scale, against a random direction and a shuffled-label null. The run uses a rated lexicon and the spaces of the chapter on likeness (@sec-dir-qualities).
 
 *Goal 2, the linear representation hypothesis (Park and colleagues).* The expectation is that a concept can be a direction both in what a model represents and in how it reads it out, so that moving a representation along the direction changes the model's output in the corresponding way, against a random direction of the same norm. The sceptics find features that are not one-dimensional lines [@engels2025notlinear]. The run needs a small open language model (@sec-dir-used).
 
@@ -30,7 +39,6 @@ The scope is one quality for many items. The step between one pair of meanings i
 ## Features in Superposition {#sec-dir-superposition}
 *Plan (about 3 pages). Goal 4. A toy model with more sparse features than dimensions, trained to reconstruct them; the phase diagram of which features are stored as a function of sparsity; a sparse dictionary that recovers them. The claim carried to real models (that they store features in superposition) is stated as a hypothesis with the sceptics beside it.*
 
-
 <!-- salvaged from embedding-technologies-stubs/contextual_vectors.qmd, section sec-features-directions -->
 ## Features as Directions {#sec-features-directions}
 *The linear representation and superposition hypotheses, stated as claims together with the experiments that test them (probing and steering). Results are told as dated history.*
@@ -38,7 +46,7 @@ The scope is one quality for many items. The step between one pair of meanings i
 <!-- salvaged from embedding-technologies-stubs/contextual_vectors.qmd, section sec-sparse-autoencoders-dictionary-learning -->
 ## Sparse Autoencoders and Dictionary Learning {#sec-sparse-autoencoders-dictionary-learning}
 *Hand-off from @sec-likeness-other-objects: in an overcomplete sparse basis, likeness can be read as overlap of active features instead of a dense cosine, which interference between superimposed features can distort [@bricken2023towards]. In that paper's one-layer transformer a sparse autoencoder gives features that are more interpretable than neurons, similar across two models (median activation correlation of the closest feature 0.72, against 0.46 for neurons), and that split into finer ones as the dictionary grows from 512 to 4,096 features and beyond; how far this holds for the models of this book is not shown. That features are the circuits of the model is a separate claim, not made there.*
-*An autoencoder (@sec-ch-meaning-as-likeness) with a sparse code wider than its input, recovering more features than dimensions, which uses the near-orthogonality of @sec-ch-curse-of-dimensionality.*
+*An autoencoder (@sec-ch-meaning-as-likeness) with a sparse code wider than its input, recovering more features than dimensions, which uses the near-orthogonality of @sec-room-exponentially-many-directions.*
 
 ## Technologies That Exploit Direction {#sec-dir-technologies}
 *Plan (about 1 page). Probing, activation steering and editing, sparse autoencoders and dictionary learning for interpretability, and the use of directions for control of generation. For each: cost, whether it parallelizes, and whether the evidence at scale shows that the direction is used and not only read.*
@@ -47,3 +55,46 @@ The scope is one quality for many items. The step between one pair of meanings i
 *Plan (1 page). Findings: which qualities have a direction that generalizes to held-out items, whether moving along it changes the output, and what a probe with its control task says about what is represented against what is used. Achieved for the representation of meaning: directions that carry qualities (@sec-prop-direction), with the conditions. Computation: whether sparse dictionaries scale, and whether the features they find are stable across seeds. Still out of reach: a concept has an extent and a hierarchy, which a direction does not say (@sec-ch-meaning-as-region).*
 
 *Sources and gaps (first pass).* Sourced in `references/`: Osgood, Gärdenfors, the linear representation hypothesis and its sceptics, probes and control tasks, superposition. Not yet read for this chapter: the claims about steering at scale and about the stability of sparse features across seeds.
+
+<!-- salvaged from chapters/properties_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/properties_of_meaning.qmd), section sec-prop-direction -->
+
+## A Direction Is a Meaning You Can Move Along {#sec-prop-direction}
+*Some directions carry a single quality, such as plural, past, or formal, and moving along them changes only that quality.*
+
+Figure (planned): a sentence nudged along one direction, changing tone while keeping its topic.
+
+Earned in @sec-ch-meaning-as-likeness (directions as concepts, steering), in this chapter (features as directions), and in @sec-room-exponentially-many-directions (why there is room for so many directions).
+
+Sources (first pass). Constant offsets between word vectors [@mikolov2013linguistic]; directions that also carry social bias [@caliskan2017semantics; @garg2018word]; the linear representation hypothesis for large language models [@park2024linear]; more features than dimensions, stored as nearly orthogonal directions in superposition [@elhage2022toy].
+
+Sceptics and balance. For it: gender bias is captured by a direction, and a single principal component of ten difference vectors explains most of their variance [@bolukbasi2016man, p. 9]; the occupation scores along it are consistent across embeddings (Spearman 0.81, same source, p. 7). Against it: removing that direction hides the bias but does not remove it, since the information is still recoverable from the distances between the "neutralized" words [@gonen2019lipstick]; some features are irreducibly multi-dimensional, such as the circles formed by the days of the week and the months in GPT-2 and Mistral 7B [@engels2025notlinear]; and finding a direction with a supervised probe does not show that the representation encodes it, because the probe may learn the task itself, which is why a control task and a measure of selectivity are needed [@hewitt2019control; @belinkov2022probing]. What survives: some qualities lie along a direction, and the test of one is causal (an intervention changes that quality and leaves the others), not only a probe that reads it.
+
+<!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-separability-when-more-dimensions -->
+
+## Separability: When More Dimensions Help {#sec-separability-when-more-dimensions}
+*Cover's counting argument [@cover1965geometrical]: in $d$ dimensions, about $2d$ randomly labelled points can be separated by a hyperplane, so lifting data into more dimensions makes linear separation easier [@bishop2024deep]. For classes that are manifolds rather than points, separability depends on their dimension and radius, the manifold capacity of neural population geometry [@chung2021neural]. This is why a linear probe can read a concept out of a trained space (@sec-ch-meaning-in-context).*
+
+<!-- salvaged from chapters/curse_of_dimensionality.qmd (snapshot: embedding-technologies-stubs-v2/curse_of_dimensionality.qmd), section sec-johnson-lindenstrauss-lemma -->
+
+## The Johnson-Lindenstrauss Lemma {#sec-johnson-lindenstrauss-lemma}
+*The mathematical foundation preserving pairwise distances under random projections [@johnson1984extensions], and the tool behind capacity bounds for vector symbolic architectures [@clarkson2023capacity] (@sec-ch-meaning-and-structure).*
+
+## Candidate Sections {#sec-meaning-as-direction-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- Steering a sentence along a direction (candidate, not run).
+- Sparse autoencoders on a small model's hidden states (candidate, not run).
+- Curse of dimensionality: room for many directions, superposition, separability and Johnson-Lindenstrauss.
+
+## Question and Answer {#sec-meaning-as-direction-answer}
+
+*Question:* is a quality a direction you can move along?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* a direction is one quality; a concept has extent (@sec-ch-meaning-as-region).
+
+## Exercises {#sec-meaning-as-direction-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.

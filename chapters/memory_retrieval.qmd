@@ -1,0 +1,58 @@
+---
+status: idea
+---
+
+# Memory and Retrieval: Finding the Passage That Answers {#sec-ch-memory-retrieval}
+
+<!-- Task 6 template -->
+*Part I, the Librarian Test: can a computer shelve and find things by meaning alone, with one fixed place for each thing?* This chapter follows @sec-ch-meaning-across-senses. **Question: can the librarian find the passage that answers a question?**
+
+*Data, models and loss.* Data: The 150 gold claims and 14 reference documents of the repository's ground-truth evaluation, where retrieval means finding the page that supports a claim (`.github/skills/ground-truth-review/eval/EVAL_REPORT.md`; its numbers are the repository's own, not independent, and were not re-run). The models are in @sec-ch-zoo-of-models; the loss of each is stated there once.
+
+| Model | Zoo | Role in this chapter |
+|:--|:--|:--|
+| BM25 | @sec-zoo-bm25 | retrieval by term counts |
+| SBERT | @sec-zoo-sbert | retrieval by a dual encoder |
+
+<!-- salvaged from chapters/meaning_and_truth.qmd (snapshot: embedding-technologies-stubs-v2/meaning_and_truth.qmd), section sec-retrieval-augmented-generation -->
+
+## Retrieval-Augmented Generation {#sec-retrieval-augmented-generation}
+*Bridging parametric model memory with external latent storage, told as the answer of the 2020s.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-from-exact-approximate-search -->
+
+<!-- salvaged from chapters/meaning_and_truth.qmd (snapshot: embedding-technologies-stubs-v2/meaning_and_truth.qmd), section sec-from-exact-approximate-search -->
+
+## Finding Neighbours Among Billions {#sec-from-exact-approximate-search}
+*Pointer: what a raw cosine hides (a common mean direction, anisotropy, hubness) is in @sec-reading-nearness-correctly, salvaged into the chapter on context; it bears on retrieval because the nearest neighbour by cosine inherits it.*
+
+Here we check what exact search costs and what is lost, if anything, when the neighbours are found approximately.
+
+*Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*
+
+<!-- salvaged from embedding-technologies-stubs/vector_databases.qmd, section sec-negation-multi-hop-reasoning -->
+
+<!-- salvaged from chapters/meaning_across_scales.qmd (snapshot: embedding-technologies-stubs-v2/meaning_across_scales.qmd), section sec-hybrid-search-multi-vector -->
+
+## Hybrid Search & Multi-Vector Alignments {#sec-hybrid-search-multi-vector}
+*Fusing lexical BM25 with dense semantic recall, and ColBERT late interaction as an attempt to go beyond one vector per item: likeness there is an alignment, the sum over query tokens of the best match among document tokens (Khattab and Zaharia, SIGIR 2020, to add), which is asymmetric and not a distance (@sec-likeness-other-objects). The same machinery serves cross-modal queries ("find the clip of a dog barking"), where hubness and the modality gap of @sec-ch-meaning-across-senses are practical problems.*
+
+## Candidate Sections {#sec-memory-retrieval-candidates}
+
+Experiments that could go in this chapter, not run:
+
+- ColBERT late interaction against a pooled vector (candidate, not run).
+- Hybrid search, BM25 with a dense encoder.
+- Curse of dimensionality: concentration of distances and hubness, which force approximate search.
+
+## Question and Answer {#sec-memory-retrieval-answer}
+
+*Question:* can the librarian find the passage that answers a question?
+
+*Answer:* to be written when the chapter is answered.
+
+*Next:* the librarian finds a passage, but what does one vector keep of a text as it grows (@sec-ch-meaning-across-scales)?
+
+## Exercises {#sec-memory-retrieval-exercises}
+
+At most ten: six or seven to think over or look up, two or three to reproduce a result or a figure. To be written with the chapter.
