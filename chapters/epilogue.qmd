@@ -15,6 +15,9 @@ The chapters before this one ask how far a vector with a distance can carry each
 | Critical literacy | @sec-ch-meaning-across-scales to @sec-ch-meaning-as-generation | untested | |
 | Universal translator | @sec-ch-meaning-as-arrangement | untested | |
 | Alien technology | @sec-ch-alien-technology | untested | |
+The table has no total, because a profile across tests is not an average. The number that matters for a verdict is the literature number for the same approach; ours is a smoke test, run on a laptop, which can fail and cannot rank methods at scale. The probe and the literature row are fixed before a chapter is written, failures are recorded, and the sceptics are part of the row, with their sources (the per-chapter scorecard of the old chapter of tests is in the snapshot `embedding-technologies-stubs-v2/tests_of_meaning.qmd`).
+
+<!-- OPEN (author, 2026-11-28): the two chapters of Part III, the universal translator and alien technology, may make this Epilogue unnecessary. Consolidated for now into this question, the four-test table above and the idea boxes below; decide after the chapters are written whether it stays, shrinks to the table, or goes. -->
 
 *Where the idea boxes go.*
 
@@ -100,25 +103,6 @@ The meaning of a life (Frankl [@frankl1962man]) and meaning as something people 
 *Shelf life.* The sceptics are read with a grain of salt as well. Queen and Zou retested 50 widely cited findings about large language models on 20 newer models and report, in the secondary accounts that this book has read so far, that most no longer held or had weakened within about 15 months [@queen2026shelflife]; the study is about language-model behaviour, and carrying it over to embedding properties is an extrapolation of this book, to be tested, not a result. It cuts both ways. A negative finding made on one family of models (analogies in static word vectors, 2016 to 2019) may not carry over to the models of today, and a positive one may not either: the convergence claim of 2024 [@huh2024platonic] was already qualified in 2026 [@groger2026aristotelian; @koepke2026plato]. Each chapter therefore labels each claim by its kind and its date: a derivation (the offset method as a combination of three similarities [@levy2014linguistic]) lasts as long as its assumptions; a measurement on a model family (the failure of the vanilla offset [@linzen2016analogies]) is a record of that family at that date; a benchmark verdict depends on the benchmark and the model version. When a script of a chapter reruns on a newer model, the change in its numbers is itself a measurement of the shelf life of the property.
 
 *Plan (half a page).* Balance: for each chapter, its answer box gives what supports the answer, what the sceptics showed, and what survives; the answers do not stand equally. Likeness and difference are the best documented and the most qualified; direction holds for some qualities and fails for others; region, generation and the senses are weakly tested, and structure must be built. Findings: the answers of the chapters, each stated in the plain language of distance and direction, collected here from the answer boxes. Computation: no answer says how a space is computed; whether the way a space is built (memory, cost per step, parallelism) decides which answers it can give is a question for the chapters ahead. Still out of reach: the list is open by design and is not a claim that these are all; an answer earns its place by being tested by a chapter and sourced by someone other than the author.
-
-<!-- salvaged from chapters/tests_of_meaning.qmd (snapshot: embedding-technologies-stubs-v2/tests_of_meaning.qmd), section sec-tests-scorecard -->
-
-## Scorecard {#sec-tests-scorecard .idea}
-
-<!-- OPEN: the table of four tests in the first section summarizes this per-chapter scorecard; reconcile them when the first rung is filled. A rung is a probe of a given difficulty on one test (the ladder of the old chapter of tests, in the snapshot). -->
-
-One row per chapter and test, filled as chapters are written. *Literature* is the result of the same approach in the literature, *Ours* the smoke test of the chapter, and *Date, model* the date and the model family of the evidence. The table has no total, because a profile across tests and rungs is not an average (a chapter can reach one test and have nothing to say on the others).
-
-| Chapter | Test | Rung | Probe | Literature | Ours | Verdict | Date, model |
-|:------------|:---------|:--------|:------------|:--------------|:-----------|:----------|:--------------|
-| (none yet) | | | | | | | |
-
-Rules for adding a row.
-
-- The benchmark follows the question of the chapter, and the table may say "no honest probe" for a chapter.
-- The number that matters is the literature number for the same approach; ours is a smoke test, run on a laptop, which can fail and cannot rank methods at scale.
-- Fix the probe and the literature row before writing the chapter, and record failures. A chapter written to hit a rung stops testing anything.
-- Sceptics are part of the row, with their sources (each chapter collects the sceptics of its own question).
 
 <!-- salvaged from chapters/meaning_as_likeness.qmd (snapshot: embedding-technologies-stubs-v2/meaning_as_likeness.qmd), section sec-likeness-ceiling -->
 

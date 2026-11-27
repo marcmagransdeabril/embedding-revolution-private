@@ -5,86 +5,11 @@
 
 {{< pagebreak >}}
 
-## Prologue: The Geometry of Meaning {#sec-prologue-geometry-meaning .unnumbered}
+## Prologue: The Geometry of Meaning {#sec-prologue-geometry-meaning .unnumbered .idea}
 
-### Realizing a Word is a Coordinate
+<!-- STUB (author, 2026-11-28): the Prologue is written last, after the chapters, from what they found. The earlier Prologue (a word as a coordinate, Shannon, what this book is, why everything is becoming a vector, embedding space or latent space, the dog test, the critical literacy test, the compass of high dimensions) is kept in embedding-technologies-stubs-v2/index.qmd. What it will have to say: why vectors for meaning; the question the book asks (is representing meaning as vectors a good approach, and where does it strain); that the book is exploratory and each chapter tags its own status; the three Parts and the four tests (@sec-symbols-tests); that the experiments are smoke tests and the claims about scale rest on cited comparisons; and the terms embedding space and latent space. -->
 
-There is a distinct moment every engineer remembers when the abstraction behind their tools suddenly dissolves into something far more visceral. For me, that moment arrived while inspecting the internals of a neural language model. Up until then, software had always dealt with words as arbitrary integers or ASCII byte sequences—opaque strings compared with `==` operators or indexed in B-trees.
-
-Looking into the high-dimensional latent layer, however, the text ceased to be strings. Each word, in its context, was represented as a point in a Euclidean space of a thousand or more dimensions: a vector of floating-point numbers $\mathbf{z} \in \mathbb{R}^{D}$. Even more striking was that its location was not random. Words with related meanings occupied tight geometric neighborhoods. Abstract relations mapped to spatial offsets: moving across a specific vector subspace turned verbs from present to past tense, shifted countries to their capitals, or modulated formal language into casual speech. Meaning was no longer an intangible philosophical construct; it was a physical location in a continuous geometric space.
-
-### From Cartesian Coordinates to Latent Worlds
-
-For more than seven decades, computer science operated on a foundational dogma: **information is discrete, and computation is symbolic manipulation over structured records**. 
-
-In 1948, Claude Shannon laid the mathematical bedrock of digital telecommunications by formalizing information as statistical uncertainty reduction, whose simplest form is the entropy of a discrete source:
-
-$$H(X) = -\sum_{x \in \mathcal{X}} p(x) \log_2 p(x)$$
-
-In doing so, Shannon deliberately set aside the question of *meaning*:
-
-> *"These semantic aspects of communication are irrelevant to the engineering problem."* — Claude Shannon (1948)
-
-More than seven decades later, artificial intelligence has arrived at the reciprocal breakthrough: **the Embedding Revolution**. 
-
-Beneath the architectures of the last decade (attention, diffusion, generative chatbots) lies a profound shift: language, images, molecules, robot trajectories, and relational graphs have all been mapped, with remarkable success, to points in continuous, high-dimensional spaces. Once embedded, similarity becomes an inner product, and analogies often become offsets between vectors.
-
-### What This Book Is
-
-<!-- OPEN: what "revolution" refers to. Candidates: a change in how knowledge is represented (needs a failing predecessor to count as a revolution); one method reaching everything (needs the shared part to be the embedding and not only deep learning plus scale); reasoning as paths in a space; or only a metaphor. Decide after Part II; until then the title is a working title. -->
-
-This is an exploratory book. It has no thesis to defend and no conclusion fixed in advance. Its subject is the spaces, called embedding spaces or latent spaces, in which machine learning places words, images, sounds and other things as points, and what those spaces say about how meaning, discourse, reasoning and thought can be represented. I write it as I explore. Some chapters are settled, some are provisional and some are only questions, and each chapter says which. The plan will change as the evidence comes in, and ideas that do not hold up are dropped.
-
-The question that guides the exploration is whether representing meaning as vectors is a good approach: why it works, what it can express, where it strains, and what each proposed extension, whether curved, topological, quantum, or hyperdimensional, buys and costs. None of those geometries is assumed to be better than the others.
-
-Two ideas run through the exploration. The first is that the mathematics that explains why vectors work (Shannon, Chomsky, Rice, concentration of measure, symmetry, algebra) is far more durable than any model, so each chapter is built around a question of that kind, and tells the methods that explored it as history, with dates. The second is the **bitter lesson** [@sutton2019bitter]: general methods that keep improving as computation grows have repeatedly beaten methods that build in what researchers know. The lesson is about how an algorithm uses computation, not about the shape of the model, and the winner is sometimes linear. Whatever structure is proposed here must align with computational efficiency and scalability, or say why it need not.
-
-The exploration is guided by three things. The first is the classic results of philosophy, mathematics and linguistics, which have outlived every model and say what a representation of meaning would have to be. The second is the way science keeps its hypotheses, by refutation: a claim earns trust by surviving attempts to break it, and the book prefers the test that can show a property is absent to the example that shows it is present (the *via negativa*). The third is experiments small enough for a typical computer, which can be read, rerun and changed by the reader. The aim is insight and a holistic view of the field, and not state-of-the-art performance. A view of the whole may also show gaps in the current approaches, which this book reports as questions and does not promise to fill.
-
-This book is written without a laboratory. It cannot rely on expensive external judgement or on computing power at scale: no panels of human raters, no paid judge models, no clusters. Its own experiments are therefore smoke tests. They can falsify a claim or illustrate a mechanism, and they cannot rank methods at scale. Human judgements come from published benchmarks, and a claim that one method beats another rests on cited comparisons made at scale, with their source and date. Each test of a chapter is posed as a question that a small run can refute, and when it cannot be answered here the book says so and points to the evidence that would.
-
-The direction of the exploration so far is a working frame, not a thesis. Representing meaning as vectors is surprising and it works: Shannon's own quantities (pointwise mutual information, mutual information, cross-entropy) turn into geometry, and carry the book past his exclusion of meaning while the mathematics stays inside his framework. A single vector has limits, and each limit has proposed remedies, each with a price. Four tests probe them, set out at the end of @sec-ch-symbols-without-interior (@sec-symbols-tests): the Librarian Test of Part I, which contains the dog test below, the critical literacy test below, which is Part II, and, in Part III, the universal translator and the alien technology test, which go beyond the state of the art, starting from what the existing approaches still cannot do and asking what fields outside machine learning have said about the same problem.
-
-### Why Everything is Becoming a Vector
-
-Many kinds of things have been embedded. This book follows the ones that bear on meaning, discourse, reasoning and thought, and mentions the others only as pointers:
-
-- **Natural Language:** Tokens, sentences, and documents mapped to continuous semantic coordinates.
-- **Perception (Vision, Audio, Video):** Pixels, audio waveforms, and video frames, each encoded into vectors by encoders built for the symmetries of that signal.
-- **Multimodal Meaning:** Text, images, sound, and motion projected into one shared metric space, so that a photograph, a word, and a sound of the same thing become neighbours (e.g., CLIP for images and text in 2021, ImageBind for six modalities in 2023).
-- **Biology & Chemistry:** Amino acid sequences and molecular structures represented as continuous vectors (e.g., protein language models).
-- **Knowledge Graphs & Logic:** Discrete entities and relational predicates transformed into continuous translational and rotational operators ($\mathbb{R}^D, \mathbb{C}^D$).
-- **Action, Planning and Reasoning:** Goals, world states, and plans represented as vectors, and behaviour as trajectories of such vectors (e.g., world models that predict the next state in latent space and plan there). Reasoning can follow such a trajectory too, or keep leaving the space to write each step down in words, as a chain of thought does. Either way it is a draw from a distribution of paths, not a geodesic to the answer: training raises the probability that a path ends in a correct one, and no single path is guaranteed to.
-
-Each item is also a question: what does the vector keep, and what does it lose?
-
-### Embedding Space or Latent Space?
-
-Two names appear in this book for what looks like the same place, and the literature does not keep them apart either. *Embedding space* comes from mathematics and language processing, where an embedding maps objects to vectors so that similar objects are close. *Latent space* comes from statistics and generative models, where a latent variable is the hidden cause of the data. Wikipedia treats them as synonyms, and papers often use both words for the same hidden layer.
-
-What does differ is how a space was trained. A space trained for similarity gives distance a meaning by construction and usually has no way back to the data. A space trained to reconstruct or generate usually has a decoder, and its distances mean only what the training made them mean. This book uses the two words interchangeably, except where the literature has settled on one of them for a context (*latent semantic analysis*, *latent variable*, *latent diffusion*, against *word embedding*, *embedding model*). Where the training matters, it says which kind produced the space. The chapters that build spaces lean on the word their literatures use: *embedding* for the maps of @sec-ch-meaning-as-likeness, *latent* for the generative models of @sec-ch-meaning-as-generation.
-
-### The Dog Test
-
-One question is harder than the others, and it returns throughout this book. Take a dog. There is a photograph of it, the word "dog", the sound of its bark, and a video of how it runs. Four signals with nothing in common at the level of bytes: a grid of pixels, a string of characters, a pressure wave, a sequence of frames. Yet a child who meets a dog through any one of them recognizes the others as the same thing. Firth's company, "you shall know a word by the company it keeps", is a company of words. The dog test asks for more: can a photograph, a word, a bark, and a gait be placed in **one** space, near each other and far from a cat, a car, and a doorbell?
-
-This is the *symbol grounding problem* in geometric form (Harnad, 1990): words defined only by other words never touch the world. Text-only embeddings keep the company of words, while multimodal embeddings add the company of the senses. Whether the result is one meaning seen through four channels, or four meanings that merely happen to be close, is a question the book returns to along the way. Chapters report partial answers where they find them, @sec-ch-meaning-across-senses gives its own, and the Epilogue collects them. The test is demanding: a shared space may keep what the four signals have in common and lose what is specific to each, and the way in which it loses it is part of the answer.
-
-### The Critical Literacy Test {.idea}
-
-<!-- Provisional (author, 2026-11-12): name, kinds of question and criteria are a first draft, and what the test is applied to (a single vector, a set of vectors, a model that reads the text) is undecided. The universal translator and the alien technology test are chapters of Part III. -->
-
-The dog test varies the channel: one concept, several senses. A second question varies the scale. A word, a phrase, a paragraph, a section, a chapter and a whole book can each be placed in a space, but a book is not a word-like point. It is parts of several sizes, an order of prerequisites, and an argument that has to hold together and agree with the world. The *critical literacy test* asks whether the representation of a text, at each of those levels, supports what a good reader does with it: regenerate the text, to the fidelity the level allows, and answer questions about it, not only about what it states directly but about its consequences, its logical implications, and the places where two passages contradict each other.
-
-Four kinds of question separate what a representation keeps. *Granularity*: how much of the detail survives at each level, which is Shannon's rate against distortion. *Dependency*: what must be known before a section can be read, an order of definitions that is a graph and not a tree. *Internal consistency*: whether the parts agree with each other and each claim follows from what came before. The verdict has three values and not two: a claim is entailed by the ground truth and the common sense assumed, or refuted (its negation is entailed), or undetermined (neither follows). Falsehood is therefore something derived by reasoning, not the absence of truth, and the test must tell it from ignorance: a representation that scores a claim as implausible has not shown it false. *External consistency*: whether the claims agree with sources outside the book that are known to be right. The aim is that each kind has a counterpart in the reading and reasoning tests already given to people and to models, so that the test can be scored. The hardest case, and the best testbed, is a deep mathematical subject, where a formal library gives the dependency graph and a proof checker confirms that a formal claim follows from earlier ones, or that its negation does, once the text has been translated into formal statements. When the checker can do neither, the claim is independent of what came before, which is ignorance and not falsehood.
-
-The question is not whether a language model can answer questions about a text it is shown: today's appear to do it well, and the interesting questions come after that. How reliably across a whole book, and with a contradiction planted in it? What must a bounded representation keep, and in how many bits, for the answers to survive without the text? And does a correct answer come from the representation, from re-reading the text, or from training that already contained it? Whether geometry alone can carry consistency, or whether something beside the space, a retrieval step or a verifier, has to check it, is open, and the book does not assume the answer. Chapters report partial answers where they find them, and the Epilogue collects them.
-
-### The Geek's Compass: Navigating Thousands of Dimensions
-
-High-dimensional spaces do not behave like our 3D intuitive world. In 1,000 dimensions, nearly all the volume of a ball concentrates in a thin outer shell, thinner as the dimension grows; random vectors are almost certainly close to orthogonal ($\langle \mathbf{u}, \mathbf{v} \rangle \approx 0$); and traditional Euclidean distance metrics lose discriminative power without careful geometric regularization. The same strangeness is a resource: there is room for exponentially many nearly orthogonal directions, which is what lets a distributed representation hold far more concepts than it has dimensions.
-
-Navigating this counter-intuitive landscape requires a toolkit that blends linear algebra, differential geometry, group theory, topology, and hyperdimensional algebras. This book is your compass for that journey.
+*To be written last.*
 
 {{< pagebreak >}}
 
