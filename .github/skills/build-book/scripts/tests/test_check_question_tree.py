@@ -13,6 +13,13 @@ REPO_ROOT = Path(__file__).resolve().parents[5]
 
 TREE = """# Tree
 
+## Parts
+
+| Part | Title | Test |
+|---|---|---|
+| I | One | q |
+| II | Two | q |
+
 ## Chapters
 
 | Part | Chapter | Question | Models | Main text it reuses |
@@ -69,6 +76,25 @@ def test_duplicate_chapter_is_a_finding():
     assert any("twice" in f for f in cqt.check_tree(rows(bad)))
 
 
+def test_outside_question_is_checked():
+    assert any("outside" in f or "first" in f for f in cqt.check_tree(rows(TREE.replace("what first?", "what first"))))
+
+
+def test_missing_last_row_is_a_finding():
+    bad = TREE.replace("| last | last | what last? |\n", "")
+    assert any("first and the last" in f for f in cqt.check_tree(rows(bad)))
+
+
+def test_short_row_is_a_finding_not_a_crash():
+    bad = TREE.replace("| II | beta | is a thing far? | A:sec-zoo-a | y |", "| II | beta | is a thing far? |")
+    assert any("5 cells" in f for f in cqt.check_tree(rows(bad)))
+
+
+def test_parts_table_must_match_part_column():
+    bad = TREE.replace("| II | Two | q |\n", "")
+    assert any("Parts table" in f for f in cqt.check_tree(rows(bad)))
+
+
 def test_bad_anchor_is_a_finding():
     bad = TREE.replace("A:sec-zoo-a, B", "A:zoo-a, B")
     assert any("anchor" in f for f in cqt.check_tree(rows(bad)))
@@ -96,6 +122,23 @@ def test_missing_sections_and_model_are_findings(tmp_path):
     assert any("Exercises" in f for f in found)
     assert any("Next" in f for f in found)
     assert any("sec-zoo-b" in f for f in found)
+
+
+def test_exercises_are_counted_per_chapter_not_per_block(tmp_path):
+    block = "::: {.questions}\n" + "\n".join(f"{i}. q" for i in range(1, 7)) + "\n:::\n\n::: {.answers}\n1. a\n:::\n\n"
+    write_chapter(tmp_path, "alpha", GOOD_BODY.split("::: {.questions}")[0] + block + block)
+    assert any("12 exercises" in f for f in cqt.check_chapter(rows().chapters[0], tmp_path))
+
+
+def test_testbed_model_needs_no_citation_in_chapter(tmp_path):
+    write_chapter(tmp_path, "beta", GOOD_BODY)
+    c = cqt.Chapter("II", "beta", "q?", [("Osc", "testbed")])
+    assert cqt.check_chapter(c, tmp_path) == []
+
+
+def test_chapter_missing_from_quarto_is_a_finding(tmp_path):
+    (tmp_path / "_quarto.yml").write_text("book:\n  chapters:\n  - index.qmd\n  - chapters/first.qmd\n  - chapters/last.qmd\n", encoding="utf-8")
+    assert cqt.check_quarto(rows(), tmp_path)
 
 
 def test_more_than_ten_exercises_is_a_finding(tmp_path):

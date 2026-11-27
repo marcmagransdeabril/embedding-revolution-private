@@ -43,6 +43,9 @@ class Tree:
     chapters: list[Chapter] = field(default_factory=list)
     first: str = ""
     last: str = ""
+    outside: dict[str, str] = field(default_factory=dict)  # stem -> question of the chapters outside the Parts
+    parts: list[tuple[str, str]] = field(default_factory=list)  # (number, title), in order
+    errors: list[str] = field(default_factory=list)
 
 
 def _cells(line: str) -> list[str]:
@@ -67,13 +70,27 @@ def _table(text: str, heading: str) -> list[list[str]]:
 
 def parse_tree(text: str) -> Tree:
     tree = Tree()
-    for part, stem, question, models, _ in (r + [""] * (5 - len(r)) for r in _table(text, "Chapters")):
+    for r in _table(text, "Parts"):
+        if len(r) == 3:
+            tree.parts.append((r[0], r[1]))
+        else:
+            tree.errors.append(f"tree: a row of the Parts table must have 3 cells: {r}")
+    for r in _table(text, "Chapters"):
+        if len(r) != 5:
+            tree.errors.append(f"tree: a row of the Chapters table must have 5 cells, not {len(r)}: {r}")
+            continue
+        part, stem, question, models, _ = r
         pairs = []
         for item in filter(None, (s.strip() for s in models.split(","))):
             name, _, anchor = item.rpartition(":")
             pairs.append((name.strip(), anchor.strip()))
         tree.chapters.append(Chapter(part, stem, question, pairs))
-    for pos, stem, _ in (r + [""] * (3 - len(r)) for r in _table(text, "Chapters outside the Parts")):
+    for r in _table(text, "Chapters outside the Parts"):
+        if len(r) != 3:
+            tree.errors.append(f"tree: a row of the outside-Parts table must have 3 cells: {r}")
+            continue
+        pos, stem, question = r
+        tree.outside[stem] = question
         if pos == "first":
             tree.first = stem
         elif pos == "last":
@@ -82,7 +99,12 @@ def parse_tree(text: str) -> Tree:
 
 
 def check_tree(tree: Tree) -> list[str]:
-    found, seen = [], set()
+    found, seen = list(tree.errors), set()
+    for stem, q in tree.outside.items():
+        if not q.endswith("?") or q.count("?") != 1:
+            found.append(f"tree: {stem} must have one question ending with a question mark")
+    if len(tree.parts) != len({c.part for c in tree.chapters}) or [p for p, _ in tree.parts] != list(dict.fromkeys(c.part for c in tree.chapters)):
+        found.append("tree: the Parts table and the Part column of the Chapters table disagree")
     for c in tree.chapters:
         if c.stem in seen:
             found.append(f"tree: chapter {c.stem} is listed twice")
@@ -120,10 +142,9 @@ def check_chapter(c: Chapter, root: Path) -> list[str]:
     for name, anchor in c.models:
         if anchor != "testbed" and f"@{anchor}" not in text:
             found.append(f"{c.stem}: model {name} is not cited by its zoo anchor @{anchor}")
-    for block in re.findall(r"::: \{\.questions\}\n(.*?)\n:::", text, re.S):
-        n = len(re.findall(r"^\d+\. ", block, re.M))
-        if n > MAX_EXERCISES:
-            found.append(f"{c.stem}: {n} exercises, at most {MAX_EXERCISES}")
+    n = sum(len(re.findall(r"^\d+\. ", b, re.M)) for b in re.findall(r"::: \{\.questions\}\n(.*?)\n:::", text, re.S))
+    if n > MAX_EXERCISES:
+        found.append(f"{c.stem}: {n} exercises, at most {MAX_EXERCISES}")
     return found
 
 
@@ -153,6 +174,9 @@ def check_quarto(tree: Tree, root: Path) -> list[str]:
         by_part.setdefault(c.part, []).append(c.stem)
     if groups != list(by_part.values()):
         found.append(f"quarto: Parts group {groups}, the tree says {list(by_part.values())}")
+    titles = [e.get("part") for e in cfg["book"]["chapters"] if isinstance(e, dict)]
+    if len(titles) == len(tree.parts) and any(t is None or not str(t).strip() for t in titles):
+        found.append("quarto: every Part needs a title")
     return found
 
 
@@ -168,6 +192,9 @@ def main(argv: list[str] | None = None) -> int:
     if a.files or a.all:
         for c in tree.chapters:
             found += check_chapter(c, a.root)
+        for stem in (tree.first, tree.last):
+            if _chapter_text(stem, a.root) is None:
+                found.append(f"{stem}: chapters/{stem}.qmd does not exist")
     if a.zoo or a.all:
         found += check_zoo(tree, a.root)
     if a.quarto or a.all:
