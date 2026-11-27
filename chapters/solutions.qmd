@@ -258,7 +258,7 @@ solutions there; `make validate` fails if this file is out of date.
 
 7. The known pairs were chosen because they hold a relation, so the reader finds one in 94% of them whatever it does with far pairs. A far pair is chosen for its cosine and not for a relation, so what it shows only means something against pairs that were not chosen for a relation either, and a reader finds one in 10.5% of those.
 
-8. Draw the words with `numpy.random.default_rng(0)` inside each band (only for display; the statistics use all pairs), rank the others by cosine as in the loss section, and compute the overlap of the two lists of five. The overlap is largest for frequent words and smallest for rare ones, whose counts are small: 49% in band 0 and 19% in band 9 (@fig-gallery-overlap).
+8. Draw the words with `numpy.random.default_rng(0)` inside each band (only for display; the statistics use all pairs), rank the others by cosine as in @sec-loss-decides-near, and compute the overlap of the two lists of five. The overlap is largest for frequent words and smallest for rare ones, whose counts are small: 49% in band 0 and 19% in band 9 (@fig-gallery-overlap).
 
 9. The script `relation_collapse.py` draws it from the labels of the neighbours (`figures.neighbours`). The left panel falls from about 23% and 25% at rank 1 to 0.5% at ranks 500 to 1,000, and the right panel rises from 56% [55%, 57%] (PPMI-SVD) and 55% [54%, 56%] (SGNS) of the nearest neighbours that carry no relation to 79% at ranks 3 and 4 and 99% at ranks 500 to 1,000. The nearer a neighbour is, the more likely that a dictionary names the relation, but even the nearest one is unnamed in more than half of the cases, so near does not say that a named relation holds. The curves of the two spaces almost coincide.
 

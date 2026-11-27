@@ -16,6 +16,8 @@ Stub. The question, the models and the template are written in Task 6 of `tmp/pl
 <!-- salvaged from chapters/meaning_and_truth.qmd (snapshot: embedding-technologies-stubs-v2/meaning_and_truth.qmd), section sec-from-exact-approximate-search -->
 
 ## Finding Neighbours Among Billions {#sec-from-exact-approximate-search}
+*Pointer: what a raw cosine hides (a common mean direction, anisotropy, hubness) is in @sec-reading-nearness-correctly, salvaged into the chapter on context; it bears on retrieval because the nearest neighbour by cosine inherits it.*
+
 Here we check what exact search costs and what is lost, if anything, when the neighbours are found approximately.
 
 *Why distance concentration forces approximation, and how the field went from locality-sensitive hashing to HNSW graphs, IVFFlat inverted files, and Product Quantization.*

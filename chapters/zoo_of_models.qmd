@@ -158,7 +158,7 @@ The output is one vector per sentence, taken from the encoder. Two things differ
 
 ## The Three Objectives, Stated Once {#sec-zoo-objectives}
 
-The three objectives are stated here once, since the rest of the chapter reads their results, and later chapters that need them point back to this section. Let $C_{wc}$ be the number of times the word $c$ stands within a window of the word $w$, and let $\hat P$ be the relative frequencies of the pairs, with $|\mathcal D| = \sum_{w,c} C_{wc}$ pairs in all. *Counting* turns the counts into the pointwise mutual information of a pair, the log of how many times more often the two words meet than independent words would,
+The three objectives are stated here once, since the chapters read their results (the likeness chapter first), and later chapters that need them point back to this section. Let $C_{wc}$ be the number of times the word $c$ stands within a window of the word $w$, and let $\hat P$ be the relative frequencies of the pairs, with $|\mathcal D| = \sum_{w,c} C_{wc}$ pairs in all. *Counting* turns the counts into the pointwise mutual information of a pair, the log of how many times more often the two words meet than independent words would,
 
 $$
 \mathrm{PMI}(w,c) = \log_2 \frac{\hat P(w,c)}{\hat P(w)\,\hat P(c)},
