@@ -1,0 +1,1801 @@
+{"blind_sha256": "3a5c0749c2d5cfaa9cad7acd7881b78b7646e0a365924206d1af1326548fd5e6", "model": "claude-opus-5.5"}
+{"id": "p0001", "relations": []}
+{"id": "p0002", "relations": ["slang", "synonym"]}
+{"id": "p0003", "relations": ["meronym", "part_of"]}
+{"id": "p0004", "relations": ["has_part", "made_of", "political_metaphor"]}
+{"id": "p0005", "relations": ["postal_cancellation_mark", "related_to"]}
+{"id": "p0006", "relations": ["antonym", "rhyme"]}
+{"id": "p0007", "relations": ["derived_from", "inflection", "present_participle"]}
+{"id": "p0008", "relations": ["derived_from", "inflection", "past_participle"]}
+{"id": "p0009", "relations": ["antonym"]}
+{"id": "p0010", "relations": ["antonym", "derived_from", "negation_prefix"]}
+{"id": "p0011", "relations": ["derived_term", "part_of", "related_to"]}
+{"id": "p0012", "relations": ["related_to"]}
+{"id": "p0013", "relations": ["antonym"]}
+{"id": "p0014", "relations": ["form_of", "plural_of"]}
+{"id": "p0015", "relations": ["related_to", "synonym"]}
+{"id": "p0016", "relations": ["language_spoken_in", "related_to"]}
+{"id": "p0017", "relations": ["related_to"]}
+{"id": "p0018", "relations": ["related_to"]}
+{"id": "p0019", "relations": ["related_to"]}
+{"id": "p0020", "relations": []}
+{"id": "p0021", "relations": ["antonym"]}
+{"id": "p0022", "relations": ["synonym"]}
+{"id": "p0023", "relations": ["made_of", "material_of"]}
+{"id": "p0024", "relations": ["hypernym", "is_a"]}
+{"id": "p0025", "relations": ["agent_of", "derivationally_related"]}
+{"id": "p0026", "relations": ["color_of", "has_property"]}
+{"id": "p0027", "relations": ["synonym"]}
+{"id": "p0028", "relations": ["attribute", "derivationally_related"]}
+{"id": "p0029", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p0030", "relations": ["antonym"]}
+{"id": "p0031", "relations": ["near-synonym", "synonym"]}
+{"id": "p0032", "relations": ["inflection", "plural", "same lemma", "third-person singular"]}
+{"id": "p0033", "relations": ["inflection", "past participle / present participle", "same lemma"]}
+{"id": "p0034", "relations": ["inflection", "plural", "same lemma"]}
+{"id": "p0035", "relations": []}
+{"id": "p0036", "relations": ["holonym", "meronym", "part-whole"]}
+{"id": "p0037", "relations": ["adjective-noun", "derivation", "pertainym", "same root"]}
+{"id": "p0038", "relations": ["cause-effect", "near-synonym", "related", "synonym"]}
+{"id": "p0039", "relations": ["abbreviation of state", "city-state", "located in", "part-whole"]}
+{"id": "p0040", "relations": ["agent noun", "rhyme", "same suffix -er"]}
+{"id": "p0041", "relations": ["hypernym", "synonym"]}
+{"id": "p0042", "relations": ["builds", "habitat", "located_in"]}
+{"id": "p0043", "relations": ["derivationally_related", "object_of_action"]}
+{"id": "p0044", "relations": ["derivationally_related", "participle_variant", "same_root"]}
+{"id": "p0045", "relations": ["antonym", "derivationally_related", "morphological_negation"]}
+{"id": "p0046", "relations": []}
+{"id": "p0047", "relations": []}
+{"id": "p0048", "relations": ["related_to", "sound_made_by"]}
+{"id": "p0049", "relations": ["derivationally_related", "similar_to", "synonym"]}
+{"id": "p0050", "relations": ["hypernym", "made_of"]}
+{"id": "p0051", "relations": []}
+{"id": "p0052", "relations": ["antonym"]}
+{"id": "p0053", "relations": ["antonym", "derivationally_related"]}
+{"id": "p0054", "relations": ["synonym"]}
+{"id": "p0055", "relations": ["antonym"]}
+{"id": "p0056", "relations": ["derivationally_related"]}
+{"id": "p0057", "relations": ["inflection", "past_participle", "past_tense"]}
+{"id": "p0058", "relations": ["hypernym"]}
+{"id": "p0059", "relations": []}
+{"id": "p0060", "relations": ["instance_hypernym"]}
+{"id": "p0061", "relations": ["related_to"]}
+{"id": "p0062", "relations": []}
+{"id": "p0063", "relations": ["both_chemical_elements", "same_period"]}
+{"id": "p0064", "relations": []}
+{"id": "p0065", "relations": []}
+{"id": "p0066", "relations": ["inflected_form_of", "past_participle_of", "past_tense_of"]}
+{"id": "p0067", "relations": ["hypernym_of", "part_of"]}
+{"id": "p0068", "relations": ["antonym"]}
+{"id": "p0069", "relations": ["nationality"]}
+{"id": "p0070", "relations": ["inflected_form_of", "same_lemma"]}
+{"id": "p0071", "relations": ["derivationally_related", "hypernym", "synonym"]}
+{"id": "p0072", "relations": ["pertainym", "similar_to", "synonym"]}
+{"id": "p0073", "relations": ["has_young", "part_of_lifecycle"]}
+{"id": "p0074", "relations": ["located_in", "member_meronym", "part_of"]}
+{"id": "p0075", "relations": ["antonym"]}
+{"id": "p0076", "relations": ["antonym"]}
+{"id": "p0077", "relations": ["antonym"]}
+{"id": "p0078", "relations": ["hypernym", "similar_to", "synonym"]}
+{"id": "p0079", "relations": []}
+{"id": "p0080", "relations": []}
+{"id": "p0081", "relations": ["related_to", "synonym"]}
+{"id": "p0082", "relations": ["has_property", "related_to", "synonym"]}
+{"id": "p0083", "relations": ["derived_from", "form_of", "related_to"]}
+{"id": "p0084", "relations": ["has_property", "related_to"]}
+{"id": "p0085", "relations": []}
+{"id": "p0086", "relations": ["related_to", "synonym"]}
+{"id": "p0087", "relations": ["part_of", "related_to"]}
+{"id": "p0088", "relations": []}
+{"id": "p0089", "relations": ["form_of", "plural_of", "related_to"]}
+{"id": "p0090", "relations": []}
+{"id": "p0091", "relations": ["inflection", "plural"]}
+{"id": "p0092", "relations": ["county_town", "etymology", "located_in", "part_of"]}
+{"id": "p0093", "relations": []}
+{"id": "p0094", "relations": []}
+{"id": "p0095", "relations": ["inflection", "same_lemma"]}
+{"id": "p0096", "relations": ["adjective_of", "derivation"]}
+{"id": "p0097", "relations": ["antonym", "co-hyponym"]}
+{"id": "p0098", "relations": ["antonym"]}
+{"id": "p0099", "relations": []}
+{"id": "p0100", "relations": ["related_to", "synonym"]}
+{"id": "p0101", "relations": ["network_role", "related_concept"]}
+{"id": "p0102", "relations": ["synonym"]}
+{"id": "p0103", "relations": ["inflection", "plural_of"]}
+{"id": "p0104", "relations": ["related_concept"]}
+{"id": "p0105", "relations": ["antonym", "derivation"]}
+{"id": "p0106", "relations": ["co_hyponym", "mountain_range"]}
+{"id": "p0107", "relations": []}
+{"id": "p0108", "relations": ["near_synonym", "orthographic_similarity", "similar_shape"]}
+{"id": "p0109", "relations": ["adjective_of", "demonym", "derivation"]}
+{"id": "p0110", "relations": ["inflection", "third_person_singular_of"]}
+{"id": "p0111", "relations": ["collocation", "color_of", "yellow_pepper_compound"]}
+{"id": "p0112", "relations": ["inflection", "plural_of"]}
+{"id": "p0113", "relations": ["both_english_writers", "both_surnames"]}
+{"id": "p0114", "relations": ["demonym", "derived_from", "language_of"]}
+{"id": "p0115", "relations": ["model_of", "shape_of", "synonym"]}
+{"id": "p0116", "relations": ["has_part", "part_of"]}
+{"id": "p0117", "relations": ["component_of", "found_in", "potato_is_a_starch"]}
+{"id": "p0118", "relations": ["inflection_of_same_verb", "past_participle", "present_third_person"]}
+{"id": "p0119", "relations": ["related_sense", "synonym"]}
+{"id": "p0120", "relations": ["component_of", "has_part", "ingredient_of"]}
+{"id": "p0121", "relations": ["has_city", "has_part", "holonym"]}
+{"id": "p0122", "relations": ["similar_to", "synonym"]}
+{"id": "p0123", "relations": ["antonym"]}
+{"id": "p0124", "relations": ["hypernym", "type_of"]}
+{"id": "p0125", "relations": ["holonym", "located_in", "part_of"]}
+{"id": "p0126", "relations": []}
+{"id": "p0127", "relations": ["color_of", "has_property"]}
+{"id": "p0128", "relations": []}
+{"id": "p0129", "relations": []}
+{"id": "p0130", "relations": []}
+{"id": "p0131", "relations": ["roman numeral", "synonym"]}
+{"id": "p0132", "relations": ["inflection", "plural"]}
+{"id": "p0133", "relations": []}
+{"id": "p0134", "relations": ["synonym"]}
+{"id": "p0135", "relations": ["hypernym", "is-a"]}
+{"id": "p0136", "relations": ["synonym", "troponym"]}
+{"id": "p0137", "relations": ["adjective form", "derivation"]}
+{"id": "p0138", "relations": ["inflection", "plural"]}
+{"id": "p0139", "relations": ["agent", "derivation", "plays instrument"]}
+{"id": "p0140", "relations": ["rhyme"]}
+{"id": "p0141", "relations": ["synonym"]}
+{"id": "p0142", "relations": []}
+{"id": "p0143", "relations": []}
+{"id": "p0144", "relations": ["attribute", "property"]}
+{"id": "p0145", "relations": []}
+{"id": "p0146", "relations": ["related_to"]}
+{"id": "p0147", "relations": ["anagram"]}
+{"id": "p0148", "relations": ["prefix", "shortening", "synonym"]}
+{"id": "p0149", "relations": []}
+{"id": "p0150", "relations": ["derivationally_related_form", "pertainym"]}
+{"id": "p0151", "relations": ["anagram", "orthographic_overlap"]}
+{"id": "p0152", "relations": []}
+{"id": "p0153", "relations": ["cordell_hull_secretary_of_state_during_ww2"]}
+{"id": "p0154", "relations": ["amy_lowell_was_a_poet", "robert_lowell_was_a_poet"]}
+{"id": "p0155", "relations": ["derivationally_related_form", "noun_from_verb"]}
+{"id": "p0156", "relations": ["has_member", "member_of"]}
+{"id": "p0157", "relations": ["capital_of", "located_in", "part_of"]}
+{"id": "p0158", "relations": ["official_language"]}
+{"id": "p0159", "relations": ["habitat", "lives_in"]}
+{"id": "p0160", "relations": ["derivationally_related_form", "noun_from_adjective"]}
+{"id": "p0161", "relations": ["hypernym", "synonym"]}
+{"id": "p0162", "relations": ["city_state", "located_in", "part_of"]}
+{"id": "p0163", "relations": ["antonym"]}
+{"id": "p0164", "relations": ["antonym"]}
+{"id": "p0165", "relations": []}
+{"id": "p0166", "relations": ["inflection", "plural"]}
+{"id": "p0167", "relations": ["inflection", "same_lemma", "verb_tense"]}
+{"id": "p0168", "relations": ["related_to"]}
+{"id": "p0169", "relations": []}
+{"id": "p0170", "relations": ["antonym", "state_of_matter"]}
+{"id": "p0171", "relations": ["similar_to", "synonym"]}
+{"id": "p0172", "relations": []}
+{"id": "p0173", "relations": ["inflection", "plural_of"]}
+{"id": "p0174", "relations": ["color_of", "has_color", "similar_to"]}
+{"id": "p0175", "relations": ["derivationally_related", "nominalization"]}
+{"id": "p0176", "relations": ["has_property", "nationality"]}
+{"id": "p0177", "relations": []}
+{"id": "p0178", "relations": ["inflection", "same_lemma"]}
+{"id": "p0179", "relations": ["contains_city", "has_part", "located_in"]}
+{"id": "p0180", "relations": []}
+{"id": "p0181", "relations": []}
+{"id": "p0182", "relations": []}
+{"id": "p0183", "relations": ["deprive"]}
+{"id": "p0184", "relations": ["hypernym", "instance_of"]}
+{"id": "p0185", "relations": ["hypernym", "instance_of"]}
+{"id": "p0186", "relations": ["demonym", "derivationally_related", "pertainym"]}
+{"id": "p0187", "relations": []}
+{"id": "p0188", "relations": ["derivationally_related", "inflection", "past_tense"]}
+{"id": "p0189", "relations": []}
+{"id": "p0190", "relations": ["hypernym", "similar_to"]}
+{"id": "p0191", "relations": []}
+{"id": "p0192", "relations": ["derivationally_related_form", "nominalization"]}
+{"id": "p0193", "relations": ["contains_city", "has_capital", "has_part"]}
+{"id": "p0194", "relations": ["related_to"]}
+{"id": "p0195", "relations": ["hypernym", "related_to"]}
+{"id": "p0196", "relations": ["derivationally_related_form", "pertainym"]}
+{"id": "p0197", "relations": ["hypernym", "rhyme"]}
+{"id": "p0198", "relations": ["similar_to", "synonym"]}
+{"id": "p0199", "relations": ["hyponym", "related_to", "synonym"]}
+{"id": "p0200", "relations": ["hypernym", "part_of", "related_to"]}
+{"id": "p0201", "relations": ["official language of", "spoken in"]}
+{"id": "p0202", "relations": ["informal variant", "synonym"]}
+{"id": "p0203", "relations": ["instance of", "occupation"]}
+{"id": "p0204", "relations": ["emotional state", "related to"]}
+{"id": "p0205", "relations": []}
+{"id": "p0206", "relations": ["related to", "type of change"]}
+{"id": "p0207", "relations": []}
+{"id": "p0208", "relations": ["form of guidance", "related to"]}
+{"id": "p0209", "relations": []}
+{"id": "p0210", "relations": ["hypernym", "synonym"]}
+{"id": "p0211", "relations": ["hypernym", "instance"]}
+{"id": "p0212", "relations": ["antonym", "co-hyponym"]}
+{"id": "p0213", "relations": ["synonym"]}
+{"id": "p0214", "relations": []}
+{"id": "p0215", "relations": ["hypernym", "related"]}
+{"id": "p0216", "relations": ["located-in", "part-of"]}
+{"id": "p0217", "relations": ["attribute", "collocation"]}
+{"id": "p0218", "relations": ["attribute", "nationality"]}
+{"id": "p0219", "relations": []}
+{"id": "p0220", "relations": ["derivation", "related"]}
+{"id": "p0221", "relations": []}
+{"id": "p0222", "relations": ["derivationally_related", "uses"]}
+{"id": "p0223", "relations": ["has_part", "made_of"]}
+{"id": "p0224", "relations": ["has_part"]}
+{"id": "p0225", "relations": ["synonym"]}
+{"id": "p0226", "relations": ["synonym"]}
+{"id": "p0227", "relations": ["derivationally_related"]}
+{"id": "p0228", "relations": ["hypernym", "is_a"]}
+{"id": "p0229", "relations": ["derivationally_related"]}
+{"id": "p0230", "relations": []}
+{"id": "p0231", "relations": ["inflection", "plural"]}
+{"id": "p0232", "relations": ["inflection", "past_participle", "past_tense"]}
+{"id": "p0233", "relations": ["member_of"]}
+{"id": "p0234", "relations": ["hypernym", "synonym"]}
+{"id": "p0235", "relations": ["related_to"]}
+{"id": "p0236", "relations": ["inflection", "past_participle", "past_tense"]}
+{"id": "p0237", "relations": []}
+{"id": "p0238", "relations": ["derivation", "nominalization"]}
+{"id": "p0239", "relations": ["related_to", "synonym"]}
+{"id": "p0240", "relations": ["derivation", "inflection", "related_form"]}
+{"id": "p0241", "relations": ["has_part"]}
+{"id": "p0242", "relations": ["synonym"]}
+{"id": "p0243", "relations": ["related_to", "synonym"]}
+{"id": "p0244", "relations": []}
+{"id": "p0245", "relations": ["related_to"]}
+{"id": "p0246", "relations": ["language_spoken_in", "related_to"]}
+{"id": "p0247", "relations": ["related_to"]}
+{"id": "p0248", "relations": []}
+{"id": "p0249", "relations": ["derived_form", "related_to"]}
+{"id": "p0250", "relations": []}
+{"id": "p0251", "relations": ["antonym"]}
+{"id": "p0252", "relations": ["antonym"]}
+{"id": "p0253", "relations": ["antonym"]}
+{"id": "p0254", "relations": ["antonym", "derivationally_related_form"]}
+{"id": "p0255", "relations": []}
+{"id": "p0256", "relations": ["derivationally_related_form", "pertainym"]}
+{"id": "p0257", "relations": []}
+{"id": "p0258", "relations": ["derivationally_related_form", "member_holonym"]}
+{"id": "p0259", "relations": ["derivationally_related_form"]}
+{"id": "p0260", "relations": ["antonym"]}
+{"id": "p0261", "relations": ["similar_meaning", "synonym"]}
+{"id": "p0262", "relations": ["adjective_of", "demonym", "derivation", "pertainym"]}
+{"id": "p0263", "relations": ["habitat", "has_inhabitant", "location_of"]}
+{"id": "p0264", "relations": []}
+{"id": "p0265", "relations": []}
+{"id": "p0266", "relations": ["both_african_countries", "co_hyponym"]}
+{"id": "p0267", "relations": ["antonym"]}
+{"id": "p0268", "relations": ["contains_city", "has_part", "located_in", "part_of"]}
+{"id": "p0269", "relations": ["hypernym", "related_action"]}
+{"id": "p0270", "relations": ["rhyme", "similar_meaning", "synonym"]}
+{"id": "p0271", "relations": ["antonym"]}
+{"id": "p0272", "relations": ["related_to"]}
+{"id": "p0273", "relations": []}
+{"id": "p0274", "relations": ["inflection", "plural"]}
+{"id": "p0275", "relations": ["contrast", "related_to"]}
+{"id": "p0276", "relations": []}
+{"id": "p0277", "relations": ["related_to"]}
+{"id": "p0278", "relations": ["derivation", "pertainym"]}
+{"id": "p0279", "relations": ["inflection", "superlative"]}
+{"id": "p0280", "relations": ["derivation", "related_to"]}
+{"id": "p0281", "relations": ["instance_of", "member_of", "part_of"]}
+{"id": "p0282", "relations": []}
+{"id": "p0283", "relations": ["hypernym", "synonym"]}
+{"id": "p0284", "relations": ["synonym"]}
+{"id": "p0285", "relations": ["related_to", "synonym"]}
+{"id": "p0286", "relations": ["derivationally_related", "related_form"]}
+{"id": "p0287", "relations": []}
+{"id": "p0288", "relations": ["language_spoken_in", "official_language", "related_to"]}
+{"id": "p0289", "relations": ["antonym"]}
+{"id": "p0290", "relations": []}
+{"id": "p0291", "relations": ["derivationally related", "inflection", "present participle"]}
+{"id": "p0292", "relations": ["member", "part of", "related to"]}
+{"id": "p0293", "relations": ["association", "collocation", "related to"]}
+{"id": "p0294", "relations": ["similar to", "synonym"]}
+{"id": "p0295", "relations": ["both us cities", "co-hyponym"]}
+{"id": "p0296", "relations": ["hypernym", "is a"]}
+{"id": "p0297", "relations": ["antonym"]}
+{"id": "p0298", "relations": ["both surnames", "co-hyponym"]}
+{"id": "p0299", "relations": ["derivationally related", "related to", "synonym"]}
+{"id": "p0300", "relations": ["antonym"]}
+{"id": "p0301", "relations": []}
+{"id": "p0302", "relations": []}
+{"id": "p0303", "relations": ["capital_of", "contains_city", "has_capital", "has_part", "located_in", "part_of"]}
+{"id": "p0304", "relations": ["demonym", "derivationally_related", "derived_from", "nationality_of", "pertains_to"]}
+{"id": "p0305", "relations": ["inflection", "plural", "same_lemma", "singular_of"]}
+{"id": "p0306", "relations": ["derivationally_related", "derived_from", "gerund", "inflection", "present_participle", "same_lemma"]}
+{"id": "p0307", "relations": ["agent_noun", "derivationally_related", "derived_from", "player_of", "practitioner_of"]}
+{"id": "p0308", "relations": []}
+{"id": "p0309", "relations": ["adjective_of", "derivationally_related", "pertains_to", "related_to"]}
+{"id": "p0310", "relations": ["rhyme", "shares_suffix"]}
+{"id": "p0311", "relations": ["slang", "synonym"]}
+{"id": "p0312", "relations": ["related_to"]}
+{"id": "p0313", "relations": ["hypernym", "is_a"]}
+{"id": "p0314", "relations": ["has_part", "part_of"]}
+{"id": "p0315", "relations": ["inflection", "plural_of"]}
+{"id": "p0316", "relations": ["inflection", "plural"]}
+{"id": "p0317", "relations": ["antonym"]}
+{"id": "p0318", "relations": ["located_in", "part_of"]}
+{"id": "p0319", "relations": ["agent_of", "derived_from", "related_to"]}
+{"id": "p0320", "relations": ["hypernym", "is_a"]}
+{"id": "p0321", "relations": ["associated_with", "leader_of", "member_of"]}
+{"id": "p0322", "relations": ["both_surnames", "both_writers"]}
+{"id": "p0323", "relations": ["adherent_of", "derivationally_related", "pertainym"]}
+{"id": "p0324", "relations": ["attribute", "has_color"]}
+{"id": "p0325", "relations": ["has_part", "part_of"]}
+{"id": "p0326", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p0327", "relations": ["hyponym", "member_of", "works_for"]}
+{"id": "p0328", "relations": ["multiple_of", "unit_of_information"]}
+{"id": "p0329", "relations": ["city_in", "county_in", "located_in"]}
+{"id": "p0330", "relations": []}
+{"id": "p0331", "relations": ["similar meaning (strong, as in a stiff drink)", "synonym"]}
+{"id": "p0332", "relations": ["co-hyponym (parts of a lock or watch)", "related (key stem is part of a key)"]}
+{"id": "p0333", "relations": ["antonym"]}
+{"id": "p0334", "relations": ["hypernym-instance", "instance (edison is an inventor)"]}
+{"id": "p0335", "relations": []}
+{"id": "p0336", "relations": ["related (bail sets a prisoner loose)", "synonym (bail out / let loose)"]}
+{"id": "p0337", "relations": ["associated (grace is said at thanksgiving dinner)"]}
+{"id": "p0338", "relations": ["derivation (adjective from noun)", "morphological relation"]}
+{"id": "p0339", "relations": ["antonym"]}
+{"id": "p0340", "relations": ["holonym-meronym (somerset is part of england)", "part of"]}
+{"id": "p0341", "relations": []}
+{"id": "p0342", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p0343", "relations": ["synonym"]}
+{"id": "p0344", "relations": ["language_spoken", "official_language"]}
+{"id": "p0345", "relations": ["antonym"]}
+{"id": "p0346", "relations": ["antonym"]}
+{"id": "p0347", "relations": ["city_of", "located_in", "part_of"]}
+{"id": "p0348", "relations": ["hyponym", "instance"]}
+{"id": "p0349", "relations": ["synonym"]}
+{"id": "p0350", "relations": ["causes", "entailment"]}
+{"id": "p0351", "relations": ["related_to"]}
+{"id": "p0352", "relations": ["both_writers", "co_hyponym", "nobel_vs_non_nobel"]}
+{"id": "p0353", "relations": ["related_to", "synonym"]}
+{"id": "p0354", "relations": ["synonym"]}
+{"id": "p0355", "relations": ["antonym", "derivationally_related"]}
+{"id": "p0356", "relations": ["capable_of", "related_to", "synonym"]}
+{"id": "p0357", "relations": ["derivationally_related", "form_of"]}
+{"id": "p0358", "relations": ["hypernym", "synonym"]}
+{"id": "p0359", "relations": ["form_of", "plural_form"]}
+{"id": "p0360", "relations": ["etymologically_related", "member_of", "related_to"]}
+{"id": "p0361", "relations": ["synonym"]}
+{"id": "p0362", "relations": ["antonym"]}
+{"id": "p0363", "relations": ["antonym"]}
+{"id": "p0364", "relations": ["derivation", "related_to"]}
+{"id": "p0365", "relations": ["inflection", "third_person_singular"]}
+{"id": "p0366", "relations": []}
+{"id": "p0367", "relations": ["inflection", "same_lemma"]}
+{"id": "p0368", "relations": []}
+{"id": "p0369", "relations": ["antonym"]}
+{"id": "p0370", "relations": []}
+{"id": "p0371", "relations": ["antonym", "co-hyponym", "grammatical case contrast"]}
+{"id": "p0372", "relations": ["antonym", "complementary states"]}
+{"id": "p0373", "relations": ["country-language", "demonym-related", "official language"]}
+{"id": "p0374", "relations": ["island nation in ocean", "located in", "part of"]}
+{"id": "p0375", "relations": ["near-homograph", "orthographic neighbor", "rhyme-like sound similarity"]}
+{"id": "p0376", "relations": ["derivation", "inflection", "noun from verb", "present participle"]}
+{"id": "p0377", "relations": ["related in sense of not expressing", "synonym (suppress/hold back)"]}
+{"id": "p0378", "relations": ["phrase component", "phrase: code sweating"]}
+{"id": "p0379", "relations": ["derivation", "morphological relation", "noun-verb"]}
+{"id": "p0380", "relations": ["container for animal", "location (trap/captivity)"]}
+{"id": "p0381", "relations": ["both verbs", "similar meaning", "synonym"]}
+{"id": "p0382", "relations": []}
+{"id": "p0383", "relations": ["hypernym", "part-whole", "sixties is a span of years"]}
+{"id": "p0384", "relations": ["landmark marks a position", "navigation", "related concept"]}
+{"id": "p0385", "relations": ["body part", "part-whole", "synonym"]}
+{"id": "p0386", "relations": []}
+{"id": "p0387", "relations": ["degree", "similar meaning", "synonym"]}
+{"id": "p0388", "relations": ["both rivers", "co-hyponym", "cradles of ancient civilization"]}
+{"id": "p0389", "relations": ["primates", "verb sense: to imitate / to coddle", "young of primate"]}
+{"id": "p0390", "relations": ["cast", "synonym", "verb sense: hurl"]}
+{"id": "p0391", "relations": ["similar_to", "synonym"]}
+{"id": "p0392", "relations": ["antonym"]}
+{"id": "p0393", "relations": []}
+{"id": "p0394", "relations": ["hypernym", "synonym"]}
+{"id": "p0395", "relations": ["similar_to", "synonym"]}
+{"id": "p0396", "relations": ["both_cities", "co-hyponym"]}
+{"id": "p0397", "relations": ["located_in", "part_of"]}
+{"id": "p0398", "relations": ["related_to", "similar_to"]}
+{"id": "p0399", "relations": ["has_property", "related_to"]}
+{"id": "p0400", "relations": ["both_surnames", "co-hyponym"]}
+{"id": "p0401", "relations": ["co-hyponym (island)"]}
+{"id": "p0402", "relations": ["hypernym", "instance"]}
+{"id": "p0403", "relations": ["co-hyponym (plant)"]}
+{"id": "p0404", "relations": ["eyelid compound", "meronym", "part of"]}
+{"id": "p0405", "relations": ["derivation", "inflection", "plural"]}
+{"id": "p0406", "relations": ["similar to", "synonym"]}
+{"id": "p0407", "relations": ["co-hyponym (container)"]}
+{"id": "p0408", "relations": ["metonymy", "similar to", "synonym"]}
+{"id": "p0409", "relations": ["meronym", "produces", "slang", "synonym"]}
+{"id": "p0410", "relations": ["holonym", "located in", "part of"]}
+{"id": "p0411", "relations": []}
+{"id": "p0412", "relations": ["related_to"]}
+{"id": "p0413", "relations": ["contains_city", "has_part"]}
+{"id": "p0414", "relations": ["hypernym", "is_a"]}
+{"id": "p0415", "relations": ["antonym"]}
+{"id": "p0416", "relations": ["antonym"]}
+{"id": "p0417", "relations": ["synonym"]}
+{"id": "p0418", "relations": ["similar_to", "synonym"]}
+{"id": "p0419", "relations": ["derivationally_related_form", "derived_from"]}
+{"id": "p0420", "relations": ["similar_to", "synonym"]}
+{"id": "p0421", "relations": []}
+{"id": "p0422", "relations": ["related_to", "synonym"]}
+{"id": "p0423", "relations": ["related_to"]}
+{"id": "p0424", "relations": ["located_in", "part_of"]}
+{"id": "p0425", "relations": ["related_to", "synonym"]}
+{"id": "p0426", "relations": ["form_of", "plural_form"]}
+{"id": "p0427", "relations": ["antonym"]}
+{"id": "p0428", "relations": ["antonym"]}
+{"id": "p0429", "relations": ["related_to", "synonym"]}
+{"id": "p0430", "relations": ["derivationally_related_form", "related_to"]}
+{"id": "p0431", "relations": ["inflection", "present tense / past tense", "same lemma"]}
+{"id": "p0432", "relations": ["antonym"]}
+{"id": "p0433", "relations": ["both cities", "twin cities"]}
+{"id": "p0434", "relations": ["same language", "synonym"]}
+{"id": "p0435", "relations": ["located in", "part of"]}
+{"id": "p0436", "relations": ["developmental stage", "life stage of"]}
+{"id": "p0437", "relations": ["parent-offspring", "young of"]}
+{"id": "p0438", "relations": ["antonym (wet)", "follows in process", "laundry sequence"]}
+{"id": "p0439", "relations": ["hypernym (verb sense)", "synonym"]}
+{"id": "p0440", "relations": ["inflection", "past tense / base form", "same lemma"]}
+{"id": "p0441", "relations": ["similar_meaning", "synonym"]}
+{"id": "p0442", "relations": ["similar_meaning", "synonym"]}
+{"id": "p0443", "relations": ["associated_with", "characteristic_action", "sound_made_by"]}
+{"id": "p0444", "relations": ["antonym", "collocation"]}
+{"id": "p0445", "relations": ["similar_meaning", "synonym"]}
+{"id": "p0446", "relations": ["antonym"]}
+{"id": "p0447", "relations": ["abbreviation_of_state", "capital_of", "located_in"]}
+{"id": "p0448", "relations": ["adjective_form", "derivationally_related_form", "pertainym"]}
+{"id": "p0449", "relations": ["hypernym", "is_a", "similar_meaning", "synonym"]}
+{"id": "p0450", "relations": ["antonym", "co_hyponym", "contrast"]}
+{"id": "p0451", "relations": []}
+{"id": "p0452", "relations": ["both cities", "co-hyponyms"]}
+{"id": "p0453", "relations": ["related", "synonym"]}
+{"id": "p0454", "relations": ["antonym", "derivation"]}
+{"id": "p0455", "relations": ["related"]}
+{"id": "p0456", "relations": []}
+{"id": "p0457", "relations": ["hyponym"]}
+{"id": "p0458", "relations": ["language spoken in", "related"]}
+{"id": "p0459", "relations": ["shared etymology"]}
+{"id": "p0460", "relations": ["antonym", "derivation"]}
+{"id": "p0461", "relations": ["located_in", "part_of"]}
+{"id": "p0462", "relations": ["synonym"]}
+{"id": "p0463", "relations": ["related_to", "synonym"]}
+{"id": "p0464", "relations": ["part_of", "synonym"]}
+{"id": "p0465", "relations": ["hypernym", "related_to"]}
+{"id": "p0466", "relations": ["synonym"]}
+{"id": "p0467", "relations": ["related_to", "synonym"]}
+{"id": "p0468", "relations": ["derivationally_related_form"]}
+{"id": "p0469", "relations": ["synonym"]}
+{"id": "p0470", "relations": ["derivationally_related_form", "form_of"]}
+{"id": "p0471", "relations": ["synonym"]}
+{"id": "p0472", "relations": []}
+{"id": "p0473", "relations": []}
+{"id": "p0474", "relations": []}
+{"id": "p0475", "relations": ["demonym", "derivationally_related_form"]}
+{"id": "p0476", "relations": ["derivationally_related_form", "pertainym"]}
+{"id": "p0477", "relations": ["synonym"]}
+{"id": "p0478", "relations": ["antonym"]}
+{"id": "p0479", "relations": []}
+{"id": "p0480", "relations": []}
+{"id": "p0481", "relations": []}
+{"id": "p0482", "relations": ["hypernym", "synonym"]}
+{"id": "p0483", "relations": ["related_to", "synonym"]}
+{"id": "p0484", "relations": ["attribute", "derivationally_related_form"]}
+{"id": "p0485", "relations": ["has_part", "unit_of_measure"]}
+{"id": "p0486", "relations": ["antonym", "has_part"]}
+{"id": "p0487", "relations": ["located_in", "member_of", "part_of"]}
+{"id": "p0488", "relations": ["antonym"]}
+{"id": "p0489", "relations": ["antonym"]}
+{"id": "p0490", "relations": ["derivationally_related_form", "hypernym"]}
+{"id": "p0491", "relations": ["antonym"]}
+{"id": "p0492", "relations": ["language spoken", "official language"]}
+{"id": "p0493", "relations": ["similar to", "synonym"]}
+{"id": "p0494", "relations": ["hypernym", "is a", "synonym"]}
+{"id": "p0495", "relations": ["derivationally related form", "derived from"]}
+{"id": "p0496", "relations": ["hypernym", "synonym"]}
+{"id": "p0497", "relations": ["hypernym", "is a"]}
+{"id": "p0498", "relations": ["hypernym", "is a"]}
+{"id": "p0499", "relations": ["hypernym", "is a", "synonym"]}
+{"id": "p0500", "relations": ["hypernym", "synonym"]}
+{"id": "p0501", "relations": ["derivation", "inflection", "past_participle", "past_tense"]}
+{"id": "p0502", "relations": ["inflection", "plural"]}
+{"id": "p0503", "relations": ["antonym", "derivation", "negation_prefix"]}
+{"id": "p0504", "relations": ["agent_of", "derivation", "related_term"]}
+{"id": "p0505", "relations": ["related_term", "synonym"]}
+{"id": "p0506", "relations": ["city", "co_hyponym"]}
+{"id": "p0507", "relations": ["related_term", "synonym"]}
+{"id": "p0508", "relations": []}
+{"id": "p0509", "relations": ["hypernym", "related_term"]}
+{"id": "p0510", "relations": ["spelling_variant", "synonym"]}
+{"id": "p0511", "relations": ["derived_from", "prefixation", "related_to"]}
+{"id": "p0512", "relations": ["is_a", "member_of", "part_of"]}
+{"id": "p0513", "relations": ["language_spoken", "official_language", "related_to"]}
+{"id": "p0514", "relations": ["inflection", "plural"]}
+{"id": "p0515", "relations": []}
+{"id": "p0516", "relations": ["derived_from", "inflection", "past_participle", "past_tense"]}
+{"id": "p0517", "relations": ["adjective_form", "derived_from", "pertainym"]}
+{"id": "p0518", "relations": ["related_to"]}
+{"id": "p0519", "relations": ["related_to", "sound_made_by"]}
+{"id": "p0520", "relations": ["related_to"]}
+{"id": "p0521", "relations": ["adjective_to_noun", "derivationally_related_form", "nominalization"]}
+{"id": "p0522", "relations": ["inflection", "plural_form"]}
+{"id": "p0523", "relations": ["part_of_book_written_by", "related_to"]}
+{"id": "p0524", "relations": ["inflection", "plural_form"]}
+{"id": "p0525", "relations": ["antonym", "co_hyponym", "female_male_pair", "gender_counterpart", "spouse"]}
+{"id": "p0526", "relations": ["both_english_poets", "both_writers", "co_hyponym"]}
+{"id": "p0527", "relations": ["co_hyponym", "female_male_pair", "gender_counterpart", "spouse"]}
+{"id": "p0528", "relations": ["derivationally_related_form", "noun_to_adjective", "pertainym"]}
+{"id": "p0529", "relations": ["hypernym", "is_a"]}
+{"id": "p0530", "relations": []}
+{"id": "p0531", "relations": ["meronym", "part_of"]}
+{"id": "p0532", "relations": ["derived_form", "inflection", "present_participle"]}
+{"id": "p0533", "relations": ["produced_by", "related_to"]}
+{"id": "p0534", "relations": []}
+{"id": "p0535", "relations": ["both_poets", "co_hyponyms"]}
+{"id": "p0536", "relations": ["agent_noun", "derivation", "derived_from"]}
+{"id": "p0537", "relations": ["inflection", "plural"]}
+{"id": "p0538", "relations": ["hypernym", "is_a"]}
+{"id": "p0539", "relations": ["orthographic_similarity", "shared_prefix"]}
+{"id": "p0540", "relations": ["antonym"]}
+{"id": "p0541", "relations": []}
+{"id": "p0542", "relations": ["borders", "part_of_region"]}
+{"id": "p0543", "relations": ["action_of", "homonym_context", "sound_made_by"]}
+{"id": "p0544", "relations": []}
+{"id": "p0545", "relations": ["adjective_noun", "derivation"]}
+{"id": "p0546", "relations": ["inflection", "same_lemma"]}
+{"id": "p0547", "relations": ["derivation", "pertainym"]}
+{"id": "p0548", "relations": ["antonym"]}
+{"id": "p0549", "relations": ["color_of", "compound_part"]}
+{"id": "p0550", "relations": ["climbs", "habitat", "location_of"]}
+{"id": "p0551", "relations": ["hypernym"]}
+{"id": "p0552", "relations": ["derivationally related form"]}
+{"id": "p0553", "relations": ["synonym"]}
+{"id": "p0554", "relations": ["hyponym"]}
+{"id": "p0555", "relations": ["synonym"]}
+{"id": "p0556", "relations": ["part meronym"]}
+{"id": "p0557", "relations": ["antonym"]}
+{"id": "p0558", "relations": ["synonym"]}
+{"id": "p0559", "relations": ["instance of city in", "part holonym"]}
+{"id": "p0560", "relations": ["antonym"]}
+{"id": "p0561", "relations": ["has_instance", "hypernym"]}
+{"id": "p0562", "relations": ["bird", "co-hyponym"]}
+{"id": "p0563", "relations": ["synonym"]}
+{"id": "p0564", "relations": []}
+{"id": "p0565", "relations": ["hypernym", "related_term"]}
+{"id": "p0566", "relations": ["derivationally_related", "inflection", "past_tense"]}
+{"id": "p0567", "relations": []}
+{"id": "p0568", "relations": ["antonym"]}
+{"id": "p0569", "relations": ["synonym"]}
+{"id": "p0570", "relations": ["official_language_of", "spoken_in"]}
+{"id": "p0571", "relations": ["derivationally_related", "inflection", "past_participle", "past_tense"]}
+{"id": "p0572", "relations": ["derivationally_related", "noun_to_adjective", "pertainym"]}
+{"id": "p0573", "relations": []}
+{"id": "p0574", "relations": ["antonym", "derivationally_related", "negation_prefix"]}
+{"id": "p0575", "relations": ["habitat", "location_of", "related_to"]}
+{"id": "p0576", "relations": ["derivationally_related", "inflection", "plural"]}
+{"id": "p0577", "relations": ["similar_to", "synonym"]}
+{"id": "p0578", "relations": ["capital_of", "located_in", "part_of"]}
+{"id": "p0579", "relations": ["similar_to", "synonym"]}
+{"id": "p0580", "relations": ["antonym", "opposite"]}
+{"id": "p0581", "relations": ["antonym"]}
+{"id": "p0582", "relations": ["inflection", "same lemma", "third person singular"]}
+{"id": "p0583", "relations": ["hypernym", "instance of"]}
+{"id": "p0584", "relations": ["derived from", "follower of", "related to"]}
+{"id": "p0585", "relations": ["adjective to noun", "attribute", "derivation"]}
+{"id": "p0586", "relations": ["adjective to noun", "derivation", "pertainym"]}
+{"id": "p0587", "relations": ["hypernym", "synonym"]}
+{"id": "p0588", "relations": ["part of", "related to"]}
+{"id": "p0589", "relations": ["comparative", "inflection"]}
+{"id": "p0590", "relations": ["inflection", "same lemma", "third person singular to past tense"]}
+{"id": "p0591", "relations": ["derivation", "related_form"]}
+{"id": "p0592", "relations": ["hypernym", "instance_of"]}
+{"id": "p0593", "relations": ["attribute", "collocation"]}
+{"id": "p0594", "relations": ["derivation", "pertainym"]}
+{"id": "p0595", "relations": ["attribute", "derivation"]}
+{"id": "p0596", "relations": ["coordinate_term", "military_rank"]}
+{"id": "p0597", "relations": ["hypernym"]}
+{"id": "p0598", "relations": []}
+{"id": "p0599", "relations": ["antonym"]}
+{"id": "p0600", "relations": ["coordinate_term"]}
+{"id": "p0601", "relations": ["hypernym", "instance of category"]}
+{"id": "p0602", "relations": ["chemical symbol of member", "hypernym", "member of class"]}
+{"id": "p0603", "relations": []}
+{"id": "p0604", "relations": ["derivation", "related form", "synonym"]}
+{"id": "p0605", "relations": ["hypernym", "instance of"]}
+{"id": "p0606", "relations": ["antonym", "co-hyponym"]}
+{"id": "p0607", "relations": ["antonym", "symbiotic counterpart"]}
+{"id": "p0608", "relations": []}
+{"id": "p0609", "relations": []}
+{"id": "p0610", "relations": []}
+{"id": "p0611", "relations": ["ingredient_of", "part_of", "used_in_baking"]}
+{"id": "p0612", "relations": ["contains", "holds_captive", "location_of"]}
+{"id": "p0613", "relations": ["related_to", "synonym"]}
+{"id": "p0614", "relations": ["derivationally_related", "related_to", "same_root"]}
+{"id": "p0615", "relations": ["described_by", "occupation_of"]}
+{"id": "p0616", "relations": ["inflectional_form", "past_participle_vs_gerund", "same_lemma"]}
+{"id": "p0617", "relations": ["country_in_continent", "located_in", "part_of"]}
+{"id": "p0618", "relations": ["both_cities", "coordinate_terms", "sister_cities"]}
+{"id": "p0619", "relations": ["inflectional_form", "past_vs_present_participle", "same_lemma"]}
+{"id": "p0620", "relations": ["composes", "member_of", "part_of"]}
+{"id": "p0621", "relations": ["antonym", "opposite sides of a coin"]}
+{"id": "p0622", "relations": ["city in country", "part of"]}
+{"id": "p0623", "relations": []}
+{"id": "p0624", "relations": ["adjective from verb", "derivationally related", "present participle"]}
+{"id": "p0625", "relations": ["both capital cities", "co-hyponyms"]}
+{"id": "p0626", "relations": ["inflection", "plural"]}
+{"id": "p0627", "relations": ["capital of", "city in country", "part of"]}
+{"id": "p0628", "relations": ["hypernym", "synonym"]}
+{"id": "p0629", "relations": ["hyponym", "synonym"]}
+{"id": "p0630", "relations": ["adjective from verb", "derivationally related", "present participle"]}
+{"id": "p0631", "relations": ["located_in", "meronym", "part_of", "region_of"]}
+{"id": "p0632", "relations": ["antonym", "derivationally_related"]}
+{"id": "p0633", "relations": ["located_in", "meronym", "part_of", "region_of"]}
+{"id": "p0634", "relations": ["hypernym", "instance_of", "is_a"]}
+{"id": "p0635", "relations": ["derivationally_related", "inflection_of", "same_lemma", "verb_form"]}
+{"id": "p0636", "relations": ["at_location", "kept_in", "located_in"]}
+{"id": "p0637", "relations": ["at_location", "habitat_of", "home_of", "used_by"]}
+{"id": "p0638", "relations": []}
+{"id": "p0639", "relations": []}
+{"id": "p0640", "relations": ["language_spoken", "official_language"]}
+{"id": "p0641", "relations": ["near-homophone", "one-letter difference", "same length"]}
+{"id": "p0642", "relations": ["antonym", "derivation", "negation prefix im-"]}
+{"id": "p0643", "relations": ["inflection", "plural", "third-person singular verb form"]}
+{"id": "p0644", "relations": []}
+{"id": "p0645", "relations": ["co-hyponym", "parts of a whole", "sequence"]}
+{"id": "p0646", "relations": ["antonym", "derivation", "negation prefix in-"]}
+{"id": "p0647", "relations": []}
+{"id": "p0648", "relations": ["place names", "proper nouns"]}
+{"id": "p0649", "relations": ["abbreviation", "toponym abbreviations", "two-letter country code (ai = anguilla)"]}
+{"id": "p0650", "relations": ["arkansas abbreviation (ar) is a southern state, part of dixie", "holonym/meronym (region contains state)"]}
+{"id": "p0651", "relations": ["derivationally related form", "noun-adjective pair"]}
+{"id": "p0652", "relations": []}
+{"id": "p0653", "relations": ["agent noun", "derivationally related form", "homograph"]}
+{"id": "p0654", "relations": []}
+{"id": "p0655", "relations": []}
+{"id": "p0656", "relations": []}
+{"id": "p0657", "relations": ["inflected form", "past participle", "past tense"]}
+{"id": "p0658", "relations": ["hyponym of member", "member holonym"]}
+{"id": "p0659", "relations": ["holonym", "meronym", "part of"]}
+{"id": "p0660", "relations": ["derivationally related form", "nominalization", "verb-noun pair"]}
+{"id": "p0661", "relations": []}
+{"id": "p0662", "relations": []}
+{"id": "p0663", "relations": ["abbreviation_context", "part_of"]}
+{"id": "p0664", "relations": ["related_to", "synonym"]}
+{"id": "p0665", "relations": ["derivationally_related", "related_to", "used_by"]}
+{"id": "p0666", "relations": ["inflectional_form", "same_lemma"]}
+{"id": "p0667", "relations": ["antonym"]}
+{"id": "p0668", "relations": []}
+{"id": "p0669", "relations": ["hypernym"]}
+{"id": "p0670", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p0671", "relations": ["holonym", "located_in", "part_of"]}
+{"id": "p0672", "relations": ["hypernym", "synonym"]}
+{"id": "p0673", "relations": []}
+{"id": "p0674", "relations": ["related_to", "similar_to"]}
+{"id": "p0675", "relations": ["derived_form", "inflection", "plural"]}
+{"id": "p0676", "relations": []}
+{"id": "p0677", "relations": ["related_to", "similar_to", "synonym"]}
+{"id": "p0678", "relations": ["related_to", "similar_to", "synonym"]}
+{"id": "p0679", "relations": []}
+{"id": "p0680", "relations": ["derived_form", "inflection", "plural"]}
+{"id": "p0681", "relations": ["hypernym", "synonym"]}
+{"id": "p0682", "relations": []}
+{"id": "p0683", "relations": ["inflection", "present_participle_to_past_participle", "same_lemma"]}
+{"id": "p0684", "relations": ["antonym"]}
+{"id": "p0685", "relations": ["language_spoken", "nationality"]}
+{"id": "p0686", "relations": ["related_to"]}
+{"id": "p0687", "relations": ["hyponym", "synonym"]}
+{"id": "p0688", "relations": ["inflection", "present_participle_to_past_participle", "same_lemma"]}
+{"id": "p0689", "relations": ["inflection", "singular_to_plural"]}
+{"id": "p0690", "relations": ["antonym", "related_to"]}
+{"id": "p0691", "relations": ["derivationally_related_form", "morphological_derivation"]}
+{"id": "p0692", "relations": []}
+{"id": "p0693", "relations": ["antonym"]}
+{"id": "p0694", "relations": ["hypernym", "instance_of"]}
+{"id": "p0695", "relations": ["related_to", "verb_group"]}
+{"id": "p0696", "relations": []}
+{"id": "p0697", "relations": ["antonym"]}
+{"id": "p0698", "relations": ["antonym"]}
+{"id": "p0699", "relations": []}
+{"id": "p0700", "relations": ["has_capital", "has_part", "part_holonym"]}
+{"id": "p0701", "relations": ["antonym"]}
+{"id": "p0702", "relations": ["inflection", "past participle / third person singular", "same lemma"]}
+{"id": "p0703", "relations": ["co-hyponym", "language", "nationality", "southeast asian"]}
+{"id": "p0704", "relations": ["antonym"]}
+{"id": "p0705", "relations": []}
+{"id": "p0706", "relations": ["hypernym", "synonym"]}
+{"id": "p0707", "relations": ["antonym"]}
+{"id": "p0708", "relations": []}
+{"id": "p0709", "relations": []}
+{"id": "p0710", "relations": ["abbreviation of illinois", "city-state", "located in"]}
+{"id": "p0711", "relations": ["location", "related_to"]}
+{"id": "p0712", "relations": ["related_to"]}
+{"id": "p0713", "relations": ["hypernym", "is_a"]}
+{"id": "p0714", "relations": ["related_to", "synonym"]}
+{"id": "p0715", "relations": []}
+{"id": "p0716", "relations": ["derivationally_related", "related_to"]}
+{"id": "p0717", "relations": ["related_to", "synonym"]}
+{"id": "p0718", "relations": ["collocation", "related_to"]}
+{"id": "p0719", "relations": ["form_of", "past_tense", "related_to"]}
+{"id": "p0720", "relations": ["derivationally_related", "pertainym", "related_to"]}
+{"id": "p0721", "relations": ["has_part", "part_of"]}
+{"id": "p0722", "relations": ["derivationally_related_form"]}
+{"id": "p0723", "relations": ["has_part", "located_in", "part_of"]}
+{"id": "p0724", "relations": ["has_instance", "instance_hypernym"]}
+{"id": "p0725", "relations": ["has_part", "part_of"]}
+{"id": "p0726", "relations": []}
+{"id": "p0727", "relations": []}
+{"id": "p0728", "relations": ["has_part", "part_of"]}
+{"id": "p0729", "relations": ["similar_to", "synonym"]}
+{"id": "p0730", "relations": ["hypernym", "hyponym", "member_of"]}
+{"id": "p0731", "relations": ["attribute", "derivationally related form", "noun form of adjective"]}
+{"id": "p0732", "relations": ["derivationally related form", "past participle of verb", "verb derived from noun"]}
+{"id": "p0733", "relations": ["member of domain region", "official language", "related to"]}
+{"id": "p0734", "relations": ["similar meaning", "synonym"]}
+{"id": "p0735", "relations": ["part of plant", "related to"]}
+{"id": "p0736", "relations": ["instance of city in", "located in", "part of"]}
+{"id": "p0737", "relations": ["derivationally related form", "noun derived from noun", "state of being"]}
+{"id": "p0738", "relations": []}
+{"id": "p0739", "relations": ["informal variant", "same meaning (father)", "synonym"]}
+{"id": "p0740", "relations": ["similar meaning", "synonym"]}
+{"id": "p0741", "relations": ["attribute", "part_of", "related_to"]}
+{"id": "p0742", "relations": ["antonym", "related_to"]}
+{"id": "p0743", "relations": ["has_part", "related_to"]}
+{"id": "p0744", "relations": ["related_to"]}
+{"id": "p0745", "relations": ["antonym", "derivationally_related"]}
+{"id": "p0746", "relations": ["capable_of", "creates", "related_to"]}
+{"id": "p0747", "relations": []}
+{"id": "p0748", "relations": ["instrument", "related_to", "used_for"]}
+{"id": "p0749", "relations": ["derivationally_related", "inflection", "superlative"]}
+{"id": "p0750", "relations": []}
+{"id": "p0751", "relations": ["capital", "has_part", "part_of"]}
+{"id": "p0752", "relations": ["derivationally_related", "inflection", "third_person_singular"]}
+{"id": "p0753", "relations": ["antonym"]}
+{"id": "p0754", "relations": ["adjective_of_verb", "derivationally_related"]}
+{"id": "p0755", "relations": []}
+{"id": "p0756", "relations": ["alliteration", "rhyme_onset"]}
+{"id": "p0757", "relations": ["alliteration", "hypernym"]}
+{"id": "p0758", "relations": []}
+{"id": "p0759", "relations": ["has_part", "part_of"]}
+{"id": "p0760", "relations": []}
+{"id": "p0761", "relations": []}
+{"id": "p0762", "relations": ["derivationally_related_form", "related_to"]}
+{"id": "p0763", "relations": ["is_a", "nationality", "related_to"]}
+{"id": "p0764", "relations": ["synonym"]}
+{"id": "p0765", "relations": ["at_location", "related_to"]}
+{"id": "p0766", "relations": ["similar_to", "synonym"]}
+{"id": "p0767", "relations": ["synonym"]}
+{"id": "p0768", "relations": []}
+{"id": "p0769", "relations": ["made_of", "related_to"]}
+{"id": "p0770", "relations": ["related_to", "synonym"]}
+{"id": "p0771", "relations": ["synonym"]}
+{"id": "p0772", "relations": []}
+{"id": "p0773", "relations": ["habitat", "lives_in"]}
+{"id": "p0774", "relations": ["capital", "has_capital"]}
+{"id": "p0775", "relations": ["antonym", "co-hyponym", "gender_counterpart", "sibling"]}
+{"id": "p0776", "relations": ["member_meronym", "member_of", "part_of"]}
+{"id": "p0777", "relations": ["co-hyponym"]}
+{"id": "p0778", "relations": ["action_of", "characteristic_action", "sound_made_by"]}
+{"id": "p0779", "relations": ["derivationally_related", "event_noun_of", "nominalization"]}
+{"id": "p0780", "relations": []}
+{"id": "p0781", "relations": ["antonym"]}
+{"id": "p0782", "relations": []}
+{"id": "p0783", "relations": []}
+{"id": "p0784", "relations": ["synonym"]}
+{"id": "p0785", "relations": ["derivationally related form"]}
+{"id": "p0786", "relations": ["inflectional variant", "same lemma"]}
+{"id": "p0787", "relations": ["hypernym", "is a"]}
+{"id": "p0788", "relations": ["location of", "related to"]}
+{"id": "p0789", "relations": ["antonym"]}
+{"id": "p0790", "relations": []}
+{"id": "p0791", "relations": ["derivationally_related", "inflection", "plural"]}
+{"id": "p0792", "relations": ["similar_to", "synonym"]}
+{"id": "p0793", "relations": []}
+{"id": "p0794", "relations": ["derivationally_related", "inflection", "past_tense"]}
+{"id": "p0795", "relations": ["derivationally_related", "inflection", "present_participle"]}
+{"id": "p0796", "relations": ["demonym", "derivationally_related", "inhabitant_of", "related_to"]}
+{"id": "p0797", "relations": ["related_to"]}
+{"id": "p0798", "relations": ["antonym", "gender_counterpart", "related_to"]}
+{"id": "p0799", "relations": ["hypernym", "similar_to", "synonym"]}
+{"id": "p0800", "relations": ["related_to", "sound_made_by"]}
+{"id": "p0801", "relations": ["constituent", "has_part", "made_of"]}
+{"id": "p0802", "relations": ["antonym"]}
+{"id": "p0803", "relations": ["derivation", "participle", "related_form"]}
+{"id": "p0804", "relations": []}
+{"id": "p0805", "relations": ["component", "part_of"]}
+{"id": "p0806", "relations": []}
+{"id": "p0807", "relations": ["derivation", "inflection", "related_form"]}
+{"id": "p0808", "relations": ["derivation", "etymology", "related_form"]}
+{"id": "p0809", "relations": []}
+{"id": "p0810", "relations": ["derivation", "pertainym", "related_form"]}
+{"id": "p0811", "relations": []}
+{"id": "p0812", "relations": ["antonym"]}
+{"id": "p0813", "relations": ["hypernym", "instance_of"]}
+{"id": "p0814", "relations": ["hypernym"]}
+{"id": "p0815", "relations": ["antonym"]}
+{"id": "p0816", "relations": ["co-hyponym"]}
+{"id": "p0817", "relations": ["synonym"]}
+{"id": "p0818", "relations": ["related_language"]}
+{"id": "p0819", "relations": ["hyponym", "instance"]}
+{"id": "p0820", "relations": ["comparative_form", "derivation"]}
+{"id": "p0821", "relations": []}
+{"id": "p0822", "relations": ["part_of", "related_to"]}
+{"id": "p0823", "relations": ["has_part", "located_in"]}
+{"id": "p0824", "relations": ["synonym"]}
+{"id": "p0825", "relations": ["antonym"]}
+{"id": "p0826", "relations": ["both_cities", "both_oil_economies"]}
+{"id": "p0827", "relations": ["synonym"]}
+{"id": "p0828", "relations": ["related_to"]}
+{"id": "p0829", "relations": ["derived_from", "synonym"]}
+{"id": "p0830", "relations": ["similar_to", "synonym"]}
+{"id": "p0831", "relations": ["similar meaning", "synonym"]}
+{"id": "p0832", "relations": ["accounting terms", "antonym", "balance sheet items"]}
+{"id": "p0833", "relations": ["form of address", "gender counterpart", "honorific", "title"]}
+{"id": "p0834", "relations": ["neighboring country", "official language", "spoken in"]}
+{"id": "p0835", "relations": ["geographic feature", "located in africa", "victoria falls on zambezi"]}
+{"id": "p0836", "relations": ["african countries", "co-hyponyms", "country"]}
+{"id": "p0837", "relations": ["similar meaning", "synonym", "verbs of humiliation"]}
+{"id": "p0838", "relations": ["derivationally related", "inflections of suit", "orthographically similar", "shared root"]}
+{"id": "p0839", "relations": ["expressed as percentage", "financial terms", "profit margin"]}
+{"id": "p0840", "relations": ["occult practice involves ritual", "related concept", "topical association"]}
+{"id": "p0841", "relations": []}
+{"id": "p0842", "relations": []}
+{"id": "p0843", "relations": []}
+{"id": "p0844", "relations": ["related_to", "used_for"]}
+{"id": "p0845", "relations": ["related_to", "similar_to"]}
+{"id": "p0846", "relations": ["related_to", "similar_spelling"]}
+{"id": "p0847", "relations": []}
+{"id": "p0848", "relations": []}
+{"id": "p0849", "relations": []}
+{"id": "p0850", "relations": ["derived_form", "related_to"]}
+{"id": "p0851", "relations": ["derivationally_related", "inflection", "plural_of", "same_lemma"]}
+{"id": "p0852", "relations": ["both_cities", "co_hyponym", "port_city", "proper_noun"]}
+{"id": "p0853", "relations": ["related_to", "temporal_relation"]}
+{"id": "p0854", "relations": ["antonym", "opposite"]}
+{"id": "p0855", "relations": ["ethnic_group", "related_to", "similar_to", "synonym"]}
+{"id": "p0856", "relations": ["both_english_towns", "co_hyponym", "county_town", "east_midlands", "geographically_near"]}
+{"id": "p0857", "relations": ["co_hyponym", "general", "historical_figure", "military_commander", "proper_noun"]}
+{"id": "p0858", "relations": ["hypernym_hyponym", "observe", "synonym"]}
+{"id": "p0859", "relations": ["abstinence", "similar_to", "synonym"]}
+{"id": "p0860", "relations": ["antonym", "co_hyponym", "complementary_pair", "electrode", "opposite"]}
+{"id": "p0861", "relations": ["derivationally related", "inflection", "past tense"]}
+{"id": "p0862", "relations": []}
+{"id": "p0863", "relations": ["language spoken", "official language"]}
+{"id": "p0864", "relations": ["derivationally related", "inflection", "same lemma"]}
+{"id": "p0865", "relations": ["capable of", "related to"]}
+{"id": "p0866", "relations": ["similar to", "synonym"]}
+{"id": "p0867", "relations": ["co-hyponym", "related to"]}
+{"id": "p0868", "relations": ["life stage of", "part of", "related to"]}
+{"id": "p0869", "relations": ["located in", "part of"]}
+{"id": "p0870", "relations": ["related to", "topic of"]}
+{"id": "p0871", "relations": ["collocation"]}
+{"id": "p0872", "relations": ["member_of", "part_of"]}
+{"id": "p0873", "relations": ["antonym"]}
+{"id": "p0874", "relations": []}
+{"id": "p0875", "relations": ["hypernym", "instance"]}
+{"id": "p0876", "relations": ["inflection", "same_lemma"]}
+{"id": "p0877", "relations": ["entailment", "synonym"]}
+{"id": "p0878", "relations": ["derivation"]}
+{"id": "p0879", "relations": ["derivation", "nominalization"]}
+{"id": "p0880", "relations": ["attribute", "nationality"]}
+{"id": "p0881", "relations": ["derivationally_related", "derived_from", "past_participle", "verb_form"]}
+{"id": "p0882", "relations": ["hypernym", "related_to", "religious_event"]}
+{"id": "p0883", "relations": ["inflection", "plural", "same_lemma"]}
+{"id": "p0884", "relations": ["collocation", "related_to"]}
+{"id": "p0885", "relations": ["city_of", "holonym", "located_in", "part_of"]}
+{"id": "p0886", "relations": ["contrast", "related_to"]}
+{"id": "p0887", "relations": ["capital_of", "holonym", "located_in", "part_of"]}
+{"id": "p0888", "relations": ["orthographic_similarity", "part_of", "related_to"]}
+{"id": "p0889", "relations": ["derivationally_related", "derived_from", "pertainym"]}
+{"id": "p0890", "relations": ["similar_to", "synonym"]}
+{"id": "p0891", "relations": ["derivation", "verb-noun"]}
+{"id": "p0892", "relations": ["related form"]}
+{"id": "p0893", "relations": []}
+{"id": "p0894", "relations": []}
+{"id": "p0895", "relations": ["synonym"]}
+{"id": "p0896", "relations": ["derivation", "noun-adjective"]}
+{"id": "p0897", "relations": ["adverb-adjective", "derivation"]}
+{"id": "p0898", "relations": ["synonym"]}
+{"id": "p0899", "relations": ["related form", "synonym"]}
+{"id": "p0900", "relations": ["rhyme"]}
+{"id": "p0901", "relations": []}
+{"id": "p0902", "relations": ["hypernym", "is_a"]}
+{"id": "p0903", "relations": ["related_to"]}
+{"id": "p0904", "relations": ["coordinate_term", "related_to"]}
+{"id": "p0905", "relations": ["derived_from", "inflection", "past_tense"]}
+{"id": "p0906", "relations": ["inflection", "plural"]}
+{"id": "p0907", "relations": ["antonym"]}
+{"id": "p0908", "relations": ["related_to", "synonym"]}
+{"id": "p0909", "relations": ["hypernym", "is_a"]}
+{"id": "p0910", "relations": ["has_part", "located_in", "meronym"]}
+{"id": "p0911", "relations": ["has_part", "holonym"]}
+{"id": "p0912", "relations": ["synonym"]}
+{"id": "p0913", "relations": ["co_hyponym"]}
+{"id": "p0914", "relations": []}
+{"id": "p0915", "relations": ["inflection", "plural"]}
+{"id": "p0916", "relations": []}
+{"id": "p0917", "relations": ["derivation", "inflection", "past_participle"]}
+{"id": "p0918", "relations": ["derivation", "pertainym"]}
+{"id": "p0919", "relations": []}
+{"id": "p0920", "relations": ["co_meronym", "part_of_pistil"]}
+{"id": "p0921", "relations": ["related_to", "sound_made_by"]}
+{"id": "p0922", "relations": ["both_us_state_capitals", "co_hyponyms"]}
+{"id": "p0923", "relations": ["inflection_of_same_lemma", "third_person_singular_vs_present_participle"]}
+{"id": "p0924", "relations": ["hypernym_of_instance", "instance_of"]}
+{"id": "p0925", "relations": ["antonym"]}
+{"id": "p0926", "relations": ["adjective_noun_derivation", "derivationally_related"]}
+{"id": "p0927", "relations": ["attribute_of_instance", "ethnicity_of"]}
+{"id": "p0928", "relations": []}
+{"id": "p0929", "relations": ["inflection_of_same_lemma", "present_vs_past_tense", "suppletive_form"]}
+{"id": "p0930", "relations": []}
+{"id": "p0931", "relations": ["derivationally_related", "nominalization"]}
+{"id": "p0932", "relations": ["has_property"]}
+{"id": "p0933", "relations": ["has_instance", "hypernym"]}
+{"id": "p0934", "relations": ["antonym", "contrast"]}
+{"id": "p0935", "relations": ["located_in", "part_of"]}
+{"id": "p0936", "relations": ["antonym"]}
+{"id": "p0937", "relations": ["inflection", "same_lemma"]}
+{"id": "p0938", "relations": ["inflection", "plural"]}
+{"id": "p0939", "relations": ["derivationally_related", "inflection", "past_participle"]}
+{"id": "p0940", "relations": ["synonym"]}
+{"id": "p0941", "relations": ["salmon fishing in idaho", "salmon is a city in idaho", "salmon river in idaho"]}
+{"id": "p0942", "relations": []}
+{"id": "p0943", "relations": ["lives_in", "morphological_derivation", "part_of"]}
+{"id": "p0944", "relations": ["antonym", "co-hyponym", "posture"]}
+{"id": "p0945", "relations": []}
+{"id": "p0946", "relations": ["co-hyponym", "mexican_cities", "mexican_states_related"]}
+{"id": "p0947", "relations": ["co-hyponym", "football_clubs"]}
+{"id": "p0948", "relations": ["gender_counterpart", "morphological_derivation", "synonym"]}
+{"id": "p0949", "relations": ["derivationally_related", "inflection", "morphological_derivation"]}
+{"id": "p0950", "relations": ["hypernym", "is_a"]}
+{"id": "p0951", "relations": ["instance_of", "is_a", "occupation"]}
+{"id": "p0952", "relations": ["derivationally_related", "inflection", "same_lemma"]}
+{"id": "p0953", "relations": []}
+{"id": "p0954", "relations": ["similar_to", "synonym"]}
+{"id": "p0955", "relations": ["derivationally_related", "inflection", "past_tense", "same_lemma"]}
+{"id": "p0956", "relations": []}
+{"id": "p0957", "relations": ["demonym", "derivationally_related", "nationality_of", "pertainym"]}
+{"id": "p0958", "relations": ["epithet", "synonym", "title_of"]}
+{"id": "p0959", "relations": ["meronym", "part_of", "part_of_feather"]}
+{"id": "p0960", "relations": ["inflection", "plural", "same_lemma"]}
+{"id": "p0961", "relations": ["similar meaning", "synonym"]}
+{"id": "p0962", "relations": ["abundance", "similar meaning", "synonym"]}
+{"id": "p0963", "relations": ["derivationally related", "polysemy: current (prevalent) / currency (prevalence)", "shared etymology"]}
+{"id": "p0964", "relations": ["cause-effect", "related meaning"]}
+{"id": "p0965", "relations": ["attribute", "color of", "sea-green compound"]}
+{"id": "p0966", "relations": ["golf links (homonym)", "inflection", "plural form"]}
+{"id": "p0967", "relations": ["antonym-like prefixes (over/under)", "morphological contrast"]}
+{"id": "p0968", "relations": ["cognate", "etymology", "same origin", "unit of currency/weight"]}
+{"id": "p0969", "relations": ["both places/cities", "co-hyponym", "port cities"]}
+{"id": "p0970", "relations": ["derivationally related", "noun-adjective", "pertainym"]}
+{"id": "p0971", "relations": ["antonym"]}
+{"id": "p0972", "relations": ["plural"]}
+{"id": "p0973", "relations": ["antonym"]}
+{"id": "p0974", "relations": ["first letter"]}
+{"id": "p0975", "relations": ["hypernym", "related to"]}
+{"id": "p0976", "relations": ["plural"]}
+{"id": "p0977", "relations": ["related to"]}
+{"id": "p0978", "relations": ["antonym"]}
+{"id": "p0979", "relations": ["derivationally related form", "nominalization"]}
+{"id": "p0980", "relations": ["both cities", "co-hyponym"]}
+{"id": "p0981", "relations": ["category_member", "hypernym", "instance_of"]}
+{"id": "p0982", "relations": ["location", "meronym", "part_of", "related_to"]}
+{"id": "p0983", "relations": []}
+{"id": "p0984", "relations": []}
+{"id": "p0985", "relations": ["contains", "holonym", "located_in", "part_of"]}
+{"id": "p0986", "relations": ["attribute", "color_of", "property", "related_to"]}
+{"id": "p0987", "relations": ["similar_to", "synonym"]}
+{"id": "p0988", "relations": ["adjective_to_noun", "derivationally_related", "morphological_derivation"]}
+{"id": "p0989", "relations": []}
+{"id": "p0990", "relations": ["derivationally_related", "noun_to_adjective", "pertainym"]}
+{"id": "p0991", "relations": []}
+{"id": "p0992", "relations": []}
+{"id": "p0993", "relations": ["cause", "similar_to", "synonym"]}
+{"id": "p0994", "relations": ["antonym"]}
+{"id": "p0995", "relations": ["similar_to", "synonym"]}
+{"id": "p0996", "relations": ["similar_to", "synonym"]}
+{"id": "p0997", "relations": []}
+{"id": "p0998", "relations": []}
+{"id": "p0999", "relations": ["related_to", "sound_made_by"]}
+{"id": "p1000", "relations": ["similar_to", "synonym"]}
+{"id": "p1001", "relations": []}
+{"id": "p1002", "relations": ["derivationally_related", "nominalization"]}
+{"id": "p1003", "relations": ["co_hyponym", "saint"]}
+{"id": "p1004", "relations": ["derivationally_related", "inflection"]}
+{"id": "p1005", "relations": ["co_hyponym", "feudal_hierarchy", "hypernym"]}
+{"id": "p1006", "relations": ["agent_action", "derivationally_related", "part_of_lifecycle"]}
+{"id": "p1007", "relations": ["antonym"]}
+{"id": "p1008", "relations": []}
+{"id": "p1009", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p1010", "relations": []}
+{"id": "p1011", "relations": ["abbreviation", "has_part", "holonym"]}
+{"id": "p1012", "relations": ["derivationally_related", "morphological_derivation"]}
+{"id": "p1013", "relations": ["has_part", "hyponym", "morphological_derivation", "taxonomic_rank"]}
+{"id": "p1014", "relations": ["inflection", "past_participle", "past_tense"]}
+{"id": "p1015", "relations": ["false_morphological_relation", "orthographic_similarity"]}
+{"id": "p1016", "relations": ["similar_meaning", "synonym"]}
+{"id": "p1017", "relations": []}
+{"id": "p1018", "relations": ["inflection", "plural"]}
+{"id": "p1019", "relations": []}
+{"id": "p1020", "relations": ["demonym", "nationality", "related_to"]}
+{"id": "p1021", "relations": ["hypernym", "instance_of"]}
+{"id": "p1022", "relations": []}
+{"id": "p1023", "relations": []}
+{"id": "p1024", "relations": ["derivationally_related", "inflection", "same_lemma"]}
+{"id": "p1025", "relations": ["derivationally_related", "nominalization"]}
+{"id": "p1026", "relations": []}
+{"id": "p1027", "relations": ["similar_to", "synonym"]}
+{"id": "p1028", "relations": ["has_capital", "has_part", "part_holonym"]}
+{"id": "p1029", "relations": ["hypernym", "synonym"]}
+{"id": "p1030", "relations": []}
+{"id": "p1031", "relations": ["capital", "country-capital", "located-in", "part-whole"]}
+{"id": "p1032", "relations": ["derivationally-related", "inflection", "present-participle"]}
+{"id": "p1033", "relations": ["both-cities", "co-hyponyms"]}
+{"id": "p1034", "relations": []}
+{"id": "p1035", "relations": ["agent-patient", "derivation", "derivationally-related"]}
+{"id": "p1036", "relations": ["adjective-of", "derivationally-related", "pertainym"]}
+{"id": "p1037", "relations": ["chemists", "co-hyponyms", "nobel-laureates"]}
+{"id": "p1038", "relations": ["similar", "synonym", "top-covering"]}
+{"id": "p1039", "relations": ["cut", "reduce", "synonym"]}
+{"id": "p1040", "relations": ["both-cities", "co-hyponyms"]}
+{"id": "p1041", "relations": ["derivationally_related", "inflection", "same_lemma"]}
+{"id": "p1042", "relations": []}
+{"id": "p1043", "relations": ["similar_meaning", "synonym"]}
+{"id": "p1044", "relations": ["hypernym", "instance_of"]}
+{"id": "p1045", "relations": ["similar_meaning", "synonym"]}
+{"id": "p1046", "relations": []}
+{"id": "p1047", "relations": ["has_instance", "occupation_of"]}
+{"id": "p1048", "relations": ["blend_component", "hyponym", "morphological_component"]}
+{"id": "p1049", "relations": ["hypernym", "synonym"]}
+{"id": "p1050", "relations": ["hyponym", "intensity_scale", "related_to"]}
+{"id": "p1051", "relations": ["derivationally_related", "inflection_of_same_lemma"]}
+{"id": "p1052", "relations": ["inflection", "present_participle_of"]}
+{"id": "p1053", "relations": ["abbreviation", "has_part", "state_abbreviation"]}
+{"id": "p1054", "relations": ["at_location", "located_in", "part_of"]}
+{"id": "p1055", "relations": ["similar_to", "synonym"]}
+{"id": "p1056", "relations": ["antonym"]}
+{"id": "p1057", "relations": ["antonym"]}
+{"id": "p1058", "relations": ["related_to", "requires"]}
+{"id": "p1059", "relations": ["demonym", "derivationally_related", "pertainym"]}
+{"id": "p1060", "relations": ["instance_of", "is_a", "occupation"]}
+{"id": "p1061", "relations": ["co-hyponym", "gender counterpart", "morphological derivation"]}
+{"id": "p1062", "relations": ["chemical element", "co-hyponym"]}
+{"id": "p1063", "relations": ["attribute", "has color", "hyponym of color"]}
+{"id": "p1064", "relations": ["has part", "hyponym", "member of instrument class"]}
+{"id": "p1065", "relations": ["antonym"]}
+{"id": "p1066", "relations": ["adjective-noun", "attribute", "derivationally related"]}
+{"id": "p1067", "relations": ["attribute", "collocation", "derivationally related"]}
+{"id": "p1068", "relations": []}
+{"id": "p1069", "relations": ["adjective-noun", "attribute", "derivationally related"]}
+{"id": "p1070", "relations": ["adjective-noun", "attribute", "derivationally related"]}
+{"id": "p1071", "relations": ["related_to"]}
+{"id": "p1072", "relations": ["related_to", "synonym"]}
+{"id": "p1073", "relations": ["part_of", "related_to"]}
+{"id": "p1074", "relations": []}
+{"id": "p1075", "relations": ["is_a_vehicle", "related_to", "synonym"]}
+{"id": "p1076", "relations": ["antonym"]}
+{"id": "p1077", "relations": ["slang_for_toilet", "synonym"]}
+{"id": "p1078", "relations": []}
+{"id": "p1079", "relations": ["derivationally_related_form"]}
+{"id": "p1080", "relations": ["synonym"]}
+{"id": "p1081", "relations": ["synonym"]}
+{"id": "p1082", "relations": ["antonym"]}
+{"id": "p1083", "relations": ["made_of", "material"]}
+{"id": "p1084", "relations": ["antonym"]}
+{"id": "p1085", "relations": []}
+{"id": "p1086", "relations": ["located_in", "part_of"]}
+{"id": "p1087", "relations": ["antonym"]}
+{"id": "p1088", "relations": ["attribute", "collocation", "compound"]}
+{"id": "p1089", "relations": ["synonym"]}
+{"id": "p1090", "relations": ["antonym"]}
+{"id": "p1091", "relations": ["derivation", "morphological_relation", "nominalization"]}
+{"id": "p1092", "relations": ["slang", "vulgar_association"]}
+{"id": "p1093", "relations": ["antonym"]}
+{"id": "p1094", "relations": ["synonym"]}
+{"id": "p1095", "relations": ["zodiac_sign_association"]}
+{"id": "p1096", "relations": ["meronym", "part_of"]}
+{"id": "p1097", "relations": []}
+{"id": "p1098", "relations": []}
+{"id": "p1099", "relations": ["agent_noun", "derivation", "morphological_relation"]}
+{"id": "p1100", "relations": []}
+{"id": "p1101", "relations": ["derived form", "inflection", "past participle", "past tense"]}
+{"id": "p1102", "relations": []}
+{"id": "p1103", "relations": ["rhyme"]}
+{"id": "p1104", "relations": ["synonym"]}
+{"id": "p1105", "relations": ["antonym", "negation prefix"]}
+{"id": "p1106", "relations": ["has property", "hypernym", "is a"]}
+{"id": "p1107", "relations": ["hypernym", "hyponym"]}
+{"id": "p1108", "relations": ["derived form", "inflection", "past tense"]}
+{"id": "p1109", "relations": ["derived form", "inflection", "present participle"]}
+{"id": "p1110", "relations": ["derived form", "plural form", "synonym"]}
+{"id": "p1111", "relations": ["color_association", "dark_chocolate", "related_to"]}
+{"id": "p1112", "relations": []}
+{"id": "p1113", "relations": ["similar_meaning", "synonym"]}
+{"id": "p1114", "relations": []}
+{"id": "p1115", "relations": ["compound", "fish_farm", "location"]}
+{"id": "p1116", "relations": ["both_cities", "co-hyponym"]}
+{"id": "p1117", "relations": ["blockage", "rhyme", "similar_meaning"]}
+{"id": "p1118", "relations": ["color_association"]}
+{"id": "p1119", "relations": ["derivation", "field_practitioner"]}
+{"id": "p1120", "relations": []}
+{"id": "p1121", "relations": ["antonym"]}
+{"id": "p1122", "relations": ["inflection of same verb", "past participle / present participle"]}
+{"id": "p1123", "relations": []}
+{"id": "p1124", "relations": ["inflection of same verb", "present participle / past participle"]}
+{"id": "p1125", "relations": ["synonym"]}
+{"id": "p1126", "relations": ["derivation", "noun from verb"]}
+{"id": "p1127", "relations": ["dive is a manner of descending", "hypernym"]}
+{"id": "p1128", "relations": ["book of job is part of the writings (ketuvim)", "part of"]}
+{"id": "p1129", "relations": []}
+{"id": "p1130", "relations": ["located in", "part of"]}
+{"id": "p1131", "relations": ["agent noun", "derivation", "morphological relation", "related form"]}
+{"id": "p1132", "relations": ["inflection", "morphological relation", "plural"]}
+{"id": "p1133", "relations": ["inflection", "morphological relation", "plural"]}
+{"id": "p1134", "relations": ["art movement association", "association", "part of name (van gogh)"]}
+{"id": "p1135", "relations": ["similar meaning", "synonym"]}
+{"id": "p1136", "relations": ["derivation", "instrument noun", "morphological relation", "related form"]}
+{"id": "p1137", "relations": ["antonym", "derivation", "negation prefix"]}
+{"id": "p1138", "relations": ["adjective of noun", "derivation", "morphological relation", "pertainym"]}
+{"id": "p1139", "relations": ["category member", "hypernym", "meronym", "part-whole"]}
+{"id": "p1140", "relations": ["hand over", "similar meaning", "synonym"]}
+{"id": "p1141", "relations": ["synonym"]}
+{"id": "p1142", "relations": ["inflection", "third person singular"]}
+{"id": "p1143", "relations": ["habitat", "related"]}
+{"id": "p1144", "relations": []}
+{"id": "p1145", "relations": ["derivation", "noun-adjective"]}
+{"id": "p1146", "relations": []}
+{"id": "p1147", "relations": ["inflection", "plural"]}
+{"id": "p1148", "relations": []}
+{"id": "p1149", "relations": ["related", "slang synonym"]}
+{"id": "p1150", "relations": []}
+{"id": "p1151", "relations": ["capital", "contains city", "country-capital", "part-whole"]}
+{"id": "p1152", "relations": ["adjective-verb", "derivation", "morphological variant", "same root"]}
+{"id": "p1153", "relations": []}
+{"id": "p1154", "relations": ["antonym", "computing file operation pair", "opposite", "trade complement"]}
+{"id": "p1155", "relations": ["inflection", "plural noun-past participle", "same lemma", "third person singular-past tense"]}
+{"id": "p1156", "relations": ["19th-century writers", "co-hyponyms", "novelists", "surnames"]}
+{"id": "p1157", "relations": ["city-county", "english place names", "part-whole", "surnames of english writers (h. g. wells, w. somerset maugham)", "wells in somerset"]}
+{"id": "p1158", "relations": ["inflection", "past participle-present participle", "same lemma"]}
+{"id": "p1159", "relations": ["buoyancy (bubbles rise)", "co-hyponyms (nouns)", "verbs of upward motion"]}
+{"id": "p1160", "relations": ["inflection", "present-past tense", "same lemma"]}
+{"id": "p1161", "relations": ["context", "part_of", "related_to"]}
+{"id": "p1162", "relations": ["action_agent", "derived_from", "related_to"]}
+{"id": "p1163", "relations": ["abbreviation", "same_unit", "synonym"]}
+{"id": "p1164", "relations": ["similar_meaning", "synonym"]}
+{"id": "p1165", "relations": []}
+{"id": "p1166", "relations": ["antonym"]}
+{"id": "p1167", "relations": ["related_to", "scale_relation", "unit_prefix_variant"]}
+{"id": "p1168", "relations": []}
+{"id": "p1169", "relations": ["antonym"]}
+{"id": "p1170", "relations": ["derived_from", "inflection_of", "related_form", "same_lemma"]}
+{"id": "p1171", "relations": ["language_spoken", "official_language", "related_to"]}
+{"id": "p1172", "relations": ["related_to", "supports", "used_with"]}
+{"id": "p1173", "relations": ["made_of", "material"]}
+{"id": "p1174", "relations": ["similar_to", "synonym"]}
+{"id": "p1175", "relations": ["antonym", "opposite"]}
+{"id": "p1176", "relations": []}
+{"id": "p1177", "relations": ["related_form", "similar_to", "synonym"]}
+{"id": "p1178", "relations": []}
+{"id": "p1179", "relations": []}
+{"id": "p1180", "relations": ["form_of", "inflection", "plural", "same_lemma"]}
+{"id": "p1181", "relations": ["indigenous_language_of", "language_of", "spoken_in"]}
+{"id": "p1182", "relations": []}
+{"id": "p1183", "relations": ["derivationally_related", "inflection_of_same_lemma", "past_participle_vs_present_participle"]}
+{"id": "p1184", "relations": ["related_to", "synonym"]}
+{"id": "p1185", "relations": []}
+{"id": "p1186", "relations": ["is_a", "occupation"]}
+{"id": "p1187", "relations": ["has_young", "life_stage", "related_to"]}
+{"id": "p1188", "relations": ["has_part", "part_of"]}
+{"id": "p1189", "relations": []}
+{"id": "p1190", "relations": ["has_instance", "hypernym", "is_a_reverse"]}
+{"id": "p1191", "relations": ["hyponym", "is_a", "related_to", "used_for"]}
+{"id": "p1192", "relations": []}
+{"id": "p1193", "relations": ["expression_of", "related_to"]}
+{"id": "p1194", "relations": ["derivationally_related", "gerund_of", "related_to"]}
+{"id": "p1195", "relations": []}
+{"id": "p1196", "relations": ["language_spoken_in", "related_to"]}
+{"id": "p1197", "relations": ["attribute_of", "derivationally_related", "nominalization"]}
+{"id": "p1198", "relations": ["derivationally_related", "related_to"]}
+{"id": "p1199", "relations": ["derivationally_related", "inflection_of_same_lemma", "related_to"]}
+{"id": "p1200", "relations": ["inflection", "plural_of"]}
+{"id": "p1201", "relations": ["former_name", "same_city", "synonym"]}
+{"id": "p1202", "relations": ["antonym", "negation_prefix"]}
+{"id": "p1203", "relations": ["related_haste", "rushing"]}
+{"id": "p1204", "relations": ["antonym"]}
+{"id": "p1205", "relations": ["located_in", "meronym", "part_of"]}
+{"id": "p1206", "relations": ["housed_in", "location_of", "shelter_for"]}
+{"id": "p1207", "relations": ["slang_synonym", "synonym"]}
+{"id": "p1208", "relations": ["antonym"]}
+{"id": "p1209", "relations": ["demonym_related", "ethnic_group_of", "inhabitant"]}
+{"id": "p1210", "relations": ["citizenship", "instance_of", "nationality"]}
+{"id": "p1211", "relations": ["hypernym", "instance"]}
+{"id": "p1212", "relations": ["derivation", "inflection", "past_participle"]}
+{"id": "p1213", "relations": ["derivation", "nominalization"]}
+{"id": "p1214", "relations": ["inflection", "past_participle", "past_tense"]}
+{"id": "p1215", "relations": ["synonym"]}
+{"id": "p1216", "relations": []}
+{"id": "p1217", "relations": ["related"]}
+{"id": "p1218", "relations": []}
+{"id": "p1219", "relations": []}
+{"id": "p1220", "relations": ["derivation", "nominalization"]}
+{"id": "p1221", "relations": ["similar_to", "synonym"]}
+{"id": "p1222", "relations": ["similar_to", "synonym"]}
+{"id": "p1223", "relations": ["antonym"]}
+{"id": "p1224", "relations": ["produces", "related_to", "used_for"]}
+{"id": "p1225", "relations": ["located_in", "part_of", "related_to"]}
+{"id": "p1226", "relations": ["related_to"]}
+{"id": "p1227", "relations": ["similar_to", "synonym"]}
+{"id": "p1228", "relations": ["derived_from", "form_of"]}
+{"id": "p1229", "relations": ["has_part", "part_of"]}
+{"id": "p1230", "relations": ["similar_to", "synonym"]}
+{"id": "p1231", "relations": []}
+{"id": "p1232", "relations": ["derivationally_related", "gerund", "inflection", "present_participle"]}
+{"id": "p1233", "relations": ["derivationally_related", "gerund", "inflection", "present_participle", "synonym"]}
+{"id": "p1234", "relations": ["hypernym", "similar_to", "synonym"]}
+{"id": "p1235", "relations": []}
+{"id": "p1236", "relations": ["similar_to", "synonym"]}
+{"id": "p1237", "relations": ["derivationally_related", "inflection", "third_person_singular"]}
+{"id": "p1238", "relations": ["co_hyponym", "same_category_mathematician", "same_category_scientist"]}
+{"id": "p1239", "relations": ["antonym"]}
+{"id": "p1240", "relations": ["derivationally_related", "inflection", "shared_lemma"]}
+{"id": "p1241", "relations": ["form_of", "hypernym"]}
+{"id": "p1242", "relations": ["inflection", "plural"]}
+{"id": "p1243", "relations": ["inflection", "same_lemma", "tense_variant"]}
+{"id": "p1244", "relations": []}
+{"id": "p1245", "relations": []}
+{"id": "p1246", "relations": ["hypernym", "part_of", "synonym"]}
+{"id": "p1247", "relations": []}
+{"id": "p1248", "relations": ["has_part", "made_of", "related_to"]}
+{"id": "p1249", "relations": ["located_at", "part_of", "related_to"]}
+{"id": "p1250", "relations": ["similar_to", "synonym"]}
+{"id": "p1251", "relations": ["location", "related_to"]}
+{"id": "p1252", "relations": ["related_to", "title_of"]}
+{"id": "p1253", "relations": ["related_to", "slang_synonym"]}
+{"id": "p1254", "relations": ["synonym"]}
+{"id": "p1255", "relations": ["antonym"]}
+{"id": "p1256", "relations": []}
+{"id": "p1257", "relations": ["related_to"]}
+{"id": "p1258", "relations": ["antonym"]}
+{"id": "p1259", "relations": ["derivationally_related_form", "related_to"]}
+{"id": "p1260", "relations": ["located_in", "part_of"]}
+{"id": "p1261", "relations": []}
+{"id": "p1262", "relations": ["similar_to", "synonym"]}
+{"id": "p1263", "relations": ["similar_to", "synonym"]}
+{"id": "p1264", "relations": []}
+{"id": "p1265", "relations": ["demonym", "has_instance"]}
+{"id": "p1266", "relations": ["similar_to", "synonym"]}
+{"id": "p1267", "relations": []}
+{"id": "p1268", "relations": ["inflection", "plural"]}
+{"id": "p1269", "relations": ["derivationally_related", "has_part", "part_of"]}
+{"id": "p1270", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p1271", "relations": ["spelling variant", "synonym"]}
+{"id": "p1272", "relations": ["hypernym", "instance of"]}
+{"id": "p1273", "relations": ["derivationally related form", "verb-noun nominalization"]}
+{"id": "p1274", "relations": ["derivationally related form", "inflection", "verb-gerund"]}
+{"id": "p1275", "relations": ["antonym", "co-hyponym", "contrast"]}
+{"id": "p1276", "relations": []}
+{"id": "p1277", "relations": ["both authors", "co-hyponym"]}
+{"id": "p1278", "relations": ["attribute", "derivationally related form", "noun-adjective"]}
+{"id": "p1279", "relations": ["derivationally related form", "noun-adjective", "pertainym"]}
+{"id": "p1280", "relations": ["inflection", "member of", "plural"]}
+{"id": "p1281", "relations": ["both_cities_in_southern_us", "both_us_cities", "orleans_part_of_new_orleans"]}
+{"id": "p1282", "relations": ["synonym", "use_up"]}
+{"id": "p1283", "relations": []}
+{"id": "p1284", "relations": ["collocation", "hitchhiking_uses_thumb", "thumb_a_ride"]}
+{"id": "p1285", "relations": ["slang_compound"]}
+{"id": "p1286", "relations": ["both_hitting_actions", "grand_slam_club_sports", "synonym_strike"]}
+{"id": "p1287", "relations": ["antonym", "both_orders_of_sorting"]}
+{"id": "p1288", "relations": ["antonym", "political_ideologies"]}
+{"id": "p1289", "relations": ["attribute_of", "derivation", "slick_has_smoothness"]}
+{"id": "p1290", "relations": ["antonym", "both_tenses", "both_time_periods"]}
+{"id": "p1291", "relations": ["antonym"]}
+{"id": "p1292", "relations": ["derivationally_related", "noun_to_adjective"]}
+{"id": "p1293", "relations": ["antonym"]}
+{"id": "p1294", "relations": ["attribute", "color_of"]}
+{"id": "p1295", "relations": ["demonym", "nationality_of"]}
+{"id": "p1296", "relations": ["habitat", "made_by"]}
+{"id": "p1297", "relations": ["inflection", "past_tense_to_present_tense"]}
+{"id": "p1298", "relations": ["inflection", "present_tense_to_past_tense"]}
+{"id": "p1299", "relations": ["synonym", "translation"]}
+{"id": "p1300", "relations": ["antonym"]}
+{"id": "p1301", "relations": []}
+{"id": "p1302", "relations": ["related_to", "synonym"]}
+{"id": "p1303", "relations": ["related_to", "synonym"]}
+{"id": "p1304", "relations": ["has_part", "part_of"]}
+{"id": "p1305", "relations": ["abbreviation", "form_of"]}
+{"id": "p1306", "relations": []}
+{"id": "p1307", "relations": ["related_to"]}
+{"id": "p1308", "relations": ["antonym"]}
+{"id": "p1309", "relations": ["capable_of", "related_to", "synonym"]}
+{"id": "p1310", "relations": ["synonym"]}
+{"id": "p1311", "relations": ["derived_form", "gerund", "morphological_relation", "nominalization"]}
+{"id": "p1312", "relations": []}
+{"id": "p1313", "relations": []}
+{"id": "p1314", "relations": ["component_of", "part_of", "substance_of"]}
+{"id": "p1315", "relations": ["antonym"]}
+{"id": "p1316", "relations": []}
+{"id": "p1317", "relations": ["contains_state", "has_part", "holonym", "location"]}
+{"id": "p1318", "relations": ["demonym", "derived_form", "nationality", "pertainym"]}
+{"id": "p1319", "relations": ["antonym"]}
+{"id": "p1320", "relations": ["fruit_of", "meronym", "part_of", "produced_by", "seed_of"]}
+{"id": "p1321", "relations": []}
+{"id": "p1322", "relations": []}
+{"id": "p1323", "relations": ["synonym"]}
+{"id": "p1324", "relations": ["hypernym"]}
+{"id": "p1325", "relations": ["hypernym", "synonym"]}
+{"id": "p1326", "relations": ["synonym"]}
+{"id": "p1327", "relations": []}
+{"id": "p1328", "relations": []}
+{"id": "p1329", "relations": ["plural_of"]}
+{"id": "p1330", "relations": ["adherent_of", "derivationally_related"]}
+{"id": "p1331", "relations": ["derivationally_related", "pertainym", "related_to"]}
+{"id": "p1332", "relations": ["inflection", "plural_of"]}
+{"id": "p1333", "relations": ["attribute", "collocation", "has_property"]}
+{"id": "p1334", "relations": ["has_part", "hyponym", "related_to"]}
+{"id": "p1335", "relations": ["antonym"]}
+{"id": "p1336", "relations": ["antonym"]}
+{"id": "p1337", "relations": ["derivationally_related", "pertainym", "related_to"]}
+{"id": "p1338", "relations": ["derivationally_related", "female_form_of", "gender_counterpart"]}
+{"id": "p1339", "relations": ["similar_to", "synonym"]}
+{"id": "p1340", "relations": ["located_in", "part_holonym", "part_of"]}
+{"id": "p1341", "relations": ["agent_noun", "derivation", "morphological_relation"]}
+{"id": "p1342", "relations": ["part_of", "related_to"]}
+{"id": "p1343", "relations": ["related_to", "synonym"]}
+{"id": "p1344", "relations": ["habitat", "location_of", "related_to"]}
+{"id": "p1345", "relations": ["located_in", "meronym", "part_of"]}
+{"id": "p1346", "relations": ["derivation", "inflection", "same_lemma"]}
+{"id": "p1347", "relations": ["hypernym", "related_to", "synonym"]}
+{"id": "p1348", "relations": ["derivation", "related_to", "synonym"]}
+{"id": "p1349", "relations": ["antonym"]}
+{"id": "p1350", "relations": ["related_to", "synonym"]}
+{"id": "p1351", "relations": ["adjective_to_noun", "derivationally_related"]}
+{"id": "p1352", "relations": ["similar_to", "synonym"]}
+{"id": "p1353", "relations": ["derivationally_related", "synonym", "verb_to_noun"]}
+{"id": "p1354", "relations": ["antonym"]}
+{"id": "p1355", "relations": ["antonym"]}
+{"id": "p1356", "relations": ["contains_city", "has_part"]}
+{"id": "p1357", "relations": ["hypernym", "synonym"]}
+{"id": "p1358", "relations": ["contains_state", "has_part"]}
+{"id": "p1359", "relations": ["synonym"]}
+{"id": "p1360", "relations": ["antonym"]}
+{"id": "p1361", "relations": ["inflectional_variant", "past_tense_of", "same_lemma"]}
+{"id": "p1362", "relations": ["derivationally_related", "gerund_of", "inflectional_variant", "present_participle_of"]}
+{"id": "p1363", "relations": ["hypernym", "instance_of"]}
+{"id": "p1364", "relations": ["historical_region", "located_in", "part_of", "predecessor_of"]}
+{"id": "p1365", "relations": ["derivationally_related", "gerund_of", "inflectional_variant", "present_participle_of"]}
+{"id": "p1366", "relations": []}
+{"id": "p1367", "relations": ["has_part", "holonym_of", "meronym"]}
+{"id": "p1368", "relations": ["demonym", "ethnic_group", "indigenous_people", "language_spoken"]}
+{"id": "p1369", "relations": []}
+{"id": "p1370", "relations": ["similar_to", "synonym"]}
+{"id": "p1371", "relations": []}
+{"id": "p1372", "relations": ["associated_leader", "head_of_state_of", "member_of"]}
+{"id": "p1373", "relations": []}
+{"id": "p1374", "relations": []}
+{"id": "p1375", "relations": ["dwelling_of", "habitat", "lives_in"]}
+{"id": "p1376", "relations": ["can_be_kept_in"]}
+{"id": "p1377", "relations": ["component_of", "meronym", "part_of"]}
+{"id": "p1378", "relations": ["antonym_in_scale", "contrast_in_size"]}
+{"id": "p1379", "relations": ["antonym", "opposite", "reverses"]}
+{"id": "p1380", "relations": []}
+{"id": "p1381", "relations": []}
+{"id": "p1382", "relations": ["life_stage", "related_to_insects"]}
+{"id": "p1383", "relations": []}
+{"id": "p1384", "relations": ["derivationally_related", "noun_adjective_pair"]}
+{"id": "p1385", "relations": ["similar_to", "synonym"]}
+{"id": "p1386", "relations": ["adjective_noun_pair", "derivationally_related", "participle_of"]}
+{"id": "p1387", "relations": []}
+{"id": "p1388", "relations": ["hypernym", "instance_of"]}
+{"id": "p1389", "relations": []}
+{"id": "p1390", "relations": ["both_scientists", "both_surnames", "co_hyponym"]}
+{"id": "p1391", "relations": ["borders", "location", "related to", "river in"]}
+{"id": "p1392", "relations": ["dismissal", "similar meaning", "synonym"]}
+{"id": "p1393", "relations": ["adjacent", "attached to", "meronym", "part of aircraft"]}
+{"id": "p1394", "relations": ["derivationally related", "orthographic similarity", "prefix", "related to"]}
+{"id": "p1395", "relations": ["asian country", "co-hyponym", "country", "former name"]}
+{"id": "p1396", "relations": ["location", "neighborhood of", "part of"]}
+{"id": "p1397", "relations": ["feces related", "related to", "slang for toilet", "synonym"]}
+{"id": "p1398", "relations": ["antonym", "opposite"]}
+{"id": "p1399", "relations": ["green river in wyoming", "location", "place in"]}
+{"id": "p1400", "relations": ["similar meaning", "synonym", "trust"]}
+{"id": "p1401", "relations": ["member_meronym", "member_of", "part_of"]}
+{"id": "p1402", "relations": []}
+{"id": "p1403", "relations": ["hypernym", "is_a"]}
+{"id": "p1404", "relations": ["part_meronym", "part_of"]}
+{"id": "p1405", "relations": ["inflection", "same_lemma", "third_person_singular", "verb_form"]}
+{"id": "p1406", "relations": []}
+{"id": "p1407", "relations": ["part_meronym", "part_of"]}
+{"id": "p1408", "relations": ["synonym", "verb_group"]}
+{"id": "p1409", "relations": ["contains", "holder_of", "related_to"]}
+{"id": "p1410", "relations": ["adjective_to_noun", "attribute", "derivationally_related_form", "nominalization"]}
+{"id": "p1411", "relations": ["derivationally_related", "present_participle", "verb_inflection"]}
+{"id": "p1412", "relations": ["country_adjective", "demonym", "derivationally_related"]}
+{"id": "p1413", "relations": ["photography_process_steps"]}
+{"id": "p1414", "relations": ["inflection", "plural", "third_person_singular"]}
+{"id": "p1415", "relations": ["derivationally_related", "present_participle", "verb_inflection"]}
+{"id": "p1416", "relations": ["capital_of", "located_in", "part_of"]}
+{"id": "p1417", "relations": ["similar_to", "synonym"]}
+{"id": "p1418", "relations": ["derivationally_related", "nominalization", "verb_to_noun"]}
+{"id": "p1419", "relations": ["builds", "habitat", "located_at"]}
+{"id": "p1420", "relations": ["derivationally_related", "inflectional_variant", "same_lemma"]}
+{"id": "p1421", "relations": ["capital_of", "located_in", "part_of"]}
+{"id": "p1422", "relations": []}
+{"id": "p1423", "relations": ["antonym"]}
+{"id": "p1424", "relations": ["past_tense_and_present_participle_of_bring", "same_lemma"]}
+{"id": "p1425", "relations": ["born_in_germany", "nationality"]}
+{"id": "p1426", "relations": ["hypernym", "is_a"]}
+{"id": "p1427", "relations": ["similar_to", "synonym"]}
+{"id": "p1428", "relations": ["compound_head", "hypernym", "is_a"]}
+{"id": "p1429", "relations": ["antonym"]}
+{"id": "p1430", "relations": ["antonym", "negation_prefix"]}
+{"id": "p1431", "relations": []}
+{"id": "p1432", "relations": []}
+{"id": "p1433", "relations": ["derivationally_related", "inflection", "same_lemma"]}
+{"id": "p1434", "relations": ["antonym", "co-hyponym", "gender_counterpart", "related_to"]}
+{"id": "p1435", "relations": []}
+{"id": "p1436", "relations": []}
+{"id": "p1437", "relations": ["antonym"]}
+{"id": "p1438", "relations": ["antonym"]}
+{"id": "p1439", "relations": ["hypernym", "is_a", "related_to"]}
+{"id": "p1440", "relations": ["derivationally_related", "nominalization"]}
+{"id": "p1441", "relations": ["related_to"]}
+{"id": "p1442", "relations": ["derived_from", "related_to"]}
+{"id": "p1443", "relations": ["collocation", "made_of", "material_of", "related_to"]}
+{"id": "p1444", "relations": ["derived_from", "related_to"]}
+{"id": "p1445", "relations": []}
+{"id": "p1446", "relations": ["related_to", "similar_to"]}
+{"id": "p1447", "relations": ["derived_from", "related_to"]}
+{"id": "p1448", "relations": ["related_to", "similar_to"]}
+{"id": "p1449", "relations": ["derived_from", "pertainym", "related_to"]}
+{"id": "p1450", "relations": ["related_to", "similar_to", "synonym"]}
+{"id": "p1451", "relations": ["has_color", "related_to"]}
+{"id": "p1452", "relations": ["form_of", "inflection_of_same_lemma"]}
+{"id": "p1453", "relations": ["related_to", "synonym"]}
+{"id": "p1454", "relations": ["antonym"]}
+{"id": "p1455", "relations": ["has_part", "related_to"]}
+{"id": "p1456", "relations": ["hyponym", "instance_of"]}
+{"id": "p1457", "relations": ["related_to", "synonym"]}
+{"id": "p1458", "relations": ["agent_noun_of", "derived_from"]}
+{"id": "p1459", "relations": ["derivationally_related", "nominalization"]}
+{"id": "p1460", "relations": ["antonym", "related_to"]}
+{"id": "p1461", "relations": ["inflection", "noun-verb third person singular", "plural", "same lemma"]}
+{"id": "p1462", "relations": ["hypernym-hyponym", "related verb", "synonym", "travel by water"]}
+{"id": "p1463", "relations": ["antonym", "boolean values", "opposite"]}
+{"id": "p1464", "relations": ["largest city", "located in", "part-whole", "state-city"]}
+{"id": "p1465", "relations": ["antonym", "temporal opposite"]}
+{"id": "p1466", "relations": ["gerund", "inflection", "present participle", "same lemma"]}
+{"id": "p1467", "relations": ["country-city", "former city name", "located in", "part-whole"]}
+{"id": "p1468", "relations": ["inflection", "past tense vs third person singular", "same lemma"]}
+{"id": "p1469", "relations": ["agent noun", "derivation", "morphological relation", "verb-agent"]}
+{"id": "p1470", "relations": ["analogy hand-paw", "animal counterpart", "body part contrast"]}
+{"id": "p1471", "relations": []}
+{"id": "p1472", "relations": ["co-hyponym", "related_to", "similar_to"]}
+{"id": "p1473", "relations": ["found_in", "part_of", "related_to"]}
+{"id": "p1474", "relations": ["derived_from", "etymologically_related", "orthographic_similarity", "related_to"]}
+{"id": "p1475", "relations": ["derived_from", "inflection", "plural_of"]}
+{"id": "p1476", "relations": ["antonym"]}
+{"id": "p1477", "relations": ["antonym", "co-hyponym", "contrast"]}
+{"id": "p1478", "relations": ["contrast", "related_to"]}
+{"id": "p1479", "relations": ["derived_from", "inflection", "third_person_singular_of"]}
+{"id": "p1480", "relations": ["antonym", "contrast"]}
+{"id": "p1481", "relations": ["derivation", "related_form"]}
+{"id": "p1482", "relations": ["hypernym", "related_action"]}
+{"id": "p1483", "relations": ["antonym"]}
+{"id": "p1484", "relations": ["antonym"]}
+{"id": "p1485", "relations": ["derivation", "related_form"]}
+{"id": "p1486", "relations": ["part_of", "related_concept"]}
+{"id": "p1487", "relations": ["hypernym", "synonym"]}
+{"id": "p1488", "relations": ["inflection", "plural"]}
+{"id": "p1489", "relations": ["has_administrative_centre", "has_part"]}
+{"id": "p1490", "relations": ["synonym"]}
+{"id": "p1491", "relations": ["antonym"]}
+{"id": "p1492", "relations": ["related_to", "similar_to"]}
+{"id": "p1493", "relations": ["derived_from", "related_to"]}
+{"id": "p1494", "relations": ["located_in", "part_of"]}
+{"id": "p1495", "relations": ["form_of", "plural_of"]}
+{"id": "p1496", "relations": ["abbreviation_of_state_in", "part_of"]}
+{"id": "p1497", "relations": ["abbreviation_of_state_containing", "has_capital"]}
+{"id": "p1498", "relations": ["derived_from", "related_to"]}
+{"id": "p1499", "relations": ["part_of", "related_to", "used_for"]}
+{"id": "p1500", "relations": []}
+{"id": "p1501", "relations": ["antonym", "related_to"]}
+{"id": "p1502", "relations": ["derivationally_related_form", "pertainym", "related_to"]}
+{"id": "p1503", "relations": []}
+{"id": "p1504", "relations": ["derivationally_related_form", "related_to"]}
+{"id": "p1505", "relations": ["related_to", "similar_to", "synonym"]}
+{"id": "p1506", "relations": ["hypernym", "related_to"]}
+{"id": "p1507", "relations": ["similar_to", "synonym"]}
+{"id": "p1508", "relations": ["located_in", "part_of", "related_to"]}
+{"id": "p1509", "relations": ["has_property", "related_to"]}
+{"id": "p1510", "relations": ["attribute", "derivationally_related_form", "related_to"]}
+{"id": "p1511", "relations": []}
+{"id": "p1512", "relations": ["synonym"]}
+{"id": "p1513", "relations": ["demonym", "language_of", "related_to"]}
+{"id": "p1514", "relations": ["demonym", "derivationally_related", "language_of"]}
+{"id": "p1515", "relations": ["made_of", "related_to"]}
+{"id": "p1516", "relations": ["life_stage_of", "part_of_lifecycle", "precedes"]}
+{"id": "p1517", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p1518", "relations": ["instance_of"]}
+{"id": "p1519", "relations": ["related_to"]}
+{"id": "p1520", "relations": ["derivationally_related"]}
+{"id": "p1521", "relations": []}
+{"id": "p1522", "relations": ["hypernym", "related_to"]}
+{"id": "p1523", "relations": []}
+{"id": "p1524", "relations": ["derived_from", "pertainym", "related_to"]}
+{"id": "p1525", "relations": ["antonym"]}
+{"id": "p1526", "relations": ["antonym"]}
+{"id": "p1527", "relations": ["made_of", "part_of", "related_to"]}
+{"id": "p1528", "relations": ["hyponym", "related_to"]}
+{"id": "p1529", "relations": []}
+{"id": "p1530", "relations": ["similar_to", "synonym"]}
+{"id": "p1531", "relations": ["hypernym", "instance_of"]}
+{"id": "p1532", "relations": ["part_of", "related_to"]}
+{"id": "p1533", "relations": ["synonym"]}
+{"id": "p1534", "relations": ["abbreviation", "co_hyponym", "related_to"]}
+{"id": "p1535", "relations": []}
+{"id": "p1536", "relations": []}
+{"id": "p1537", "relations": ["derivationally_related", "verb_noun"]}
+{"id": "p1538", "relations": []}
+{"id": "p1539", "relations": ["related_to"]}
+{"id": "p1540", "relations": ["color_of", "has_property"]}
+{"id": "p1541", "relations": ["container_for", "location_of", "used_to_confine"]}
+{"id": "p1542", "relations": ["compound_word", "related_to_hot_dog", "slang_for_dachshund", "synonym"]}
+{"id": "p1543", "relations": ["antonym"]}
+{"id": "p1544", "relations": ["capital_of", "located_in", "part_of"]}
+{"id": "p1545", "relations": ["container_for", "location_of", "used_to_confine"]}
+{"id": "p1546", "relations": ["adjective_form", "derivationally_related", "pertainym"]}
+{"id": "p1547", "relations": ["both_musicians", "both_surnames", "co_hyponym"]}
+{"id": "p1548", "relations": []}
+{"id": "p1549", "relations": ["co_hyponym", "event_requires"]}
+{"id": "p1550", "relations": ["similar_to", "synonym"]}
+{"id": "p1551", "relations": ["hypernym", "synonym"]}
+{"id": "p1552", "relations": []}
+{"id": "p1553", "relations": ["demonym", "derivationally_related", "pertainym"]}
+{"id": "p1554", "relations": ["antonym"]}
+{"id": "p1555", "relations": ["hypernym", "synonym"]}
+{"id": "p1556", "relations": ["antonym"]}
+{"id": "p1557", "relations": ["derivationally_related", "participle"]}
+{"id": "p1558", "relations": ["hypernym", "synonym"]}
+{"id": "p1559", "relations": []}
+{"id": "p1560", "relations": ["related_to", "topic_domain"]}
+{"id": "p1561", "relations": ["hypernym", "related_to"]}
+{"id": "p1562", "relations": ["comparative_form", "derivationally_related"]}
+{"id": "p1563", "relations": []}
+{"id": "p1564", "relations": ["agent_of", "derivationally_related"]}
+{"id": "p1565", "relations": ["antonym"]}
+{"id": "p1566", "relations": ["antonym"]}
+{"id": "p1567", "relations": ["hyponym", "related_to"]}
+{"id": "p1568", "relations": ["official_language", "related_to"]}
+{"id": "p1569", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p1570", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p1571", "relations": ["inflection", "same lemma", "third person singular"]}
+{"id": "p1572", "relations": ["antonym"]}
+{"id": "p1573", "relations": []}
+{"id": "p1574", "relations": ["has subevent", "part of", "related to"]}
+{"id": "p1575", "relations": ["language spoken in", "related to"]}
+{"id": "p1576", "relations": ["inflection", "related to", "same lemma"]}
+{"id": "p1577", "relations": ["similar to", "synonym"]}
+{"id": "p1578", "relations": ["nationality", "related to"]}
+{"id": "p1579", "relations": []}
+{"id": "p1580", "relations": ["means of", "related to", "used for"]}
+{"id": "p1581", "relations": ["both cities", "both coastal-adjacent locations", "both have gardens (versailles gardens, bah\u00e1'\u00ed gardens in haifa)"]}
+{"id": "p1582", "relations": ["similar meaning", "synonym"]}
+{"id": "p1583", "relations": []}
+{"id": "p1584", "relations": ["both christian denominations", "co-hyponyms"]}
+{"id": "p1585", "relations": ["anagram-adjacent", "both military-related", "rifle as verb (search/plunder) related to foray (raid)"]}
+{"id": "p1586", "relations": ["brighton located in england", "holonym", "part-whole"]}
+{"id": "p1587", "relations": ["both adjectives", "unable is antonym of able"]}
+{"id": "p1588", "relations": ["antonym", "rhyme", "shared suffix -structive"]}
+{"id": "p1589", "relations": ["derivationally related", "noun-adjective pair", "shared root"]}
+{"id": "p1590", "relations": ["departed as euphemism for dead", "derivationally related", "inflection", "past participle", "past tense"]}
+{"id": "p1591", "relations": ["hypernym", "similar_to", "synonym"]}
+{"id": "p1592", "relations": ["derivationally_related_form", "derived_from", "pertainym"]}
+{"id": "p1593", "relations": ["at_location", "kept_in", "related_to"]}
+{"id": "p1594", "relations": ["derivationally_related_form", "hypernym", "related_to"]}
+{"id": "p1595", "relations": ["category", "hypernym", "is_a"]}
+{"id": "p1596", "relations": ["derivationally_related_form", "pertainym", "related_to"]}
+{"id": "p1597", "relations": ["demonym", "derivationally_related_form", "pertainym"]}
+{"id": "p1598", "relations": ["hypernym", "is_a", "young_of"]}
+{"id": "p1599", "relations": ["has_instance", "hyponym", "instance_hyponym"]}
+{"id": "p1600", "relations": ["similar_to", "synonym", "verb_group"]}
+{"id": "p1601", "relations": ["inflection", "past participle", "past tense"]}
+{"id": "p1602", "relations": []}
+{"id": "p1603", "relations": ["co-occurrence", "dwelling", "habitat"]}
+{"id": "p1604", "relations": ["near homophone", "similar spelling", "surname"]}
+{"id": "p1605", "relations": ["agent-quality", "derivation", "morphological relation"]}
+{"id": "p1606", "relations": ["hyponym", "is-a", "type of failure"]}
+{"id": "p1607", "relations": []}
+{"id": "p1608", "relations": ["action-process", "derivation", "verb-gerund"]}
+{"id": "p1609", "relations": []}
+{"id": "p1610", "relations": ["basics", "rudiments", "synonym"]}
+{"id": "p1611", "relations": ["similar meaning (lineage, breed, variety)", "synonym"]}
+{"id": "p1612", "relations": ["related meaning (statement of belief)"]}
+{"id": "p1613", "relations": ["inflection", "plural form"]}
+{"id": "p1614", "relations": ["derivationally related", "inflection", "present participle"]}
+{"id": "p1615", "relations": ["similar meaning (of a meal)", "synonym"]}
+{"id": "p1616", "relations": ["derivationally related", "part of (city in county)", "shared stem"]}
+{"id": "p1617", "relations": ["antonym (market terms)", "co-hyponym (animals)"]}
+{"id": "p1618", "relations": ["antonym (level as raze/flatten)", "related meaning (raise to a level)"]}
+{"id": "p1619", "relations": ["cherry has a yellow variety", "co-hyponym (colors)"]}
+{"id": "p1620", "relations": ["inflection", "plural form", "third-person singular form"]}
+{"id": "p1621", "relations": []}
+{"id": "p1622", "relations": ["instance_of", "is_a", "member_of_alphabet"]}
+{"id": "p1623", "relations": ["related_to", "similar_to", "synonym"]}
+{"id": "p1624", "relations": ["antonym", "derived_from", "negation"]}
+{"id": "p1625", "relations": ["antonym", "opposite"]}
+{"id": "p1626", "relations": []}
+{"id": "p1627", "relations": []}
+{"id": "p1628", "relations": ["antonym", "derived_from", "negation"]}
+{"id": "p1629", "relations": ["antonym", "opposite"]}
+{"id": "p1630", "relations": ["city_of", "located_in", "part_holonym", "part_of"]}
+{"id": "p1631", "relations": ["antonym"]}
+{"id": "p1632", "relations": []}
+{"id": "p1633", "relations": ["derived_from", "pertainym"]}
+{"id": "p1634", "relations": ["member_of", "part_of"]}
+{"id": "p1635", "relations": ["color_of", "has_property"]}
+{"id": "p1636", "relations": ["derived_from", "form_of", "past_participle"]}
+{"id": "p1637", "relations": ["clipping", "synonym"]}
+{"id": "p1638", "relations": ["derived_from", "nominalization"]}
+{"id": "p1639", "relations": []}
+{"id": "p1640", "relations": ["antonym"]}
+{"id": "p1641", "relations": ["similar_to", "synonym"]}
+{"id": "p1642", "relations": ["similar_to", "synonym"]}
+{"id": "p1643", "relations": []}
+{"id": "p1644", "relations": []}
+{"id": "p1645", "relations": ["derivationally_related", "language_of", "related_to"]}
+{"id": "p1646", "relations": ["derivationally_related", "related_to"]}
+{"id": "p1647", "relations": ["coordinate_term", "lanthanide_sibling"]}
+{"id": "p1648", "relations": ["antonym"]}
+{"id": "p1649", "relations": ["antonym", "converse", "related_to"]}
+{"id": "p1650", "relations": ["language_spoken_in", "related_to"]}
+{"id": "p1651", "relations": []}
+{"id": "p1652", "relations": ["similar_to", "synonym"]}
+{"id": "p1653", "relations": []}
+{"id": "p1654", "relations": ["related_to", "similar_to"]}
+{"id": "p1655", "relations": ["derived_from", "inflection", "plural_of"]}
+{"id": "p1656", "relations": []}
+{"id": "p1657", "relations": ["capital_of", "located_in", "part_of"]}
+{"id": "p1658", "relations": ["color_of", "has_property", "related_to"]}
+{"id": "p1659", "relations": []}
+{"id": "p1660", "relations": ["part_of", "related_to"]}
+{"id": "p1661", "relations": ["inflection", "lemma", "present participle"]}
+{"id": "p1662", "relations": ["has part", "meronym", "related to"]}
+{"id": "p1663", "relations": ["inflection", "shared lemma"]}
+{"id": "p1664", "relations": ["antonym"]}
+{"id": "p1665", "relations": ["derivation", "inflection", "present participle"]}
+{"id": "p1666", "relations": ["similar to", "synonym"]}
+{"id": "p1667", "relations": ["hypernym", "instance of"]}
+{"id": "p1668", "relations": []}
+{"id": "p1669", "relations": ["color of", "has property"]}
+{"id": "p1670", "relations": ["demonym", "derivation", "pertainym"]}
+{"id": "p1671", "relations": ["attribute", "collocation", "compound phrase"]}
+{"id": "p1672", "relations": ["antonym", "opposite"]}
+{"id": "p1673", "relations": []}
+{"id": "p1674", "relations": ["located in", "member of continent", "meronym", "part of"]}
+{"id": "p1675", "relations": ["co-hyponym", "nhl team cities", "us cities"]}
+{"id": "p1676", "relations": ["derivationally related", "gerund", "inflection", "present participle"]}
+{"id": "p1677", "relations": ["adjective form", "derivation", "derivationally related", "pertainym"]}
+{"id": "p1678", "relations": ["demonym", "derivationally related", "nationality adjective", "pertainym"]}
+{"id": "p1679", "relations": []}
+{"id": "p1680", "relations": ["antonym", "opposite"]}
+{"id": "p1681", "relations": ["hypernym", "instance"]}
+{"id": "p1682", "relations": ["container", "location"]}
+{"id": "p1683", "relations": ["similar", "synonym"]}
+{"id": "p1684", "relations": []}
+{"id": "p1685", "relations": []}
+{"id": "p1686", "relations": ["derivation", "inflection", "related"]}
+{"id": "p1687", "relations": ["contains", "holonym", "part_of"]}
+{"id": "p1688", "relations": ["agent", "derivation"]}
+{"id": "p1689", "relations": ["part_of", "related"]}
+{"id": "p1690", "relations": ["antonym"]}
+{"id": "p1691", "relations": ["antonym"]}
+{"id": "p1692", "relations": ["inflection", "same lemma"]}
+{"id": "p1693", "relations": []}
+{"id": "p1694", "relations": ["political association"]}
+{"id": "p1695", "relations": ["derivation"]}
+{"id": "p1696", "relations": ["inflection", "same lemma"]}
+{"id": "p1697", "relations": ["inflection", "same lemma"]}
+{"id": "p1698", "relations": ["antonym"]}
+{"id": "p1699", "relations": ["antonym", "derivation"]}
+{"id": "p1700", "relations": ["synonym"]}
+{"id": "p1701", "relations": ["related_to"]}
+{"id": "p1702", "relations": ["antonym"]}
+{"id": "p1703", "relations": ["antonym", "derived_form"]}
+{"id": "p1704", "relations": ["inflection", "plural_form"]}
+{"id": "p1705", "relations": ["attribute", "derivationally_related_form"]}
+{"id": "p1706", "relations": []}
+{"id": "p1707", "relations": ["similar_to", "synonym"]}
+{"id": "p1708", "relations": ["inflection", "present_participle"]}
+{"id": "p1709", "relations": ["related_to"]}
+{"id": "p1710", "relations": []}
+{"id": "p1711", "relations": ["antonym", "co-hyponym", "derivationally_related"]}
+{"id": "p1712", "relations": ["derivationally_related", "participle_variants", "same_root"]}
+{"id": "p1713", "relations": ["ancient_city", "city", "co-hyponym"]}
+{"id": "p1714", "relations": ["hypernym", "synonym"]}
+{"id": "p1715", "relations": ["attribute_of_surface", "co-hyponym", "related_to"]}
+{"id": "p1716", "relations": ["habitat", "located_in"]}
+{"id": "p1717", "relations": ["hypernym", "related_to"]}
+{"id": "p1718", "relations": ["language_spoken_in", "official_language"]}
+{"id": "p1719", "relations": []}
+{"id": "p1720", "relations": ["meronym", "part_of"]}
+{"id": "p1721", "relations": ["derived form", "inflection", "present participle", "same lemma"]}
+{"id": "p1722", "relations": ["color of", "has property", "related to"]}
+{"id": "p1723", "relations": ["has part", "part of", "related to"]}
+{"id": "p1724", "relations": ["derivation", "derived form", "related to"]}
+{"id": "p1725", "relations": ["derived form", "related to", "shared root"]}
+{"id": "p1726", "relations": ["has part", "has property", "related to"]}
+{"id": "p1727", "relations": ["antonym", "derived form", "negation", "shared root"]}
+{"id": "p1728", "relations": ["antonym", "opposite"]}
+{"id": "p1729", "relations": ["located in", "part holonym", "part of"]}
+{"id": "p1730", "relations": ["related to", "similar to", "synonym"]}
+{"id": "p1731", "relations": ["level", "synonym"]}
+{"id": "p1732", "relations": ["diversion", "synonym"]}
+{"id": "p1733", "relations": ["derivationally_related", "pertainym"]}
+{"id": "p1734", "relations": ["inflection", "moving", "synonym"]}
+{"id": "p1735", "relations": ["co-hyponym", "science_fiction", "writer"]}
+{"id": "p1736", "relations": ["stone"]}
+{"id": "p1737", "relations": ["co-occurrence", "location"]}
+{"id": "p1738", "relations": ["derivationally_related", "inflection", "instrument"]}
+{"id": "p1739", "relations": ["back", "rear", "synonym"]}
+{"id": "p1740", "relations": ["co-hyponym", "cut_of_meat"]}
+{"id": "p1741", "relations": ["meronym", "part_of", "related_to"]}
+{"id": "p1742", "relations": ["derivationally_related", "inflection", "same_lemma"]}
+{"id": "p1743", "relations": ["derivationally_related", "inflection", "related_to"]}
+{"id": "p1744", "relations": ["similar_to", "synonym"]}
+{"id": "p1745", "relations": ["both_cities", "co_hyponym", "related_to"]}
+{"id": "p1746", "relations": ["capital_of", "holonym", "located_in", "part_of"]}
+{"id": "p1747", "relations": ["antonym", "co_hyponym", "complementary", "related_to"]}
+{"id": "p1748", "relations": ["has_property", "red_state", "related_to"]}
+{"id": "p1749", "relations": ["derivationally_related", "related_to"]}
+{"id": "p1750", "relations": ["derivationally_related", "inflection", "same_lemma"]}
+{"id": "p1751", "relations": []}
+{"id": "p1752", "relations": []}
+{"id": "p1753", "relations": ["has_part", "related_to"]}
+{"id": "p1754", "relations": ["derivationally_related_form", "related_to"]}
+{"id": "p1755", "relations": ["form_of", "plural_form", "related_to"]}
+{"id": "p1756", "relations": ["has_part", "part_of", "related_to"]}
+{"id": "p1757", "relations": ["antonym", "related_to"]}
+{"id": "p1758", "relations": ["derivationally_related_form", "related_to", "synonym"]}
+{"id": "p1759", "relations": ["part_of", "related_to"]}
+{"id": "p1760", "relations": ["at_location", "related_to"]}
+{"id": "p1761", "relations": ["attribute", "derivationally_related", "noun_of_adjective"]}
+{"id": "p1762", "relations": ["related_to", "used_for"]}
+{"id": "p1763", "relations": ["nationality", "related_to"]}
+{"id": "p1764", "relations": ["astronomers", "lunar_crater_names", "same_category"]}
+{"id": "p1765", "relations": ["similar_meaning", "synonym"]}
+{"id": "p1766", "relations": ["related_to", "removed_by"]}
+{"id": "p1767", "relations": ["part_of", "synonym", "weft"]}
+{"id": "p1768", "relations": ["derivationally_related", "gerund_of", "nominalization"]}
+{"id": "p1769", "relations": ["inflection", "plural_form"]}
+{"id": "p1770", "relations": ["is_a", "occupation"]}
+{"id": "p1771", "relations": ["adjective_to_noun", "derivationally_related_form", "morphological_derivation"]}
+{"id": "p1772", "relations": ["has_part", "part_of", "related_to"]}
+{"id": "p1773", "relations": ["compound_contains", "etymologically_related", "habitat", "shared_morpheme"]}
+{"id": "p1774", "relations": ["located_in", "part_holonym", "part_of"]}
+{"id": "p1775", "relations": ["derivationally_related_form", "participle_variant", "same_root"]}
+{"id": "p1776", "relations": ["instance_of", "is_a", "occupation"]}
+{"id": "p1777", "relations": ["action_on", "related_to", "used_for"]}
+{"id": "p1778", "relations": ["collocation", "modifier_of", "related_to"]}
+{"id": "p1779", "relations": ["derivationally_related_form", "inflectional_form", "same_lemma"]}
+{"id": "p1780", "relations": ["hypernym", "is_a", "related_to", "synonym"]}
+{"id": "p1781", "relations": ["synonym"]}
+{"id": "p1782", "relations": []}
+{"id": "p1783", "relations": ["derivationally related form", "noun-adjective"]}
+{"id": "p1784", "relations": ["collocation", "part of (sustaining pedal)"]}
+{"id": "p1785", "relations": ["similar to", "synonym"]}
+{"id": "p1786", "relations": ["hypernym", "similar to", "synonym"]}
+{"id": "p1787", "relations": ["derivationally related form", "location of activity"]}
+{"id": "p1788", "relations": ["official language of", "spoken in"]}
+{"id": "p1789", "relations": ["hypernym", "synonym"]}
+{"id": "p1790", "relations": ["inflection", "plural form"]}
+{"id": "p1791", "relations": ["compound: windbell", "wind causes bell to ring", "wind chime"]}
+{"id": "p1792", "relations": []}
+{"id": "p1793", "relations": ["part of a whole", "synonym"]}
+{"id": "p1794", "relations": []}
+{"id": "p1795", "relations": ["burning plastic releases gas", "plastic made from natural gas/petrochemicals", "states of matter contrast"]}
+{"id": "p1796", "relations": ["derivationally related", "synonym (sequence/arrangement)", "verb to gerund/noun"]}
+{"id": "p1797", "relations": ["both contain carotene", "carrot is orange", "same color"]}
+{"id": "p1798", "relations": []}
+{"id": "p1799", "relations": ["both capital cities", "coordinate terms"]}
+{"id": "p1800", "relations": ["hi is abbreviation of hawaii, a us state", "part of (state in country)"]}
